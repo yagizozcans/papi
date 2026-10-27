@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}{{ c.ticker }}{% endblock %}
+{% block main %}
+<section class="card head">
+  <h1>{{ c.ticker }}{% if c.badge == 'HOLDING' %} <b class="badge hold">HOLDING</b>{% elif c.badge == 'WATCH' %} <b class="badge watch">WATCH</b>{% endif %}</h1>
+  {% if c.issuer %}<p>{{ c.issuer.legal_name }}{% if c.issuer.sector_code %} · sektör {{ c.issuer.sector_code }}{% endif %} · {{ c.issuer.status }}</p>{% endif %}
+  <div class="meta">
+    {% if c.last_close %}<span>Son kapanış: <b>{{ c.last_close[1] | num }}</b> ({{ c.last_close[0] | ist }})</span>{% endif %}
+    {% if c.indices %}<span>Endeksler: {{ c.indices | join(', ') }}</span>{% endif %}
+    {% if c.position %}<span>Pozisyon: {{ c.position.quantity | num(0) }} adet · {{ c.position.market_value | num }} TL</span>{% endif %}
+  </div>
+</section>
+
+<section class="card" id="chart">
+  <h2>Fiyat (günlük kapanış) ve işlemlerim</h2>
+  {% if c.chart %}
+  <div class="chart" data-kind="price"></div>
+  <script type="application/json" class="chart-data">{{ c.chart | tojson_safe }}</script>
+  <p class="small"><span class="dot buy"></span> alış <span class="dot sell"></span> satış</p>
+  {% else %}<p class="reason">Fiyat verisi yok.</p>{% endif %}
+</section>
+
+<section class="card" id="events">
+  <h2>Olaylar</h2>
+  <div class="feed">{% for it in c.events %}{% include "_feed_item.html" %}{% else %}<p class="reason">Sınıflandırılmış olay yok.</p>{% endfor %}</div>
+</section>
+
+<section class="card" id="disclosures">
+  <h2>Bildirim geçmişi</h2>
+  {% if c.disclosures %}
+  <table class="tbl"><thead><tr><th>Yayın</th><th>Konu</th><th>Olay</th><th></th></tr></thead><tbody>
+  {% for d in c.disclosures %}<tr><td>{{ d.published_at | ist }}</td><td>{{ d.title or d.subject or '—' }}{% if d.revision_label %} <span class="mark rev">{{ d.revision_label }}</span>{% endif %}{% if d.is_late %} <span class="mark late">Geç bildirim</span>{% endif %}</td>
+    <td>{% for e in d.events %}<a href="/events/{{ e.id }}">{{ e.label }}</a>{% if not loop.last %}, {% endif %}{% else %}<small>{{ d.ingest_status }}</small>{% endfor %}</td>
+    <td><a href="{{ d.kap_url }}" target="_blank" rel="noopener noreferrer">KAP ↗</a></td></tr>{% endfor %}
+  </tbody></table>
+  {% else %}<p class="reason">Bildirim yok.</p>{% endif %}
+</section>
+
+<section class="card" id="txns">
+  <h2>İşlemlerim</h2>
+  {% if c.txns %}
+  <table class="tbl"><thead><tr><th>Tarih</th><th>Tür</th><th class="r">Adet</th><th class="r">Fiyat</th><th>Kaynak</th></tr></thead><tbody>
+  {% for t in c.txns %}<tr class="{{ 'reversed' if t.reversed or t.reverses_id }}"><td>{{ t.trade_date | ist }}</td><td>{{ t.type }}</td><td class="r">{{ t.quantity | num(0) }}</td><td class="r">{{ t.price | num }}</td><td>{{ t.source }}</td></tr>{% endfor %}
+  </tbody></table>
+  {% else %}<p class="reason">Bu hissede işlem yok.</p>{% endif %}
+</section>
+
+<section class="card" id="identifiers">
+  <h2>Kimlikler</h2>
+  <table class="tbl"><thead><tr><th>Tür</th><th>Değer</th><th>Geçerlilik</th></tr></thead><tbody>
+  {% for i in c.identifiers %}<tr><td>{{ i.scheme }}</td><td><code>{{ i.value }}</code></td><td>{{ i.valid_from | ist if i.valid_from else 'başından' }} – {{ i.valid_to | ist if i.valid_to else 'bugün' }}</td></tr>{% endfor %}
+  </tbody></table>
+</section>
+{% endblock %}

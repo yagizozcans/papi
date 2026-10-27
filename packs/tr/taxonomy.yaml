@@ -1,0 +1,512 @@
+# papi event taxonomy — Türkiye pack (PRD 06 §5.1, 04 §3/§7).
+#
+# Codes are hierarchical, dot-separated, English and stable. Adding codes is non-breaking; renaming or
+# removing one is breaking and bumps `taxonomy_version`.
+#
+# families.<f>.prior   rules-materiality prior (0–100) for every code of the family (README in
+#                      src/papi/triage explains the formula)
+# codes.<c>.prior      optional per-code override of the family prior
+# codes.<c>.recurring  true → routine/periodic item: no novelty boost (first-of-family-in-365-days)
+# codes.<c>.schema     payload JSON Schema name in contracts/schemas/<schema>.json (null → none yet)
+version: 1
+taxonomy_version: "tr-2026.10"
+
+families:
+  capital:      {label_tr: Sermaye,            label_en: Capital,             prior: 60}
+  distribution: {label_tr: Kâr dağıtımı,       label_en: Distribution,        prior: 55}
+  buyback:      {label_tr: Pay geri alımı,     label_en: Buyback,             prior: 40}
+  ownership:    {label_tr: Ortaklık yapısı,    label_en: Ownership,           prior: 45}
+  business:     {label_tr: Faaliyet,           label_en: Business,            prior: 50}
+  mna:          {label_tr: Birleşme ve satın alma, label_en: M&A,             prior: 60}
+  finance:      {label_tr: Finansman,          label_en: Finance,             prior: 35}
+  report:       {label_tr: Raporlama,          label_en: Reporting,           prior: 30}
+  governance:   {label_tr: Yönetişim,          label_en: Governance,          prior: 25}
+  legal:        {label_tr: Hukuki,             label_en: Legal,               prior: 45}
+  market:       {label_tr: Piyasa,             label_en: Market,              prior: 35}
+  macro:        {label_tr: Makro,              label_en: Macro,               prior: 50}
+  other:        {label_tr: Diğer,              label_en: Other,               prior: 20}
+
+codes:
+  # ------------------------------------------------------------------------------------------ capital
+  capital.increase.rights:
+    label_tr: Bedelli sermaye artırımı
+    label_en: Rights issue
+    prior: 70
+    schema: event.capital.increase.rights.v1
+  capital.increase.bonus:
+    label_tr: Bedelsiz sermaye artırımı
+    label_en: Bonus issue
+    prior: 65
+    schema: event.capital.increase.bonus.v1
+  capital.increase.private_placement:
+    label_tr: Tahsisli sermaye artırımı
+    label_en: Private placement
+    prior: 65
+  capital.decrease:
+    label_tr: Sermaye azaltımı
+    label_en: Capital decrease
+    prior: 60
+  capital.change:
+    label_tr: Sermaye değişikliği (türü belirtilmemiş)
+    label_en: Capital change (type not stated)
+    prior: 50
+  capital.registered_ceiling:
+    label_tr: Kayıtlı sermaye tavanı
+    label_en: Registered capital ceiling
+    prior: 25
+  capital.use_of_proceeds:
+    label_tr: Fon kullanım raporu
+    label_en: Use of proceeds report
+    prior: 15
+    recurring: true
+  capital.action.cancel:
+    label_tr: Hak kullanım süreci iptali
+    label_en: Corporate action cancelled
+    prior: 55
+
+  # ------------------------------------------------------------------------------------- distribution
+  distribution.dividend.cash:
+    label_tr: Nakit kâr payı
+    label_en: Cash dividend
+    schema: event.distribution.dividend.cash.v1
+  distribution.dividend.stock:
+    label_tr: Pay olarak kâr payı
+    label_en: Stock dividend
+    schema: event.distribution.dividend.stock.v1
+  distribution.dividend.advance:
+    label_tr: Kâr payı avansı
+    label_en: Interim dividend
+    prior: 45
+  distribution.policy:
+    label_tr: Kâr dağıtım politikası
+    label_en: Dividend policy
+    prior: 25
+
+  # ------------------------------------------------------------------------------------------ buyback
+  buyback.program.start:
+    label_tr: Geri alım programı
+    label_en: Buyback programme
+    prior: 55
+    schema: event.buyback.program.start.v1
+  buyback.execution:
+    label_tr: Pay geri alım işlemi
+    label_en: Buyback execution
+    prior: 30
+    recurring: true
+    schema: event.buyback.execution.v1
+  buyback.program.end:
+    label_tr: Geri alım programının sona ermesi
+    label_en: Buyback programme end
+    prior: 30
+  buyback.disposal:
+    label_tr: Geri alınan payların satışı
+    label_en: Disposal of repurchased shares
+    prior: 45
+
+  # ---------------------------------------------------------------------------------------- ownership
+  ownership.insider_trade:
+    label_tr: İçeriden işlem (pay alım satım)
+    label_en: Insider trade
+    prior: 35
+    recurring: true
+    schema: event.ownership.insider_trade.v1
+  ownership.threshold_crossing:
+    label_tr: Pay oranı eşik aşımı
+    label_en: Ownership threshold crossing
+    prior: 55
+    schema: event.ownership.threshold_crossing.v1
+  ownership.tender_offer:
+    label_tr: Pay alım teklifi
+    label_en: Tender offer
+    prior: 75
+  ownership.squeeze_out:
+    label_tr: Ortaklıktan çıkarma
+    label_en: Squeeze-out
+    prior: 70
+  ownership.block_trade:
+    label_tr: Toptan alış satış
+    label_en: Block trade
+    prior: 50
+  ownership.secondary_offering:
+    label_tr: Mevcut payların satışı
+    label_en: Secondary offering
+    prior: 60
+
+  # ----------------------------------------------------------------------------------------- business
+  business.contract.award:
+    label_tr: Yeni iş ilişkisi / sözleşme
+    label_en: Contract award
+    schema: event.business.contract.award.v1
+  business.contract.termination:
+    label_tr: Sözleşme feshi
+    label_en: Contract termination
+    prior: 55
+  business.capex:
+    label_tr: Yatırım kararı
+    label_en: Capital expenditure
+  business.capacity:
+    label_tr: Kapasite değişikliği
+    label_en: Capacity change
+  business.new_market:
+    label_tr: Yeni pazar
+    label_en: New market
+    prior: 45
+  business.tender_result:
+    label_tr: İhale süreci / sonucu
+    label_en: Tender result
+  business.related_party:
+    label_tr: İlişkili taraf işlemi
+    label_en: Related-party transaction
+    prior: 35
+  business.asset_lease:
+    label_tr: Varlık kiralama / ayni hak
+    label_en: Asset lease or encumbrance
+    prior: 30
+  business.operations.halt:
+    label_tr: Faaliyetlerin durması
+    label_en: Operations halted
+    prior: 75
+  business.incident:
+    label_tr: Olay / kaza
+    label_en: Incident
+    prior: 55
+  business.labour:
+    label_tr: Toplu iş sözleşmesi / grev
+    label_en: Labour relations
+    prior: 40
+  business.license:
+    label_tr: İzin, ruhsat, lisans
+    label_en: Licence or permit
+    prior: 35
+  business.incentive:
+    label_tr: Yatırım teşviki
+    label_en: Investment incentive
+    prior: 30
+  business.footprint:
+    label_tr: Şube / tesis açılış-kapanış
+    label_en: Branch or site change
+    prior: 15
+  business.player_transfer:
+    label_tr: Sporcu transferi
+    label_en: Player transfer
+    prior: 30
+
+  # ---------------------------------------------------------------------------------------------- mna
+  mna.acquisition:
+    label_tr: Satın alma / iştirak edinimi
+    label_en: Acquisition
+    schema: event.mna.acquisition.v1
+  mna.disposal:
+    label_tr: Satış / elden çıkarma
+    label_en: Disposal
+    schema: event.mna.disposal.v1
+  mna.merger:
+    label_tr: Birleşme
+    label_en: Merger
+    prior: 70
+  mna.demerger:
+    label_tr: Bölünme
+    label_en: Demerger
+    prior: 60
+  mna.jv:
+    label_tr: Ortak girişim
+    label_en: Joint venture
+    prior: 50
+  mna.subsidiary_formation:
+    label_tr: Bağlı ortaklık kuruluşu
+    label_en: Subsidiary formed
+    prior: 35
+  mna.withdrawal_right:
+    label_tr: Ayrılma hakkı
+    label_en: Withdrawal (appraisal) right
+    prior: 55
+
+  # ------------------------------------------------------------------------------------------ finance
+  finance.debt.issuance:
+    label_tr: Borçlanma aracı ihracı
+    label_en: Debt issuance
+  finance.debt.issuance_ceiling:
+    label_tr: İhraç tavanı
+    label_en: Debt issuance ceiling
+    prior: 25
+  finance.debt.payment:
+    label_tr: Kupon / itfa ödemesi
+    label_en: Coupon or redemption payment
+    prior: 10
+    recurring: true
+  finance.debt.listing:
+    label_tr: Borçlanma aracının işlem görmeye başlaması
+    label_en: Debt instrument listing
+    prior: 10
+    recurring: true
+  finance.debt.restructuring:
+    label_tr: Borç yapılandırma
+    label_en: Debt restructuring
+    prior: 65
+  finance.rating.change:
+    label_tr: Kredi derecelendirmesi
+    label_en: Credit rating
+    prior: 45
+  finance.loan:
+    label_tr: Kredi / finansman anlaşması
+    label_en: Loan agreement
+    prior: 40
+  finance.shareholder_funding:
+    label_tr: Ortaktan finansman / sermaye avansı
+    label_en: Shareholder funding
+    prior: 35
+  finance.structured_product:
+    label_tr: Varant / sertifika işlemleri
+    label_en: Warrants and certificates
+    prior: 5
+    recurring: true
+
+  # ------------------------------------------------------------------------------------------- report
+  report.financial.periodic:
+    label_tr: Finansal rapor
+    label_en: Periodic financial report
+    prior: 55
+    recurring: true
+    schema: event.report.financial.periodic.v1
+  report.financial.guidance:
+    label_tr: Geleceğe dönük değerlendirme
+    label_en: Guidance
+    prior: 60
+    schema: event.report.financial.guidance.v1
+  report.financial.restatement:
+    label_tr: Finansal tablo / dipnot değişikliği
+    label_en: Financial restatement
+    prior: 50
+  report.financial.calendar:
+    label_tr: Finansal takvim
+    label_en: Financial calendar
+    prior: 5
+    recurring: true
+  report.financial.regulatory_filing:
+    label_tr: Otoriteye verilen mali tablo
+    label_en: Financial statements filed with an authority
+    prior: 35
+    recurring: true
+  report.financial.extension:
+    label_tr: Finansal rapor ek süre talebi
+    label_en: Reporting deadline extension
+    prior: 45
+  report.activity:
+    label_tr: Faaliyet raporu
+    label_en: Annual/interim activity report
+    prior: 15
+    recurring: true
+  report.attestation:
+    label_tr: Sorumluluk beyanı
+    label_en: Statement of responsibility
+    prior: 5
+    recurring: true
+  report.sustainability:
+    label_tr: Sürdürülebilirlik raporu
+    label_en: Sustainability report
+    prior: 10
+    recurring: true
+  report.corporate_governance:
+    label_tr: Kurumsal yönetim raporu
+    label_en: Corporate governance report
+    prior: 5
+    recurring: true
+  report.investor_presentation:
+    label_tr: Yatırımcı sunumu / bilgi notu
+    label_en: Investor presentation
+    prior: 30
+    recurring: true
+  report.operating_data:
+    label_tr: Operasyonel veriler
+    label_en: Operating data
+    prior: 35
+    recurring: true
+  report.portfolio:
+    label_tr: Portföy raporu
+    label_en: Portfolio report
+    prior: 10
+    recurring: true
+  report.valuation:
+    label_tr: Değerleme raporu
+    label_en: Valuation report
+    prior: 30
+  report.company_info:
+    label_tr: Şirket bilgi formu
+    label_en: Company information form
+    prior: 5
+    recurring: true
+
+  # --------------------------------------------------------------------------------------- governance
+  governance.board.change:
+    label_tr: Yönetim kurulu değişikliği
+    label_en: Board change
+    prior: 30
+  governance.board.committees:
+    label_tr: Yönetim kurulu komiteleri
+    label_en: Board committees
+    prior: 5
+  governance.executive.change:
+    label_tr: Üst yönetim değişikliği
+    label_en: Executive change
+    prior: 30
+  governance.gm.notice:
+    label_tr: Genel kurul daveti
+    label_en: General meeting notice
+  governance.gm.result:
+    label_tr: Genel kurul sonucu
+    label_en: General meeting result
+  governance.articles.change:
+    label_tr: Esas sözleşme değişikliği
+    label_en: Articles of association change
+  governance.auditor.change:
+    label_tr: Bağımsız denetçi seçimi
+    label_en: Auditor appointment
+    prior: 10
+    recurring: true
+  governance.name.change:
+    label_tr: Unvan değişikliği
+    label_en: Name change
+    prior: 20
+  governance.hq.change:
+    label_tr: Merkez / adres değişikliği
+    label_en: Head office change
+    prior: 10
+  governance.rating:
+    label_tr: Kurumsal yönetim derecelendirmesi
+    label_en: Governance rating
+    prior: 15
+  governance.policy:
+    label_tr: Şirket politikası
+    label_en: Company policy
+    prior: 10
+  governance.insurance:
+    label_tr: Yönetici sorumluluk sigortası
+    label_en: D&O insurance
+    prior: 5
+    recurring: true
+
+  # -------------------------------------------------------------------------------------------- legal
+  legal.lawsuit:
+    label_tr: Dava
+    label_en: Lawsuit
+  legal.investigation:
+    label_tr: Soruşturma / inceleme
+    label_en: Investigation
+    prior: 55
+  legal.sanction:
+    label_tr: İdari yaptırım / ceza
+    label_en: Sanction
+    prior: 55
+  legal.bankruptcy:
+    label_tr: İflas
+    label_en: Bankruptcy
+    prior: 85
+  legal.concordat:
+    label_tr: Konkordato
+    label_en: Concordat
+    prior: 85
+
+  # ------------------------------------------------------------------------------------------- market
+  market.measure:
+    label_tr: Piyasa tedbiri
+    label_en: Market measure
+    prior: 70
+  market.halt:
+    label_tr: İşlem sırası kapatma / açma
+    label_en: Trading halt
+    prior: 70
+  market.segment.change:
+    label_tr: Pazar değişikliği
+    label_en: Market segment change
+    prior: 45
+  market.index.change:
+    label_tr: Endeks değişikliği
+    label_en: Index change
+    prior: 40
+  market.ipo:
+    label_tr: Halka arz
+    label_en: IPO
+    prior: 40
+  market.prospectus:
+    label_tr: İzahname
+    label_en: Prospectus
+    prior: 20
+  market.delisting:
+    label_tr: Borsa kotundan çıkma
+    label_en: Delisting
+    prior: 80
+  market.circuit_breaker:
+    label_tr: Pay bazında devre kesici
+    label_en: Single-stock circuit breaker
+    prior: 30
+    recurring: true
+  market.nav_premium:
+    label_tr: Fiyatın net aktif değerin 2 katını aşması
+    label_en: Price above 2× NAV
+    prior: 20
+    recurring: true
+  market.unusual_activity:
+    label_tr: Olağan dışı fiyat ve miktar hareketi
+    label_en: Unusual price/volume activity
+    prior: 40
+  market.rumour_response:
+    label_tr: Haber ve söylentilere açıklama
+    label_en: Response to news or rumours
+    prior: 45
+  market.market_making:
+    label_tr: Piyasa yapıcılığı / likidite sağlayıcılık
+    label_en: Market making / liquidity provision
+    prior: 5
+    recurring: true
+  market.trade_cancellation:
+    label_tr: İşlem iptali
+    label_en: Trade cancellation
+    prior: 25
+  market.share_conversion:
+    label_tr: Borsada işlem gören tipe dönüşüm
+    label_en: Conversion to tradable shares
+    prior: 30
+    recurring: true
+  market.corporate_action_notice:
+    label_tr: Hak kullanımı duyurusu
+    label_en: Corporate action notice
+    prior: 25
+    recurring: true
+  market.settlement_default:
+    label_tr: Temerrüt işlemi
+    label_en: Settlement default
+    prior: 40
+  market.notice:
+    label_tr: Borsa / kurum duyurusu
+    label_en: Exchange or institution notice
+    prior: 10
+    recurring: true
+  market.bulletin:
+    label_tr: Piyasa bülteni
+    label_en: Market bulletin
+    prior: 5
+    recurring: true
+
+  # -------------------------------------------------------------------------------------------- macro
+  macro.policy_rate:
+    label_tr: Politika faizi
+    label_en: Policy rate
+  macro.inflation:
+    label_tr: Enflasyon
+    label_en: Inflation
+  macro.fx_regulation:
+    label_tr: Döviz düzenlemesi
+    label_en: FX regulation
+  macro.law_change:
+    label_tr: Mevzuat değişikliği
+    label_en: Law change
+
+  # -------------------------------------------------------------------------------------------- other
+  other.unclassified:
+    label_tr: Sınıflandırılmamış
+    label_en: Unclassified
+  other.test:
+    label_tr: Test bildirimi
+    label_en: Test disclosure
+    prior: 0
+    recurring: true

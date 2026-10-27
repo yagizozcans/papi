@@ -1,0 +1,120 @@
+// papi dashboard: span highlighting, live feed (SSE), keyboard navigation, uPlot charts. No external requests.
+(function () {
+  "use strict";
+
+  // ---- span highlighting -------------------------------------------------------------------------
+  function anchorsOf(el) { return (el.getAttribute("data-anchor") || "").split(/\s+/).filter(Boolean); }
+  function highlight(ids, on) {
+    ids.forEach(function (id) { var t = document.getElementById(id); if (t) t.classList.toggle("hl", on); });
+  }
+  document.addEventListener("mouseover", function (e) {
+    var el = e.target.closest && e.target.closest("[data-anchor]"); if (el) highlight(anchorsOf(el), true);
+  });
+  document.addEventListener("mouseout", function (e) {
+    var el = e.target.closest && e.target.closest("[data-anchor]"); if (el) highlight(anchorsOf(el), false);
+  });
+  document.addEventListener("click", function (e) {
+    var el = e.target.closest && e.target.closest("[data-anchor]"); if (!el) return;
+    var ids = anchorsOf(el), first = ids.length && document.getElementById(ids[0]);
+    if (!first) return;
+    e.preventDefault();
+    document.querySelectorAll(".span.hl").forEach(function (s) { s.classList.remove("hl"); });
+    highlight(ids, true);
+    first.scrollIntoView({ behavior: "smooth", block: "center" });
+    history.replaceState(null, "", "#" + ids[0]);
+  });
+  if (location.hash.length > 1) {
+    var target = document.getElementById(location.hash.slice(1));
+    if (target && target.classList.contains("span")) target.classList.add("hl");
+  }
+
+  // ---- live feed ---------------------------------------------------------------------------------
+  var feed = document.getElementById("feed");
+  var pill = document.getElementById("newpill");
+  var live = document.getElementById("live");
+  var pending = [];
+  function fragment(html) { var t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstElementChild; }
+  function insert(node) {
+    var old = document.getElementById(node.id);
+    if (old) { old.replaceWith(node); return; }
+    var empty = document.getElementById("feed-empty"); if (empty) empty.remove();
+    node.classList.add("fresh");
+    feed.insertBefore(node, feed.firstElementChild);
+  }
+  function flush() {
+    pending.splice(0).reverse().forEach(insert);
+    pill.hidden = true;
+  }
+  if (feed && feed.dataset.stream && window.EventSource) {
+    var es = new EventSource(feed.dataset.stream);
+    es.onopen = function () { live.classList.add("on"); };
+    es.onerror = function () { live.classList.remove("on"); };
+    var onItem = function (ev) {
+      var msg = JSON.parse(ev.data); if (!msg.html) return;
+      var node = fragment(msg.html);
+      if (document.getElementById(node.id)) { insert(node); return; }  // status update (e.g. analysed)
+      if (window.scrollY > 200) {
+        pending.push(node);
+        pill.hidden = false; pill.querySelector("button").textContent = pending.length + " yeni";
+      } else { insert(node); }
+    };
+    ["event.classified", "analysis.completed", "forecast.created"].forEach(function (t) { es.addEventListener(t, onItem); });
+    es.addEventListener("disclosure.revised", function (ev) {
+      var msg = JSON.parse(ev.data), id = msg.data && msg.data.revision_of;
+      document.querySelectorAll(".item").forEach(function (it) {
+        if (id && it.dataset.disclosure === id) it.classList.add("fresh");
+      });
+    });
+    pill.querySelector("button").addEventListener("click", function () { flush(); window.scrollTo({ top: 0 }); });
+    window.addEventListener("scroll", function () { if (window.scrollY < 50 && pending.length) flush(); });
+  }
+
+  // ---- keyboard ----------------------------------------------------------------------------------
+  var cur = -1;
+  function items() { return Array.prototype.slice.call(document.querySelectorAll(".item")); }
+  function focusAt(i) {
+    var list = items(); if (!list.length) return;
+    cur = Math.max(0, Math.min(list.length - 1, i));
+    list.forEach(function (x) { x.classList.remove("focus"); });
+    var el = list[cur]; el.classList.add("focus");
+    var d = el.closest("details"); if (d) d.open = true;
+    el.scrollIntoView({ block: "nearest" });
+  }
+  document.addEventListener("keydown", function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var tag = (e.target.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "select" || tag === "textarea") { if (e.key === "Escape") e.target.blur(); return; }
+    var list = items(), el = list[cur];
+    if (e.key === "j") { focusAt(cur + 1); }
+    else if (e.key === "k") { focusAt(cur - 1); }
+    else if (e.key === "/") { var f = document.getElementById("f-ticker"); if (f) { e.preventDefault(); f.focus(); } }
+    else if (e.key === "o" && el) { var k = el.querySelector("a.kap"); if (k) window.open(k.href, "_blank", "noopener"); }
+    else if (e.key === "Enter" && el) { var h = el.querySelector("a.headline"); if (h) location.href = h.href; }
+  });
+
+  // ---- charts (uPlot) ----------------------------------------------------------------------------
+  function trNum(v, d) { return v == null ? "—" : v.toLocaleString("tr-TR", { maximumFractionDigits: d }); }
+  function makeChart(el) {
+    var dataEl = el.nextElementSibling; if (!dataEl || !window.uPlot) return;
+    var d = JSON.parse(dataEl.textContent), kind = el.dataset.kind, w = el.clientWidth || 600, opts, data;
+    var tz = function (ts) { return uPlot.tzDate(new Date(ts * 1e3), "Europe/Istanbul"); };
+    if (kind === "price") {
+      data = [d.x, d.close, d.buy, d.sell];
+      opts = { width: w, height: 260, tzDate: tz, series: [{},
+        { label: "Kapanış", stroke: "#0b5cad", width: 1.5, value: function (u, v) { return trNum(v, 2); } },
+        { label: "Alış", stroke: "#0a7a3d", paths: function () { return null; }, points: { show: true, size: 9, fill: "#0a7a3d" } },
+        { label: "Satış", stroke: "#b3261e", paths: function () { return null; }, points: { show: true, size: 9, fill: "#b3261e" } }] };
+    } else if (kind === "usage") {
+      data = [d.x, d.cost];
+      opts = { width: w, height: 220, tzDate: tz, series: [{},
+        { label: "USD/saat", stroke: "#6b3fa0", fill: "rgba(107,63,160,.25)", paths: uPlot.paths.bars({ size: [0.9, 40] }),
+          value: function (u, v) { return trNum(v, 4); } }] };
+    } else {
+      data = [d.x, d.y];
+      opts = { width: w, height: 200, tzDate: tz, scales: { y: { distr: 3 } }, series: [{},
+        { label: "Gecikme (sn)", stroke: "#9a4d00", paths: function () { return null; }, points: { show: true, size: 4, fill: "#9a4d00" } }] };
+    }
+    new uPlot(opts, data, el);
+  }
+  document.querySelectorAll(".chart").forEach(makeChart);
+})();

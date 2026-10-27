@@ -1,0 +1,15 @@
+{% macro tickers(list) -%}
+{% for t in list %}<a class="chip" href="/company/{{ t.ticker }}">{{ t.ticker }}{% if t.badge == 'HOLDING' %}<b class="badge hold">HOLDING</b>{% elif t.badge == 'WATCH' %}<b class="badge watch">WATCH</b>{% endif %}</a>{% endfor %}
+{%- endmacro %}
+{% macro mat(m, band) -%}
+{% if m is not none %}<span class="mat mat-{{ band or 'na' }}" title="Önemlilik {{ m }}/100{% if band %} ({{ band }}){% endif %}">{{ m }}</span>{% endif %}
+{%- endmacro %}
+{% macro prio(p) -%}
+{% if p %}<span class="prio prio-{{ p }}">{{ p }}</span>{% endif %}
+{%- endmacro %}
+{% macro markers(it) -%}
+{% if it.revision_label %}<span class="mark rev" title="Revizyon">{{ it.revision_label }}</span>{% endif %}
+{% if it.catchup %}<span class="mark catchup" title="papi bu bildirimi geç gördü ({{ it.latency_s | latency }})">Geç görüldü</span>{% endif %}
+{% if it.is_late %}<span class="mark late" title="KAP: süresinde yapılmamış bildirim">Geç bildirim</span>{% endif %}
+{% if it.status == 'provisional' %}<span class="mark prov" title="Geçici sınıflandırma">geçici</span>{% endif %}
+{%- endmacro %}

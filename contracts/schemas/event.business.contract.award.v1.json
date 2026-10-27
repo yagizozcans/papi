@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "event.business.contract.award/1",
+  "title": "event.business.contract.award payload v1",
+  "description": "Contract award / new business relationship (Yeni iş ilişkisi). Unknown = null; spans are kept outside the payload (event.extra.payload_spans).",
+  "type": "object",
+  "required": [
+    "counterparty",
+    "value",
+    "currency"
+  ],
+  "properties": {
+    "counterparty": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "issuer_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "is_related_party": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "is_public_sector": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "value": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Contract value in `currency`"
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[A-Z]{3}$"
+    },
+    "vat_included": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "duration_months": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "start_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "scope": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "is_framework": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "ratios": {
+      "type": "object",
+      "properties": {
+        "value_to_ttm_revenue": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "value_to_market_cap": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

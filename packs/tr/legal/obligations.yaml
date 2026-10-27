@@ -1,0 +1,477 @@
+# papi obligations layer — Türkiye pack (PRD 03 §3.3, top event types 04 §7 #1–#10).
+#
+# DRAFT written by an LLM (Claude) from the provision texts fetched on 2026-10-28 (SPK consolidated
+# texts via mevzuat.spk.gov.tr, Borsa İstanbul Pay Piyasası Yönergesi). Nothing here is approved:
+# every item must be reviewed against the cited provisions and approved with
+# `papi kb approve-obligation <id>`; only approved items are used by analysis/simulation.
+#
+# Fields
+#   id               stable key (approval is stored per id; editing an item resets its approval)
+#   event_codes      taxonomy codes (packs/tr/taxonomy.yaml) this obligation applies to
+#   citation         primary provision (citation id); also_cites = supporting provisions
+#   actor            issuer | board | insider | shareholder | offeror | exchange | regulator
+#   trigger          what starts the clock
+#   deadline_rule    immediately | by_next_session_open | within_n_business_days(n) | within_n_days(n)
+#                    | before_event (must happen before a later event, see note) | no_deadline
+#   required_fields  what a compliant disclosure contains
+#   downstream_steps expected follow-on steps in order (timelines, PRD 05); `after` = previous step key
+version: 1
+drafted_by: "claude (LLM draft from provision text, 2026-10-28; unreviewed)"
+
+obligations:
+  # ----------------------------------------------------------------------- 1 business.contract.award
+  - id: contract-award-inside-information
+    event_codes: [business.contract.award]
+    title_tr: Önemli sözleşme / iş ilişkisi — içsel bilginin kamuya açıklanması
+    citation: "tr:spk:II-15.1:m5:f1"
+    also_cites:
+      - "tr:spk-guide:ozel-durumlar:II.5.7"
+      - "tr:spk:II-15.1:m24:f1"
+      - "tr:spk:II-15.1:m6:f1"
+      - "tr:spk:II-15.1:m23:f7"
+    actor: issuer
+    trigger: >-
+      Faaliyetleri önemli ölçüde etkileyebilecek bir müşteri/tedarikçi ile yeni iş ilişkisi (sözleşme,
+      ihale kazanımı) ortaya çıktığında veya öğrenildiğinde.
+    deadline_rule: immediately
+    required_fields:
+      - karşı taraf (gerekliyse; m.24/1)
+      - sözleşmenin konusu
+      - tutar veya miktar (ifade edilebiliyorsa; m.24/1)
+      - süre / teslim takvimi
+      - finansal tablolara beklenen etki
+      - ilişkili taraf işlemi olup olmadığı
+    downstream_steps:
+      - key: contract_update
+        label_tr: Sözleşmedeki gelişme ve değişikliklerin güncellenmesi
+        actor: issuer
+        deadline_rule: immediately
+        cites: ["tr:spk:II-15.1:m23:f7"]
+      - key: contract_completion_or_termination
+        label_tr: Sözleşmenin tamamlanması, feshi veya önemini yitirmesinin açıklanması
+        actor: issuer
+        deadline_rule: immediately
+        cites: ["tr:spk-guide:ozel-durumlar:II.5.7"]
+    note: >-
+      Erteleme (m.6) mümkündür; erteleme kararı yönetim kurulu kararına bağlanır ve sebep ortadan
+      kalkınca erteleme gerekçesiyle birlikte açıklanır.
+
+  # ------------------------------------------------------------------------ 2 capital.increase.bonus
+  - id: bonus-issue-board-decision
+    event_codes: [capital.increase.bonus]
+    title_tr: Bedelsiz sermaye artırımı — yönetim kurulu kararının açıklanması
+    citation: "tr:spk:II-15.1:m18:f1:e"
+    also_cites:
+      - "tr:spk:II-18.1:m12:f1"
+      - "tr:spk:VII-128.1:m16"
+    actor: board
+    trigger: İç kaynaklardan ve/veya kâr payından sermaye artırımına ilişkin yönetim kurulu kararı alınması.
+    deadline_rule: immediately
+    required_fields:
+      - mevcut (çıkarılmış) sermaye
+      - artırım tutarı ve oranı
+      - kaynak (iç kaynak kalemleri / kâr payı)
+      - kayıtlı sermaye tavanı (kayıtlı sistemde)
+      - pay grupları ve imtiyazlar
+    downstream_steps:
+      - key: spk_application
+        label_tr: Kurula başvuru (yetkili organ kararından itibaren 30 gün içinde)
+        actor: issuer
+        deadline_rule: within_n_days(30)
+        cites: ["tr:spk:VII-128.1:m16:f4:a"]
+      - key: spk_approval
+        label_tr: SPK onayı / uygun görüşü (SPK bülteninde ilan)
+        actor: regulator
+        deadline_rule: no_deadline
+        cites: ["tr:spk:VII-128.1:m16"]
+      - key: bonus_distribution_date
+        label_tr: Bedelsiz pay dağıtım (hak kullanım) tarihinin KAP'ta duyurulması
+        actor: issuer
+        deadline_rule: before_event
+        cites: ["tr:spk:II-15.1:m18:f1:e"]
+        note: Hak kullanım tarihinden önce duyurulur; payların borsada işlem görmesi BIST ilanını izler.
+      - key: new_shares_trading
+        label_tr: Yeni payların Pay Piyasasında işlem görmeye başlaması (işlem öncesi KAP ilanı)
+        actor: exchange
+        deadline_rule: before_event
+        cites: ["tr:bist:pay-piyasasi-yonergesi:m11:f1"]
+      - key: capital_registration
+        label_tr: Sermaye maddesinin yeni şeklinin ticaret siciline tescili (uygun görüşten sonra 10 gün)
+        actor: board
+        deadline_rule: within_n_days(10)
+        cites: ["tr:spk:II-18.1:m12:f2"]
+
+  # ----------------------------------------------------------------------- 3 capital.increase.rights
+  - id: rights-issue-board-decision
+    event_codes: [capital.increase.rights]
+    title_tr: Bedelli sermaye artırımı — yönetim kurulu kararının açıklanması
+    citation: "tr:spk:II-15.1:m18:f1:e"
+    also_cites:
+      - "tr:spk:VII-128.1:m12:f1:a"
+      - "tr:spk:II-18.1:m12:f1"
+    actor: board
+    trigger: >-
+      Kayıtlı sermaye sisteminde artırılacak sermaye miktarını ve satış esaslarını belirleyen yönetim
+      kurulu kararı (esas sermaye sisteminde madde tadil tasarısı) alınması.
+    deadline_rule: immediately
+    required_fields:
+      - mevcut sermaye ve artırım tutarı
+      - yeni pay alma hakkı oranı ve kısıtlanıp kısıtlanmadığı (m.12/1-c)
+      - pay satış fiyatı (1 TL nominal için)
+      - kullanım süresi ve satış esasları
+      - fon kullanım yeri (bedelli artırımdan elde edilecek fon)
+    downstream_steps:
+      - key: spk_application
+        label_tr: İzahname onayı için Kurula başvuru (yetkili organ kararından itibaren 30 gün içinde)
+        actor: issuer
+        deadline_rule: within_n_days(30)
+        cites: ["tr:spk:VII-128.1:m12:f2"]
+      - key: spk_approval
+        label_tr: İzahnamenin Kurulca onayı (SPK bülteni)
+        actor: regulator
+        deadline_rule: no_deadline
+        cites: ["tr:spk:VII-128.1:m12:f2"]
+      - key: prospectus_publication
+        label_tr: Onaylı izahnamenin ilanı (KAP)
+        actor: issuer
+        deadline_rule: no_deadline
+        cites: ["tr:spk:VII-128.1:m22:f1"]
+      - key: rights_period_start
+        label_tr: Yeni pay alma hakkı kullanımının başlaması (izahname ilanını izleyen 10 gün içinde)
+        actor: issuer
+        deadline_rule: within_n_days(10)
+        after: prospectus_publication
+        cites: ["tr:spk:VII-128.1:m22:f1"]
+      - key: rights_period_end
+        label_tr: Yeni pay alma hakkı kullanım süresinin sonu (borsada işlem gören ortaklıkta 15–60 gün)
+        actor: issuer
+        deadline_rule: within_n_days(60)
+        after: rights_period_start
+        cites: ["tr:spk:VII-128.1:m22:f4"]
+        note: Süre 15 günden az olamaz; Kuruldan izinle uzatılabilir.
+      - key: remaining_shares_sale
+        label_tr: Kalan payların borsada satışı ve satış sonuçlarının açıklanması
+        actor: issuer
+        deadline_rule: no_deadline
+        cites: ["tr:spk:VII-128.1:m23:f4"]
+      - key: sale_completion
+        label_tr: Satılmayan payların iptali (6 iş günü) veya taahhüde müracaat (3 iş günü)
+        actor: issuer
+        deadline_rule: within_n_business_days(6)
+        cites: ["tr:spk:VII-128.1:m25:f1:a", "tr:spk:VII-128.1:m25:f1:b"]
+      - key: completion_disclosure
+        label_tr: Sermaye artırımının tamamlandığını ve sağlanan fonu gösteren özel durum açıklaması
+        actor: issuer
+        deadline_rule: immediately
+        cites: ["tr:spk:VII-128.1:m25:f1:d"]
+      - key: new_shares_trading
+        label_tr: Yeni payların Pay Piyasasında işlem görmeye başlaması (işlem öncesi KAP ilanı)
+        actor: exchange
+        deadline_rule: before_event
+        cites: ["tr:bist:pay-piyasasi-yonergesi:m11:f1"]
+      - key: capital_registration
+        label_tr: Kurul uygun görüşünden sonra sermaye maddesinin 10 gün içinde tescil ve ilanı
+        actor: board
+        deadline_rule: within_n_days(10)
+        cites: ["tr:spk:VII-128.1:m25:f1:ç"]
+
+  # ---------------------------------------------------------------------- 4 distribution.dividend.cash
+  - id: dividend-board-proposal
+    event_codes: [distribution.dividend.cash]
+    title_tr: Kâr dağıtımına ilişkin yönetim kurulu önerisinin kâr dağıtım tablosuyla açıklanması
+    citation: "tr:spk:II-19.1:m8:f1"
+    also_cites:
+      - "tr:spk:II-15.1:m18:f1:c"
+      - "tr:spk:II-19.1:m4:f2"
+      - "tr:spk-guide:kar-payi:B"
+    actor: board
+    trigger: Yönetim kurulunun kâr dağıtım önerisini (veya kâr payı avansı kararını) alması.
+    deadline_rule: immediately
+    required_fields:
+      - kâr dağıtım tablosu (Kurulca belirlenen şekilde)
+      - pay başına brüt/net nakit kâr payı
+      - dağıtım oranı (net dağıtılabilir dönem kârına)
+      - önerilen ödeme tarihi / taksitler
+      - imtiyazlı paylara dağıtım (varsa)
+    downstream_steps:
+      - key: gm_agenda
+        label_tr: Olağan genel kurul gündeminin ilanı (kâr dağıtım tablosu en geç bu tarihte açıklanır)
+        actor: board
+        deadline_rule: before_event
+        cites: ["tr:spk:II-15.1:m18:f1:a", "tr:spk:II-19.1:m8:f1"]
+      - key: gm_decision
+        label_tr: Genel kurulun kâr dağıtım kararının açıklanması
+        actor: issuer
+        deadline_rule: immediately
+        cites: ["tr:spk:II-15.1:m18:f1:c"]
+      - key: installment_dates
+        label_tr: Taksit ödeme zamanlarının duyurulması (genel kurulu takip eden 15 gün içinde, belirlenmediyse)
+        actor: board
+        deadline_rule: within_n_days(15)
+        cites: ["tr:spk:II-19.1:m5:f2:b"]
+      - key: dividend_payment
+        label_tr: Kâr payı ödemesi (en geç genel kurulun yapıldığı hesap dönemi sonuna kadar başlanır)
+        actor: issuer
+        deadline_rule: no_deadline
+        cites: ["tr:spk:II-19.1:m4:f2:c"]
+
+  # --------------------------------------------------------------- 5 buyback.program.start / execution
+  - id: buyback-program-announcement
+    event_codes: [buyback.program.start]
+    title_tr: Geri alım programının genel kurul öncesi kamuya duyurulması
+    citation: "tr:spk:II-22.1:m12:f1"
+    also_cites:
+      - "tr:spk:II-22.1:m5:f1"
+      - "tr:spk:II-22.1:m7:f1"
+      - "tr:spk:II-22.1:m5:f4"
+    actor: board
+    trigger: Yönetim kurulunun geri alım programını hazırlayıp genel kurul onayına sunması.
+    deadline_rule: before_event
+    required_fields:
+      - geri alımın amacı
+      - program süresi (borsada işlem gören ortaklıkta azami 3 yıl)
+      - geri alınabilecek azami pay sayısı
+      - alt ve üst fiyat limitleri
+      - geri alım için ayrılan fon ve kaynağı
+    downstream_steps:
+      - key: gm_approval
+        label_tr: Programın genel kurulda onaylanması (değişiklik varsa ertesi iş günü açıklama)
+        actor: issuer
+        deadline_rule: within_n_business_days(1)
+        cites: ["tr:spk:II-22.1:m12:f2"]
+      - key: pre_start_notice
+        label_tr: Geri alıma başlamadan 2 iş günü önce dönem ve nominal tutar açıklaması
+        actor: issuer
+        deadline_rule: before_event
+        cites: ["tr:spk:II-22.1:m12:f4"]
+      - key: completion_report
+        label_tr: Dönemin/programın bitimini izleyen 3 iş günü içinde toplu sonuç açıklaması
+        actor: issuer
+        deadline_rule: within_n_business_days(3)
+        cites: ["tr:spk:II-22.1:m12:f7"]
+    note: >-
+      Program, ilan ve toplantı günleri hariç genel kurul tarihinden en az üç hafta önce açıklanır.
+      Yakın ve ciddi kayıp halinde (m.5/4–5) genel kurul yetkisi olmadan yönetim kurulu kararıyla geri
+      alım yapılabilir; bu durumda da m.12 açıklamaları uygulanır.
+
+  - id: buyback-transaction-disclosure
+    event_codes: [buyback.execution]
+    title_tr: Her geri alım işleminin ertesi iş günü seans öncesi açıklanması
+    citation: "tr:spk:II-22.1:m12:f5"
+    also_cites:
+      - "tr:spk:II-22.1:m12:f6"
+      - "tr:spk:II-22.1:m9"
+    actor: issuer
+    trigger: Program kapsamında bir geri alım işleminin gerçekleşmesi.
+    deadline_rule: by_next_session_open
+    required_fields:
+      - işleme konu payların nominal tutarı
+      - sermayeye oranı
+      - işlem fiyatı
+      - program kapsamında daha önce geri alınan payların nominal tutarı
+      - paylara bağlı imtiyazlar (varsa)
+      - işlem tarihi
+    downstream_steps:
+      - key: completion_report
+        label_tr: Dönemin/programın bitimini izleyen 3 iş günü içinde toplu sonuç açıklaması
+        actor: issuer
+        deadline_rule: within_n_business_days(3)
+        cites: ["tr:spk:II-22.1:m12:f7"]
+
+  # ------------------------------------------------------------------------ 6 ownership.insider_trade
+  - id: insider-transaction-disclosure
+    event_codes: [ownership.insider_trade]
+    title_tr: İdari sorumluluğu bulunan kişiler ve ana ortak işlemlerinin açıklanması
+    citation: "tr:spk:II-15.1:m11:f1"
+    also_cites:
+      - "tr:spk:II-15.1:m11:f2"
+      - "tr:spk:II-15.1:m11:f4"
+      - "tr:spk-guide:ozel-durumlar:IV"
+      - "tr:spk-guide:ozel-durumlar:II.8"
+    actor: insider
+    trigger: >-
+      İdari sorumluluğu bulunan kişi, yakından ilişkili kişi veya ana ortağın ihraççı payları ya da paya
+      dayalı araçlarda işlem yapması (takvim yılı toplamı 250.000 TL'ye ulaştıktan sonraki tüm işlemler).
+    deadline_rule: immediately
+    required_fields:
+      - işlemi yapanın adı soyadı / unvanı ve ihraççıdaki görevi veya ilişkisi
+      - işlem tarihi
+      - alış/satış ve fiyat aralığı
+      - işleme konu payların nominal tutarı ve işlem tutarı
+      - işlem sonrası sermaye ve oy hakkı oranları
+    downstream_steps: []
+    note: >-
+      Tebliğ süre belirtmez; Özel Durumlar Rehberi IV'e göre açıklama işlem "ortaya çıktığı veya
+      öğrenildiği anda" Tebliğ ekindeki formla yapılır.
+
+  # --------------------------------------------------------------- 7 ownership.threshold_crossing
+  - id: ownership-threshold-disclosure
+    event_codes: [ownership.threshold_crossing]
+    title_tr: Pay/oy hakkı eşiklerinin (%5…%95) aşılması veya altına düşülmesinin açıklanması
+    citation: "tr:spk:II-15.1:m12:f1:a"
+    also_cites:
+      - "tr:spk:II-15.1:m12:f4"
+      - "tr:spk:II-15.1:m23:f3"
+      - "tr:spk:II-15.1:m15:f1"
+    actor: shareholder
+    trigger: >-
+      Bir kişinin (birlikte hareket edenlerle, doğrudan/dolaylı) sermaye veya oy hakkı oranının %5, %10,
+      %15, %20, %25, %33, %50, %67 veya %95'e ulaşması ya da altına düşmesi.
+    deadline_rule: within_n_business_days(3)
+    required_fields:
+      - yükümlünün adı soyadı / unvanı
+      - dolaylı iştirak ilişkisine konu ortaklıkların unvanı (varsa)
+      - birlikte hareket edenler (varsa)
+      - ihraççının unvanı
+      - işlem tarihi, nominal değer ve işlem tutarı
+      - işlem öncesi ve sonrası pay ve oy hakkı oranları
+    downstream_steps: []
+    note: >-
+      Süre, işlemin gerçekleşmesini izleyen üçüncü iş günü saat 09.00'dur (m.23/3). Doğrudan pay sahipliği
+      eşikleri için açıklamayı MKK yapar (m.12/4); birlikte hareket, dolaylı veya oy hakkına bağlı
+      eşiklerde yükümlülük kişinin kendisindedir.
+
+  # ------------------------------------------------------------------ 8 mna.acquisition / mna.disposal
+  - id: mna-inside-information
+    event_codes: [mna.acquisition, mna.disposal]
+    title_tr: Birleşme, devralma, iştirak/varlık alım-satımı — içsel bilginin açıklanması
+    citation: "tr:spk:II-15.1:m5:f1"
+    also_cites:
+      - "tr:spk-guide:ozel-durumlar:II.5.5"
+      - "tr:spk-guide:ozel-durumlar:II.5.9"
+      - "tr:spk:II-15.1:m6:f1"
+    actor: issuer
+    trigger: Satın alma/satış kararı veya anlaşmasının ortaya çıkması ya da öğrenilmesi.
+    deadline_rule: immediately
+    required_fields:
+      - karşı taraf
+      - işlemin konusu (pay oranı / varlık)
+      - bedel ve ödeme koşulları
+      - değerleme raporu (varsa) ve sonucu
+      - finansal tablolara beklenen etki
+      - önemli nitelikteki işlem sayılıp sayılmadığı
+    downstream_steps:
+      - key: deal_update
+        label_tr: Kapanış koşulları, onaylar (Rekabet Kurumu vb.) ve gelişmelerin güncellenmesi
+        actor: issuer
+        deadline_rule: immediately
+        cites: ["tr:spk:II-15.1:m23:f7"]
+      - key: deal_completion
+        label_tr: İşlemin tamamlandığının açıklanması
+        actor: issuer
+        deadline_rule: immediately
+        cites: ["tr:spk:II-15.1:m5:f1"]
+
+  - id: mna-significant-transaction
+    event_codes: [mna.acquisition, mna.disposal]
+    title_tr: Önemli nitelikteki işlem (ÖNİ) — yönetim kurulu kararının seans dışında açıklanması
+    citation: "tr:spk:II-23.3:m8:f2"
+    also_cites:
+      - "tr:spk:II-23.3:m8:f1"
+      - "tr:spk:II-23.3:m6"
+      - "tr:spk-guide:onemli-nitelikteki-islemler:2"
+    actor: board
+    trigger: Tebliğ m.5–6 ölçütlerini aşan birleşme/bölünme veya mal varlığı devrine ilişkin yönetim kurulu kararı.
+    deadline_rule: by_next_session_open
+    required_fields:
+      - önemli nitelikteki işlemin niteliği
+      - ikinci bölüm kapsamındaki önemlilik değerlendirmesi
+      - işlemin gerekçesi
+      - ayrılma hakkı kullanım fiyatı
+      - ayrılma hakkından yararlanabilecek pay sahipleri ve şartlar
+      - değerleme raporunun özeti/sonucu (varsa)
+      - bağımsız üyelerin oyu ve muhalefet şerhi
+    downstream_steps:
+      - key: gm_agenda
+        label_tr: Ayrı gündem maddeleri ve bilgilendirme dokümanıyla genel kurul ilanı
+        actor: board
+        deadline_rule: no_deadline
+        cites: ["tr:spk:II-23.3:m9:f1", "tr:spk:II-23.3:m9:f2"]
+      - key: gm_vote
+        label_tr: Genel kurulda işlemin oylanması
+        actor: issuer
+        deadline_rule: no_deadline
+        cites: ["tr:spk:II-23.3:m10"]
+      - key: withdrawal_right_start
+        label_tr: Ayrılma hakkı kullanımının başlaması (genel kurul tarihinden itibaren en geç 6 iş günü)
+        actor: issuer
+        deadline_rule: within_n_business_days(6)
+        cites: ["tr:spk:II-23.3:m12:f2"]
+      - key: withdrawal_right_end
+        label_tr: Ayrılma hakkı kullanım süresinin sonu (başlangıçtan itibaren 10 iş günü)
+        actor: issuer
+        deadline_rule: within_n_business_days(10)
+        after: withdrawal_right_start
+        cites: ["tr:spk:II-23.3:m12:f2"]
+    note: Payları borsada işlem gören ortaklıkta açıklama Borsa pay piyasası işlem saatleri dışında yapılır.
+
+  # ------------------------------------------------------------------ 9 report.financial.periodic
+  - id: annual-financial-report
+    event_codes: [report.financial.periodic]
+    title_tr: Yıllık finansal raporun ve bağımsız denetim raporunun KAP'ta bildirimi
+    citation: "tr:spk:II-14.1:m10:f1"
+    also_cites:
+      - "tr:spk:II-14.1:m10:f2"
+      - "tr:spk:II-14.1:m10:f3"
+      - "tr:spk:II-14.1:m9"
+    actor: issuer
+    trigger: Hesap döneminin bitimi.
+    deadline_rule: within_n_days(70)
+    required_fields:
+      - yıllık finansal tablolar ve dipnotlar
+      - bağımsız denetim raporu
+      - yıllık faaliyet raporu
+      - sorumluluk beyanı (m.9)
+    downstream_steps: []
+    note: >-
+      Konsolide tablo hazırlamayanlar için 60 gün, hazırlayanlar için 70 gün (m.10/1); halka açık
+      ortaklıklar genel kuruldan en az 3 hafta önce bildirir; her halükarda hesap dönemini izleyen üçüncü
+      ayın sonuna kadar. Son gün resmi tatile denk gelirse izleyen ilk iş günü.
+
+  - id: interim-financial-report
+    event_codes: [report.financial.periodic]
+    title_tr: Ara dönem finansal raporun KAP'ta bildirimi
+    citation: "tr:spk:II-14.1:m11:f1"
+    also_cites:
+      - "tr:spk:II-14.1:m11:f2"
+      - "tr:spk:II-14.1:m11:f3"
+    actor: issuer
+    trigger: Ara dönemin (3, 6, 9 ay) bitimi.
+    deadline_rule: within_n_days(40)
+    required_fields:
+      - ara dönem finansal tablolar ve dipnotlar
+      - ara dönem faaliyet raporu
+      - sorumluluk beyanı
+      - sınırlı denetim raporu (inceleme yapıldıysa)
+    downstream_steps: []
+    note: >-
+      Konsolide olmayan 30 gün, konsolide 40 gün; sınırlı bağımsız denetime tabi ara dönemlerde borsada
+      işlem gören işletmeler için 10 gün eklenir (m.11/2).
+
+  # ------------------------------------------------------------------ 10 report.financial.guidance
+  - id: forward-looking-statements
+    event_codes: [report.financial.guidance]
+    title_tr: Geleceğe yönelik değerlendirmelerin (beklentilerin) kamuya açıklanması esasları
+    citation: "tr:spk:II-15.1:m10:f1"
+    also_cites:
+      - "tr:spk:II-15.1:m10:f1:a"
+      - "tr:spk:II-15.1:m10:f1:b"
+      - "tr:spk:II-15.1:m10:f1:c"
+      - "tr:spk:II-15.1:m10:f2"
+      - "tr:spk-guide:ozel-durumlar:VI"
+    actor: issuer
+    trigger: >-
+      İhraççının geleceğe yönelik değerlendirme açıklamak istemesi veya açıklanmış beklentilerde önemli
+      değişiklik ortaya çıkması.
+    deadline_rule: immediately
+    required_fields:
+      - yönetim kurulu kararı veya yetkili kişinin yazılı onayı
+      - açıklanan beklentiler ve dayandığı varsayımlar
+      - önceki açıklamalarla gerçekleşmeler arasındaki önemli farklılıkların nedenleri
+    downstream_steps:
+      - key: guidance_revision
+        label_tr: Açıklanmış beklentilerde önemli değişiklikte (sayı sınırı olmaksızın) güncelleme
+        actor: issuer
+        deadline_rule: immediately
+        cites: ["tr:spk:II-15.1:m10:f1:b"]
+    note: Açıklama zorunlu değildir; yapılırsa yılda en fazla dört defa (önemli değişiklikler hariç).

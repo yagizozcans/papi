@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "event.buyback.execution/1",
+  "title": "event.buyback.execution payload v1",
+  "description": "Shares repurchased under a buyback programme. Unknown = null; spans are kept outside the payload (event.extra.payload_spans).",
+  "type": "object",
+  "required": [
+    "trade_date",
+    "shares_nominal",
+    "avg_price",
+    "min_price",
+    "max_price",
+    "total_amount",
+    "currency",
+    "cumulative_shares_nominal",
+    "cumulative_pct_of_capital",
+    "trades"
+  ],
+  "properties": {
+    "trade_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "shares_nominal": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "avg_price": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "min_price": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "max_price": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "total_amount": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[A-Z]{3}$"
+    },
+    "cumulative_shares_nominal": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "cumulative_pct_of_capital": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "trades": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "side": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "buy",
+              "sell",
+              null
+            ]
+          },
+          "shares_nominal": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "price": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "amount": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

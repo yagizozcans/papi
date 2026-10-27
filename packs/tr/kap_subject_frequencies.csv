@@ -1,0 +1,137 @@
+subject,disclosure_class,count,share_pct,cum_share_pct,map_entry,map_codes
+Finansal Rapor,FR,980,13.57,13.57,subject,report.financial.periodic
+Sorumluluk Beyanı (Konsolide),FR,798,11.05,24.63,subject,report.attestation
+Faaliyet Raporu (Konsolide),FR,770,10.66,35.29,subject,report.activity
+Pay Bazında Devre Kesici Bildirimi,DKB,636,8.81,44.10,subject,market.circuit_breaker
+Özel Durum Açıklaması (Genel),ODA,599,8.30,52.40,subject,rules
+Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren),ODA,424,5.87,58.27,subject,rules
+Şirket Genel Bilgi Formu,DG,320,4.43,62.70,subject,report.company_info
+Herhangi Bir Otoriteye Mali Tablo Verilmesi,DG,177,2.45,65.15,subject,report.financial.regulatory_filing
+Katılım Finansı İlkeleri Bilgi Formu,DG,157,2.17,67.33,subject,report.company_info
+Payların Geri Alınmasına İlişkin Bildirim,ODA,150,2.08,69.40,subject,rules
+Genel Kurul İşlemlerine İlişkin Bildirim,ODA,121,1.68,71.08,subject,rules
+Sorumluluk Beyanı (Konsolide Olmayan),FR,118,1.63,72.71,subject,report.attestation
+Faaliyet Raporu (Konsolide Olmayan),FR,96,1.33,74.04,subject,report.activity
+Pay Alım Satım Bildirimi,DKB,96,1.33,75.37,subject,ownership.insider_trade
+Bağımsız Denetim Kuruluşunun Belirlenmesi,ODA,89,1.23,76.61,subject,governance.auditor.change
+Yatırım Kuruluşu Varant - Sertifika - Senetlerine İlişkin Bildirim,ODA,80,1.11,77.71,subject,finance.structured_product
+Sermaye Artırımı - Azaltımı İşlemlerine İlişkin Bildirim,ODA,76,1.05,78.77,subject,rules
+Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faizsiz),ODA,68,0.94,79.71,subject,rules
+İhraç Tavanına İlişkin Bildirim,ODA,64,0.89,80.60,subject,finance.debt.issuance_ceiling
+Kar Payı Dağıtım İşlemlerine İlişkin Bildirim,ODA,62,0.86,81.45,subject,rules
+Piyasa Yapıcılığı Kapsamında Gerçekleştirilen İşlemler Bildirimi,DG,60,0.83,82.29,subject,market.market_making
+Kurumsal Yönetim Uyum Raporu,DG,50,0.69,82.98,subject,report.corporate_governance
+Sürdürülebilirlik Uyum Raporu,DG,50,0.69,83.67,subject,report.sustainability
+Kredi Derecelendirmesi,ODA,49,0.68,84.35,subject,finance.rating.change
+BISTECH Pay Piyasası Alım Satım Sistemi Duyurusu,DKB,48,0.66,85.01,subject,rules
+Kurumsal Yönetim Bilgi Formu,DG,48,0.66,85.68,prefix,report.corporate_governance
+Haftalık Rapor,DG,45,0.62,86.30,subject,report.portfolio
+Kurumsal Yönetim Bilgi Formu (Güncelleme) - Yönetim Kurulu-2,DG,44,0.61,86.91,prefix,report.corporate_governance
+Yeni İş İlişkisi,ODA,44,0.61,87.52,subject,business.contract.award
+Kayıtlı Sermaye Tavanı İşlemlerine İlişkin Bildirim,ODA,40,0.55,88.07,subject,capital.registered_ceiling
+Genel Açıklama,DG,38,0.53,88.60,subject,rules
+Tertip İhraç Belgesi,DG,38,0.53,89.13,subject,finance.debt.issuance
+Pay Alım Satım Bildirimi,ODA,36,0.50,89.63,subject,ownership.insider_trade
+Yönetim Kurulu Komiteleri,ODA,35,0.48,90.11,subject,governance.board.committees
+TSRS Uyumlu Sürdürülebilirlik Raporu,FR,32,0.44,90.55,subject,report.sustainability
+Esas Sözleşme,DG,30,0.42,90.97,subject,governance.articles.change
+İhraç Belgesi,DG,30,0.42,91.39,subject,finance.debt.issuance
+Halka Arz Fiyatının Belirlenmesinde Esas Alınan Varsayımlara İlişkin Değerlendirme Raporu,DG,23,0.32,91.70,subject,market.ipo
+Finansal Tablo ve-veya Dipnot Değişikliği,ODA,22,0.30,92.01,subject,report.financial.restatement
+Likidite Sağlayıcılık Kapsamındaki İşlemler,DG,22,0.30,92.31,subject,market.market_making
+Sermaye Artırımından Elde Edilecek - Edilen Fonun Kullanımına İlişkin Rapor,DG,20,0.28,92.59,subject,capital.use_of_proceeds
+Finansal Takvim,DG,19,0.26,92.85,subject,report.financial.calendar
+Sürdürülebilirlik Raporu,DG,19,0.26,93.12,subject,report.sustainability
+Genel Kurul Bildirimi,ODA,18,0.25,93.37,subject,rules
+İşlem İptali,DKB,17,0.24,93.60,subject,market.trade_cancellation
+İhale Süreci / Sonucu,ODA,16,0.22,93.82,subject,business.tender_result
+"Borçlanma Araçları, Yatırım Fonları ve Varant İtfa/Kupon/Getiri/ Nakdi Uzlaşı Ödeme İşlemleri",DKB,15,0.21,94.03,subject,finance.debt.payment
+Borçlanma Araçlarının / Kira Sertifikalarının İşlem Görmeye Başlaması,DKB,15,0.21,94.24,subject,finance.debt.listing
+Esas Sözleşme Tadili,ODA,15,0.21,94.45,subject,governance.articles.change
+Hak Kullanımı,DKB,15,0.21,94.65,subject,market.corporate_action_notice
+Takasbank Para Piyasası Günlük Bülten,DKB,15,0.21,94.86,subject,market.bulletin
+Borsada İşlem Gören Tipe Dönüşüm Duyurusu,DKB,14,0.19,95.06,subject,market.share_conversion
+Faaliyet Raporu Sorumluluk Beyanı,FR,14,0.19,95.25,subject,report.attestation
+Geleceğe Dönük Değerlendirmeler,ODA,14,0.19,95.44,subject,report.financial.guidance
+Kamuyu Aydınlatma Platformu Duyurusu,DKB,14,0.19,95.64,subject,rules
+Kurumsal Yönetim Bilgi Formu (Güncelleme) - Yönetim Kurulu-1,DG,13,0.18,95.82,prefix,report.corporate_governance
+Olağan Dışı Fiyat ve Miktar Hareketleri,ODA,13,0.18,96.00,subject,market.unusual_activity
+Finansal Duran Varlık Edinimi,ODA,12,0.17,96.16,subject,mna.acquisition
+Kurumsal Yönetim İlkelerine Uyum Derecelendirmesi,ODA,12,0.17,96.33,subject,governance.rating
+İlişkili Taraf İşlemleri,ODA,12,0.17,96.50,subject,business.related_party
+Portföy Sınırlamalarına Uyumun Kontrolü,DG,11,0.15,96.65,prefix,report.portfolio
+Merkezi Kayıt Kuruluşu A.Ş. Duyurusu,DKB,10,0.14,96.79,subject,rules
+Kurumsal Yönetim Bilgi Formu (Güncelleme) - Pay Sahipleri,DG,9,0.12,96.91,prefix,report.corporate_governance
+Endekslerde Kullanılan Fiili Dolaşımdaki Pay Oranı Değişiklikleri,DKB,8,0.11,97.02,subject,market.index.change
+Takasbank Ödünç Pay Piyasası Günlük Bülten,DKB,8,0.11,97.13,subject,market.bulletin
+Kurumsal Yönetim Bilgi Formu (Güncelleme) - Yönetim Kurulu-3,DG,7,0.10,97.23,prefix,report.corporate_governance
+Pay  Satış Bilgi Formu,DG,7,0.10,97.33,subject,ownership.secondary_offering
+Sermaye Artırımı veya Azaltımı Bildirimi,ODA,7,0.10,97.42,subject,rules
+Temerrüt İşlemi,DKB,7,0.10,97.52,subject,market.settlement_default
+Yatırımcı Raporu,DG,7,0.10,97.62,subject,report.portfolio
+İzahname (SPK Tarafından Onaylanan),DG,7,0.10,97.71,prefix,market.prospectus
+Değerleme Raporu,DG,6,0.08,97.80,subject,report.valuation
+Özel Durum Açıklaması (Genel),DKB,6,0.08,97.88,subject,rules
+Birleşme İşlemlerine İlişkin Bildirim,ODA,5,0.07,97.95,subject,mna.merger
+Finansal Duran Varlık Satışı,ODA,5,0.07,98.02,subject,mna.disposal
+Geri Alınan Payların Elden Çıkarılması,ODA,5,0.07,98.09,subject,buyback.disposal
+Haber ve Söylentilere İlişkin Açıklama,ODA,5,0.07,98.16,subject,market.rumour_response
+Maddi Duran Varlık Alımı,ODA,5,0.07,98.23,subject,business.capex
+Maddi Duran Varlık Kiraya Verilmesi veya Ayni Hak Tesisi,ODA,5,0.07,98.30,subject,business.asset_lease
+Pay Mali Hak Kullanım İşlemi - Nakit Ödeme,DKB,5,0.07,98.37,subject,market.corporate_action_notice
+Toptan Alış Satış İşlemi Bildirimi,ODA,5,0.07,98.43,subject,ownership.block_trade
+Varantların veya Sertifikaların İşlem Görmeye Başlaması,DKB,5,0.07,98.50,subject,finance.structured_product
+Endeks Şirketlerinde Değişiklik,DKB,4,0.06,98.56,subject,market.index.change
+Faaliyetlerin Kısmen veya Tamamen Durdurulması ya da İmkansız Hale Gelmesi,ODA,4,0.06,98.61,subject,business.operations.halt
+Hak Kullanım Süreç İptal Bildirimi,ODA,4,0.06,98.67,subject,capital.action.cancel
+Halka Arz İşlemlerinde Sermaye Piyasası Aracının % 5 inden Fazlasını Satın Alanlara İlişkin Bildirim,ODA,4,0.06,98.73,subject,market.ipo
+Toptan Alış Satış İşlemi,DKB,4,0.06,98.78,subject,ownership.block_trade
+İzahname (SPK Onayına Sunulan),DG,4,0.06,98.84,prefix,market.prospectus
+İzahname-Sermaye Piyasası Aracı Notu (SPK Tarafından Onaylanan),DG,4,0.06,98.89,prefix,market.prospectus
+Şirket Merkezi Değişikliği,ODA,4,0.06,98.95,subject,governance.hq.change
+Birincil Piyasa Duyurusu - Kalan Paylar,DKB,3,0.04,98.99,subject,market.ipo
+Finansal Rapor Ek Süre Taleplerine İlişkin SPK Değerlendirmesi,DKB,3,0.04,99.03,subject,report.financial.extension
+Halka Arz Sonuçları,DG,3,0.04,99.07,subject,market.ipo
+Kar Dağıtım Politikası,ODA,3,0.04,99.11,subject,distribution.policy
+Maddi Duran Varlık Satımı,ODA,3,0.04,99.16,subject,mna.disposal
+SPK Bülteni,DKB,3,0.04,99.20,subject,rules
+Test Bildirimi,DKB,3,0.04,99.24,subject,other.test
+İzahname-Özet (SPK Tarafından Onaylanan),DG,3,0.04,99.28,prefix,market.prospectus
+Ayrılma Hakkı Kullanımına İlişkin Bildirim,ODA,2,0.03,99.31,subject,mna.withdrawal_right
+Bilgilendirme Politikası,ODA,2,0.03,99.34,subject,governance.policy
+Bölünme İşlemlerine İlişkin Bildirim,ODA,2,0.03,99.36,subject,mna.demerger
+Entegre Rapor,FR,2,0.03,99.39,subject,report.sustainability
+Pay İşlem Sırası Kapatma / Açma,DKB,2,0.03,99.42,subject,market.halt
+"Portföy Sınırlamalarına, Finansal Borç ve Toplam Gider Sınırına Uyumun Kontrolü",DG,2,0.03,99.45,prefix,report.portfolio
+Rüçhan Hakkı Referans Fiyatı,DKB,2,0.03,99.47,subject,market.corporate_action_notice
+Tasarruf Sahiplerine Satış Duyurusu,DG,2,0.03,99.50,subject,market.ipo
+VİOP Gün İçi Fiyat Limiti Değişikliği Duyuruları,DKB,2,0.03,99.53,subject,market.notice
+VİOP İşlem İptali Duyuruları,DKB,2,0.03,99.56,subject,market.trade_cancellation
+Yabancı Yatırımcı İşlemleri,DKB,2,0.03,99.58,subject,market.bulletin
+Ünvan Değişikliği,ODA,2,0.03,99.61,subject,governance.name.change
+İzahname (Sermaye Piyasası Aracı Notu-SPK Onayına Sunulan),DG,2,0.03,99.64,prefix,market.prospectus
+İzahname-İhraççı Bİlgi Dokümanı (SPK Tarafından Onaylanan),DG,2,0.03,99.67,prefix,market.prospectus
+Borsa İstanbul A.Ş. Duyurusu,DKB,1,0.01,99.68,subject,rules
+Faaliyet Raporu (Konsolide),DKB,1,0.01,99.70,subject,report.activity
+Finansal Rapor,DKB,1,0.01,99.71,subject,report.financial.periodic
+Fiyat Tespit Raporuna İlişkin Analist Raporu (Halka Arza Aracılık Eden Kuruluş Tarafından Hazırlanan),DG,1,0.01,99.72,subject,market.ipo
+Fon Kurucusu Tarafından Yapılan Pay Alım Satım Bildirimi,ODA,1,0.01,99.74,subject,ownership.insider_trade
+Kurumsal Yönetim Uyum Raporu (Güncelleme),DG,1,0.01,99.75,subject,report.corporate_governance
+Ortaklık Aleyhine Dava Açılması veya Davaya İlişkin Gelişmeler,ODA,1,0.01,99.76,subject,legal.lawsuit
+Pay  Satış Bilgi Formu,DKB,1,0.01,99.78,subject,ownership.secondary_offering
+Pay Alım Teklifi Yoluyla Pay Toplanmasına İlişkin Bildirim,ODA,1,0.01,99.79,subject,ownership.tender_offer
+Portföy Sınırlamalarına Uyumun Kontrolü / Münhasıran Altyapı Yatırım ve Hizmetlerinden Oluşan Portföyü İşleten Ortaklıklar,DG,1,0.01,99.81,prefix,report.portfolio
+SPK İşlem Yasağı Nedeniyle Pay Duyurusu,DKB,1,0.01,99.82,subject,market.measure
+Sermaye Piyasası Kurulu Tedbir Kararı,DKB,1,0.01,99.83,subject,market.measure
+Sorumluluk Beyanı (Konsolide),DKB,1,0.01,99.85,subject,report.attestation
+Sözleşme Feshi,ODA,1,0.01,99.86,subject,business.contract.termination
+Sözleşme İmzalanması,ODA,1,0.01,99.88,subject,business.contract.award
+Teknik Yönetime İlişkin Açıklama,ODA,1,0.01,99.89,subject,governance.executive.change
+Transfer Görüşmelerinin Sonuçlanması veya Sona Ermesi,ODA,1,0.01,99.90,subject,business.player_transfer
+VİOP Özsermaye Hali Duyuruları,DKB,1,0.01,99.92,subject,market.notice
+Yetki ve İzin Belgelerine İlişkin Bildirim,DG,1,0.01,99.93,subject,business.license
+Yeşil veya Sürdürülebilir Temalı Sermaye Piyasası Aracına İlişkin Bildirim,DG,1,0.01,99.94,subject,finance.debt.issuance
+Özsermaye Hallerine İlişkin Borsa Duyurusu,DKB,1,0.01,99.96,subject,rules
+İzahname (Özet-SPK Onayına Sunulan),DG,1,0.01,99.97,prefix,market.prospectus
+İzahname (İhraççı Bilgi Dokümanı-SPK Onayına Sunulan),DG,1,0.01,99.99,prefix,market.prospectus
+İzahname veya İzahnameyi Oluşturan Belgelerde Değişiklik - Ekleme,DG,1,0.01,100.00,prefix,market.prospectus

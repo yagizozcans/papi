@@ -1,0 +1,57 @@
+ÖNEMLİ NİTELİKTEKİ İŞLEMLER VE AYRILMA HAKKI TEBLİĞİ
+UYGULAMA REHBERİ
+SPKn’nun 23 üncü maddesinde Kurul “önemli nitelikteki işlemleri, önemlilik ölçüsü de
+dâhil olmak üzere bu nitelikteki işlemlerde bulunulabilmesi veya kararların alınabilmesi için
+uyulması zorunlu usul ve esasları halka açık ortaklıkların niteliğine göre belirlemeye” yetkili
+kılınmıştır. II-23.3 sayılı Önemli Nitelikteki İşlemler ve Ayrılma Hakkı Tebliği (Tebliğ) ile hangi
+birleşme ve bölünmelerin önemli nitelikte işlem (ÖNİ) sayılacağına ilişkin esaslar belirlenmiş,
+malvarlığı devri ile ayni hak tesisi gibi işlemlerde ise önemlilik ölçütü halka açık ortaklıkların
+niteliğine göre farklılaştırılarak belirli büyüklüklerin %50’si veya %75’i olarak belirlenmiştir. Bu
+çerçevede Tebliğ ile halka açık ortaklıkların;
+• Tebliğ’in 5. maddesinde belirlenen birleşme ve bölünme işlemlerine taraf olması,
+• Tebliğ’in 6. maddesinde belirlenen büyüklükteki mal varlığını devretmesi, devri sonucunu
+doğuran işlemler tesis etmesi veya bu mal varlığı üzerinde 3. kişiler lehine sınırlı ayni hak
+tesis etmesi,
+• II-17.1 sayılı Kurumsal Yönetim Tebliği uyarınca Birinci ve İkinci Grupta yer alan
+ortaklıklar ile girişim sermayesi ve gayrimenkul yatırım ortaklıkları hariç payları borsada
+işlem gören ortaklıklardan fiili dolaşımdaki pay oranı yüzde %50’nin üstünde olanlar için,
+mal varlığına ilişkin işlemlerin Tebliğ’in 6. maddesinde belirlenen büyüklük kriterinden
+bağımsız olarak fiili faaliyet konusunun tümüyle değişmesine yol açması,
+• Tür değiştirmesi,  İmtiyaz öngörmesi veya mevcut imtiyazların kapsam veya konusunu
+değiştirmesi
+ÖNİ olarak sayılmıştır. Diğer tebliğlerde önemli nitelikteki işlem olduğu belirtilen işlemler
+ise geçerliliğini korumaktadır.
+Tebliğ hükümlerine açıklık getirmek amacıyla hazırlanan uygulama esaslarına aşağıda yer
+verilmektedir:
+1) Tebliğ’in 4 üncü maddesinin ilk fıkrasının (c) bendi uyarınca mal varlığı
+üzerinde, 3/1/2014 tarihli ve 28871 sayılı Resmi Gazetede yayımlanan II-17.1 sayılı
+Kurumsal Yönetim Tebliği’nin (Kurumsal Yönetim Tebliği) 12 nci maddesine aykırı
+olmamak kaydıyla, üçüncü kişiler lehine sınırlı ayni hak tesis edilmesi ÖNİ olarak
+kabul edilmiştir. Bu kapsamda ayni hak tesis edilirken Kurumsal Yönetim Tebliği’nin
+12 nci maddesinde belirlenen esaslara aynen uyulacak olup, anılan madde hükümlerine
+uygun şekilde üzerinde ayni hak tesis edilen mal varlığı ile ilgili olarak Tebliğ’in 6 ncı
+maddesinde belirlenen önemlilik ölçütlerinin aşılması durumunda bu işlem ÖNİ olarak
+kabul edilecektir.
+2) Tebliğ’in 6’ncı maddesinin birinci fıkrası kapsamında önemlilik ölçütlerini
+sağlayan mal varlığının devri veya bu malvarlığının devri sonucunu doğuran “TFRS 16
+Kiralamalar” standardı uyarınca kiraya veren açısından finansal kiralama olarak
+sınıflandırılan kiralamalar veya trampa (takas) gibi işlemler tesis edilmesi veya bu mal
+varlığı üzerinde üçüncü kişiler lehine sınırlı ayni hak tesis edilmesi önemli nitelikte
+işlem sayılmıştır. Tebliğ’in 6 ncı maddesinde belirlenen önemlilik kriterlerine ilişkin
+hesaplamalarda aşağıdaki esaslar uygulanır:
+a) Hesaplama, önemli nitelikteki işleme ilişkin Tebliğ’in 8’inci maddesi
+çerçevesinde
+alınan yönetim kurulu karar tarihi itibarıyla yapılacaktır.
+b) Hesaplamalarda II-14.1 sayılı Sermaye Piyasasında Finansal Raporlamaya
+İlişkin Esaslar Tebliği çerçevesinde hazırlanmış ve kamuya açıklanmış finansal tablolar
+esas alınacaktır.
+c) Tebliğ’in 6’ncı maddesinin birinci fıkrasının (b) bendi yalnızca mal
+varlığının devri durumunda uygulanacak olup, işlem tutarının döviz cinsinden
+kararlaştırılmış olması durumunda, yönetim kurulu kararından bir önceki iş günü T.C.
+Merkez Bankasınca ilan edilen döviz alış kurları kullanılır.
+ç) Tebliğ’in 6’ncı maddesinin birinci fıkrasının (c) bendinin uygulanmasında, işleme konu
+mal varlığından elde edilen gelir olarak, söz konusu mal varlığının gelir tablosuna sağladığı katkı
+dikkate alınmalıdır. Sürdürülen faaliyetler dönem net karı/zararına etki eden tüm gelir kalemlerinin
+toplamı ise hasılat, esas faaliyetlerden diğer gelirler, yatırım faaliyetlerinden gelirler, finansman
+gelirleri gibi Kar veya Zarar Tablosu’nda sürdürülen faaliyetler dönem karı/zararı kalemine kadar
+olan tüm gelir kalemlerinin toplamı dikkate alınır.

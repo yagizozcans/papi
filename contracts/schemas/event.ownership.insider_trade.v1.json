@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "event.ownership.insider_trade/1",
+  "title": "event.ownership.insider_trade payload v1",
+  "description": "Share transaction by an insider or major shareholder (pay alım satım bildirimi). Unknown = null; spans are kept outside the payload (event.extra.payload_spans).",
+  "type": "object",
+  "required": [
+    "person",
+    "side",
+    "trades",
+    "total_shares_nominal",
+    "total_amount",
+    "avg_price",
+    "currency",
+    "holding_before_pct",
+    "holding_after_pct",
+    "voting_before_pct",
+    "voting_after_pct"
+  ],
+  "properties": {
+    "person": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "role": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "is_legal_entity": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "side": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "buy",
+        "sell",
+        "mixed",
+        null
+      ]
+    },
+    "trades": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "side": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "buy",
+              "sell",
+              null
+            ]
+          },
+          "shares_nominal": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "price": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "amount": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "total_shares_nominal": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "total_amount": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "avg_price": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[A-Z]{3}$"
+    },
+    "holding_before_pct": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "holding_after_pct": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "voting_before_pct": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "voting_after_pct": {
+      "type": [
+        "number",
+        "null"
+      ]
+    }
+  }
+}

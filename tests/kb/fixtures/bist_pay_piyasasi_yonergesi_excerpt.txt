@@ -1,0 +1,212 @@
+HALKA AÇIK/PUBLIC
+Adı PAY PİYASASI YÖNERGESİ
+Türü YÖNERGE
+Kodu 02.YÖN.01
+e Onay Tarihi 15/10/2015
+g
+l
+e Revizyon Tarihi 21/09/2026
+B
+Revizyon Numarası 18
+Hazırlayan PAY PİYASASI DİREKTÖRLÜĞÜ
+Onaylayan YÖNETİM KURULU
+BORSA İSTANBUL A.Ş.
+PAY PİYASASI
+YÖNERGESİ
+İSTANBUL – 2015
+Bu belge Borsa İstanbul A.Ş. mülkiyetindedir. Bu belgenin güncel sürümü Borsa İstanbul A.Ş. kurumsal internet sitesinde
+yer almaktadır. Kullanmadan önce bu dosyanın doğru sürüm olduğunu lütfen kontrol ediniz.
+İÇİNDEKİLER
+BİRİNCİ BÖLÜM .................................................................................................................................................. 4
+Amaç, Kapsam, Dayanak, Kısaltmalar ve Tanımlar ............................................................................................... 4
+Amaç ................................................................................................................................................................... 4
+Kapsam ............................................................................................................................................................... 4
+Dayanak .............................................................................................................................................................. 4
+Kısaltmalar ve tanımlar ....................................................................................................................................... 4
+İKİNCİ BÖLÜM ..................................................................................................................................................... 5
+Emirlere ve İşlemlere İlişkin Esaslar ...................................................................................................................... 5
+Emir iletimi ......................................................................................................................................................... 5
+Emir tipleri .......................................................................................................................................................... 5
+Emirlerde geçerlilik süresi .................................................................................................................................. 7
+Emrin değiştirilmesi, düzeltilmesi veya iptal edilmesi ........................................................................................ 7
+Öncelik kuralları ................................................................................................................................................. 7
+İşlem öncesi risk kontrolü ................................................................................................................................... 7
+İşlem görecek sermaye piyasası araçları ............................................................................................................. 8
+Piyasada işlem yapacak olanlarda, piyasa yapıcılarda ve likidite sağlayıcılarda aranacak şartlar ...................... 8
+Seans ................................................................................................................................................................... 8
+İşlem birimi ......................................................................................................................................................... 8
+Açılış seansı ve açılış fiyatı ................................................................................................................................. 9
+Kapanış seansı ve kapanış fiyatı .......................................................................................................................... 9
+Referans fiyat ...................................................................................................................................................... 9
+Baz fiyat .............................................................................................................................................................. 9
+İşlemlerde uygulanacak fiyat aralıkları ve fiyat adımları .................................................................................... 9
+Fiyat değişme sınırları ....................................................................................................................................... 10
+Borsa kaydına alınan fiyatlar............................................................................................................................. 10
+Oluşan fiyatların gün sonunda ilanı .................................................................................................................. 10
+Piyasa emir ve işlem verilerinin yayımlanması ................................................................................................. 10
+İşlem sonuçlarına ilişkin bilgilerin üyelerin erişimine sunulması ..................................................................... 10
+ÜÇÜNCÜ BÖLÜM .............................................................................................................................................. 11
+İşlem Yöntemleri ve Özel Uygulamalar ................................................................................................................ 11
+İşlem yöntemleri ............................................................................................................................................... 11
+Tek fiyat yöntemi ve çok fiyat yöntemi ile işlemlerin yürütülmesi ................................................................... 11
+Devre Kesici ...................................................................................................................................................... 11
+Piyasa yapıcılık faaliyetine ilişkin esaslar ......................................................................................................... 12
+Likidite sağlayıcılık faaliyetine ilişkin esaslar .................................................................................................. 12
+Bir sermaye piyasası aracına ilişkin işlemlerin geçici olarak durdurulması ...................................................... 13
+DÖRDÜNCÜ BÖLÜM ......................................................................................................................................... 14
+Özellikli İşlemler ................................................................................................................................................... 14
+Toptan alış satış işlemleri .................................................................................................................................. 14
+Resmî müzayede ............................................................................................................................................... 14
+Birincil piyasa ................................................................................................................................................... 14
+Yeni pay alma hakları ....................................................................................................................................... 15
+Temerrüt işlemleri ............................................................................................................................................. 15
+Özel işlem bildirimi........................................................................................................................................... 15
+BEŞİNCİ BÖLÜM ................................................................................................................................................ 16
+İşlem Gören Paylarda Pazarları Belirleyen Kriterler, Değerlendirme ve İşlem Esasları ....................................... 16
+Pazarları Belirleme Kriterleri ............................................................................................................................ 16
+Pazarlar Arası Geçişlerde Değerlendirme Esasları ............................................................................................ 17
+Pazarlarda Uygulanacak İşlem Esasları ............................................................................................................ 17
+ALTINCI BÖLÜM ............................................................................................................................................... 18
+Diğer Hükümler .................................................................................................................................................... 18
+Yabancı para birimi ile işlem ............................................................................................................................ 18
+Borsa dışı işlemler ve Borsaya bildirim ............................................................................................................ 18
+Olağan dışı durum uygulamaları ....................................................................................................................... 18
+Takas yükümlülüklerinin yerine getirilmesinde uygulanacak yöntem .............................................................. 19
+Temerrüde İlişkin Disiplin Hükümleri .............................................................................................................. 19
+Pay Piyasası Teminatı ....................................................................................................................................... 19
+Yönergede hüküm bulunmayan hâller .............................................................................................................. 19
+Genel Müdür’ün düzenleme yetkisi .................................................................................................................. 19
+Pazarlarda Uygulanacak İşlem Esaslarına İlişkin Geçiş Hükümleri: ................................................................ 19
+Yürürlük ............................................................................................................................................................ 20
+Yürütme ............................................................................................................................................................ 20
+PAY PİYASASI YÖNERGESİ REVİZYONLARI .............................................................................................. 21
+Pazarlarda Uygulanacak İşlem Esasları ............................................................................................................ 37
+Pazarlarda Uygulanacak İşlem Esasları ............................................................................................................ 37
+BİRİNCİ BÖLÜM
+Amaç, Kapsam, Dayanak, Kısaltmalar ve Tanımlar
+Amaç
+MADDE 1 – (1) Bu Yönergenin amacı, Borsa İstanbul Anonim Şirketi bünyesinde faaliyet
+gösteren Pay Piyasasının işleyiş esaslarını ve kurallarını düzenlemektir.
+Kapsam
+MADDE 2 – (1) Bu Yönerge;
+a) Pay Piyasasına iletilen emirlere ve bu piyasada gerçekleştirilen işlemlere,
+b) İletilen emirlere ve gerçekleşen işlemlere ilişkin olarak Borsa tarafından üretilecek
+raporlara,
+c) Borsa kaydına alınan fiyatlara, işlem miktarlarına ve bunların ilanına,
+ç) Pay Piyasasında uygulanan işlem yöntemlerine,
+d) Piyasa yapıcılık ve likidite sağlayıcılık uygulamalarına,
+e) Sermaye piyasası araçlarına ilişkin Pay Piyasasındaki işlemlerin geçici olarak
+durdurulmasına,
+f) Toptan alış satış, resmî müzayede, birincil piyasa, yeni pay alma hakları gibi özellik arz
+eden işlemlere,
+g) İşlem sonrası takas yükümlülüklerinin yerine getirilmesinde uygulanacak yönteme
+ğ) Pay Piyasasında işlem gören payların pazarlar arasındaki dağılımını belirleyen kriterlere,
+değerleme dönem ve esaslarına ve pazarlarda uygulanacak işlem esaslarına
+ilişkin usulü ve esasları düzenler.
+Dayanak
+Bir sermaye piyasası aracına ilişkin işlemlerin geçici olarak durdurulması
+MADDE 30 – (1) Genel Müdür, aşağıdaki durumlardan birinin varlığı hâlinde ilgili
+sermaye piyasası aracının işlemlerini en fazla bir ay için geçici olarak durdurabilir. Bir ayı aşan
+süreler için Yönetim Kurulu kararı gereklidir.
+a) Bir sermaye piyasası aracına veya ihraççısına ilişkin olarak bir belirsizlik hâlinin veya
+yatırımcıların kararlarını etkileyecek önemde bilgiler olduğunun öğrenilmesi ve Genel Müdürün
+bu belirsizlik hâlinden veya önemli bilgilerden yatırımcıların haberdar edilmesini gerekli görmesi,
+b) Bir sermaye piyasası aracı için sağlıklı bir piyasa teşekkül etmesini önleyecek şekilde
+olağan dışı fiyat ve/veya miktarlarda alım satım emirlerinin Sisteme kaydedilmesi.
+c) Piyasa yapıcılı veya likidite sağlayıcılı olarak işlem gören sermaye piyasası aracında
+görevli piyasa yapıcı veya likidite sağlayıcı hakkında görevini yapmasını etkileyebilecek önemde
+bilgiler olduğunun öğrenilmesi ve Genel Müdürün bu bilgilerden yatırımcıların haberdar
+edilmesini gerekli görmesi.
+ç) Bir seansın sağlıklı bir biçimde yürütülmesini engelleyen sistemsel, iletişimsel, teknik
+ve benzeri diğer unsurların ortaya çıkması.
+(2) Genel Müdür, işlemlerin yeniden başlamasına aynı seans süresi içinde izin vermişse ve
+yeterli süre kalmışsa işlemler yeniden başlatılır.
+(3) Bir sermaye piyasası aracına ilişkin işlemlerin geçici olarak durdurulması hâlinde, bu
+durum KAP’ta gerekçesiyle birlikte duyurulur. Söz konusu sermaye piyasası aracının işlemlerinin
+yeniden başlatılmasına karar verilmesi durumunda, gereklilik hâlinde baz fiyat Genel Müdür
+tarafından yeniden belirlenebilir ve bu durum KAP’ta ilan edilir. Genel Müdür daha önce iletilmiş
+emirleri ve/veya gerçekleşmiş işlemleri kısmen veya tamamen iptal edebilir.
+(4) Bir sermaye piyasası aracındaki işlemlerin geçici olarak durdurulduğu süre seans
+süresini aşmışsa, söz konusu sermaye piyasası aracına ilişkin işlemlerin yeniden başlatılacağı
+zaman ve gerektiğinde uygulanacak baz fiyat Genel Müdür tarafından belirlenir ve KAP’ta ilan
+edilir.
+(5) Yönetim Kurulu, işlemleri geçici olarak durdurulan sermaye piyasası aracıyla ilgili
+olarak belirsizlik hâlinin giderilmesi için ilgili ihraççıya, Yönetim Kurulu karar tarihinden itibaren
+en fazla iki yıl süre verebilir. Yönetim Kurulu, süre sonunda ilgili mevzuat hükümleri
+doğrultusunda sermaye piyasası araçlarının yeniden işleme açılması veya işlem görmekten men
+edilmesi hususunda gerekçeli kararını verir ve KAP’ta duyurur.
+DÖRDÜNCÜ BÖLÜM
+Özellikli İşlemler
+Yürürlük
+MADDE 48 – (1) Bu Yönerge, 30/11/2015 tarihinde yürürlüğe girer.
+Yürütme
+MADDE 49 – (1) Bu Yönerge hükümlerini Genel Müdür yürütür.
+PAY PİYASASI YÖNERGESİ REVİZYONLARI
+11/10/2016 tarihinde belgede aşağıdaki değişiklikler yapılmıştır
+ESKİ METİN YENİ METİN
+Kısaltmalar ve tanımlar Kısaltmalar ve tanımlar
+MADDE 4 (1) MADDE 4 (1)
+(…) (…)
+l) Piyasa Yapıcı: Görevlendirildiği sermaye l) Piyasa Yapıcı: Görevlendirildiği sermaye
+piyasası aracının piyasasının dürüst, düzenli, piyasası aracının piyasasının dürüst, düzenli,
+etkin çalışmasını sağlamak ve ayrıca etkin çalışmasını sağlamak ve ayrıca
+likiditeye katkıda bulunmak üzere Genel likiditeye katkıda bulunmak üzere Genel
+Müdür tarafından belirlenen ölçütlere uygun Müdür Yönetim Kurulu tarafından
+olarak yetkilendirilen ve bu alandaki belirlenen ölçütlere uygun olarak Genel
+performansı dönemsel olarak değerlendirilen Müdür tarafından yetkilendirilen ve bu
+yatırım kuruluşunu, alandaki performansı dönemsel olarak
+değerlendirilen yatırım kuruluşunu,
+(…) (…)
+Öncelik kuralları Öncelik kuralları
+MADDE 9 MADDE 9
+(1) Piyasa emirleri, piyasadan limite emirler, (1) Piyasa emirleri, piyasadan limite
+miktar koşullu emirler ve özel emirler hariç emirler, miktar koşullu emirler ve özel
+olmak üzere, aynı emir defterinde Sisteme emirler hariç olmak üzere, aynı Bir emir
+kaydedilen emirler işleme dönüştürülürken defterinde Sisteme kaydedilen emirler işleme
+aşağıdaki kurallar sırasıyla uygulanır: dönüştürülürken aşağıdaki kurallar sırasıyla
+a) Fiyat Önceliği Kuralı: Daha düşük fiyatlı uygulanır:
+satım emirleri, daha yüksek fiyatlı satım a) Fiyat Önceliği Kuralı: Daha düşük fiyatlı
+emirlerinden; daha yüksek fiyatlı alım satım emirleri, daha yüksek fiyatlı satım
+emirleri, daha düşük fiyatlı alım emirlerinden emirlerinden; daha yüksek fiyatlı alım
+önce işleme dönüşür. emirleri, daha düşük fiyatlı alım emirlerinden
+b) Zaman Önceliği Kuralı: Fiyat eşitliği önce işleme dönüşür.
+hâlinde, Sisteme zaman açısından daha önce b) Zaman Önceliği Kuralı: Fiyat eşitliği
+kaydedilen emirler öncelikle işleme dönüşür. hâlinde, Sisteme zaman açısından daha önce
+kaydedilen emirler öncelikle işleme dönüşür.
+(2) Bazı emir tiplerinin farklı işleyiş
+özelliklerinden kaynaklanan durumlarda,
+iki öncelik kuralının uygulamasında Genel
+Müdür tarafından farklı esaslar
+(2) Birincil Piyasa işlemlerinde; belirlenebilir.
+a) Satılacak miktarın sabit fiyat yöntemi ile (3) Birincil Piyasa işlemlerinde;
+dağıtılması durumunda, bekleyen tüm alış a) Satılacak miktarın sabit fiyat yöntemi ile
+emirlerine zaman önceliğine göre hesap dağıtılması durumunda, bekleyen tüm alış
+numarası bazında gruplandırılmış olarak, emirlerine zaman önceliğine göre hesap
+hesap bazında emir başına birer lot şeklinde numarası bazında gruplandırılmış olarak,
+dağıtım yapılır. Satılacak miktar hesap bazında emir başına birer lot şeklinde
+tamamlanıncaya kadar dağıtım bu şekilde dağıtım yapılır. Satılacak miktar
+devam eder. tamamlanıncaya kadar dağıtım bu şekilde
+devam eder.
+ESKİ METİN YENİ METİN
+b) Satılacak miktarın değişken fiyat yöntemi b) Satılacak miktarın değişken fiyat yöntemi
+ile dağıtılması durumunda, toplanan talebin ile dağıtılması durumunda, toplanan talebin
+satış miktarını karşıladığı fiyat seviyesinde satış miktarını karşıladığı fiyat seviyesinde
+işlem fiyatı belli olur ve fiyat ve zaman işlem fiyatı belli olur ve fiyat ve zaman
+önceliği dikkate alınarak belirlenen fiyat önceliği dikkate alınarak belirlenen fiyat
+seviyesinden ve bu seviyenin üstünden gelen seviyesinden ve bu seviyenin üstünden gelen
+tüm alış emirlerine (a) bendi kapsamındaki tüm alış emirlerine (a) bendi kapsamındaki
+prensiple dağıtım yapılır. prensiple dağıtım yapılır.
+03/04/2019 tarihinde belgede aşağıdaki değişiklikler yapılmıştır
+ESKİ METİN YENİ METİN
+Bir sermaye piyasası aracına ilişkin Bir sermaye piyasası aracına ilişkin
+işlemlerin geçici olarak durdurulması işlemlerin geçici olarak durdurulması
+MADDE 30 MADDE 30
+(1) Genel Müdür, aşağıdaki durumlardan (1) Genel Müdür, aşağıdaki durumlardan
+birinin varlığı hâlinde ilgili sermaye piyasası birinin varlığı hâlinde ilgili sermaye piyasası
+aracının işlemlerini en fazla beş işlem günü aracının işlemlerini en fazla beş işlem günü
+için geçici olarak durdurabilir: bir ay için geçici olarak durdurabilir. Bir ayı
+aşan süreler için Yönetim Kurulu kararı
+gereklidir.
+(…)
+(…)
+27/09/2019 tarihinde belgede aşağıdaki değişiklikler yapılmıştır

@@ -1,0 +1,196 @@
+# Trade-parser evaluation set (PRD 11): Turkish/English phrasings → expected parse.
+# `now` is the Telegram message time (Istanbul). Fields:
+#   expect: trade | needs_info | not_trade
+#   trade: side, ref (instrument reference as written), qty or fraction ("a/b" or decimal), price,
+#          date (default: message date), time (HH:MM local; default: message time when no date was
+#          given, none when a date was given), fees
+#   needs_info: missing (exact set of missing/ambiguous fields)
+#   not_trade: reason
+now: "2026-10-28T14:00:00+03:00"
+cases:
+  # ---- Turkish buys -----------------------------------------------------------------------------
+  - {text: "THYAO 100 lot 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100 lot 285,40’tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "thyao 100 lot 285,40'tan aldım", expect: trade, side: buy, ref: thyao, qty: 100, price: "285.40"}
+  - {text: "THYAO'dan 100 lot aldım 285,40 TL", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "100 lot THYAO aldım 285,40'tan", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100 adet 285.40 TL'den alındı", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "100 adet THYAO 285,4 TL alındı", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.4"}
+  - {text: "THYAO 100 lot @ 285,40 aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100 lot @285,40 aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100x285,40 aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100 x 285,40 aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "Aldım THYAO 100 lot 285,40", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "aldim THYAO 100 lot 285.4", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.4"}
+  - {text: "ALDIM THYAO 100 LOT 285,40 TL", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100 lot 285,40 TL'den alış yaptım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100 lot fiyat 285,40 aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100 lot ortalama 285,40 aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100 lot 285,40 fiyattan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 1.000 lot 28,50'den aldım", expect: trade, side: buy, ref: THYAO, qty: 1000, price: "28.50"}
+  - {text: "THYAO 1000 lot 28,5'ten aldım", expect: trade, side: buy, ref: THYAO, qty: 1000, price: "28.5"}
+  - {text: "THYAO 100 lot ₺285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100 lot 285,40₺ aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100 lot 285,40 TL aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100 lot 285 liradan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285"}
+  - {text: "THYAO 100 lot 285,40tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100lot 285,40 aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100 lotu 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100 hisse 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100 pay 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100 tane 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO hissesinden 100 lot 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO'ya 100 lot daha ekledim 285,40'tan", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "100 adet ASELS 62,5 TL'den aldım", expect: trade, side: buy, ref: ASELS, qty: 100, price: "62.5"}
+  - {text: "THYAO 2.500 lot 28,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 2500, price: "28.40"}
+  - {text: "THYAO 2500 lot 28.40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 2500, price: "28.40"}
+  - {text: "ASELS 10 lot 1.234,50 TL'den aldım", expect: trade, side: buy, ref: ASELS, qty: 10, price: "1234.50"}
+  - {text: "ASELS 10 lot 1,234.50'den aldım", expect: trade, side: buy, ref: ASELS, qty: 10, price: "1234.50"}
+  - {text: "ASELS 10 lot 62.500 TL'den aldım", expect: trade, side: buy, ref: ASELS, qty: 10, price: "62500"}
+  - {text: "THYAO 100 lot 285,40 aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "ben THYAO 100 lot 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO 100 lot 285,40'tan alım yaptım.", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "THYAO: 100 lot, 285,40'tan aldım!", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+
+  # ---- dates and times ----------------------------------------------------------------------------
+  - {text: "Bugün THYAO 100 lot 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-28"}
+  - {text: "dün THYAO 100 lot 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-27"}
+  - {text: "THYAO 100 lot 285,40'tan dün aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-27"}
+  - {text: "Dün 100 adet THYAO 285,40 TL'den alındı", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-27"}
+  - {text: "dünkü THYAO alımı 100 lot 285,40", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-27"}
+  - {text: "önceki gün THYAO 100 lot 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-26"}
+  - {text: "27.10.2026 THYAO 100 lot 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-27"}
+  - {text: "THYAO 100 lot 285,40'tan aldım 27.10.2026", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-27"}
+  - {text: "27.10.2026'da THYAO 100 lot 285,40 aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-27"}
+  - {text: "27/10 THYAO 100 lot 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-27"}
+  - {text: "27 Ekim'de THYAO 100 lot 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-27"}
+  - {text: "27 ekim 2026 THYAO 100 lot 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-27"}
+  - {text: "2026-10-27 THYAO 100 lot 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-27"}
+  - {text: "27.10.26 THYAO 100 lot 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-27"}
+  - {text: "3 Eylül 2026 THYAO 10 lot 250'den aldım", expect: trade, side: buy, ref: THYAO, qty: 10, price: "250", date: "2026-09-03"}
+  - {text: "saat 10:15'te THYAO 100 lot 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-28", time: "10:15"}
+  - {text: "THYAO 100 lot 285,40'tan aldım 09:45", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-28", time: "09:45"}
+  - {text: "dün 15:30'da THYAO 100 lot 285,40'tan aldım", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-27", time: "15:30"}
+  - {text: "I bought 100 THYAO at 285.40 on 27.10.2026", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-27"}
+
+  # ---- fees ---------------------------------------------------------------------------------------
+  - {text: "THYAO 100 lot 285,40'tan aldım komisyon 12,50", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", fees: "12.50"}
+  - {text: "THYAO 100 lot 285,40'tan aldım, komisyon 12,5 TL", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", fees: "12.5"}
+  - {text: "THYAO 100 lot 285,40'tan aldım kom: 7", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", fees: "7"}
+  - {text: "THYAO 100 lot 285,40'tan aldım 12,50 TL komisyon", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", fees: "12.50"}
+  - {text: "THYAO 100 lot 285,40 TL komisyon 5", expect: needs_info, missing: [side]}
+  - {text: "/al THYAO 100 lot 285,40 komisyon 5", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", fees: "5"}
+  - {text: "bought 10 ASELS at 62.5 fee 3", expect: trade, side: buy, ref: ASELS, qty: 10, price: "62.5", fees: "3"}
+
+  # ---- Turkish sells ------------------------------------------------------------------------------
+  - {text: "ASELS 200 lot 61,80'den sattım", expect: trade, side: sell, ref: ASELS, qty: 200, price: "61.80"}
+  - {text: "ASELS 200 sattim 61.80", expect: trade, side: sell, ref: ASELS, qty: 200, price: "61.80"}
+  - {text: "100 adet ASELS 62,5 TL'den satıldı", expect: trade, side: sell, ref: ASELS, qty: 100, price: "62.5"}
+  - {text: "ASELS 100 lot 62,50'den satış yaptım", expect: trade, side: sell, ref: ASELS, qty: 100, price: "62.50"}
+  - {text: "Sattım ASELS 50 lot 63", expect: trade, side: sell, ref: ASELS, qty: 50, price: "63"}
+  - {text: "ASELS'ten 50 lot sattım 63,10'dan", expect: trade, side: sell, ref: ASELS, qty: 50, price: "63.10"}
+  - {text: "ASELS 50 lot bozdum 63,10", expect: trade, side: sell, ref: ASELS, qty: 50, price: "63.10"}
+  - {text: "ASELS 50 lot 63,10'dan sattık", expect: trade, side: sell, ref: ASELS, qty: 50, price: "63.10"}
+  - {text: "dün ASELS 50 lot 63,10'dan sattım", expect: trade, side: sell, ref: ASELS, qty: 50, price: "63.10", date: "2026-10-27"}
+  - {text: "ASELS 50 lot 63,10'dan sattım 26.10.2026", expect: trade, side: sell, ref: ASELS, qty: 50, price: "63.10", date: "2026-10-26"}
+  - {text: "ASELS 50 lot 63,10'dan sattım komisyon 3,2", expect: trade, side: sell, ref: ASELS, qty: 50, price: "63.10", fees: "3.2"}
+  - {text: "SATTIM ASELS 50 LOT 63,10", expect: trade, side: sell, ref: ASELS, qty: 50, price: "63.10"}
+  - {text: "ASELS 50 adet 63 TL'den satıldı bugün", expect: trade, side: sell, ref: ASELS, qty: 50, price: "63", date: "2026-10-28"}
+  - {text: "ASELS 50 63,10 sattım", expect: trade, side: sell, ref: ASELS, qty: 50, price: "63.10"}
+  - {text: "ASELS 63,10 50 sattım", expect: trade, side: sell, ref: ASELS, qty: 50, price: "63.10"}
+
+  # ---- fractions of the current holding -----------------------------------------------------------
+  - {text: "ASELS'in yarısını 62'den sattım", expect: trade, side: sell, ref: ASELS, fraction: "1/2", price: "62"}
+  - {text: "ASELS yarısını 62,50'den sattım", expect: trade, side: sell, ref: ASELS, fraction: "1/2", price: "62.50"}
+  - {text: "ASELS'in hepsini 64'ten sattım", expect: trade, side: sell, ref: ASELS, fraction: "1", price: "64"}
+  - {text: "ASELS'in tamamını 64 TL'den sattım", expect: trade, side: sell, ref: ASELS, fraction: "1", price: "64"}
+  - {text: "ASELS'in tümünü 64'ten sattım", expect: trade, side: sell, ref: ASELS, fraction: "1", price: "64"}
+  - {text: "ASELS'ten çıktım 64'ten", expect: trade, side: sell, ref: ASELS, fraction: "1", price: "64"}
+  - {text: "ASELS'in %25'ini 63'ten sattım", expect: trade, side: sell, ref: ASELS, fraction: "1/4", price: "63"}
+  - {text: "ASELS'in yüzde 40'ını 63'ten sattım", expect: trade, side: sell, ref: ASELS, fraction: "2/5", price: "63"}
+  - {text: "ASELS'in üçte birini 63'ten sattım", expect: trade, side: sell, ref: ASELS, fraction: "1/3", price: "63"}
+  - {text: "ASELS'in çeyreğini 63'ten sattım", expect: trade, side: sell, ref: ASELS, fraction: "1/4", price: "63"}
+  - {text: "ASELS yarısını sattım 62", expect: trade, side: sell, ref: ASELS, fraction: "1/2", price: "62"}
+  - {text: "sold half of ASELS @ 62", expect: trade, side: sell, ref: ASELS, fraction: "1/2", price: "62"}
+  - {text: "sold all ASELS at 64", expect: trade, side: sell, ref: ASELS, fraction: "1", price: "64"}
+  - {text: "dün ASELS'in yarısını 62'den sattım", expect: trade, side: sell, ref: ASELS, fraction: "1/2", price: "62", date: "2026-10-27"}
+
+  # ---- English ------------------------------------------------------------------------------------
+  - {text: "bought 100 THYAO at 285.40", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "Bought 100 shares of THYAO @ 285.4", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.4"}
+  - {text: "buy THYAO 100 285.40", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "sold 50 ASELS at 62.5", expect: trade, side: sell, ref: ASELS, qty: 50, price: "62.5"}
+  - {text: "sold 50 shares of ASELS at 62,5 yesterday", expect: trade, side: sell, ref: ASELS, qty: 50, price: "62.5", date: "2026-10-27"}
+  - {text: "bought THYAO 100 shares 285.40 TL today", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-28"}
+  - {text: "Oct 27 bought 100 THYAO at 285.40", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-27"}
+
+  # ---- slash commands -----------------------------------------------------------------------------
+  - {text: "/al THYAO 100 285.40", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "/al THYAO 100 285,40", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "/al THYAO 100 285.40 27.10.2026", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-27"}
+  - {text: "/al THYAO 100 285.40 dün", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-27"}
+  - {text: "/sat ASELS 50 62,5", expect: trade, side: sell, ref: ASELS, qty: 50, price: "62.5"}
+  - {text: "/sat ASELS 50 62,5 dün", expect: trade, side: sell, ref: ASELS, qty: 50, price: "62.5", date: "2026-10-27"}
+  - {text: "/AL thyao 100 285,40", expect: trade, side: buy, ref: thyao, qty: 100, price: "285.40"}
+  - {text: "/al@papi_bot THYAO 100 285.40", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "/buy THYAO 100 285.40", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40"}
+  - {text: "/sell ASELS 50 62.5", expect: trade, side: sell, ref: ASELS, qty: 50, price: "62.5"}
+  - {text: "/sat ASELS 50 lot 62,5 TL", expect: trade, side: sell, ref: ASELS, qty: 50, price: "62.5"}
+  - {text: "/sat ASELS 285,5 50", expect: trade, side: sell, ref: ASELS, qty: 50, price: "285.5"}
+  - {text: "/al THYAO 100 285.40 10:30", expect: trade, side: buy, ref: THYAO, qty: 100, price: "285.40", date: "2026-10-28", time: "10:30"}
+
+  # ---- company names ------------------------------------------------------------------------------
+  - {text: "Türk Hava Yolları 50 adet 280 TL'den alındı", expect: trade, side: buy, ref: "Türk Hava Yolları", qty: 50, price: "280"}
+  - {text: "Aselsan'dan 100 lot 62,5'ten aldım", expect: trade, side: buy, ref: Aselsan, qty: 100, price: "62.5"}
+  - {text: "aselsan 100 lot 62,5 aldım", expect: trade, side: buy, ref: aselsan, qty: 100, price: "62.5"}
+  - {text: "Koç Holding 20 lot 180 TL'den aldım", expect: trade, side: buy, ref: "Koç Holding", qty: 20, price: "180"}
+  - {text: "Ereğli 300 lot 45,20'den sattım", expect: trade, side: sell, ref: Ereğli, qty: 300, price: "45.20"}
+  - {text: "/al Aselsan 100 62,5", expect: trade, side: buy, ref: Aselsan, qty: 100, price: "62.5"}
+
+  # ---- something missing or ambiguous → ask, never guess ------------------------------------------
+  - {text: "THYAO 100 aldım", expect: needs_info, missing: [quantity, price]}
+  - {text: "THYAO 100 lot aldım", expect: needs_info, missing: [price]}
+  - {text: "THYAO aldım 285,40", expect: needs_info, missing: [quantity, price]}
+  - {text: "THYAO 285,40'tan aldım", expect: needs_info, missing: [quantity]}
+  - {text: "100 lot 285,40'tan aldım", expect: needs_info, missing: [instrument]}
+  - {text: "THYAO 100 lot 285,40", expect: needs_info, missing: [side]}
+  - {text: "aldım", expect: needs_info, missing: [instrument, quantity, price]}
+  - {text: "/al THYAO 100", expect: needs_info, missing: [price]}
+  - {text: "/al", expect: needs_info, missing: [instrument, quantity, price]}
+  - {text: "/sat ASELS", expect: needs_info, missing: [quantity, price]}
+  - {text: "THYAO 100 lot 285,40'tan aldım cuma", expect: needs_info, missing: [date]}
+  - {text: "THYAO 100 lot 285,40'tan geçen hafta aldım", expect: needs_info, missing: [date]}
+  - {text: "THYAO 100 lot 285,40'tan aldım 01.11.2026", expect: needs_info, missing: [date]}
+  - {text: "THYAO 100 lot 285,40'tan aldım 16:00", expect: needs_info, missing: [date]}
+  - {text: "31.02.2026 THYAO 100 lot 285,40'tan aldım", expect: needs_info, missing: [date]}
+  - {text: "THYAO ve ASELS 100 lot 285,40'tan aldım", expect: needs_info, missing: [instrument]}
+  - {text: "THYAO 100 lot 200 lot 285,40'tan aldım", expect: needs_info, missing: [quantity]}
+  - {text: "THYAO 100 lot 285,40'tan 286'dan aldım", expect: needs_info, missing: [price]}
+  - {text: "THYAO 100,5 lot 285,40'tan aldım", expect: needs_info, missing: [quantity]}
+  - {text: "THYAO 0 lot 285,40'tan aldım", expect: needs_info, missing: [quantity]}
+  - {text: "ASELS'in yarısını sattım", expect: needs_info, missing: [price]}
+  - {text: "THYAO'nun yarısını 285'ten aldım", expect: needs_info, missing: [quantity]}
+  - {text: "THYAO 100 lot 285,40'tan aldım ve sattım", expect: needs_info, missing: [side]}
+  - {text: "/al THYAO 100 285,40 sattım", expect: needs_info, missing: [side]}
+  - {text: "THYAO 100 lot 285,40'tan aldım 3", expect: needs_info, missing: [quantity, price]}
+  - {text: "ASELS 200 sattim", expect: needs_info, missing: [quantity, price]}
+  - {text: "sattım", expect: needs_info, missing: [instrument, quantity, price]}
+  - {text: "ASELS'in yarısını 50 lot 62'den sattım", expect: needs_info, missing: [quantity]}
+
+  # ---- not a trade --------------------------------------------------------------------------------
+  - {text: "merhaba", expect: not_trade, reason: no_trade_signal}
+  - {text: "teşekkürler", expect: not_trade, reason: no_trade_signal}
+  - {text: "", expect: not_trade, reason: empty}
+  - {text: "ASELS alsam ne olur?", expect: not_trade, reason: what_if}
+  - {text: "ASELS 200 lot alsam", expect: not_trade, reason: what_if}
+  - {text: "ASELS satsam mı", expect: not_trade, reason: what_if}
+  - {text: "THYAO almalı mıyım", expect: not_trade, reason: what_if}
+  - {text: "THYAO 100 lot 285,40'tan alacağım", expect: not_trade, reason: what_if}
+  - {text: "can I buy THYAO", expect: not_trade, reason: what_if}
+  - {text: "Bugün portföyümde ne oldu?", expect: not_trade, reason: question}
+  - {text: "bedelsiz ne demek?", expect: not_trade, reason: question}
+  - {text: "THYAO aldım mı?", expect: not_trade, reason: question}
+  - {text: "THYAO son bildirimler", expect: not_trade, reason: no_trade_signal}
+  - {text: "THYAO hedef fiyat 300 TL", expect: not_trade, reason: no_trade_signal}
+  - {text: "/portfoy", expect: not_trade, reason: command}
+  - {text: "/izle ASELS", expect: not_trade, reason: command}

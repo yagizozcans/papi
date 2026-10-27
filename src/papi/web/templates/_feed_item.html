@@ -1,0 +1,20 @@
+{% import "_macros.html" as m %}
+<article class="item{% if it.holding %} is-hold{% elif it.watch %} is-watch{% endif %}" id="ev-{{ it.id }}" data-id="{{ it.id }}" data-disclosure="{{ it.disclosure_id or "" }}" tabindex="-1">
+  <div class="when" title="Yayın: {{ it.published_at | ist('%d.%m.%Y %H:%M:%S') }} · papi: {{ it.first_seen_at | ist('%H:%M:%S') }}">
+    <time>{{ it.announced_at | ist('%H:%M') }}</time><small>{{ it.announced_at | ist('%d.%m') }}</small>
+  </div>
+  <div class="body">
+    <div class="line1">
+      {{ m.tickers(it.tickers) }}
+      <span class="code" title="{{ it.code }}">{{ it.code_label }}</span>
+      {{ m.mat(it.materiality, it.materiality_band) }} {{ m.prio(it.priority) }}
+      <span class="stage stage-{{ it.stage }}">{{ 'analiz edildi' if it.stage == 'analysed' else 'kurallar' }}</span>
+      {{ m.markers(it) }}
+    </div>
+    <a class="headline" href="/events/{{ it.id }}">{{ it.headline }}</a>
+    {% if it.issuers %}<div class="issuers">{% for i in it.issuers %}{{ i.name }}{% if not loop.last %}, {% endif %}{% endfor %}</div>{% endif %}
+  </div>
+  <div class="links">
+    {% if it.kap_url %}<a class="kap" href="{{ it.kap_url }}" target="_blank" rel="noopener noreferrer">KAP ↗</a>{% endif %}
+  </div>
+</article>

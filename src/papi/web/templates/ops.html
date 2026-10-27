@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Operasyon{% endblock %}
+{% block main %}
+<section class="card" id="ingest">
+  <h2>KAP alımı</h2>
+  <div class="grid">
+    <div><b>Son yoklama</b><br>{{ o.last_poll_at | ist('%d.%m.%Y %H:%M:%S') }}</div>
+    <div><b>Son başarılı yoklama</b><br>{{ o.last_poll_ok_at | ist('%d.%m.%Y %H:%M:%S') }}</div>
+    <div><b>Son istek</b><br>{% if o.last_fetch %}{{ o.last_fetch.started_at | ist('%d.%m %H:%M:%S') }} · {{ o.last_fetch.outcome }}{% if o.last_fetch.http_status %} ({{ o.last_fetch.http_status }}){% endif %}{% if o.last_fetch.error %}<br><small class="err">{{ o.last_fetch.error }}</small>{% endif %}{% else %}—{% endif %}</div>
+    <div><b>24 sa yoklama</b><br>{{ o.polls_24h.ok }} başarılı · {{ o.polls_24h.new_rows }} yeni · <span class="{{ 'err' if o.polls_24h.fail }}">{{ o.polls_24h.fail }} hata</span></div>
+    <div><b>Devre kesici</b><br>{% if o.circuit and o.circuit.state == 'open' %}<span class="err">AÇIK</span> — {{ o.circuit.reason }} ({{ o.circuit.open_until | ist }}'e kadar){% else %}kapalı{% endif %}</div>
+  </div>
+</section>
+
+<section class="card" id="latency">
+  <h2>Alım gecikmesi (7 gün)</h2>
+  <p class="small">Kaynak: {{ o.latency.origin }} · n={{ o.latency.n }} · p50 {{ o.latency.p50 | latency }} · p95 {{ o.latency.p95 | latency }} · en çok {{ o.latency.max | latency }}</p>
+  <table class="hist">{% for h in o.latency.hist %}<tr><th>{{ h.label }}</th><td><span class="bar" style="width: {{ h.pct }}%"></span></td><td class="r">{{ h.n }}</td></tr>{% endfor %}</table>
+  {% if o.latency.chart %}<div class="chart" data-kind="latency"></div><script type="application/json" class="chart-data">{{ o.latency.chart | tojson_safe }}</script>{% endif %}
+</section>
+
+<section class="card" id="gaps">
+  <h2>Açık boşluklar</h2>
+  {% if o.gaps.open %}<p>{{ o.gaps.open | length }} açık indeks: {% for g in o.gaps.open[:50] %}<code>{{ g }}</code>{% if o.gaps.tries.get(g|string) %}<small>×{{ o.gaps.tries[g|string] }}</small>{% endif %} {% endfor %}</p>{% else %}<p class="reason">Açık boşluk yok.</p>{% endif %}
+  {% if o.gaps.dead %}<p class="warn">Vazgeçilen: {% for g in o.gaps.dead[:50] %}<code>{{ g }}</code> {% endfor %}</p>{% endif %}
+  <p class="small">Son 24 saatte {{ o.gaps.events_24h }} boşluk olayı.</p>
+  {% if o.drift %}<p class="warn">Biçim kayması: {% for k, v in o.drift.items() %}{{ k }} ({{ v.missing | val if v is mapping else v }}) {% endfor %}</p>{% endif %}
+</section>
+
+<section class="card" id="jobs">
+  <h2>İş kuyruğu</h2>
+  {% if o.jobs.statuses %}
+  <table class="tbl"><thead><tr><th>Durum</th>{% for p in o.jobs.priorities %}<th class="r">öncelik {{ p }}</th>{% endfor %}<th class="r">toplam</th></tr></thead><tbody>
+  {% for s in o.jobs.statuses %}<tr><th>{{ s }}</th>{% for p in o.jobs.priorities %}<td class="r">{{ o.jobs.counts.get(s ~ ':' ~ p, '') }}</td>{% endfor %}<td class="r"><b>{{ o.jobs.totals[s] }}</b></td></tr>{% endfor %}
+  </tbody></table>
+  {% else %}<p class="reason">Kuyruk boş.</p>{% endif %}
+</section>
+
+<section class="card" id="dead">
+  <h2>Başarısız işler (dead)</h2>
+  {% if o.dead_jobs %}
+  <table class="tbl"><thead><tr><th>Zaman</th><th>Tür</th><th class="r">Deneme</th><th>Hata</th></tr></thead><tbody>
+  {% for j in o.dead_jobs %}<tr><td>{{ j.updated_at | ist }}</td><td><code>{{ j.kind }}</code></td><td class="r">{{ j.attempts }}</td><td class="err pre">{{ j.last_error or '' }}</td></tr>{% endfor %}
+  </tbody></table>
+  {% else %}<p class="reason">Başarısız iş yok.</p>{% endif %}
+</section>
+
+<section class="card" id="failed">
+  <h2>İşlenemeyen bildirimler</h2>
+  {% if o.failed_disclosures %}
+  <table class="tbl"><thead><tr><th>Görülme</th><th>Bildirim</th><th>Aşama</th><th>Hata</th></tr></thead><tbody>
+  {% for d in o.failed_disclosures %}<tr><td>{{ d.first_seen_at | ist }}</td><td><a href="{{ d.kap_url }}" target="_blank" rel="noopener noreferrer">{{ d.source_ref }}</a> {{ d.title or '' }}</td><td>{{ d.ingest_status }}</td><td class="err pre">{{ d.ingest_error or '' }}</td></tr>{% endfor %}
+  </tbody></table>
+  {% else %}<p class="reason">Yok.</p>{% endif %}
+</section>
+
+<section class="card" id="templates">
+  <h2>Bilinmeyen şablonlar</h2>
+  {% if o.unknown_templates %}
+  <table class="tbl"><thead><tr><th>Şablon</th><th class="r">Adet</th><th>İlk</th><th>Son</th><th>Örnek</th></tr></thead><tbody>
+  {% for t in o.unknown_templates %}<tr><td><code>{{ t.template_id }}</code></td><td class="r">{{ t.count }}</td><td>{{ t.first_seen | ist }}</td><td>{{ t.last_seen | ist }}</td><td>{% if t.example_ref %}<a href="https://www.kap.org.tr/tr/Bildirim/{{ t.example_ref }}" target="_blank" rel="noopener noreferrer">{{ t.example_ref }}</a>{% endif %}</td></tr>{% endfor %}
+  </tbody></table>
+  {% endif %}
+  {% if o.unknown_template_disclosures %}<ul>{% for d in o.unknown_template_disclosures %}<li>{{ d.first_seen_at | ist }} · <a href="{{ d.kap_url }}" target="_blank" rel="noopener noreferrer">{{ d.source_ref }}</a> {{ d.title or '' }}</li>{% endfor %}</ul>{% endif %}
+  {% if not o.unknown_templates and not o.unknown_template_disclosures %}<p class="reason">Yok.</p>{% endif %}
+</section>
+
+<section class="card" id="review">
+  <h2>İnceleme listesi</h2>
+  <h3>İşaretli analizler</h3>
+  {% if o.review.flagged %}<ul>{% for a in o.review.flagged %}<li>{{ a.created_at | ist }} · <a href="/events/{{ a.event_id }}">{{ a.code }}</a> · {{ a.agent }}</li>{% endfor %}</ul>{% else %}<p class="reason">Yok.</p>{% endif %}
+  <h3>Desteklenmeyen / doğrulanamayan iddialar</h3>
+  {% if o.review.claims %}<ul>{% for c in o.review.claims %}<li><a href="/events/{{ c.event_id }}">olay</a> · {{ c.text }} <small>({{ c.check_status or '' }} {{ c.verify_status or '' }})</small></li>{% endfor %}</ul>{% else %}<p class="reason">Yok.</p>{% endif %}
+  <h3>Geri bildirimlerim</h3>
+  {% if o.review.feedback %}<ul>{% for f in o.review.feedback %}<li>{{ f.created_at | ist }} · <b>{{ f.label }}</b> · {% if f.target_type == 'event' %}<a href="/events/{{ f.target_id }}">olay</a>{% else %}{{ f.target_type }} {{ f.target_id[:8] }}{% endif %}{% if f.comment %} — {{ f.comment }}{% endif %}</li>{% endfor %}</ul>{% else %}<p class="reason">Yok.</p>{% endif %}
+</section>
+{% endblock %}

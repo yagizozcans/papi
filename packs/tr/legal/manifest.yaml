@@ -1,0 +1,309 @@
+# papi legal corpus manifest — Türkiye pack (PRD 03 §2).
+#
+# One entry per document. Adding a document = adding an entry; no code change.
+#   id               stable manifest id (also the kv_state / regulation.extra key)
+#   official_code    code as printed in the text (II-15.1, 6362, …); guidelines/exchange rules use a slug
+#   title            official Turkish title
+#   authority        SPK | TBMM | KAP (MKK) | BIST
+#   kind             law | communique | guideline | directive | exchange_rule
+#   source_urls      official URLs, preferred first (fallbacks are tried in order on failure)
+#   priority         P0 | P1 | P2
+#   refresh          how often to re-check: daily | weekly | monthly | quarterly | <n>d
+#   citation_prefix  stable prefix of citation ids (03 §3.1); never change once published
+#   shape            articles (KISIM/BÖLÜM/MADDE/fıkra/bent) | sections (I., 1., 1.1. …)
+#   history          optional original/older texts: url + the date that text took effect
+#
+# URLs verified live on 2026-10-28. mevzuat.spk.gov.tr/api/<Mevzuat|Rehber>/File/<id> is the PDF
+# behind SPK's "Mevzuat Sistemi" viewer (mevzuat.spk.gov.tr/<Mevzuat|Rehber>/Dosya/<id>); ids come
+# from https://mevzuat.spk.gov.tr/api/Search/All. These PDFs are SPK's consolidated texts and carry
+# the "Tebliğ değişikliklerine ilişkin liste" header and inline (Değişik/Ek/Mülga:RG-…) markers.
+#
+# II-23.1 (Önemli Nitelikteki İşlemlere İlişkin Ortak Esaslar ve Ayrılma Hakkı Tebliği) is repealed
+# ("Mülga" in SPK's system, mevzuat.spk.gov.tr/Mevzuat/Dosya/203); its successor II-23.3 is listed.
+version: 1
+
+documents:
+  # ------------------------------------------------------------------------------- P0 disclosure core
+  - id: spk-ii-15-1
+    official_code: II-15.1
+    title: Özel Durumlar Tebliği
+    authority: SPK
+    kind: communique
+    source_urls:
+      - https://mevzuat.spk.gov.tr/api/Mevzuat/File/81
+      - https://www.kap.org.tr/tr/api/about/content-file/8a019492945fbe080194b284b7304992
+      - https://spk.gov.tr/data/61e367311b41c61270320808/adf72423-1d42-457a-8d1f-11c6d47066e7.pdf
+    priority: P0
+    refresh: weekly
+    citation_prefix: "tr:spk:II-15.1"
+    shape: articles
+    history:
+      - url: https://www.resmigazete.gov.tr/eskiler/2014/01/20140123-5.htm
+        effective_from: 2014-02-23   # RG 23/01/2014-28891; m.30: "yayımı tarihinden bir ay sonra yürürlüğe girer"
+        label: "Asıl metin – RG 23/01/2014-28891"
+
+  - id: spk-rehber-ozel-durumlar
+    official_code: ozel-durumlar-rehberi
+    title: Özel Durumlar Rehberi
+    authority: SPK
+    kind: guideline
+    source_urls:
+      - https://mevzuat.spk.gov.tr/api/Rehber/File/13
+      - https://spk.gov.tr/data/61e36ca51b41c61270320820/0dc4659f7005c7d2bdc5f151a7014ba8.pdf
+    priority: P0
+    refresh: monthly
+    citation_prefix: "tr:spk-guide:ozel-durumlar"
+    shape: sections
+
+  - id: spk-vii-128-6
+    official_code: VII-128.6
+    title: Kamuyu Aydınlatma Platformu Tebliği
+    authority: SPK
+    kind: communique
+    source_urls:
+      - https://mevzuat.spk.gov.tr/api/Mevzuat/File/119
+    priority: P0
+    refresh: monthly
+    citation_prefix: "tr:spk:VII-128.6"
+    shape: articles
+
+  - id: kap-bildirim-yonergesi
+    official_code: kap-uyelik-bildirim-yonergesi
+    title: KAP Üyeliğine ve KAP'a Bildirim Gönderimine İlişkin Usul ve Esaslar Yönergesi
+    authority: KAP
+    kind: directive
+    source_urls:
+      - https://www.kap.org.tr/tr/api/about/content-file/8a019492945fbe080194b2807e394957
+    priority: P0
+    refresh: monthly
+    citation_prefix: "tr:kap:bildirim-yonergesi"
+    shape: articles
+
+  - id: law-6362
+    official_code: "6362"
+    title: Sermaye Piyasası Kanunu
+    authority: TBMM
+    kind: law
+    source_urls:
+      - https://mevzuat.spk.gov.tr/api/Mevzuat/File/112
+      - https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6362.pdf
+    priority: P0
+    refresh: weekly
+    citation_prefix: "tr:law:6362"
+    shape: articles
+
+  # -------------------------------------------------------------------------- P0 capital & distribution
+  - id: spk-vii-128-1
+    official_code: VII-128.1
+    title: Pay Tebliği
+    authority: SPK
+    kind: communique
+    source_urls:
+      - https://mevzuat.spk.gov.tr/api/Mevzuat/File/246
+      - https://spk.gov.tr/data/61e3664d1b41c61270320801/73793d5c-b73a-4da7-81c5-0aedf963ae99.pdf
+    priority: P0
+    refresh: weekly
+    citation_prefix: "tr:spk:VII-128.1"
+    shape: articles
+
+  - id: spk-ii-18-1
+    official_code: II-18.1
+    title: Kayıtlı Sermaye Sistemi Tebliği
+    authority: SPK
+    kind: communique
+    source_urls:
+      - https://mevzuat.spk.gov.tr/api/Mevzuat/File/88
+      - https://spk.gov.tr/data/61e3664d1b41c61270320801/60956708-c3d2-4ddb-a2b4-d3715ddef1bb.pdf
+    priority: P0
+    refresh: monthly
+    citation_prefix: "tr:spk:II-18.1"
+    shape: articles
+
+  - id: spk-ii-19-1
+    official_code: II-19.1
+    title: Kâr Payı Tebliği
+    authority: SPK
+    kind: communique
+    source_urls:
+      - https://mevzuat.spk.gov.tr/api/Mevzuat/File/89
+      - https://www.mevzuat.gov.tr/File/GeneratePdf?mevzuatNo=19333&mevzuatTur=Teblig&mevzuatTertip=5
+    priority: P0
+    refresh: monthly
+    citation_prefix: "tr:spk:II-19.1"
+    shape: articles
+
+  - id: spk-ii-22-1
+    official_code: II-22.1
+    title: Geri Alınan Paylar Tebliği
+    authority: SPK
+    kind: communique
+    source_urls:
+      - https://mevzuat.spk.gov.tr/api/Mevzuat/File/91
+      - https://spk.gov.tr/data/61e3664d1b41c61270320801/c5136b19-1e8c-499a-b4d7-83f4188d3d8a.pdf
+    priority: P0
+    refresh: monthly
+    citation_prefix: "tr:spk:II-22.1"
+    shape: articles
+
+  # ---------------------------------------------------------------------------- P1 corporate transactions
+  - id: spk-ii-23-3
+    official_code: II-23.3
+    title: Önemli Nitelikteki İşlemler ve Ayrılma Hakkı Tebliği
+    authority: SPK
+    kind: communique
+    source_urls:
+      - https://mevzuat.spk.gov.tr/api/Mevzuat/File/95
+    priority: P1
+    refresh: monthly
+    citation_prefix: "tr:spk:II-23.3"
+    shape: articles
+
+  - id: spk-rehber-onemli-nitelikteki-islemler
+    official_code: onemli-nitelikteki-islemler-rehberi
+    title: Önemli Nitelikteki İşlemler ve Ayrılma Hakkı Tebliği Uygulama Rehberi
+    authority: SPK
+    kind: guideline
+    source_urls:
+      - https://mevzuat.spk.gov.tr/api/Rehber/File/14
+    priority: P1
+    refresh: quarterly
+    citation_prefix: "tr:spk-guide:onemli-nitelikteki-islemler"
+    shape: sections
+
+  - id: spk-ii-23-2
+    official_code: II-23.2
+    title: Birleşme ve Bölünme Tebliği
+    authority: SPK
+    kind: communique
+    source_urls:
+      - https://mevzuat.spk.gov.tr/api/Mevzuat/File/93
+    priority: P1
+    refresh: monthly
+    citation_prefix: "tr:spk:II-23.2"
+    shape: articles
+
+  - id: spk-ii-26-1
+    official_code: II-26.1
+    title: Pay Alım Teklifi Tebliği
+    authority: SPK
+    kind: communique
+    source_urls:
+      - https://mevzuat.spk.gov.tr/api/Mevzuat/File/218
+      - https://spk.gov.tr/data/61e367311b41c61270320808/001cdc3c-0f13-4a09-9cea-96e4bab2fb8b.pdf
+    priority: P1
+    refresh: monthly
+    citation_prefix: "tr:spk:II-26.1"
+    shape: articles
+
+  - id: spk-rehber-kar-payi
+    official_code: kar-payi-rehberi
+    title: Kâr Payı Rehberi
+    authority: SPK
+    kind: guideline
+    source_urls:
+      - https://mevzuat.spk.gov.tr/api/Rehber/File/10
+    priority: P1
+    refresh: quarterly
+    citation_prefix: "tr:spk-guide:kar-payi"
+    shape: sections
+
+  # --------------------------------------------------------------------------- P1 reporting & governance
+  - id: spk-ii-14-1
+    official_code: II-14.1
+    title: Sermaye Piyasasında Finansal Raporlamaya İlişkin Esaslar Tebliği
+    authority: SPK
+    kind: communique
+    source_urls:
+      - https://mevzuat.spk.gov.tr/api/Mevzuat/File/77
+      - https://spk.gov.tr/data/61e367981b41c6127032080b/0b0e02a3-6a94-4573-a771-2e7b73a3e639.pdf
+    priority: P1
+    refresh: monthly
+    citation_prefix: "tr:spk:II-14.1"
+    shape: articles
+
+  - id: spk-ii-17-1
+    official_code: II-17.1
+    title: Kurumsal Yönetim Tebliği
+    authority: SPK
+    kind: communique
+    source_urls:
+      - https://mevzuat.spk.gov.tr/api/Mevzuat/File/86
+    priority: P1
+    refresh: monthly
+    citation_prefix: "tr:spk:II-17.1"
+    shape: articles
+
+  # ------------------------------------------------------------------------------------ P1 exchange rules
+  - id: bist-pay-piyasasi-yonergesi
+    official_code: 02.YÖN.01
+    title: Borsa İstanbul A.Ş. Pay Piyasası Yönergesi
+    authority: BIST
+    kind: exchange_rule
+    source_urls:
+      - https://www.borsaistanbul.com/files/borsa-istanbul-as-pay-piyasasi-yonergesi.pdf
+    priority: P1
+    refresh: weekly
+    citation_prefix: "tr:bist:pay-piyasasi-yonergesi"
+    shape: articles
+
+  - id: bist-pay-piyasasi-proseduru
+    official_code: pay-piyasasi-proseduru
+    title: Borsa İstanbul A.Ş. Pay Piyasası Prosedürü (tedbirler ve VBTS dahil)
+    authority: BIST
+    kind: exchange_rule
+    source_urls:
+      - https://www.borsaistanbul.com/files/pay-piyasasi-proseduru.pdf
+    priority: P1
+    refresh: weekly
+    citation_prefix: "tr:bist:pay-piyasasi-proseduru"
+    shape: sections
+
+  - id: bist-pd-agirlikli-endeks-kurallari
+    official_code: bist-pd-agirlikli-pay-endeksleri-temel-kurallari
+    title: BIST Piyasa Değeri Ağırlıklı Pay Endeksleri Temel Kuralları
+    authority: BIST
+    kind: exchange_rule
+    source_urls:
+      - https://www.borsaistanbul.com/files/BISTPiyasaDegeriAgirlikliPayEndeksleriTemelKurallari.pdf
+      - https://www.borsaistanbul.com/files/bist-piyasa-degeri-agirlikli-pay-endeksleri-temel-kurallari.pdf
+    priority: P1
+    refresh: monthly
+    citation_prefix: "tr:bist:endeks-temel-kurallari"
+    shape: sections
+
+  # ------------------------------------------------------------------------------------------- P2 other
+  - id: law-6102
+    official_code: "6102"
+    title: Türk Ticaret Kanunu
+    authority: TBMM
+    kind: law
+    source_urls:
+      - https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6102.pdf
+    priority: P2
+    refresh: monthly
+    citation_prefix: "tr:law:6102"
+    shape: articles
+
+  - id: law-4054
+    official_code: "4054"
+    title: Rekabetin Korunması Hakkında Kanun
+    authority: TBMM
+    kind: law
+    source_urls:
+      - https://www.mevzuat.gov.tr/MevzuatMetin/1.5.4054.pdf
+    priority: P2
+    refresh: quarterly
+    citation_prefix: "tr:law:4054"
+    shape: articles
+
+  - id: spk-ii-5-1
+    official_code: II-5.1
+    title: İzahname ve İhraç Belgesi Tebliği
+    authority: SPK
+    kind: communique
+    source_urls:
+      - https://mevzuat.spk.gov.tr/api/Mevzuat/File/74
+    priority: P2
+    refresh: monthly
+    citation_prefix: "tr:spk:II-5.1"
+    shape: articles

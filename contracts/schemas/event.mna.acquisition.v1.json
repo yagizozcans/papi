@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "event.mna.acquisition/1",
+  "title": "event.mna.acquisition payload v1",
+  "description": "Acquisition of a stake, company or financial asset. Unknown = null; spans are kept outside the payload (event.extra.payload_spans).",
+  "type": "object",
+  "required": [
+    "counterparty",
+    "target",
+    "value",
+    "currency",
+    "valuation_report",
+    "completion_date",
+    "ratios"
+  ],
+  "properties": {
+    "counterparty": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "issuer_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "is_related_party": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "target": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "issuer_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "stake_pct": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      }
+    },
+    "value": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[A-Z]{3}$"
+    },
+    "valuation_report": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "completion_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "ratios": {
+      "type": "object",
+      "properties": {
+        "value_to_market_cap": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

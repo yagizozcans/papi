@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "event.report.financial.periodic/1",
+  "title": "event.report.financial.periodic payload v1",
+  "description": "Periodic financial report (finansal rapor). Unknown = null; spans are kept outside the payload (event.extra.payload_spans).",
+  "type": "object",
+  "required": [
+    "period_year",
+    "period_months",
+    "consolidated",
+    "audited",
+    "currency",
+    "revenue",
+    "net_income",
+    "net_income_attributable",
+    "ebitda",
+    "equity",
+    "total_assets"
+  ],
+  "properties": {
+    "period_year": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "period_months": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "enum": [
+        3,
+        6,
+        9,
+        12,
+        null
+      ]
+    },
+    "consolidated": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "audited": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[A-Z]{3}$"
+    },
+    "revenue": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "net_income": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "net_income_attributable": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "ebitda": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "equity": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "total_assets": {
+      "type": [
+        "number",
+        "null"
+      ]
+    }
+  }
+}

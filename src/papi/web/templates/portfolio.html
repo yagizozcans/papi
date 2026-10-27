@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Portföy{% endblock %}
+{% block main %}
+{% if not p.available %}
+<section class="card"><p class="notice warn">Portföy modülü yüklü değil; pozisyonlar hesaplanamıyor. Son işlemler aşağıda.</p></section>
+{% endif %}
+<section class="card">
+  <h2>Pozisyonlar</h2>
+  {% if p.positions %}
+  <table class="tbl" id="positions"><thead><tr><th>Hisse</th><th class="r">Adet</th><th class="r">Ort. maliyet</th><th class="r">Son kapanış</th><th class="r">Değer (TL)</th><th class="r">Ağırlık</th><th class="r">K/Z (TL)</th><th class="r">K/Z %</th><th>Son olay</th></tr></thead><tbody>
+  {% for r in p.positions %}
+    <tr><td><a class="chip" href="/company/{{ r.ticker }}">{{ r.ticker }}</a></td>
+      <td class="r">{{ r.quantity | num(0) }}</td><td class="r">{{ r.avg_cost | num }}</td>
+      <td class="r">{{ r.last_close | num }}{% if r.last_close_date %} <small>{{ r.last_close_date | ist }}</small>{% endif %}</td>
+      <td class="r">{{ r.market_value | num }}</td><td class="r">{{ (r.weight * 100) | pct if r.weight is not none else '—' }}</td>
+      <td class="r {{ 'pos' if r.pnl and r.pnl > 0 else 'neg' if r.pnl and r.pnl < 0 }}">{{ r.pnl | num }}</td>
+      <td class="r {{ 'pos' if r.pnl_pct and r.pnl_pct > 0 else 'neg' if r.pnl_pct and r.pnl_pct < 0 }}">{{ r.pnl_pct | pct }}</td>
+      <td>{% if r.last_event %}<a href="/events/{{ r.last_event.id }}">{{ r.last_event.code_label }}</a> <small>{{ r.last_event.announced_at | ist('%d.%m') }}</small>{% else %}—{% endif %}</td></tr>
+  {% endfor %}
+  </tbody>
+  {% if p.total_value is not none %}<tfoot><tr><th>Toplam</th><td></td><td></td><td></td><td class="r"><b>{{ p.total_value | num }}</b></td><td></td><td class="r"><b>{{ p.total_pnl | num }}</b></td><td></td><td></td></tr></tfoot>{% endif %}
+  </table>
+  {% if p.unvalued %}<p class="small warn">Fiyat verisi olmayan: {{ p.unvalued | join(', ') }} (toplama dahil değil).</p>{% endif %}
+  {% elif p.available %}<p class="reason">Açık pozisyon yok.</p>{% endif %}
+</section>
+
+<section class="card" id="pending">
+  <h2>Onay bekleyen işlemler</h2>
+  {% if p.pending is none %}<p class="reason">Portföy modülü yok.</p>
+  {% elif p.pending %}
+  <table class="tbl"><thead><tr><th>Hisse</th><th>Tür</th><th>Hak kullanım</th><th>Öneri</th><th></th></tr></thead><tbody>
+  {% for a in p.pending %}
+    <tr id="pa-{{ a.id }}"><td>{{ a.ticker or a.instrument_id[:8] }}</td><td>{{ a.kind }}</td><td>{{ a.ex_date | ist if a.ex_date else '—' }}</td>
+      <td>{% if a.proposal %}{{ a.proposal.text_tr or (a.proposal | val) }}{% endif %}</td>
+      <td class="actions"><form hx-post="/portfolio/pending/{{ a.id }}/apply" hx-target="#pa-res-{{ a.id }}" method="post" action="/portfolio/pending/{{ a.id }}/apply">
+          <input name="quantity_override" placeholder="adet (isteğe bağlı)" size="10"><button type="submit">Uygula</button></form>
+        <form hx-post="/portfolio/pending/{{ a.id }}/dismiss" hx-target="#pa-res-{{ a.id }}" method="post" action="/portfolio/pending/{{ a.id }}/dismiss"><button type="submit" class="secondary">Reddet</button></form>
+        <div id="pa-res-{{ a.id }}"></div></td></tr>
+  {% endfor %}
+  </tbody></table>
+  {% else %}<p class="reason">Onay bekleyen kurumsal işlem yok.</p>{% endif %}
+</section>
+
+<section class="card" id="timeline">
+  <h2>Portföy olayları</h2>
+  <div class="feed">{% for it in p.timeline %}{% include "_feed_item.html" %}{% else %}<p class="reason">Portföydeki hisselerde olay yok.</p>{% endfor %}</div>
+</section>
+
+<section class="card" id="txns">
+  <h2>Son işlemler</h2>
+  {% if p.txns %}
+  <table class="tbl"><thead><tr><th>Tarih</th><th>Hisse</th><th>Tür</th><th class="r">Adet</th><th class="r">Fiyat</th><th class="r">Masraf</th><th>Kaynak</th><th>Not</th></tr></thead><tbody>
+  {% for t in p.txns %}<tr class="{{ 'reversed' if t.reversed or t.reverses_id }}"><td>{{ t.trade_date | ist }}</td><td>{{ t.ticker or '—' }}</td><td>{{ t.type }}{% if t.reverses_id %} <small>(iptal kaydı)</small>{% elif t.reversed %} <small>(iptal edildi)</small>{% endif %}</td><td class="r">{{ t.quantity | num(0) }}</td><td class="r">{{ t.price | num }}</td><td class="r">{{ t.fees | num }}</td><td>{{ t.source }}</td><td>{{ t.note or '' }}</td></tr>{% endfor %}
+  </tbody></table>
+  {% else %}<p class="reason">İşlem kaydı yok. Telegram'dan "ASELS 100 @ 62,50 aldım" yazarak ekleyebilirsiniz.</p>{% endif %}
+</section>
+{% endblock %}

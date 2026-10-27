@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "event.distribution.dividend.stock/1",
+  "title": "event.distribution.dividend.stock payload v1",
+  "description": "Dividend paid in shares (pay olarak / bedelsiz kâr payı). Unknown = null; spans are kept outside the payload (event.extra.payload_spans).",
+  "type": "object",
+  "required": [
+    "period_year",
+    "rate_pct",
+    "amount",
+    "currency",
+    "ex_date"
+  ],
+  "properties": {
+    "period_year": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "rate_pct": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "New shares per existing nominal, percent"
+    },
+    "amount": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Nominal amount distributed as shares"
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[A-Z]{3}$"
+    },
+    "ex_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    }
+  }
+}

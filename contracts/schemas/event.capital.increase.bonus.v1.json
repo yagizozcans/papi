@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "event.capital.increase.bonus/1",
+  "title": "event.capital.increase.bonus payload v1",
+  "description": "Bonus issue from internal resources (bedelsiz sermaye artırımı). Unknown = null; spans are kept outside the payload (event.extra.payload_spans).",
+  "type": "object",
+  "required": [
+    "board_decision_date",
+    "current_capital",
+    "target_capital",
+    "bonus_amount",
+    "bonus_rate_pct",
+    "registered_capital_ceiling",
+    "currency"
+  ],
+  "properties": {
+    "board_decision_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "current_capital": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Issued capital before the increase"
+    },
+    "target_capital": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Issued capital after the increase"
+    },
+    "bonus_amount": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Nominal amount of new shares"
+    },
+    "bonus_rate_pct": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "New shares per existing nominal, percent"
+    },
+    "registered_capital_ceiling": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[A-Z]{3}$"
+    }
+  }
+}

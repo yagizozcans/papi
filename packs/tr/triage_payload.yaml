@@ -1,0 +1,233 @@
+# Deterministic payload extraction from parsed KAP forms (C1 document.structure) — Türkiye pack.
+# Engine: src/papi/triage/payload.py. Output must validate against contracts/schemas/<schema>.json.
+# Labels were checked against live KAP forms recorded in tests/fixtures/kap/ (tbl_KP_Report_ID,
+# tbl_SA_Report_ID, tbl_GAI_Report_ID, tbl_oda-10400_Shares-Transaction-Notification, 2026-10).
+#
+# extractors.<event code>:
+#   templates: [..]      optional: only when structure.template_id contains one of these (normalised)
+#   fields:              payload path (dot-joined for nested objects) → spec
+#     labels: [..]       label patterns in priority order; a pattern is "phrase & phrase …" and matches when
+#                        every phrase occurs at a word start in the normalised label
+#                        (papi.core.text.normalize_tr; "(%)" vanishes, "(TL)" becomes "tl")
+#     not: [..]          phrases that disqualify a label
+#     type: number | int | year | date | text | bool | side | currency
+#     row: first | last | total   which data row of a header table to read (default first non-total row)
+#   lists:               payload path → rows read from a table
+#     header_any: [..]   a table qualifies when one of its header cells matches one of these patterns
+#     columns:           item key → {labels, not, type}; keys starting with "_" are helper columns consumed
+#                        by the code's post-processing hook and never stored
+#
+# Lookup order per pattern: form fields (label_norm) → key/value table rows (first cell = label) → header
+# tables (matching column). The first non-empty parseable value wins.
+# Currency: an explicit `currency` field if extracted, else the first currency token (TL/TRY/USD/EUR/…)
+# found in a matched label or value of a numeric field; null when none.
+version: 1
+
+extractors:
+  distribution.dividend.cash:
+    fields:
+      currency: {labels: [para birimi], type: currency}
+      period_year:
+        labels: [kar payı & ait olduğu & dönem, kar payı & hesap dönemi, dağıtıma esas & dönem]
+        type: year
+      gross_per_share:
+        labels: [nominal değerli paya & nakit kar payı & brüt tl, pay başına & brüt & tl, pay başına & brüt]
+        not: [oran, bedelsiz, isabet eden]
+        type: number
+      net_per_share:
+        labels: [nominal değerli paya & nakit kar payı & net tl, pay başına & net & tl, pay başına & net]
+        not: [oran, bedelsiz, isabet eden]
+        type: number
+      gross_rate_pct:
+        labels: [nominal değerli paya & nakit kar payı & brüt, brüt & oran]
+        not: [brüt tl, bedelsiz, stopaj]
+        type: number
+      net_rate_pct:
+        labels: [nominal değerli paya & nakit kar payı & net, net & oran]
+        not: [net tl, bedelsiz, brüt, stopaj]
+        type: number
+      total_gross_amount:
+        labels: [toplam dağıtılan kar payı & nakit & brüt, dağıtılacak & toplam & brüt]
+        not: [pay başına, oran]
+        row: total
+        type: number
+      total_net_amount:
+        labels: [toplam dağıtılan kar payı & nakit & net, dağıtılacak & toplam & net]
+        not: [pay başına, oran, bedelsiz]
+        row: total
+        type: number
+      ex_date:
+        labels: [kesinleşen & hak kullanım tarihi, teklif edilen & hak kullanım tarihi, hak kullanım tarihi]
+        type: date
+      payment_date:
+        labels: [ödeme tarihi, nakit kar payı & ödeme tarihi, kar payı & dağıtım tarihi]
+        not: [hak kullanım]
+        type: date
+      installments:
+        labels: [taksit sayısı, ödeme & taksit]
+        type: int
+    lists:
+      share_groups:
+        header_any: [pay grup, pay grubu]
+        columns:
+          group: {labels: [pay grup, pay grubu], type: text}
+          gross_per_share: {labels: [nominal değerli paya & brüt tl, pay başına & brüt], not: [oran, bedelsiz], type: number}
+          net_per_share: {labels: [nominal değerli paya & net tl, pay başına & net], not: [oran, bedelsiz], type: number}
+          gross_rate_pct: {labels: [nominal değerli paya & brüt, brüt & oran], not: [brüt tl, bedelsiz, stopaj], type: number}
+
+  distribution.dividend.stock:
+    fields:
+      period_year:
+        labels: [kar payı & ait olduğu & dönem, kar payı & hesap dönemi]
+        type: year
+      currency: {labels: [para birimi], type: currency}
+      rate_pct:
+        labels: [pay biçiminde dağıtılacak kar payı oran, bedelsiz pay & oran, pay olarak & oran]
+        type: number
+      amount:
+        labels: [pay biçiminde dağıtılacak kar payı tutar, bedelsiz pay & tutar, pay olarak dağıtılacak & tutar]
+        not: [oran, pay başına]
+        type: number
+      ex_date:
+        labels: [kesinleşen & hak kullanım tarihi, teklif edilen & hak kullanım tarihi, hak kullanım tarihi]
+        type: date
+
+  capital.increase.bonus:
+    fields:
+      currency: {labels: [para birimi], type: currency}
+      board_decision_date: {labels: [yönetim kurulu karar tarihi, karar tarihi], type: date}
+      current_capital:
+        labels: [mevcut sermaye, çıkarılmış sermaye, ödenmiş sermaye, artırım öncesi sermaye]
+        not: [ulaşılacak, sonrası, tavan, yeni]
+        type: number
+      target_capital:
+        labels: [ulaşılacak sermaye, artırım sonrası sermaye, ulaşılacak çıkarılmış sermaye]
+        type: number
+      bonus_amount:
+        labels: [iç kaynaklardan & tutar, bedelsiz & tutar, kar payından & tutar, iç kaynak & tutar]
+        not: [oran, ulaşılacak, mevcut]
+        row: total
+        type: number
+      bonus_rate_pct:
+        labels: [iç kaynaklardan & oran, bedelsiz & oran, iç kaynak & oran]
+        row: total
+        type: number
+      registered_capital_ceiling:
+        labels: [kayıtlı sermaye tavan]
+        not: [süre, tarih, geçerlilik]
+        type: number
+
+  capital.increase.rights:
+    fields:
+      currency: {labels: [para birimi], type: currency}
+      board_decision_date: {labels: [yönetim kurulu karar tarihi, karar tarihi], type: date}
+      current_capital:
+        labels: [mevcut sermaye, çıkarılmış sermaye, ödenmiş sermaye, artırım öncesi sermaye]
+        not: [ulaşılacak, sonrası, tavan, yeni]
+        type: number
+      target_capital:
+        labels: [ulaşılacak sermaye, artırım sonrası sermaye, ulaşılacak çıkarılmış sermaye]
+        type: number
+      rights_amount:
+        labels: [rüçhan hakkı kullanım tutar, rüçhan hakkı & tutar, bedelli & tutar, nakden artırılacak]
+        not: [oran, fiyat, ulaşılacak, tahsisli, kullanılmayan, iptal]
+        row: total
+        type: number
+      rights_rate_pct:
+        labels: [rüçhan hakkı kullanım oran, rüçhan hakkı & oran, bedelli & oran, yeni pay alma & oran]
+        not: [fiyat]
+        row: total
+        type: number
+      subscription_price:
+        labels: [rüçhan hakkı kullandırma fiyat, rüçhan hakkı kullanım fiyat, rüçhan hakkı & fiyat,
+                 yeni pay alma hakkı & fiyat, kullanım fiyatı]
+        type: number
+      private_placement_amount:
+        labels: [tahsisli & tutar, tahsisli & nominal]
+        not: [oran, fiyat]
+        type: number
+      rights_start_date:
+        labels: [rüçhan hakkı kullanım & başlangıç, yeni pay alma hakkı kullanım & başlangıç, kullanım süresi & başlangıç]
+        type: date
+      rights_end_date:
+        labels: [rüçhan hakkı kullanım & bitiş, yeni pay alma hakkı kullanım & bitiş, kullanım süresi & bitiş]
+        type: date
+      registered_capital_ceiling:
+        labels: [kayıtlı sermaye tavan]
+        not: [süre, tarih, geçerlilik]
+        type: number
+
+  buyback.program.start:
+    fields:
+      board_decision_date: {labels: [yönetim kurulu karar tarihi, geri alım & karar tarihi], type: date}
+      max_shares_nominal:
+        labels: [geri alıma konu pay miktarı, geri alınabilecek & azami & pay, azami pay sayısı]
+        not: [fon, işlem tarihi]
+        type: number
+      max_fund_amount:
+        labels: [ödenecek azami tutar, geri alım için ayrılan fon, ayrılan fon, azami fon, ayrılan & kaynak]
+        type: number
+      start_date: {labels: [program & başlangıç, geri alım & başlangıç], type: date}
+      end_date: {labels: [program & bitiş, geri alım & bitiş], type: date}
+      duration_months: {labels: [program süresi & ay, azami süre & ay], type: number}
+
+  buyback.execution:
+    fields:
+      cumulative_pct_of_capital:
+        labels: [geri alınan payların toplam & sermayeye oran, toplam & geri alınan & sermayeye oran]
+        type: number
+      cumulative_shares_nominal:
+        labels: [daha önce & geri alınan & toplam, toplam geri alınan & nominal, geri alınan payların toplam & nominal]
+        not: [oran]
+        type: number
+    lists:
+      trades:
+        header_any: [işlem tarihi, geri alım tarihi]
+        columns:
+          date: {labels: [işlem tarihi, tarih], type: date}
+          shares_nominal: {labels: [nominal tutar, nominal], not: [fiyat, oran], type: number}
+          _pct: {labels: [sermayeye oran], type: number}
+          price: {labels: [işlem fiyatı, fiyat], not: [en düşük, en yüksek], type: number}
+          amount: {labels: [işlem tutarı, toplam tutar], not: [nominal], type: number}
+
+  ownership.insider_trade:
+    fields:
+      person.name:
+        labels: [adı soyadı, ticaret unvanı, işlemi yapan, bildirim yükümlüsü, pay sahibinin adı]
+        not: [görev, ilgili şirket]
+        type: text
+      person.role:
+        labels: [şirketteki görev, ihraççı ile ilişkisi, idari sorumluluğu, ilişkinin niteliği, görevi]
+        type: text
+      holding_before_pct:
+        labels: [gün başı & sermayeye oran, işlem öncesi & sermaye, işlem öncesi & pay oranı]
+        not: [oy hak]
+        row: first
+        type: number
+      holding_after_pct:
+        labels: [gün sonu & sermayeye oran, işlem sonrası & sermaye, işlem sonrası & pay oranı]
+        not: [oy hak]
+        row: last
+        type: number
+      voting_before_pct:
+        labels: [gün başı & oy haklarına oran, işlem öncesi & oy hak]
+        row: first
+        type: number
+      voting_after_pct:
+        labels: [gün sonu & oy haklarına oran, işlem sonrası & oy hak]
+        row: last
+        type: number
+    lists:
+      trades:
+        header_any: [işlem tarihi]
+        columns:
+          date: {labels: [işlem tarihi, tarih], type: date}
+          _buy_nominal: {labels: [alım işlemine konu & nominal], type: number}
+          _sell_nominal: {labels: [satım işlemine konu & nominal], type: number}
+          side: {labels: [alış satış, alım satım, işlem türü, işlemin türü], type: side}
+          shares_nominal:
+            labels: [işlem nominal, nominal tutar, adet, miktar]
+            not: [fiyat, oran, alım işlemine, satım işlemine, net nominal, işlemlerin net, gün başı, gün sonu, sahip olunan]
+            type: number
+          price: {labels: [işlem fiyatı, fiyat], type: number}
+          amount: {labels: [işlem tutarı], not: [nominal], type: number}

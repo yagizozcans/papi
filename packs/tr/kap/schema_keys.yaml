@@ -1,0 +1,33 @@
+# Recorded key sets of the unofficial KAP JSON endpoints (live 2026-10-28). Used by the schema-drift
+# guard: a missing `required` key raises an ops alert + `kap.drift` metric; keys outside `known` are
+# recorded in kv_state `kap:drift` for review.
+version: 1
+list_item:
+  required: [disclosureIndex, publishDate, disclosureClass, subject, summary, kapTitle, stockCodes,
+             relatedStocks, isLate, modifyStatus, attachmentCount]
+  known: [attachmentCount, disclosureCategory, disclosureClass, disclosureIndex, disclosureType, fundCode,
+          hasMultiLanguageSupport, isLate, isOldKap, kapTitle, modifyStatus, period, publishDate,
+          relatedStocks, ruleType, stockCodes, subject, summary, year]
+detail:
+  required: [disclosure, disclosureBody, attachments]
+  known: [disclosure, disclosureBody, attachments]
+detail_basic:
+  required: [disclosureIndex, disclosureId, publishDate, disclosureClass, title, mkkMemberOid, companyTitle,
+             stockCode, relatedStocks, isLate, relatedDisclosureOid, isChanged, isBlocked, attachmentCount]
+  known: [attachmentCount, companyTitle, disclosureCategory, disclosureClass, disclosureId, disclosureIndex,
+          disclosureType, donem, fundType, hasMultiLanguageSupport, isBlocked, isChanged, isLate, mkkMemberOid,
+          period, publishDate, relatedDisclosureOid, relatedStocks, senderType, stockCode, summary, title, year]
+detail_detail:
+  required: []
+  known: [auditType, blockedDescription, decimalDegree, ftNiteligi, fundOid, mainDisclosureDocumentId,
+          memberType, nonInactiveCount, oldKap, opinion, opinionMemberTitle, opinionType,
+          relatedDisclosureIndex, senderTypes]
+attachment:
+  required: [objId, fileName]
+  known: [objId, fileName, fileExtension]
+company:
+  required: [mkkMemberOid, kapMemberOid, kapMemberTitle, stockCode, kapMemberState]
+  known: [abcdCode, cityName, companyCode, faaliyetDurumu, financialType, kapMemberOid, kapMemberState,
+          kapMemberTitle, kapMemberType, kapTypes, kayitliSermayeTavani, mkkMemberOid, nonInactiveCount,
+          paidCapital, payIslemDurumu, relatedMemberOid, relatedMemberTitle, sgbfOrtaklikYapisi, stockCode,
+          taxNo, taxOffice, tradeRegDate, tradeRegNo, tradeRegOffice]

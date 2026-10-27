@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Claude kullanımı{% endblock %}
+{% block main %}
+<section class="card" id="governor">
+  <h2>Claude kullanımı</h2>
+  {% set g = u.governor %}
+  {% if g is none %}<p class="notice warn">LLM modülü yüklü değil; yönetici durumu yok. Defter aşağıda.</p>
+  {% else %}
+  <div class="grid">
+    <div><b>Durum</b><br>{% if g.paused %}<span class="err">DURAKLATILDI</span>{% if g.pause_reason %} ({{ g.pause_reason }}){% endif %}{% if g.paused_until %} · {{ g.paused_until | ist }}'e kadar{% endif %}{% else %}etkin{% endif %}{% if g.calibration_mode %}<br><small>kalibrasyon modu</small>{% endif %}</div>
+    <div><b>5 saat (analiz)</b><br>{{ g.used_5h | num(4) }} / {{ g.cap_5h | num(2) }} USD</div>
+    <div><b>5 saat (sohbet)</b><br>{{ g.used_chat_5h | num(4) if g.used_chat_5h is defined else '—' }} / {{ g.cap_chat_5h | num(2) }} USD</div>
+    <div><b>7 gün</b><br>{{ g.used_week | num(4) }} / {{ g.cap_week | num(2) }} USD</div>
+    {% if g.focus %}<div><b>Odak penceresi</b><br>≤ {{ g.focus.max_priority }}{% if g.focus.until %} · {{ g.focus.until | ist('%H:%M') }}'e kadar{% endif %}</div>{% endif %}
+    {% if g.subscription_bars %}<div><b>Claude abonelik barları</b><br>{% for name in ('five_hour', 'seven_day') %}{% set b = g.subscription_bars.get(name) %}{% if b %}{{ '5 sa' if name == 'five_hour' else '7 gün' }}: {{ b.utilization | val }}{% if b.resets_at %} (sıfırlanma {{ b.resets_at | ist('%d.%m %H:%M') }}){% endif %}<br>{% endif %}{% endfor %}</div>{% endif %}
+  </div>
+  {% if g.queue %}<p class="small">Limit nedeniyle bekleyen LLM işleri: {% if g.queue is mapping and g.queue.llm_deferred is defined %}{% for k, v in g.queue.llm_deferred.items() %}{{ k }}={{ v }} {% else %}yok{% endfor %}{% elif g.queue is mapping %}{% for k, v in g.queue.items() %}{{ k }}={{ v | val }} {% endfor %}{% else %}{{ g.queue | val }}{% endif %}</p>{% endif %}
+  {% endif %}
+  <div class="actions" id="gov-actions">
+    <button hx-post="/ops/usage/pause" hx-target="#gov-result">Duraklat</button>
+    <button hx-post="/ops/usage/resume" hx-target="#gov-result" class="secondary">Sürdür</button>
+    <span id="gov-result"></span>
+  </div>
+</section>
+
+<section class="card" id="ledger-sum">
+  <h2>Defter özeti</h2>
+  <table class="tbl"><thead><tr><th>Pencere</th><th class="r">Çağrı</th><th class="r">Tahmini maliyet (USD)</th></tr></thead><tbody>
+    <tr><th>Son 5 saat</th><td class="r">{{ u.window_5h.calls }}</td><td class="r">{{ u.window_5h.cost | num(4) }} <small>(analiz {{ u.window_5h.pipeline_cost | num(4) }} · sohbet {{ u.window_5h.chat_cost | num(4) }})</small></td></tr>
+    <tr><th>Son 7 gün</th><td class="r">{{ u.window_week.calls }}</td><td class="r">{{ u.window_week.cost | num(4) }}</td></tr>
+  </tbody></table>
+  <h3>Görev başına (7 gün)</h3>
+  {% if u.window_week.by_task %}
+  <table class="tbl"><thead><tr><th>Görev</th><th class="r">Çağrı</th><th class="r">Maliyet (USD)</th><th>Sonuçlar</th></tr></thead><tbody>
+  {% for t in u.window_week.by_task %}<tr><td>{{ t.task }}</td><td class="r">{{ t.calls }}</td><td class="r">{{ t.cost | num(4) }}</td><td>{% for k, v in t.outcomes.items() %}{{ k }}={{ v }} {% endfor %}</td></tr>{% endfor %}
+  </tbody></table>
+  {% else %}<p class="reason">Son 7 günde çağrı yok.</p>{% endif %}
+  {% if u.queue %}<p class="small">Bekleyen işler (öncelik=adet): {% for q in u.queue %}{{ q.priority }}={{ q.n }} {% endfor %}</p>{% endif %}
+</section>
+
+<section class="card" id="ledger-chart">
+  <h2>Saatlik maliyet (7 gün)</h2>
+  {% if u.chart %}<div class="chart" data-kind="usage"></div><script type="application/json" class="chart-data">{{ u.chart | tojson_safe }}</script>{% else %}<p class="reason">Veri yok.</p>{% endif %}
+</section>
+
+<section class="card" id="ledger">
+  <h2>Son çağrılar</h2>
+  {% if u.recent %}
+  <table class="tbl"><thead><tr><th>Zaman</th><th>Görev</th><th>Öncelik</th><th>Model</th><th class="r">Süre</th><th class="r">USD</th><th>Sonuç</th></tr></thead><tbody>
+  {% for r in u.recent %}<tr><td>{{ r.at | ist('%d.%m %H:%M:%S') }}</td><td>{{ r.task }}</td><td>{{ r.priority or '' }}</td><td>{{ r.model_ids | join(', ') }}</td><td class="r">{{ ((r.duration_ms or 0) / 1000) | num(1) }} sn</td><td class="r">{{ r.cost_usd_est | num(4) }}</td><td class="{{ 'err' if r.outcome != 'ok' }}" title="{{ r.error or '' }}">{{ r.outcome }}</td></tr>{% endfor %}
+  </tbody></table>
+  {% else %}<p class="reason">Defter boş.</p>{% endif %}
+</section>
+{% endblock %}

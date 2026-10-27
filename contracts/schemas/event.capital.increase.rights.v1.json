@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "event.capital.increase.rights/1",
+  "title": "event.capital.increase.rights payload v1",
+  "description": "Rights issue (bedelli sermaye artırımı). Unknown = null; spans are kept outside the payload (event.extra.payload_spans).",
+  "type": "object",
+  "required": [
+    "board_decision_date",
+    "current_capital",
+    "target_capital",
+    "rights_amount",
+    "rights_rate_pct",
+    "subscription_price",
+    "private_placement_amount",
+    "rights_start_date",
+    "rights_end_date",
+    "registered_capital_ceiling",
+    "currency"
+  ],
+  "properties": {
+    "board_decision_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "current_capital": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "target_capital": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "rights_amount": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Nominal amount offered to existing shareholders"
+    },
+    "rights_rate_pct": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Rights per existing nominal, percent"
+    },
+    "subscription_price": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Price per share of nominal 1 (rüçhan hakkı kullanım fiyatı)"
+    },
+    "private_placement_amount": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Nominal amount allocated to named investors (tahsisli), if any"
+    },
+    "rights_start_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "rights_end_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "registered_capital_ceiling": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[A-Z]{3}$"
+    }
+  }
+}

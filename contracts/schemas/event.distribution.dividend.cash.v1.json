@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "event.distribution.dividend.cash/1",
+  "title": "event.distribution.dividend.cash payload v1",
+  "description": "Cash dividend (nakit kâr payı). Unknown = null; spans are kept outside the payload (event.extra.payload_spans).",
+  "type": "object",
+  "required": [
+    "decision_body",
+    "period_year",
+    "gross_per_share",
+    "net_per_share",
+    "gross_rate_pct",
+    "net_rate_pct",
+    "total_gross_amount",
+    "total_net_amount",
+    "currency",
+    "ex_date",
+    "payment_date",
+    "installments",
+    "share_groups"
+  ],
+  "properties": {
+    "decision_body": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "board",
+        "general_meeting",
+        null
+      ]
+    },
+    "period_year": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "gross_per_share": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Gross cash dividend per share (nominal 1)"
+    },
+    "net_per_share": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "gross_rate_pct": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Gross dividend as percent of nominal"
+    },
+    "net_rate_pct": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "total_gross_amount": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "total_net_amount": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[A-Z]{3}$"
+    },
+    "ex_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date",
+      "description": "Hak kullanım (ex-dividend) date"
+    },
+    "payment_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "installments": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "share_groups": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "group": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "gross_per_share": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "net_per_share": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "gross_rate_pct": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

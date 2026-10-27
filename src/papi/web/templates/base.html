@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}papi{% endblock %} · papi</title>
+<link rel="stylesheet" href="/static/vendor/uPlot.min.css">
+<link rel="stylesheet" href="/static/app.css">
+<script src="/static/vendor/htmx.min.js" defer></script>
+<script src="/static/vendor/uPlot.iife.min.js" defer></script>
+<script src="/static/app.js" defer></script>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="/">papi</a>
+  <nav>
+    <a href="/" class="{{ 'on' if nav == 'feed.html' }}">Akış</a>
+    <a href="/portfolio" class="{{ 'on' if nav == 'portfolio.html' }}">Portföy</a>
+    <a href="/ops" class="{{ 'on' if nav == 'ops.html' }}">Operasyon</a>
+    <a href="/ops/usage" class="{{ 'on' if nav == 'usage.html' }}">Claude kullanımı</a>
+  </nav>
+  <form class="jump" action="/company/" method="get" onsubmit="this.action='/company/'+encodeURIComponent(this.t.value.trim().toUpperCase());">
+    <input name="t" placeholder="Hisse kodu" aria-label="Hisse kodu" autocomplete="off">
+  </form>
+</header>
+<main>
+{% block main %}{% endblock %}
+</main>
+<footer class="foot">Yerel pano · veriler KAP kaynaklıdır; her öğe KAP bağlantısıyla doğrulanabilir. Yatırım tavsiyesi değildir.</footer>
+</body>
+</html>

@@ -1,0 +1,162 @@
+ÖZEL DURUMLAR REHBERİ
+İÇİNDEKİLER
+I. YASAL ÇERÇEVE..........................................................................................................3
+II. İÇSEL BİLGİLER...........................................................................................................3
+1. İÇSEL BİLGİ NEDEN AÇIKLANMALIDIR?...............................................................3
+2. İÇSEL BİLGİ NEDİR?..................................................................................................3
+2.1. Bilginin Niteliklerinin Belirli Olması.................................................................................................................4
+2.2. Kamuya Duyurma...............................................................................................................................................5
+2.3. Sermaye Piyasası Aracının Değerini, Fiyatını ve Yatırım Kararlarını Etkilemesi Muhtemel Bilgi...........5
+2.4. Bilginin Oluşma Sürecinde Birden Fazla Aşama Olması Durumu................................................................6
+2.5. Haber veya Söylentilerin Doğrulanması...........................................................................................................6
+2.6. Dolaylı Olarak Etki Edebilecek Durumlar.......................................................................................................7
+2.7. Kamuya Açıklanmış Bilgiler Üzerine Yapılan Analizler.................................................................................7
+3. İÇSEL BİLGİNİN GİZLİLİĞİNİN SAĞLANMASI........................................................7
+4. İÇSEL BİLGİLERE ERİŞİMİ OLAN KİŞİLER LİSTESİ...............................................7
+5. AÇIKLAMA YÜKÜMLÜLÜĞÜNE TABİ İÇSEL BİLGİLER......................................10
+5.1. İhraççıyı İlgilendiren Dışsal Koşullar.............................................................................................................10
+5.2. Yönetim Kadrolarındaki Değişiklikler...........................................................................................................11
+5.3. İdari ve Adli Kovuşturma................................................................................................................................11
+5.4. Önemli Tutarda Olağandışı Gelir ve Kârlar ile Gider ve Zararlar.............................................................12
+5.5. Birleşme, Devralmalar veya Pay Alım Teklifi................................................................................................12
+5.6. Maddi Duran Varlıklar ile İlgili İşlemler.......................................................................................................13
+5.7. İhraççının Faaliyetlerine İlişkin Değişiklikler................................................................................................13
+5.8. İhraççının Finansal Yapısına İlişkin Değişiklikler.........................................................................................15
+5.9. Bağlı Ortaklıklar ve Finansal Duran Varlıklara İlişkin Değişiklikler.........................................................17
+5.10. Diğer Değişiklikler..........................................................................................................................................17
+5.11. Açıklamalarda Kullanılan Göstergeler.........................................................................................................18
+6. İÇSEL BİLGİNİN AÇIKLANMASININ ERTELENMESİ............................................18
+6.1. İhraççının Erteleme Kararı Almasında Dikkate Alacağı Meşru Çıkarlar..................................................19
+6.2. Kamuoyunun Yanıltılmaması..........................................................................................................................20
+6.3. İçsel Bilginin Gizliliğinin Sağlanması..............................................................................................................20
+7. SERMAYE PİYASASI ARAÇLARI BORSADA İŞLEM GÖREN İHRAÇÇILARDA ........
+İÇSEL BİLGİLERİN BİLDİRİM ŞEKLİ..........................................................................20
+7.1. Açıklamada Dikkat Edilecek Hususlar...........................................................................................................20
+7.2. Pazarlamaya Yönelik Açıklamalar..................................................................................................................22
+7.3. Açıklamanın Güncellenmesi.............................................................................................................................22
+7.4. Düzeltme Gerektiğinde Yapılacak Açıklama.................................................................................................23
+8. İDARİ SORUMLULUĞU BULUNAN KİŞİLER.........................................................23
+III. SÜREKLİ BİLGİLER...................................................................................................24
+1. SÜREKLİ BİLGİLERİN AÇIKLANMASINA İLİŞKİN ESASLAR...............................24
+2. SERMAYE PİYASASI ARAÇLARINA İLİŞKİN BİLDİRİM YÜKÜMLÜLÜĞÜ..........25
+IV. ÖZEL DURUM AÇIKLAMALARININ DİLİ VE BİLDİRİM ŞEKLİ.......................25
+V. ÖZEL DURUMLARIN İHRAÇÇININ İNTERNET SİTESİNDE YAYINLANMASI26
+VI. GELECEĞE YÖNELİK DEĞERLENDİRMELERİN KAMUYA AÇIKLANMASI26
+VII. KAMUYU AYDINLATMA UYGULAMALARININ ETKİNLEŞTİRİLMESİ......27
+I. YASAL ÇERÇEVE
+Bu Rehber, 6362 sayılı Sermaye Piyasası Kanununun (Kanun) 15 inci maddesi ile II-
+15.1 sayılı Özel Durumlar Tebliğinin (Tebliğ) 27 nci maddesine dayanılarak düzenlenmiştir.
+Bu Rehberde yer alan hususlar Kurul Kararı hükmündedir.
+II. İÇSEL BİLGİLER
+1. İÇSEL BİLGİ NEDEN AÇIKLANMALIDIR?
+Sermaye Piyasası Kanunu’nun 106 ncı maddesinin birinci fıkrası uyarınca; doğrudan
+ya da dolaylı olarak sermaye piyasası araçları ya da ihraççılar hakkında, ilgili sermaye
+piyasası araçlarının fiyatlarını, değerlerini veya yatırımcıların kararlarını etkileyebilecek
+nitelikteki ve henüz kamuya duyurulmamış bilgilere dayalı olarak ilgili sermaye piyasası
+araçları için alım ya da satım emri vermek veya verdiği emri değiştirmek veya iptal etmek
+ve bu suretle kendisine veya bir başkasına menfaat temin etmek bilgi suistimalidir.
+İçsel bilgilere erişimi olan kişiler bu bilgileri kullanarak sermaye piyasası araçları
+üzerinde işlem yapamazlar. Kamuya açıklanmamış bu bilgilerin kullanılması halinde bunun
+yaptırımı Kanun’un aynı maddesinde düzenlenmiştir.
+II-15.1 sayılı Özel Durumlar Tebliği ise yatırımcıların, ihraççıların ve ilgili tarafların
+zamanında, tam ve doğru bilgilendirilerek sermaye piyasasının güvenilir, şeffaf, etkin,
+istikrarlı, adil ve rekabetçi bir ortamda işleyişinin sağlanmasına ilişkin usul ve esasları
+düzenlemektedir.
+İçsel bilginin açıklanma yükümlülüğü, sermaye piyasası araçlarının değerini, fiyatını
+veya yatırımcıların yatırım kararlarını etkileyebilecek koşulların ortaya çıkması halinde
+kamuya açıklama yapılması yükümlülüğüdür.
+İçsel bilginin açıklanması yükümlülüğünün amacı, tüm piyasa katılımcılarının
+eşzamanlı olarak eşit seviyede bilgi sahibi olmalarını sağlamak ve böylece eksik ve yanlış
+bilgi edinimi sonucunda etkin olmayan bir fiyat ve piyasa oluşumunu önlemektir. Bilginin
+kullanıcıları arasında eşit olarak dağılmasının sağlanması sermaye piyasalarının da düzgün
+bir biçimde işlemesi amacına hizmet edecektir.
+2. İÇSEL BİLGİ NEDİR?
+Tebliğin 4 üncü maddesi uyarınca içsel bilgi, sermaye piyasası araçlarının değerini,
+fiyatını veya yatırımcıların yatırım kararlarını etkileyebilecek henüz kamuya açıklanmamış
+bilgi, olay ve gelişmeleri ifade eder. Bu tanım göz önüne alındığında içsel bilgi:
+a) Somut bir olaya ilişkin,
+b) Rasyonel bir yatırımcının yatırım kararını alırken önemli kabul edebileceği,
+c) Kamuya açıklanmamış durumlarla ilgili,
+ç) Bilgiyi kullanan kişiye bu bilgiden haberi olmayan diğer yatırımcılara nazaran
+avantaj sağlayabilecek olan,
+d) Kamuya açıklandığı takdirde söz konusu sermaye piyasası aracının değerinde,
+fiyatında veya yatırımcıların yatırım kararları üzerinde etki yaratabilecek, bilgi,
+olay ve gelişmeler olarak tanımlanır.
+Açıklanan bilginin sermaye piyasası aracının değeri, fiyatı veya yatırımcıların yatırım
+kararı üzerinde etkili olup olmadığının tespitinde; geçmişte sermaye piyasası aracının değeri,
+fiyatı veya yatırımcıların yatırım kararı üzerinde benzer etki yaratan bilgiyle aynı olup
+olmadığı ve benzer olayların ihraççının kendisi tarafından hâlihazırda içsel bilgi olarak kabul
+edilip edilmediği de dikkate alınmalıdır.
+Geçmişte sermaye piyasası aracının değeri, fiyatı veya yatırımcıların yatırım kararı
+üzerinde etkili olacağı düşüncesi ile içsel bilgi olarak kabul edilen bilginin herhangi bir etki
+yaratmadığı görüldüğünde şirket izleyen dönemlerde bu nitelikteki bilgileri “içsel bilgi”
+olarak değerlendirmeyebilir. Diğer taraftan, geçmişte içsel bilgi olarak görülmeyen bazı
+durumların piyasa katılımcıları üzerinde etki yarattığının anlaşılması halinde de bu tür
+durumlarda izleyen dönemde mutlaka açıklama yapılmalıdır.
+Etkinin oluşabileceğinin değerlendirilmesinde 2.3. nolu bölümdeki açıklamalar
+dikkate alınabileceği gibi, yatırımcılardan ve analistlerden benzer konularla ilgili çokça soru
+ve yorum alınması da etkinin oluşabileceğine dair bir gösterge olarak değerlendirilebilir.
+2.1. Bilginin Niteliklerinin Belirli Olması
+İçsel bilgi, sermaye piyasası araçlarının değerinde ya da fiyatında meydana gelebilecek
+gelişmeler hakkında yeterli esasları içeren hususlardan oluşmalıdır. Bu kapsamda;
+a) Bilginin mevcut olan veya rasyonel bir değerlendirmeyle ortaya çıkması
+muhtemel
+olan bir takım koşulların ve olayların göstergesi olması,
+b) Bilginin, söz konusu koşulların veya olayların ilgili sermaye piyasası aracının
+değeri, fiyatı veya yatırımcıların yatırım kararları üzerindeki etkisini değerlendirmeye
+yetecek kadar belirli olması, gereklidir.
+Nitelikleri henüz belirgin olmamakla birlikte, mevcut hali ile piyasa katılımcılarının
+farklı yorum ve değerlendirmelere ulaşmasına imkan verebilecek bilgilerin mevcudiyeti
+halinde, bu bilgilerin kamuya açıklanması yanıltıcı olabileceğinden gizliliğinin sağlanması
+gerekmektedir. Özellikle ileride içsel bilgi oluşumuna neden olabilecek süreçlerde gizlilik
+için gerekli tedbirler alınmalıdır. Örneğin henüz üzerinde araştırmaya yeni başlanan bir
+yatırım projesi ile ilgili detaylar (yatırım tutarı, süresi, beklenen katkı, yatırımın yapılıp
+yapılmayacağı vb.) yatırımcının kararları üzerindeki etkisinin değerlendirilmesine yetecek
+kadar belirgin değil ise bu hususun kamuya açıklanması yanıltıcı sonuçlara neden
+olabileceğinden, henüz içsel bilgi oluşmadığından erteleme kararı alınmaksızın gizliliğinin
+sağlanması gerekmektedir.
+2.2. Kamuya Duyurma
+İçsel bilginin kamuya duyurulması şarttır. İçsel bilginin kamuya duyurulmuş
+sayılabilmesi için, söz konusu bilginin Kurulun kamuyu aydınlatma düzenlemeleri
+çerçevesinde yayımlanmış olması zorunludur.
+İçsel bilginin basın toplantısı, basın-yayın organları, internet veya buna benzer yollarla
+kamuya duyurulmuş olması, kamuyu aydınlatma yükümlülüğünün yerine getirildiği
+anlamına gelmez.
+IV. ÖZEL DURUM AÇIKLAMALARININ DİLİ VE BİLDİRİM ŞEKLİ
+Yabancı ihraççılar ve yabancı yatırımcılar tarafından yapılacak özel durum
+açıklamaları da dâhil olmak üzere tüm özel durum açıklamalarının dili Türkçedir. Bununla
+birlikte 01.01.2015 tarihinden başlamak üzere, Kurulun kurumsal yönetime ilişkin
+düzenlemeleri çerçevesinde birinci grupta yer alan ortaklıklar tarafından yapılan özel durum
+açıklamalarının Türkçe’nin yanı sıra eş anlı ve İngilizce olarak, içeriğin doğruluğuna ilişkin
+sorumluluk ilgili ortaklıkta olmak üzere, ilan edilmesi zorunludur. İngilizce olarak yapılan
+açıklamada, Türkçe açıklamanın esas kabul edileceğine yönelik çekince bildirimi de yer
+almalıdır.
+İhraççılar tarafından yapılacak açıklamaların Tebliğde aksi belirtilmedikçe derhal
+yapılması esastır.
+Tebliğin 12 ve 22 nci maddesi uyarınca yapılacak özel durum açıklamaları Tebliğin
+ekinde yer alan form kullanılarak, en geç durumun ortaya çıktığı günü izleyen üçüncü iş
+günü saat 09:00’a kadar KAP’ta duyurulur.
+Tebliğin 4 üncü maddesinin birinci fıkrasının (f) ve (g) bentleri çerçevesinde, ihraççıda
+idari sorumluluğu bulunan kişiler ve bunlarla yakından ilişkili kişiler ile ihraççının gerçek
+ya da tüzel kişi ana ortağının ihraççının paylarına ilişkin yaptıkları işlemlere ait özel durum
+açıklamalarının ortaya çıktığı veya öğrenildiği anda Tebliğin ekinde yer alan form
+kullanılarak kamuya duyurulması gerekmektedir. Formlarda yer alan tüm alanların eksiksiz
+doldurulması zorunludur.
+25
+Açıklama yükümlülüğü, bilgiye hızlı erişimi sağlayacak ve yatırımcılar arasında eşit
+işlem ilkesine aykırılık teşkil etmeyecek şekilde yerine getirilmelidir.
+V. ÖZEL DURUMLARIN İHRAÇÇININ İNTERNET SİTESİNDE
+YAYINLANMASI
+Sermaye piyasası araçları borsada işlem gören ihraççılar, özel durum açıklamalarını
+en geç kamuya açıklama yapıldıktan sonraki iş günü içinde KAP’ta ihraççıya ilişkin genel
+bilgilerde belirtilen internet sitesinde ilan etmek ve söz konusu açıklamaları beş yıl süreyle
+bu internet sitesinde bulundurmak zorundadır. Bu yükümlülük, ortaklığın internet sitesinde
+KAP’ta yer alan açıklamalara bağlantı verilmesi suretiyle de yerine getirilebilir.
+Sermaye piyasası araçları borsada işlem görmeyen ihraççılar ise, özel durum
+açıklamalarını en geç kamuya açıklama yapıldıktan sonraki beş iş günü içinde bulunması
+durumunda kendilerine ait internet sitesinde ilan etmek ve söz konusu açıklamaları beş yıl
+süreyle bu internet sitesinde bulundurmak zorundadır. Bu ihraççıların kendilerine ait birden
+fazla internet sitesinin bulunması durumunda, özel durumlar tescil edilen internet sitesinde
+zorunlu, diğer internet sitelerinde ise ihtiyari olarak ilan edilir. Tescil edilen internet
+sitesinde, özel durumların ilan edildiği diğer internet sitelerinin bağlantı adreslerine yer
+verilir.

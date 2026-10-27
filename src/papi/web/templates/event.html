@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% set it = d.item %}
+{% block title %}{{ it.tickers | map(attribute='ticker') | join(', ') }} · {{ it.code_label }}{% endblock %}
+{% block main %}
+<section class="card head">
+  <div class="line1">
+    {{ m.tickers(it.tickers) }}
+    <span class="code" title="{{ d.event.code }} (taksonomi {{ d.event.taxonomy_version }})">{{ it.code_label }}</span>
+    {{ m.mat(it.materiality, it.materiality_band) }} {{ m.prio(it.priority) }}
+    <span class="stage stage-{{ it.stage }}">{{ 'analiz edildi' if it.stage == 'analysed' else 'kurallar' }}</span>
+    {{ m.markers(it) }}
+  </div>
+  <h1>{{ it.headline }}</h1>
+  <div class="meta">
+    {% for i in it.issuers %}<span>{{ i.name }}</span>{% endfor %}
+    <span>Yayın: <b>{{ it.published_at | ist('%d.%m.%Y %H:%M:%S') }}</b></span>
+    <span class="latency {{ 'slow' if it.catchup }}" title="KAP yayını → papi görmesi">Gecikme: {{ it.latency_s | latency }}</span>
+    {% if it.kap_url %}<a class="kap" href="{{ it.kap_url }}" target="_blank" rel="noopener noreferrer">KAP'ta aç ↗</a>{% endif %}
+    <span class="code-raw">{{ d.event.code }}</span>
+  </div>
+  {% if d.event.superseded_by %}<p class="notice warn">Bu olay yeni bir sürümle değiştirildi: <a href="/events/{{ d.event.superseded_by }}">güncel olay</a></p>{% endif %}
+  {% if d.revision_chain %}
+  <div class="revs"><b>Revizyon geçmişi:</b>
+    <ol>{% for r in d.revision_chain %}<li class="{{ 'cur' if r.current }}">{{ r.revision_label }} · {{ r.published_at | ist }} · {% if r.event_id and not r.current %}<a href="/events/{{ r.event_id }}">olay</a> · {% endif %}<a href="{{ r.kap_url }}" target="_blank" rel="noopener noreferrer">KAP {{ r.source_ref }}</a></li>{% endfor %}</ol>
+  </div>
+  {% endif %}
+  {% if d.superseded %}<p class="small">Önceki sınıflandırmalar: {% for s in d.superseded %}<a href="/events/{{ s.id }}">{{ s.code }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</p>{% endif %}
+</section>
+
+<section class="card forme" id="for-me">
+  <h2>Benim için</h2>
+  {% set fm = d.for_me %}
+  {% if fm.positions %}
+  <table class="tbl"><thead><tr><th>Hisse</th><th class="r">Adet</th><th class="r">Ort. maliyet</th><th class="r">Son kapanış</th><th class="r">Değer (TL)</th><th class="r">Ağırlık</th></tr></thead><tbody>
+  {% for p in fm.positions %}<tr><td>{{ p.ticker }}</td><td class="r">{{ p.quantity | num(0) }}</td><td class="r">{{ p.avg_cost | num }}</td><td class="r">{{ p.last_close | num }}{% if p.last_close_date %} <small>({{ p.last_close_date | ist }})</small>{% endif %}</td><td class="r">{{ p.market_value | num }}</td><td class="r">{{ (p.weight * 100) | pct if p.weight is not none else '—' }}</td></tr>{% endfor %}
+  </tbody></table>
+  {% endif %}
+  {% for f in fm.impacts %}
+  <div class="impact"><span class="tag model">model</span> <b>{{ f.ticker }} {{ f.horizon }}</b> <small>{{ f.model }}</small>
+    {% if f.position_impact is mapping %}<table class="tbl kv">{% for k, v in f.position_impact.items() %}<tr><th>{{ k }}</th><td>{{ v | val }}</td></tr>{% endfor %}</table>{% else %}<p>{{ f.position_impact | val }}</p>{% endif %}
+  </div>
+  {% endfor %}
+  {% if fm.reason %}<p class="reason">{{ fm.reason }}</p>{% endif %}
+</section>
+
+<section class="card" id="summary">
+  <h2>Özet</h2>
+  {% set tr = d.summaries.get('tr') %}{% set en = d.summaries.get('en') %}
+  {% if tr or en %}
+    {% if tr %}<div class="sum" lang="tr"><span class="tag interp">yorum</span> {% if tr.headline %}<b>{{ tr.headline }}</b>{% endif %}<p>{{ tr.body | srefs }}</p></div>{% endif %}
+    {% if en %}<details class="sum" lang="en"><summary>English</summary>{% if en.headline %}<b>{{ en.headline }}</b>{% endif %}<p>{{ en.body | srefs }}</p></details>{% endif %}
+  {% else %}
+    <p class="reason">{% if it.stage == 'rules' %}Claude analizi henüz yok (kural tabanlı sınıflandırma). {% endif %}Özet yok.</p>
+  {% endif %}
+  {% if d.event.rules %}<details><summary>Sınıflandırma gerekçesi</summary><table class="tbl kv">{% for k, v in d.event.rules.items() %}<tr><th>{{ k }}</th><td>{{ v | val }}</td></tr>{% endfor %}</table></details>{% endif %}
+</section>
+
+<section class="card" id="facts">
+  <h2>Temel bilgiler</h2>
+  {% if d.key_facts %}
+  <table class="tbl kv facts"><tbody>
+  {% for f in d.key_facts %}<tr><th>{{ f.path }}</th><td><span class="tag fact">bilgi</span>
+    {% if f.anchors %}<a class="fact-val" href="#{{ f.anchors[0] }}" data-anchor="{{ f.anchors | join(' ') }}" title="Kaynak: {{ f.anchors | join(', ') }}">{{ f.value | val }}</a>{% for a in f.anchors %} <a class="sref" href="#{{ a }}" data-anchor="{{ a }}">[S{{ a.split('s')[-1] }}]</a>{% endfor %}
+    {% else %}{{ f.value | val }} <small class="muted" title="Kaynak alanı eşlenemedi">(kaynak eşlenmedi)</small>{% endif %}
+  </td></tr>{% endfor %}
+  </tbody></table>
+  {% else %}<p class="reason">Yapılandırılmış veri (payload) yok.</p>{% endif %}
+</section>
+
+{% if d.analyses %}
+<section class="card" id="analysis">
+  <h2>Analiz</h2>
+  {% for a in d.analyses %}
+  <div class="analysis">
+    <div class="meta"><b>{{ a.agent }}</b> · {{ a.created_at | ist }} · {{ a.model_ids | join(', ') }}{% if a.confidence is not none %} · güven {{ a.confidence | num(2) }}{% endif %} · <span class="review review-{{ a.review_state }}">{{ a.review_state }}</span></div>
+    {% if a.claims %}<ul class="claims">
+    {% for c in a.claims %}<li class="claim claim-{{ c.kind }}"><span class="tag {{ {'fact': 'fact', 'computation': 'calc', 'inference': 'interp'}.get(c.kind, 'interp') }}">{{ {'fact': 'bilgi', 'computation': 'hesap', 'inference': 'yorum'}.get(c.kind, c.kind) }}</span>
+      {{ c.text_tr | srefs }}
+      {% for ct in c.citations %}{% if ct.anchor and ("[S" ~ ct.anchor.split("s")[-1] ~ "]") in (c.text_tr or "") %}{% elif ct.anchor %} <a class="sref" href="#{{ ct.anchor }}" data-anchor="{{ ct.anchor }}" title="{{ ct.quote or '' }}">[S{{ ct.anchor.split('s')[-1] }}]</a>{% elif ct.target_type == 'provision_version' %} <span class="cite-legal" title="{{ ct.quote or '' }}">§{{ ct.target_id[:8] }}</span>{% endif %}{% endfor %}
+      {% if c.check_status == 'unsupported' or c.verify_status == 'fail' %}<span class="mark rev">doğrulanamadı</span>{% endif %}
+    </li>{% endfor %}
+    </ul>{% endif %}
+  </div>
+  {% endfor %}
+</section>
+{% endif %}
+
+{% if d.forecasts %}
+<section class="card" id="forecasts">
+  <h2>Senaryolar</h2>
+  <table class="tbl"><thead><tr><th>Hisse</th><th>Ufuk</th><th>Hedef</th><th>Dağılım</th><th>Model</th><th>Gerçekleşen</th></tr></thead><tbody>
+  {% for f in d.forecasts %}<tr><td>{{ f.ticker }}</td><td>{{ f.horizon }}</td><td>{{ f.target }}</td><td><span class="tag model">model</span> {% if f.distribution %}{% for k, v in f.distribution.items() %}{{ k }}={{ v | val }} {% endfor %}{% endif %}</td><td>{{ f.model }}</td><td>{{ f.outcome.realised_value | val if f.outcome else '—' }}</td></tr>{% endfor %}
+  </tbody></table>
+</section>
+{% endif %}
+
+<section class="card" id="original">
+  <h2>Orijinal belge</h2>
+  {% for doc in d.documents %}
+    {% set html, rest = render_document(doc) %}
+    <div class="doc" id="doc-{{ doc.index }}">
+      <div class="doc-head"><b>{{ {'disclosure_body': 'Bildirim metni', 'attachment': 'Ek', 'kap_pdf': 'KAP PDF'}.get(doc.kind, doc.kind) }}</b>
+        {% if doc.filename %} · {{ doc.filename }}{% endif %}{% if doc.mime %} · <small>{{ doc.mime }}</small>{% endif %}
+        {% if doc.raw_sha256 %} · <a href="/raw/{{ doc.raw_sha256 }}" target="_blank" rel="noopener">ham dosya{% if doc.byte_size %} ({{ doc.byte_size ~ " B" if doc.byte_size < 1024 else (doc.byte_size / 1024) | num(0) ~ " KB" }}){% endif %}</a>{% endif %}
+      </div>
+      {% if doc.text %}<pre class="doctext">{{ html }}</pre>{% endif %}
+      {% if rest %}<ol class="spanlist">{% for s in rest %}<li id="{{ s.anchor }}" class="span" data-s="{{ s.ordinal }}"><b>[S{{ s.ordinal }}]</b>{% if s.page %} <small>s.{{ s.page }}</small>{% endif %} {{ s.text or '' }}</li>{% endfor %}</ol>{% endif %}
+    </div>
+  {% else %}
+    <p class="reason">Belge metni henüz alınmadı.{% if it.kap_url %} <a href="{{ it.kap_url }}" target="_blank" rel="noopener noreferrer">KAP'ta oku</a>.{% endif %}</p>
+  {% endfor %}
+</section>
+
+<section class="card" id="feedback">
+  <h2>Geri bildirim</h2>
+  <form class="fb" hx-post="/events/{{ d.event.id }}/feedback" hx-target="#fb-result" hx-swap="innerHTML" method="post" action="/events/{{ d.event.id }}/feedback">
+    <input name="comment" placeholder="Not (isteğe bağlı)" size="30">
+    {% for k, label in feedback_kinds.items() %}<button type="submit" name="kind" value="{{ k }}">{{ label }}{% if d.feedback_counts.get(k) %} ({{ d.feedback_counts[k] }}){% endif %}</button>{% endfor %}
+  </form>
+  <div id="fb-result"></div>
+</section>
+{% endblock %}

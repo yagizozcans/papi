@@ -1,0 +1,36 @@
+# Known KAP disclosure body templates (class of the outer `tbl_*` table), recorded from live KAP
+# (2026-10-27/28, fixtures in tests/fixtures/kap/). Bodies whose template id is not listed here are
+# still parsed by structure (taxonomy / report / generic) but flagged `template_unknown`
+# (document.extra.template_known=false, kv_state kap:unknown_templates, metric kap.template_unknown).
+# Add an id here after checking its parse output.
+version: 1
+templates:
+  # taxonomy family (field ids like oda_CorrectionAnnouncementFlag, bilingual cells)
+  tbl_oda-10000_Material-Event-Disclosure-General: {family: taxonomy, subject: "Özel Durum Açıklaması (Genel)"}
+  tbl_oda-10400_Shares-Transaction-Notification: {family: taxonomy, subject: "Pay Alım Satım Bildirimi"}
+  tbl_oda-12000_New-Business-Relation: {family: taxonomy, subject: "Yeni İş İlişkisi"}
+  tbl_oda-12800_CMB-Bulletin: {family: taxonomy, subject: "SPK Bülteni"}
+  tbl_oda-14700_Default-Transaction: {family: taxonomy, subject: "Temerrüt İşlemi"}
+  tbl_oda-21300_Change-In-Articles-Of-Association: {family: taxonomy, subject: "Esas Sözleşme Tadili"}
+  tbl_oda-23900_Notification-About-Suspension-of-BIST-Stock: {family: taxonomy, subject: "Pay Bazında Devre Kesici Bildirimi"}
+  tbl_oda-24100_Capital-Market-Board-Administrative-Mesasures: {family: taxonomy, subject: "Sermaye Piyasası Kurulu Tedbir Kararı"}
+  tbl_oda-24400_Public-Disclosure-Platform-Announcement: {family: taxonomy, subject: "Kamuyu Aydınlatma Platformu Duyurusu"}
+  tbl_oda-26500_Representation-Letter: {family: taxonomy, subject: "Sorumluluk Beyanı"}
+  tbl_oda-29000_Credit-Rating: {family: taxonomy, subject: "Kredi Derecelendirmesi"}
+  tbl_oda-32000_Winning-A-Tender: {family: taxonomy, subject: "İhale Süreci / Sonucu"}
+  tbl_oda-34000_Unconsolidated-Operating-Review: {family: taxonomy, subject: "Faaliyet Raporu (Konsolide Olmayan)"}
+  tbl_oda-36000_General-Notification: {family: taxonomy, subject: "Genel Açıklama"}
+  tbl_oda-54000_Financial-Calender: {family: taxonomy, subject: "Finansal Takvim"}
+  # report family (label/value rows, bordered tables)
+  tbl_oda-21900_General-Info-Form: {family: report, subject: "Şirket Genel Bilgi Formu"}
+  tbl_GENEL_DUYURU_GONDERIMI: {family: report, subject: "KAP genel duyuru (ör. DKB Pay Alım Satım Bildirimi)"}
+  tbl_GAI_Report_ID: {family: report, subject: "Payların Geri Alınmasına İlişkin Bildirim"}
+  tbl_KP_Report_ID: {family: report, subject: "Kar Payı Dağıtım İşlemlerine İlişkin Bildirim"}
+  tbl_SA_Report_ID: {family: report, subject: "Sermaye Artırımı - Azaltımı İşlemlerine İlişkin Bildirim"}
+  tbl_GK_Report_ID: {family: report, subject: "Genel Kurul İşlemlerine İlişkin Bildirim"}
+  tbl_SPAF_Report_ID: {family: report, subject: "Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim"}
+  tbl_IT_Report_ID: {family: report, subject: "İhraç Tavanına İlişkin Bildirim"}
+  tbl_MKK_CSV_Report_ID: {family: report, subject: "Pay Mali Hak Kullanım İşlemi"}
+patterns:
+  # XBRL financial statement roles: tbl_general_role_210015, tbl_insurance_role_310010, …
+  - {pattern: '^tbl_[a-z]+_role_\d+$', family: taxonomy, subject: "Finansal Rapor"}

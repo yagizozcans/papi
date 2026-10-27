@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "event.buyback.program.start/1",
+  "title": "event.buyback.program.start payload v1",
+  "description": "Share buyback programme approved or started. Unknown = null; spans are kept outside the payload (event.extra.payload_spans).",
+  "type": "object",
+  "required": [
+    "board_decision_date",
+    "max_shares_nominal",
+    "max_fund_amount",
+    "currency",
+    "start_date",
+    "end_date",
+    "duration_months"
+  ],
+  "properties": {
+    "board_decision_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "max_shares_nominal": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "max_fund_amount": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[A-Z]{3}$"
+    },
+    "start_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "end_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "duration_months": {
+      "type": [
+        "number",
+        "null"
+      ]
+    }
+  }
+}

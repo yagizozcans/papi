@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "event.ownership.threshold_crossing/1",
+  "title": "event.ownership.threshold_crossing payload v1",
+  "description": "Holding crosses a disclosure threshold (5, 10, 15, 20, 25, 33, 50, 67, 95 %). Unknown = null; spans are kept outside the payload (event.extra.payload_spans).",
+  "type": "object",
+  "required": [
+    "holder_name",
+    "threshold_pct",
+    "direction",
+    "holding_before_pct",
+    "holding_after_pct",
+    "voting_before_pct",
+    "voting_after_pct"
+  ],
+  "properties": {
+    "holder_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "threshold_pct": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "direction": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "up",
+        "down",
+        null
+      ]
+    },
+    "holding_before_pct": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "holding_after_pct": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "voting_before_pct": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "voting_after_pct": {
+      "type": [
+        "number",
+        "null"
+      ]
+    }
+  }
+}
