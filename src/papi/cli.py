@@ -38,6 +38,7 @@ SUBCOMMAND_MODULES: tuple[tuple[str, str], ...] = (
     ("web", "web"),
     ("run", "run"),
     ("evals", "eval"),
+    ("analyst", "analyst"),
 )
 
 

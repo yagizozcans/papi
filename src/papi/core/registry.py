@@ -34,6 +34,7 @@ PLUGIN_MODULES: tuple[str, ...] = (
     "web",
     "run",
     "evals",
+    "analyst",
 )
 
 EVENT_JOB_PREFIX = "event:"
