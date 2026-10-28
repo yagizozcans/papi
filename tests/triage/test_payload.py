@@ -102,17 +102,33 @@ def test_schema_failure_on_extracted_value(tax):
     spec = P.parse_spec(
         {
             "extractors": {
-                "capital.increase.bonus": {
-                    "fields": {"currency": {"labels": ["para birimi"], "type": "text"}}
-                }
+                "buyback.program.start": {"fields": {"currency": {"labels": ["para birimi"], "type": "text"}}}
             }
         }
     )
     s = {"form_fields": [form_field("Para Birimi", "Türk Lirası", 1)], "tables": []}
-    r = P.build("capital.increase.bonus", tax, structure=s, spec=spec)
+    r = P.build("buyback.program.start", tax, structure=s, spec=spec)
     assert r.payload is None
     assert r.source is None
     assert "currency" in r.error
+
+
+def test_capital_increase_without_amount_or_ratio_has_no_payload(tax):
+    s = {
+        "form_fields": [
+            form_field("Yönetim Kurulu Karar Tarihi", "26.10.2026", 1),
+            form_field("Mevcut Sermaye (TL)", "500.000.000", 2),
+            form_field("Para Birimi", "TRY", 3),
+        ],
+        "tables": [],
+    }
+    for code in ("capital.increase.rights", "capital.increase.bonus"):
+        r = P.build(code, tax, structure=s)
+        assert r.payload is None and r.source is None
+        assert r.error.startswith("no_increase_terms")
+    s["form_fields"].append(form_field("Ulaşılacak Sermaye (TL)", "600.000.000", 4))
+    r = P.build("capital.increase.rights", tax, structure=s)
+    assert (r.payload["rights_amount"], r.payload["rights_rate_pct"]) == (100_000_000, 20)
 
 
 def test_no_structure_and_no_match(tax):

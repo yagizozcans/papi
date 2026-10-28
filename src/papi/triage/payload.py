@@ -417,7 +417,7 @@ def _post_dividend_cash(p: dict[str, Any], ctx: dict[str, Any]) -> None:
 
 
 def _post_capital(amount_key: str, rate_key: str) -> Any:
-    def hook(p: dict[str, Any], ctx: dict[str, Any]) -> None:
+    def hook(p: dict[str, Any], ctx: dict[str, Any]) -> str | None:
         cur, tgt, amt = p.get("current_capital"), p.get("target_capital"), p.get(amount_key)
         if amt is None and cur is not None and tgt is not None and tgt >= cur:
             p[amount_key] = round(tgt - cur, 6)
@@ -426,6 +426,10 @@ def _post_capital(amount_key: str, rate_key: str) -> Any:
             p["target_capital"] = round(cur + amt, 6)
         if p.get(rate_key) is None and cur and amt is not None:
             p[rate_key] = round(amt / cur * 100, 6)
+        # Without an amount or ratio the payload would describe a zero-factor corporate action.
+        if not p.get(amount_key) and not p.get(rate_key):
+            return f"no_increase_terms: {amount_key} / {rate_key} not stated"
+        return None
 
     return hook
 
@@ -619,8 +623,10 @@ def build(
     if "currency" in payload and payload.get("currency") is None and ex.currency:
         payload["currency"] = ex.currency
     hook = _POST.get(code)
-    if hook:
-        hook(payload, {"summary": summary, "meta": meta or {}, "structure": structure or {}})
+    if hook and (
+        hook_error := hook(payload, {"summary": summary, "meta": meta or {}, "structure": structure or {}})
+    ):
+        return PayloadResult(None, None, ec.schema, error=hook_error, from_=origin)
     _strip_helpers(payload)
     reason = validate(schema, payload)
     if reason:

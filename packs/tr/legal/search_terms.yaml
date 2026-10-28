@@ -1,0 +1,65 @@
+# KB full-text search vocabulary — Türkiye pack (PRD 03 §5; used by papi.kb.query / papi.kb.search).
+#
+# stopwords   tokens ignored in queries: Turkish function words and legal/KAP filler that carries no
+#             topic ("ilişkin", "dair", "hakkında", "bildirim" titles…). Written as normal Turkish;
+#             they are normalised (lowercase, diacritics folded) on load.
+# synonyms    query word → extra words a provision may use instead. KAP subjects speak of
+#             "bildirim", "alım satım", "dönük"; the texts say "açıklama", "işlem", "yönelik".
+#             Keys/values are stemmed like queries, so inflected forms match too.
+# event_terms taxonomy code → wording of the provisions behind it (drafted from the provision texts
+#             cited in obligations.yaml); `papi.kb.search_for_event` searches subject + these terms.
+version: 1
+
+stopwords:
+  [ve, veya, ile, ya, da, de, ki, mi, mu, bu, şu, o, bir, her, gibi, için, ait, olan, olarak, olup,
+   ilişkin, ilişkindir, dair, hakkında, hk, hk., göre, kapsamında, üzere, ise, ancak, hem, daha, en,
+   kadar, sonra, önce, üzerinde, tarafından, nedeniyle, dolayı, sayılı, inci, ıncı, nci, ncı, üncü,
+   uncu, ncü, ncu, madde, maddesi, fıkra, fıkrası, bent, bendi, açıklaması, duyuru, duyurusu, genel,
+   diğer, yapılan, yapılması, yapılacak]
+
+synonyms:
+  bildirim: [açıklama]
+  bildirimi: [açıklama]
+  alım: [işlem]
+  satım: [işlem]
+  dönük: [yönelik]
+  beklenti: [geleceğe yönelik değerlendirme]
+  kapatma: [durdur]
+  kapatılması: [durdurul]
+  açma: [başlatma]
+  temettü: [kâr payı]
+  bedelsiz: [iç kaynak]
+  bedelli: [nakit]
+  rüçhan: [yeni pay alma]
+  birleşme: [devralma]
+  devralma: [birleşme]
+  satın: [iktisap]
+  hisse: [pay]
+  ihale: [sözleşme]
+  sözleşme: [iş ilişkisi]
+  tedbir: [durdur]
+
+event_terms:
+  business.contract.award: "faaliyetlerini önemli ölçüde etkileyebilecek müşteri tedarikçi yeni iş ilişkisi sözleşme içsel bilgi"
+  business.tender_result: "ihale sözleşme yeni iş ilişkisi içsel bilgi"
+  capital.increase.bonus: "iç kaynaklardan kâr payından bedelsiz sermaye artırımı yeni pay ihracı yönetim kurulu kararı"
+  capital.increase.rights: "bedelli sermaye artırımı yeni pay alma hakları kullanılması izahname"
+  distribution.dividend.cash: "kâr payı dağıtımı kâr dağıtım tablosu yönetim kurulu önerisi kâr dağıtım politikası"
+  distribution.dividend.stock: "kâr payının pay şeklinde dağıtılması bedelsiz kâr dağıtım tablosu"
+  buyback.program.start: "geri alım programı genel kurul yetkilendirme geri alınan paylar"
+  buyback.execution: "geri alım işlemi seans başlamadan özel durum açıklaması geri alınan paylar nominal tutar"
+  ownership.insider_trade: "idari sorumluluğu bulunan kişiler yakından ilişkili ana ortak paylar işlemler kamuya açıklanır"
+  ownership.threshold_crossing: "sermayesindeki payının toplam oy haklarının ulaşması altına düşmesi birlikte hareket"
+  ownership.tender_offer: "pay alım teklifi bilgi formu teklif fiyatı"
+  mna.acquisition: "birleşme devralma pay alım teklifi önemli nitelikteki işlem mal varlığı"
+  mna.disposal: "mal varlığının devri önemli nitelikteki işlem ayrılma hakkı"
+  mna.merger: "birleşme bölünme önemli nitelikteki işlem"
+  mna.withdrawal_right: "ayrılma hakkı kullanım fiyatı önemli nitelikteki işlem olumsuz oy"
+  report.financial.periodic: "yıllık ara dönem finansal rapor bildirim süreleri bağımsız denetim"
+  report.financial.guidance: "geleceğe yönelik değerlendirmeler kamuya açıklanması yönetim kurulu kararı"
+  governance.gm.notice: "genel kurul toplantı tarihi gündem yönetim kurulu kararı"
+  governance.gm.result: "genel kurul toplantı tutanağı hazır bulunanlar listesi"
+  market.halt: "sermaye piyasası aracının işlemlerinin geçici olarak durdurulması işlem sırası"
+  market.measure: "işlemlerin geçici olarak durdurulması olağan dışı fiyat miktar tedbir"
+  market.unusual_activity: "olağan dışı fiyat miktar hareketleri alım satım emirleri sağlıklı piyasa"
+  legal.lawsuit: "dava tahkim mali yapısını faaliyet sonuçlarını önemli ölçüde etkileyecek"

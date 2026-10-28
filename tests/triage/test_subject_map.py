@@ -118,6 +118,56 @@ def test_buyback_and_gm_variants(sm):
     )
 
 
+def test_ownership_notices_and_control_changes(sm):
+    art12 = "Özel Durumlar Tebliği'nin 12-(1). maddesi gereğince yapılan açıklama"
+    assert codes(sm, "Genel Açıklama", art12) == ("ownership.threshold_crossing",)
+    assert codes(sm, "Kamuyu Aydınlatma Platformu Duyurusu", art12) == ("ownership.threshold_crossing",)
+    assert codes(sm, "Kamuyu Aydınlatma Platformu Duyurusu", "Sistem bakımı") == ("market.notice",)
+    oda = "Özel Durum Açıklaması (Genel)"
+    assert codes(sm, oda, "Şirketimizin çoğunluk paylarının devrine ilişkin hisse devir sözleşmesi") == (
+        "ownership.threshold_crossing",
+    )
+    # a share purchase agreement is a deal, not an insider trade
+    assert codes(sm, oda, "Pay alım satım sözleşmesi imzalanması") == ("mna.disposal",)
+    assert codes(sm, oda, "Pay alım satım bildirimi") == ("ownership.insider_trade",)
+
+
+def test_fund_names_gm_board_decisions_and_named_companies(sm):
+    # "Kar Payı Dağıtan" is part of a fund's name
+    assert codes(sm, "Genel Açıklama", "ABC Portföy Kar Payı Dağıtan Hisse Senedi Fonu kuruluşu") == (
+        "market.prospectus",
+    )
+    assert codes(sm, "Genel Açıklama", "Bağlı ortaklığımızın halka arzına ilişkin izahname") == (
+        "market.ipo",
+    )
+    gk = "Genel Kurul İşlemlerine İlişkin Bildirim"
+    assert codes(sm, gk, "Olağan Genel Kurul Toplantısına İlişkin Yönetim Kurulu Kararı") == (
+        "governance.gm.notice",
+    )
+    assert codes(
+        sm,
+        "Özel Durum Açıklaması (Genel)",
+        "Olağanüstü Genel Kurul yapılmasına ilişkin yönetim kurulu kararı",
+    ) == ("governance.gm.notice",)
+    assert codes(sm, gk, "Genel kurul kararlarının tescili") == ("governance.gm.result",)
+    oda = "Özel Durum Açıklaması (Genel)"
+    assert codes(sm, oda, "XYZ Teknoloji A.Ş. Sermaye Artırımı") == ("business.capex",)
+    assert codes(sm, oda, "Sermaye artırımı hakkında") == ("capital.change",)
+    assert codes(sm, oda, "Ekim 2026 Mağaza Sayısı") == ("report.operating_data",)
+    assert codes(sm, oda, "YEKA GES-2026 Yarışması Sonuçları") == ("business.tender_result",)
+    assert codes(sm, oda, "X A.Ş. hakkında başlatılan hukuki süreç") == ("legal.lawsuit",)
+    assert codes(sm, "TTK'nın 376. Maddesi Kapsamında Yapılan İşlemler", "2025 bilançosu") == (
+        "finance.shareholder_funding",
+    )
+    assert codes(sm, "Genel Açıklama", "Tasarruf sahiplerine duyuru") == ("market.notice",)
+    assert codes(sm, "Genel Açıklama", "Şirketimizin LEI kodu") == ("report.company_info",)
+
+
+def test_private_placement_is_not_a_rights_issue(sm):
+    sa = "Sermaye Artırımı - Azaltımı İşlemlerine İlişkin Bildirim"
+    assert codes(sm, sa, "Tahsisli sermaye artırımı (bedelli)") == ("capital.increase.private_placement",)
+
+
 def test_debt_rules(sm):
     faiz = "Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren)"
     assert codes(sm, faiz, "Kupon Ödemesi") == ("finance.debt.payment",)

@@ -35,19 +35,35 @@ rule_sets:
             işlemlerin geçici olarak durdurul]
       codes: [market.halt]
 
+  # Ownership-change notices under SPK II-15.1 art. 12 (also relayed as KAP announcements).
+  ownership_notices:
+    - id: art12_notice
+      any: [özel durumlar tebliği nin 12, özel durumlar tebliğinin 12, özel durumlar tebliği 12,
+            paylarındaki pozisyon, pay sahipliğindeki değişiklik]
+      codes: [ownership.threshold_crossing]
+    # sale of the issuer's own controlling stake: an ownership change, not an insider trade
+    - id: control_change
+      any: [şirket çoğunluk pay, şirketimiz çoğunluk pay, şirketimizin çoğunluk pay, şirketimizin kontrol,
+            kontrol değişik, yönetim kontrolünün devr, hakim ortağın pay, hakim ortak pay]
+      codes: [ownership.threshold_crossing]
+
   # Free-text ÖDA keyword rules, most specific first.
   general:
     - use: measures
+    - use: ownership_notices
     - id: nav_premium
       any: [net aktif değerin 2 katı, net aktif değerinin 2 katı, net aktif değerin iki katı,
             net aktif değerinin iki katı]
       codes: [market.nav_premium]
     - {id: concordat, any: [konkordato], codes: [legal.concordat]}
     - {id: bankruptcy, any: [iflas], none: [iflas talepli icra takibi], codes: [legal.bankruptcy]}
-    - {id: investigation, any: [soruşturma, inceleme başlat, denetim başlat, vergi incelemesi], codes: [legal.investigation]}
+    - id: investigation
+      any: [soruşturma, inceleme başlat, denetim başlat, vergi incelemesi, suç duyurusu, inceleme sonuç]
+      codes: [legal.investigation]
     - {id: sanction, any: [idari para cezası, para cezası, idari yaptırım], codes: [legal.sanction]}
     - id: lawsuit
-      any: [dava, tahkim, icra takibi, kayyım, kayyum, mahkeme, danıştay, yargıtay, ihtiyati tedbir, haciz]
+      any: [dava, tahkim, icra takibi, kayyım, kayyum, mahkeme, danıştay, yargıtay, ihtiyati tedbir, haciz,
+            hukuki süreç, yasal süreç]
       codes: [legal.lawsuit]
     - {id: squeeze_out, any: [ortaklıktan çıkarma, satma hakkı], codes: [ownership.squeeze_out]}
     - {id: tender_offer, any: [pay alım teklifi, pay alım teklif], codes: [ownership.tender_offer]}
@@ -65,7 +81,14 @@ rule_sets:
     - id: insider_trade
       any: [pay alım bildirim, pay alım satım, pay satım, pay alımı hakkında, hisse alım satım, payların alımı hakkında,
             içsel bilgiye ulaşan]
+      none: [sözleşme]
       codes: [ownership.insider_trade]
+    # investment funds (before dividends: "Kar Payı Ödeyen … Fon kuruluşu" is a fund name)
+    - id: funds
+      any: [fon kuruluş, fonu kuruluş, fon ihraç, yeni fon, içtüzük, iç tüzük, izahname, yatırımcı bilgi formu,
+            şemsiye fon]
+      none: [halka arz]
+      codes: [market.prospectus]
     # distributions / buybacks / capital
     - {id: dividend_advance, any: [kar payı avans, kâr payı avans, temettü avans], codes: [distribution.dividend.advance]}
     - {id: dividend_policy, any: [kar dağıtım politika, kâr dağıtım politika], codes: [distribution.policy]}
@@ -85,14 +108,18 @@ rule_sets:
       all: [sermaye artış]
       any: [bağlı ortaklı, iştirak, dolaylı iştirak, bağlı ortaklığımız]
       codes: [business.capex]
+    - id: named_company_capital
+      any: [a s sermaye artır, a s sermaye artış, a s nin sermaye artır, a s nin sermaye artış]
+      codes: [business.capex]
     - {id: bonus, any: [bedelsiz sermaye, iç kaynaklardan sermaye, iç kaynaklardan bedelsiz, bedelsiz pay], codes: [capital.increase.bonus]}
     - {id: private_placement, any: [tahsisli sermaye, tahsisli olarak], codes: [capital.increase.private_placement]}
-    - {id: rights, any: [bedelli sermaye, rüçhan, yeni pay alma hak], codes: [capital.increase.rights]}
+    - {id: rights, any: [bedelli sermaye, rüçhan, yeni pay alma hak], none: [tahsisli], codes: [capital.increase.rights]}
     - {id: decrease, any: [sermaye azaltım, sermayenin azaltıl], codes: [capital.decrease]}
     - {id: ceiling, any: [kayıtlı sermaye tavan], codes: [capital.registered_ceiling]}
     - id: shareholder_funding
       any: [sermaye avansı, ortaklardan sağlanan finansman, ortağı tarafından finansman, ortağı tarafından sağlanan,
-            ortağı tarafından yatırılan, ana ortaktan kredi, ortaklardan borç, sermayenin negatife düş, sermayenin karşılıksız]
+            ortağı tarafından yatırılan, ana ortaktan kredi, ortaklardan borç, sermayenin negatife düş, sermayenin karşılıksız,
+            ttk nın 376, ttk 376, 376 maddesi, 376 ncı madde]
       codes: [finance.shareholder_funding]
     - {id: capital_change, any: [sermaye artırım, sermaye artış, sermayenin artırıl, yeni sermaye], codes: [capital.change]}
     - {id: ipo, any: [halka arz, birincil piyasa, borsada satış], codes: [market.ipo]}
@@ -128,7 +155,7 @@ rule_sets:
       any: [pay satış, payların satış, hisse satış, hisselerin satış, pay devri, pay devir, paylarının devri, paylarının tamamının,
             hisse devir, elden çıkar, satış müzakere, çoğunluk paylarının satış, sat geri kirala, varlık satış,
             arsa satış, kredi portföyünden satış, takipteki kredi, iştirak satış, maddi duran varlık satış,
-            gayrimenkul satış, taşınmaz satış]
+            gayrimenkul satış, taşınmaz satış, pay alım satım sözleşme, hisse alım satım sözleşme, pay devir sözleşme]
       codes: [mna.disposal]
     - id: acquisition
       any: [pay devral, hisse devral, devralınması, devralma, satın alın, satın alma, edinim, edinilmesi, iştirak edin,
@@ -150,7 +177,7 @@ rule_sets:
     - {id: committees, any: [komite], codes: [governance.board.committees]}
     # business
     - {id: termination, any: [fesih, feshi, feshedil, sözleşmenin sona er, sözleşmesinin sona er, iptal edil], codes: [business.contract.termination]}
-    - {id: tender, any: [ihale, oturum sonuc, oturum tarihi], codes: [business.tender_result]}
+    - {id: tender, any: [ihale, oturum sonuc, oturum tarihi, yeka, yarışma], codes: [business.tender_result]}
     - {id: related_party, any: [ilişkili taraf], codes: [business.related_party]}
     - {id: player_transfer, any: [transfer, futbolcu, oyuncu ile, sporcu], codes: [business.player_transfer]}
     - id: contract
@@ -189,6 +216,7 @@ rule_sets:
     - id: gm_result
       all: [genel kurul]
       any: [sonuç, tescil, kararı, kararları, karar, onay, toplandı, gerçekleştiril]
+      none: [yönetim kurulu karar, davet, çağrı, gündem]
       codes: [governance.gm.result]
     - {id: gm_notice, any: [genel kurul, genel kurulu], codes: [governance.gm.notice]}
     - id: executive
@@ -211,7 +239,8 @@ rule_sets:
     - {id: guidance, any: [favök taahhüd, beklenti, hedefler, öngörü, geleceğe dönük, tahmin], codes: [report.financial.guidance]}
     - id: operating_data
       any: [prim üretim, yazılan prim, satış rakam, satış adet, trafik verileri, operasyonel, satışlar, satış verileri,
-            performans gösterge, üretim verileri, yolcu sayı, ürün satış, satış hacmi, aylık faaliyet]
+            performans gösterge, üretim verileri, yolcu sayı, ürün satış, satış hacmi, aylık faaliyet, mağaza sayı,
+            şube sayı, abone sayı, üretimi hakkında, üretim miktar, şeker üretim]
       codes: [report.operating_data]
     - id: presentation
       any: [yatırımcı sunum, sunum, bilgilendirme notu, bilgi notu, basın bülten, finansal sonuç, yatırımcı bülten,
@@ -235,9 +264,10 @@ rule_sets:
       any: [pazar değişik, pazara geçiş, yıldız pazar, ana pazar, alt pazar, gözaltı pazar, yakın izleme pazar]
       codes: [market.segment.change]
     - {id: delisting, any: [kotasyon, borsa kotundan, kottan çık, işlem görmekten çıkar], codes: [market.delisting]}
-    - id: funds
-      any: [fon kuruluş, fon ihraç, yeni fon, içtüzük, iç tüzük, izahname, yatırımcı bilgi formu, fon portföy, şemsiye fon]
-      codes: [market.prospectus]
+    - {id: company_identifiers, any: [lei kod, mersis numara, mersis no], codes: [report.company_info]}
+    - id: public_notice
+      any: [tasarruf sahiplerine duyuru, tasarruf sahiplerine, yatırımcılara duyuru, kamuoyuna duyuru]
+      codes: [market.notice]
 
 subjects:
   # ---------------------------------------------------------------------------------------- FR / reports
@@ -289,15 +319,18 @@ subjects:
         continue: true
       - id: cap_rights
         any: [bedelli, rüçhan, yeni pay alma, kullanılmayan rüçhan, birincil piyasa]
+        none: [tahsisli]
         codes: [capital.increase.rights]
         continue: true
       - id: cap_rights_form
         fields_nonzero: [bedelli, rüçhan hakkı kullanım fiyat, yeni pay alma hakkı kullanım fiyat]
+        none: [tahsisli]
         codes: [capital.increase.rights]
         continue: true
     default: [capital.change]
   Sermaye Artırımı veya Azaltımı Bildirimi: *capital_rules
   Kayıtlı Sermaye Tavanı İşlemlerine İlişkin Bildirim: [capital.registered_ceiling]
+  TTK'nın 376. Maddesi Kapsamında Yapılan İşlemler: [finance.shareholder_funding]
   Sermaye Artırımından Elde Edilecek - Edilen Fonun Kullanımına İlişkin Rapor: [capital.use_of_proceeds]
   Hak Kullanım Süreç İptal Bildirimi: [capital.action.cancel]
 
@@ -394,6 +427,7 @@ subjects:
         continue: true
       - id: gm_result
         any: [sonuç, tescil, kararları, kararı, karar, onay, toplandı, gerçekleştiril, yapıldı]
+        none: [yönetim kurulu karar, davet, çağrı, gündem]
         codes: [governance.gm.result]
       - {id: gm_notice, codes: [governance.gm.notice]}
   Genel Kurul Bildirimi: *gm_rules
@@ -437,6 +471,7 @@ subjects:
   SPK Bülteni: &notice_rules
     rules:
       - use: measures
+      - use: ownership_notices
     default: [market.notice]
   Borsa İstanbul A.Ş. Duyurusu: *notice_rules
   BISTECH Pay Piyasası Alım Satım Sistemi Duyurusu: *notice_rules

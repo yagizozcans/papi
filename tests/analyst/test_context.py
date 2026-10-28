@@ -147,16 +147,18 @@ def test_kb_provisions_listed_and_citations_mapped(db, world, monkeypatch):
         return [ob]
 
     hit_pv = replace(pv, id=uuid7(), citation_id="tr:spk:II-15.1:m9", path="m9")
-    searched: list[str] = []
+    searched: list[tuple] = []
 
-    def search(conn, q, as_of=None, k=5):
-        searched.append(q)
-        return [kb.ProvisionHit(hit_pv, "…", -1.0)]
+    def search_for_event(conn, event_code, subject=None, as_of=None, k=5, filters=None):
+        searched.append((event_code, subject, as_of, k))
+        return [kb.ProvisionHit(hit_pv, "…", -1.0), kb.ProvisionHit(hit_pv, "…", -0.5)]  # dup deduped
 
-    monkeypatch.setattr(kb, "search", search)
+    monkeypatch.setattr(kb, "search_for_event", search_for_event)
     monkeypatch.setattr(kb, "obligations", lambda conn, code, as_of=None, approved_only=True: [])
     fallback = build_context(db, world.event_id)
-    assert searched == ["Yeni İş İlişkisi"] and list(fallback.kb) == ["tr:spk:II-15.1:m9"]
+    pub = to_utc("2026-10-27T15:30:00+03:00")
+    assert searched == [("business.contract.award", "Yeni İş İlişkisi", pub, ctx_mod.KB_SEARCH_K)]
+    assert list(fallback.kb) == ["tr:spk:II-15.1:m9"] and fallback.kb["tr:spk:II-15.1:m9"].origin == "search"
     monkeypatch.setattr(kb, "obligations", obligations)
     pack = build_context(db, world.event_id)
     assert seen["as_of"] == to_utc("2026-10-27T15:30:00+03:00")

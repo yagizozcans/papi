@@ -16,7 +16,9 @@ one transaction:
    `packs/tr/triage_payload.yaml`; `report.financial.periodic` takes year / period / consolidation from the
    KAP list item. The payload gets every key of its schema (`contracts/schemas/event.<code>.v1.json`,
    unknown = `null`) and is validated with `jsonschema`; failure → `payload = null`,
-   `extra.payload_error = <reason>`. Per-field span ordinals go to `extra.payload_spans`.
+   `extra.payload_error = <reason>`. Per-field span ordinals go to `extra.payload_spans`. A bonus or rights
+   payload with neither an amount nor a ratio is also nulled (`no_increase_terms`), so consumers never see
+   a zero-factor capital increase.
 3. **Multi-event** — several codes from the subject map (e.g. dividend + buyback, bonus + rights), plus
    derived events: an insider trade whose before/after capital (else voting) share crosses
    5/10/15/20/25/33/50/67/95 % also yields `ownership.threshold_crossing`.

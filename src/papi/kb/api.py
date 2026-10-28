@@ -21,8 +21,8 @@ from typing import Any
 from sqlalchemy import Connection, select, text
 
 from papi.core.schema import obligation, provision, provision_version, regulation
-from papi.core.text import normalize_tr
 from papi.core.timeutil import now_ist, to_ist
+from papi.kb import query as kbq
 from papi.kb.snapshot import current_snapshot as _current_snapshot
 from papi.kb.snapshot import visible_snapshot_ids
 
@@ -229,63 +229,6 @@ def lookup(
     )
 
 
-_SUFFIXES = sorted(
-    {
-        "larinin",
-        "lerinin",
-        "larin",
-        "lerin",
-        "lari",
-        "leri",
-        "lar",
-        "ler",
-        "sinin",
-        "sunun",
-        "nin",
-        "nun",
-        "inin",
-        "unun",
-        "ini",
-        "unu",
-        "si",
-        "su",
-        "in",
-        "un",
-        "dan",
-        "den",
-        "tan",
-        "ten",
-        "da",
-        "de",
-        "ta",
-        "te",
-        "i",
-        "u",
-        "a",
-        "e",
-    },
-    key=len,
-    reverse=True,
-)
-
-
-def _stem(token: str) -> str:
-    for suf in _SUFFIXES:
-        if token.endswith(suf) and len(token) - len(suf) >= 3:
-            return token[: -len(suf)]
-    return token
-
-
-def fts_query(query: str) -> str:
-    """FTS5 MATCH expression: Turkish-normalised tokens, light suffix stemming, prefix match each."""
-    tokens = [t for t in normalize_tr(query).split() if t]
-    parts = []
-    for t in tokens:
-        stem = _stem(t) if len(t) > 3 else t
-        parts.append(f'"{stem}"*')
-    return " ".join(parts)
-
-
 def _matches_filters(
     v: ProvisionVersion, filters: dict[str, Any] | None, manifest_ids: dict[str, str]
 ) -> bool:
@@ -319,22 +262,98 @@ def search(
     include_draft: bool = False,
 ) -> list[ProvisionHit]:
     """Full-text search over provisions in force on ``as_of`` (filters: authority, kind, official_code,
-    regulation = manifest id, prefix = citation prefix). The most specific matching provision is kept
-    when a provision and its sub-provisions both match."""
-    match = fts_query(query)
+    regulation = manifest id, prefix = citation prefix).
+
+    Terms come from ``papi.kb.query`` (stopwords, stemming, synonyms). Provisions containing every
+    term rank first; when that yields fewer than ``k`` hits, provisions matching any term follow,
+    ranked by bm25. The most specific matching provision is kept when a provision and its
+    sub-provisions both match."""
+    return _search_terms(
+        conn, kbq.query_terms(query), as_of, k, filters, snapshot_id=snapshot_id, include_draft=include_draft
+    )
+
+
+def search_for_event(
+    conn: Connection,
+    event_code: str,
+    subject: str | None = None,
+    as_of: AsOf = None,
+    k: int = 5,
+    filters: dict[str, Any] | None = None,
+    *,
+    snapshot_id: str | None = None,
+    include_draft: bool = False,
+) -> list[ProvisionHit]:
+    """Provisions for an event without approved obligations: the KAP ``subject`` plus the pack's
+    query hints for ``event_code`` (``search_terms.yaml`` → ``event_terms``), ranked by bm25 over all
+    terms; falls back to ``search(subject)`` when the code has no hints."""
+    cfg = kbq.search_terms()
+    hint = cfg.event_terms.get(event_code, "")
+    if not hint:
+        return search(
+            conn, subject or "", as_of, k, filters, snapshot_id=snapshot_id, include_draft=include_draft
+        )
+    hint_terms = kbq.query_terms(hint, cfg)
+    known = {t.token for t in hint_terms}
+    terms = hint_terms + [t for t in kbq.query_terms(subject or "", cfg) if t.token not in known]
+    return _search_terms(
+        conn,
+        terms,
+        as_of,
+        k,
+        filters,
+        snapshot_id=snapshot_id,
+        include_draft=include_draft,
+        strict_first=False,
+    )
+
+
+def _search_terms(
+    conn: Connection,
+    terms: list[kbq.Term],
+    as_of: AsOf,
+    k: int,
+    filters: dict[str, Any] | None,
+    *,
+    snapshot_id: str | None,
+    include_draft: bool,
+    strict_first: bool = True,
+) -> list[ProvisionHit]:
     snaps = _snapshots(conn, snapshot_id, include_draft)
-    if not match or not snaps:
+    if not terms or not snaps:
         return []
     day = to_as_of(as_of)
+    hits: list[ProvisionHit] = []
+    stale: set[str] = set()
+    if strict_first:
+        hits, stale = _run_match(conn, kbq.and_match(terms), snaps, day, k, filters)
+    if len(hits) < k and (len(terms) > 1 or not strict_first):
+        # Relaxed pass. Provisions whose *other-date* wording matched every term are left out: the query
+        # targets that wording, and today's text of the same provision would be a false answer.
+        seen = {h.version.citation_id for h in hits}
+        relaxed, _ = _run_match(conn, kbq.or_match(terms), snaps, day, k * 4, filters)
+        for h in relaxed:
+            cid = h.version.citation_id
+            related = any(cid == c or cid.startswith(c + ":") or c.startswith(cid + ":") for c in seen)
+            if not related and h.version.provision_id not in stale:
+                hits.append(h)
+                seen.add(cid)
+    return hits[:k]
+
+
+def _run_match(
+    conn: Connection, match: str, snaps: list[str], day: date, k: int, filters: dict[str, Any] | None
+) -> tuple[list[ProvisionHit], set[str]]:
+    """Hits in force on ``day`` and the provisions whose matching text is another date's version."""
     rows = conn.execute(
         text(
             "SELECT id, snippet(provision_fts, 1, '[', ']', '…', 16) AS snip, rank FROM provision_fts "
             "WHERE provision_fts MATCH :q ORDER BY rank LIMIT :lim"
         ),
-        {"q": match, "lim": max(200, k * 40)},
+        {"q": match, "lim": max(400, k * 40)},
     ).all()
     if not rows:
-        return []
+        return [], set()
     hit_rank = {r.id: (r.snip, r.rank) for r in rows}
     hit_versions = conn.execute(
         _versions_query(snaps).where(provision_version.c.id.in_(list(hit_rank)))
@@ -349,25 +368,29 @@ def search(
         for rid, extra in conn.execute(select(regulation.c.id, regulation.c.extra)):
             manifest_ids[rid] = (extra or {}).get("manifest_id")
     best: dict[str, ProvisionHit] = {}
+    other_dates: set[str] = set()
     for r in hit_versions:
         v = _row_to_version(r)
         chosen = pick_version(all_versions.get(v.provision_id, []), day)
-        if chosen is None or chosen.id != v.id or not _matches_filters(v, filters, manifest_ids):
+        if chosen is None or chosen.id != v.id:
+            other_dates.add(v.provision_id)
+            continue
+        if not _matches_filters(v, filters, manifest_ids):
             continue
         snip, rank = hit_rank[v.id]
         prev = best.get(v.provision_id)
         if prev is None or rank < prev.rank:
             best[v.provision_id] = ProvisionHit(version=v, snippet=snip, rank=rank)
-    hits = sorted(best.values(), key=lambda h: h.rank)
-    citations = {h.version.citation_id for h in hits}
+    ranked = sorted(best.values(), key=lambda h: h.rank)
+    citations = {h.version.citation_id for h in ranked}
     specific = [
         h
-        for h in hits
+        for h in ranked
         if not any(
             c != h.version.citation_id and c.startswith(h.version.citation_id + ":") for c in citations
         )
     ]
-    return specific[:k]
+    return specific[:k], other_dates - set(best)
 
 
 def _obligation_from_row(row: Any) -> tuple[Obligation, dict[str, Any]]:

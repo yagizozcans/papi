@@ -491,15 +491,17 @@ def _kb_refs(
         label = pv.label_tr() + (f" — {pv.heading}" if pv.heading else "")
         refs[pv.citation_id] = KbRef(pv.citation_id, pv.id, label, text, origin)
 
+    without_obligations: list[str] = []
     for code in codes:
-        for ob in kb.obligations(conn, code, as_of=pub)[:KB_PER_CODE]:
-            if ob.provision is not None:
-                add(ob.provision, "obligation")
-    # Full-text search is a fallback for codes without approved obligations: on subjects such as
-    # "Yeni İş İlişkisi" it mostly returns unrelated provisions.
-    query = (subject or "").strip()
-    if query and not refs:
-        for hit in kb.search(conn, query, as_of=pub, k=KB_SEARCH_K):
+        found = [ob.provision for ob in kb.obligations(conn, code, as_of=pub) if ob.provision is not None]
+        for pv in found[:KB_PER_CODE]:
+            add(pv, "obligation")
+        if not found:
+            without_obligations.append(code)
+    # Event-aware full-text search (subject + per-code hint terms) is the fallback for codes without
+    # approved obligations; hits are deduplicated by citation id within the KB_MAX budget.
+    for code in without_obligations:
+        for hit in kb.search_for_event(conn, code, subject, as_of=pub, k=KB_SEARCH_K):
             add(hit.version, "search")
     return refs
 

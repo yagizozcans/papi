@@ -11,6 +11,7 @@ from papi.kb.api import (
     lookup,
     obligations,
     search,
+    search_for_event,
     timeline,
     versions,
 )
@@ -24,6 +25,7 @@ __all__ = [
     "lookup",
     "obligations",
     "search",
+    "search_for_event",
     "timeline",
     "versions",
 ]
