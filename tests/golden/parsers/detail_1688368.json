@@ -1,0 +1,103 @@
+{
+ "fixture": "detail_1688368.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_GK_Report_ID",
+   "families": [
+    "report"
+   ],
+   "span_count": 26,
+   "span_paths": {
+    "form": 19,
+    "para": 7
+   },
+   "text_len": 2425,
+   "text_sha": "b2983a83e17b90cc",
+   "paragraphs": 7,
+   "form_fields": [
+    [
+     "ozet bilgi",
+     "Olağanüstü Genel Kurul Daveti ve Bilgilendirme Dokümanı"
+    ],
+    [
+     "yapilan aciklama guncelleme mi",
+     "Hayır"
+    ],
+    [
+     "yapilan aciklama duzeltme mi",
+     "Hayır"
+    ],
+    [
+     "yapilan aciklama ertelenmis bir aciklama mi",
+     "Hayır"
+    ],
+    [
+     "genel kurul tipi",
+     "Olağanüstü Genel Kurul"
+    ],
+    [
+     "karar tarihi",
+     "27.10.2026"
+    ],
+    [
+     "genel kurul tarihi",
+     "24.11.2026"
+    ],
+    [
+     "genel kurul saati",
+     "13:00"
+    ],
+    [
+     "gk na katilim icin pay sahibi olunmasi gereken son tarih",
+     "23.11.2026"
+    ],
+    [
+     "ulke",
+     "Türkiye"
+    ],
+    [
+     "sehir",
+     "İSTANBUL"
+    ],
+    [
+     "ilce",
+     "SANCAKTEPE"
+    ],
+    [
+     "adres",
+     "Akpınar Mahallesi, Hasan Basri Caddesi No:2, Sancaktepe / İstanbul (Tel: +90 216 564 71 00, Faks: +90 216 564 73 85)"
+    ],
+    [
+     "ek 1",
+     "Olağanüstü Genel Kurul Çağrı İlanı.pdf - İlan Metni"
+    ],
+    [
+     "ek 2",
+     "Gündem.pdf - Diğer Genel Kurul Çağrı Dokümanı"
+    ],
+    [
+     "ek 3",
+     "Agenda.pdf - Diğer Genel Kurul Çağrı Dokümanı"
+    ],
+    [
+     "ek 4",
+     "General Assembly Meeting Information Document.pdf - Genel Kurul Bilgilendirme Dokümanı"
+    ],
+    [
+     "ek 5",
+     "Olağanüstü Genel Kurul Bilgilendirme Notu.pdf - Genel Kurul Bilgilendirme Dokümanı"
+    ],
+    [
+     "ek 6",
+     "Extraordinary Shareholders Meeting Invitation and Agenda.pdf - İlan Metni"
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  }
+ ]
+}

@@ -1,0 +1,121 @@
+{
+ "fixture": "detail_1688065.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_oda-14700_Default-Transaction",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 9,
+   "span_paths": {
+    "form": 8,
+    "para": 1
+   },
+   "text_len": 409,
+   "text_sha": "94573fe4aa0558f5",
+   "paragraphs": 1,
+   "form_fields": [
+    [
+     "ilgili sirketler",
+     "[ECOGR]"
+    ],
+    [
+     "ilgili fonlar",
+     "[]"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "27/10/2026"
+    ],
+    [
+     "oda_DefaultTransactionTransactionType",
+     "Temerrüt İşleminin Tamamlanması (Completion of Default Transaction)"
+    ],
+    [
+     "oda_RelatedMarket",
+     "PAY PİYASASI"
+    ],
+    [
+     "oda_Amount",
+     ""
+    ],
+    [
+     "oda_SettlementDate",
+     "27/10/2026"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "ECOGR.TE sırasındaki temerrüt işlemi 27/10/2026 tarihinde tamamlanmıştır."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  },
+  {
+   "target": "body:en",
+   "kind": "disclosure_body",
+   "language": "en",
+   "mime": "text/html",
+   "template_id": "tbl_oda-14700_Default-Transaction",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 9,
+   "span_paths": {
+    "form": 8,
+    "para": 1
+   },
+   "text_len": 430,
+   "text_sha": "b2db15faa288c905",
+   "paragraphs": 1,
+   "form_fields": [
+    [
+     "related companies",
+     "[ECOGR]"
+    ],
+    [
+     "related funds",
+     "[]"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "27/10/2026"
+    ],
+    [
+     "oda_DefaultTransactionTransactionType",
+     "Temerrüt İşleminin Tamamlanması (Completion of Default Transaction)"
+    ],
+    [
+     "oda_RelatedMarket",
+     "EQUITY MARKET"
+    ],
+    [
+     "oda_Amount",
+     ""
+    ],
+    [
+     "oda_SettlementDate",
+     "27/10/2026"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "The buy-in in ECOGR.TE has been completed on the date of 27/10/2026."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  }
+ ]
+}

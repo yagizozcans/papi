@@ -1,0 +1,39 @@
+{
+ "fixture": "company_genel_PASEU.html.gz",
+ "documents": [
+  {
+   "target": "capital",
+   "paid_in_capital": "672000000",
+   "registered_capital_ceiling": "9000000000",
+   "share_groups": [
+    {
+     "group": "A",
+     "registered": "Nama",
+     "nominal_per_share": "1",
+     "nominal_total": "120000000",
+     "capital_pct": "17.86",
+     "privilege": "Yönetim Kurulu belirlenmesi ve oy hakkı",
+     "traded": false
+    },
+    {
+     "group": "B",
+     "registered": "Hamiline",
+     "nominal_per_share": "1",
+     "nominal_total": "552000000",
+     "capital_pct": "82.14",
+     "privilege": "Mevcut değil",
+     "traded": true
+    }
+   ],
+   "free_float": {
+    "PASEU": {
+     "total_shares": "672000000.00",
+     "non_traded_shares": "389706132.00",
+     "traded_shares": "282293868.00",
+     "free_float_shares": "66057333.41",
+     "free_float_pct": "9.82"
+    }
+   }
+  }
+ ]
+}

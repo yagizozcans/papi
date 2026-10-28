@@ -6,7 +6,10 @@
   (deferred) and ``transaction()`` emits ``BEGIN IMMEDIATE`` so writers take the write lock up front and
   never hit SQLITE_BUSY on a read→write upgrade.
 - ``connect()``: a plain connection; the first statement auto-begins a deferred transaction, so call
-  ``conn.commit()`` after writes (reads may simply close).
+  ``conn.commit()`` after writes (reads may simply close). ``connect(immediate=True)``: every
+  transaction begins ``IMMEDIATE`` — for workers that read then write on the same connection (a
+  deferred read snapshot that another writer overtakes fails the upgrade with ``database is locked``
+  at once, regardless of ``busy_timeout``). Commit before slow non-DB work so the lock is not held.
 - ``transaction()``: ``BEGIN IMMEDIATE``; commits on success, rolls back on exception.
 """
 
@@ -69,10 +72,11 @@ def reset_engines() -> None:
 
 
 @contextmanager
-def connect(path: Path | None = None) -> Iterator[Connection]:
-    """Connection that auto-begins a deferred transaction; commit explicitly after writes."""
+def connect(path: Path | None = None, *, immediate: bool = False) -> Iterator[Connection]:
+    """Connection that auto-begins a transaction (deferred, or ``BEGIN IMMEDIATE`` with
+    ``immediate``); commit explicitly after writes."""
     with get_engine(path).connect() as conn:
-        yield conn
+        yield conn.execution_options(**{_IMMEDIATE_OPTION: True}) if immediate else conn
 
 
 @contextmanager

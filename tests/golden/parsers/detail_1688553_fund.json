@@ -1,0 +1,81 @@
+{
+ "fixture": "detail_1688553_fund.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_oda-01030_General-Explanation",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 70,
+   "span_paths": {
+    "form": 3,
+    "para": 67
+   },
+   "text_len": 1595,
+   "text_sha": "ec0d08fa7f5186ec",
+   "paragraphs": 67,
+   "form_fields": [
+    [
+     "oda_UpdateAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "Yoktur"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "×\nResim ekle\nDosya seçin\nResim bağlantısı\nResim ekle\n×\nBağlantı ekle\nGörüntülemek için\nBağlantı adresi?\nYeni pencerede aç\nBağlantı ekle\nKapat\nKısayollar\nEylem\nCtrl + Z\nGeri al\nCtrl + Shift + Z\nYeniden yap\nCtrl + ]\nGirintiyi azalt\nCtrl + [\nGirintiyi artır\nCtrl + ENTER\nYatay çizgi ekle\nYazı biçimlendirme\nCtrl + B\nKalın\nCtrl + I\nİtalik\nCtrl + U\nAltı çizili\nCtrl + \\\nTemizle\nBiçim\nCtrl + NUM0\nNormal\nCtrl + NUM1\nBaşlık 1\nCtrl + NUM2\nBaşlık 2\nCtrl + NUM3\nBaşlık 3\nCtrl + NUM4\nBaşlık 4\nCtrl + NUM5\nBaşlık 5\nCtrl + NUM6\nBaşlık 6\nParagraf biçimlendirme\nCtrl + Shift + L\nSola hizala\nCtrl + Shift + E\nOrtaya hizala\nCtrl + Shift + R\nSağa hizala\nCtrl + Shift + J\nYasla\nCtrl + Shift + NUM7\nNumaralı liste\nCtrl + Shift + NUM8\nMadde işaretli liste\nSummernote 0.6.16 · Project · Issues\n1 x 1\nwww.google.com\n100%50%25%\nHVK – Hedef Portföy Birinci Borçlanma Araçları (TL) Fonu portföyünde bulunan,Nurol Varlık Kiralama A.Ş. tarafından ihraç edilen ve fon kullanıcısı Workcompany Dış Ticaret A.Ş olan TRDNVKAE2613 ISIN kodlu ve 30.000.000 nominal adet özel sektör kira sertifikası için %100 oranında karşılık ayrılmıştır.\nHVK – Hedef Portföy Birinci Borçlanma Araçları (TL) Fonu portföyünde bulunan,Nurol Varlık Kiralama A.Ş. tarafından ihraç edilen ve fon kullanıcısı Workcompany Dış Ticaret A.Ş olan TRDNVKAE2613 ISIN kodlu ve 30.000.000 nominal adet özel sektör kira sertifikası için %100 oranında karşılık ayrılmıştır."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  },
+  {
+   "target": "body:en",
+   "kind": "disclosure_body",
+   "language": "en",
+   "mime": "text/html",
+   "template_id": "tbl_oda-01030_General-Explanation",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 68,
+   "span_paths": {
+    "form": 3,
+    "para": 65
+   },
+   "text_len": 994,
+   "text_sha": "c596610a055c9d8c",
+   "paragraphs": 65,
+   "form_fields": [
+    [
+     "oda_UpdateAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     ""
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "×\nResim ekle\nDosya seçin\nResim bağlantısı\nResim ekle\n×\nBağlantı ekle\nGörüntülemek için\nBağlantı adresi?\nYeni pencerede aç\nBağlantı ekle\nKapat\nKısayollar\nEylem\nCtrl + Z\nGeri al\nCtrl + Shift + Z\nYeniden yap\nCtrl + ]\nGirintiyi azalt\nCtrl + [\nGirintiyi artır\nCtrl + ENTER\nYatay çizgi ekle\nYazı biçimlendirme\nCtrl + B\nKalın\nCtrl + I\nİtalik\nCtrl + U\nAltı çizili\nCtrl + \\\nTemizle\nBiçim\nCtrl + NUM0\nNormal\nCtrl + NUM1\nBaşlık 1\nCtrl + NUM2\nBaşlık 2\nCtrl + NUM3\nBaşlık 3\nCtrl + NUM4\nBaşlık 4\nCtrl + NUM5\nBaşlık 5\nCtrl + NUM6\nBaşlık 6\nParagraf biçimlendirme\nCtrl + Shift + L\nSola hizala\nCtrl + Shift + E\nOrtaya hizala\nCtrl + Shift + R\nSağa hizala\nCtrl + Shift + J\nYasla\nCtrl + Shift + NUM7\nNumaralı liste\nCtrl + Shift + NUM8\nMadde işaretli liste\nSummernote 0.6.16 · Project · Issues\n1 x 1\nwww.google.com\n100%50%25%"
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  }
+ ]
+}

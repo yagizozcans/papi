@@ -55,7 +55,7 @@ def test_plist_generation(settings, monkeypatch, tmp_path):
     spec = launchd.build_spec()
     data = plistlib.loads(launchd.render_plist(spec))
     assert data["Label"] == "com.papi.run"
-    assert data["ProgramArguments"] == [str(exe.resolve()), "run"]
+    assert data["ProgramArguments"] == [str(exe.absolute()), "run"]
     assert data["RunAtLoad"] is True and data["KeepAlive"] is True
     assert data["EnvironmentVariables"] == {
         "PAPI_HOME": str(settings.paths.home),
@@ -72,6 +72,26 @@ def test_plist_uv_program_arguments(settings, monkeypatch):
     args = launchd.program_arguments(use_uv=True, project=Path("/repo"))
     assert args[1:] == ["run", "--project", "/repo", "papi", "run"]
     assert args[0].endswith("uv")
+
+
+def test_plist_keeps_symlinked_executables(settings, monkeypatch, tmp_path):
+    # Homebrew's /opt/homebrew/bin/uv → ../Cellar/uv/<version>/bin/uv: resolving the link would pin the
+    # LaunchAgent to a directory the next `brew upgrade uv` deletes.
+    real = tmp_path / "Cellar" / "uv" / "0.12.6" / "bin" / "uv"
+    real.parent.mkdir(parents=True)
+    real.write_text("#!/bin/sh\n")
+    link = tmp_path / "bin" / "uv"
+    link.parent.mkdir()
+    link.symlink_to(real)
+    monkeypatch.setattr(launchd.shutil, "which", lambda name: str(link) if name == "uv" else None)
+    assert launchd.program_arguments(use_uv=True, project=Path("/repo"))[0] == str(link)
+    papi_real = tmp_path / "tools" / "papi" / "bin" / "papi"
+    papi_real.parent.mkdir(parents=True)
+    papi_real.write_text("#!/bin/sh\n")
+    papi_link = tmp_path / "bin" / "papi"
+    papi_link.symlink_to(papi_real)
+    monkeypatch.setattr(launchd.sys, "argv", [str(papi_link), "run", "service", "install"])
+    assert launchd.program_arguments() == [str(papi_link), "run"]
 
 
 def test_install_status_uninstall(settings, agents, fake_launchctl, monkeypatch, tmp_path):

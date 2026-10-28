@@ -1,0 +1,105 @@
+{
+ "fixture": "detail_1688616.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_oda-10000_Material-Event-Disclosure-General",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 13,
+   "span_paths": {
+    "form": 6,
+    "para": 7
+   },
+   "text_len": 1505,
+   "text_sha": "7725498bc5c27e41",
+   "paragraphs": 7,
+   "form_fields": [
+    [
+     "ilgili sirketler",
+     "[]"
+    ],
+    [
+     "ilgili fonlar",
+     "[]"
+    ],
+    [
+     "oda_UpdateAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "-"
+    ],
+    [
+     "oda_DelayedAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "Sermaye Piyasası Kurulu'nun 27.10.2026 tarihli bülteninde yayınlanan ve Şirketimiz Pasifik Eurasia Lojistik Dış Ticaret A.Ş. (PASEU) pay piyasasında gerçekleştirilen işlemlere ilişkin inceleme sonuçlarını içeren duyuruda, bazı gerçek kişiler hakkında 6362 sayılı Sermaye Piyasası Kanunu'nun 107/1. maddesi kapsamında suç duyurusunda bulunulmasına karar verildiği açıklanmıştır.\nSöz konusu bültende yer alan suç duyurusu kararına ilişkin listede Şirketimizin tüzel kişiliği, yönetim kurulu üyeleri veya ortakları bulunmamaktadır.\nSPK tarafından yayımlanan bültende Şirketimizin ana ortakları ile yönetim organlarına yönelik bir tedbir kararının alınmamış olması; bu kapsamda şirket ana ortakları ve yönetiminin bir kusuru olmadığını göstermektedir.\nBununla birlikte, Şirketimize ulaşan bilgilere göre Şirketimizin üç ortağına ait hesaplar hakkında adli mercilerce tedbir kararı uygulandığı öğrenilmiştir.\nOrtaklarımız, tedbirin kapsamının açıklığa kavuşturulması ve kaldırılması talebiyle yasal hakları çerçevesinde ilgili adli mercilere itirazda bulunmuştur.\nKonuya ilişkin önemli gelişmeler olması hâlinde mevzuat çerçevesinde kamuya açıklama yapılacaktır.\nYatırımcılarımızın ve kamuoyunun bilgisine sunarız."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  },
+  {
+   "target": "body:en",
+   "kind": "disclosure_body",
+   "language": "en",
+   "mime": "text/html",
+   "template_id": "tbl_oda-10000_Material-Event-Disclosure-General",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 14,
+   "span_paths": {
+    "form": 6,
+    "para": 8
+   },
+   "text_len": 1988,
+   "text_sha": "37e3bce56661d84c",
+   "paragraphs": 8,
+   "form_fields": [
+    [
+     "related companies",
+     "[]"
+    ],
+    [
+     "related funds",
+     "[]"
+    ],
+    [
+     "oda_UpdateAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "-"
+    ],
+    [
+     "oda_DelayedAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "In the announcement published in the bulletin of the Capital Markets Board of Türkiye (CMB) dated 27 October 2026, which sets out the findings of its review of transactions conducted in the share market of our Company, Pasifik Eurasia Logistics Foreign Trade Inc. (PASEU), it was disclosed that a decision had been taken to file criminal complaints against certain individuals pursuant to Article 107/1 of Capital Markets Law No. 6362.\nNeither our Company as a legal entity, nor its members of the Board of Directors or shareholders, are included in the list of persons subject to the criminal complaint decisions set out in the aforementioned bulletin.\nThe fact that no precautionary measures have been imposed on our Company's principal shareholders or governing bodies in the bulletin published by the CMB indicates that no fault has been attributed to the Company's principal shareholders or management in this regard.\nNevertheless, according to information received by our Company, precautionary measures have been imposed by the judicial authorities on accounts belonging to three of our shareholders.\nOur shareholders have filed objections with the relevant judicial authorities, in accordance with their legal rights, requesting clarification of the scope of the measures and their removal.\nShould any material developments arise in relation to this matter, public disclosures will be made in accordance with the applicable legislation.\nWe hereby inform our investors and the public.\nThis statement has been translated into English for informational purposes. In case of a discrepancy between the Turkish and the English versions of this disclosure statement, the Turkish version shall prevail."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  }
+ ]
+}

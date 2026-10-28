@@ -1,0 +1,51 @@
+{
+ "fixture": "detail_1688615.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_oda-34000_Unconsolidated-Operating-Review",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 6,
+   "span_paths": {
+    "form": 5,
+    "para": 1
+   },
+   "text_len": 290,
+   "text_sha": "4c60597b64e8610e",
+   "paragraphs": 1,
+   "form_fields": [
+    [
+     "finansal tablo niteligi",
+     "Konsolide Olmayan"
+    ],
+    [
+     "ilgili sirketler",
+     "[]"
+    ],
+    [
+     "ilgili fonlar",
+     "[]"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "-"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "01.01.2026 -30.09.2026 Dönemi Faaliyet Raporumuz Ekte PDF Dosya Olarak Sunulmuştur."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  }
+ ]
+}

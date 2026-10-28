@@ -1,0 +1,39 @@
+{
+ "fixture": "file_4028328da16c7fe501a17db833540bc8.bin",
+ "documents": [
+  {
+   "target": "attachment",
+   "file_name": "Dividend Distribution Proposal.pdf",
+   "kind": "attachment",
+   "language": "en",
+   "mime": "application/pdf",
+   "template_id": null,
+   "families": null,
+   "span_count": 70,
+   "span_paths": {
+    "pdf": 70
+   },
+   "text_len": 3105,
+   "text_sha": "a95e94a2affd4596",
+   "paragraphs": 0,
+   "form_fields": [],
+   "tables": [
+    {
+     "caption": null,
+     "header_len": 7,
+     "rows": 7,
+     "cols": 7
+    },
+    {
+     "caption": null,
+     "header_len": 4,
+     "rows": 37,
+     "cols": 4
+    }
+   ],
+   "extra": {
+    "pages": 1
+   }
+  }
+ ]
+}

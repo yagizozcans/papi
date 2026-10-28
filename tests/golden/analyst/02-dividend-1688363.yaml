@@ -1,0 +1,57 @@
+# Extraction golden item (PRD 11 §2 "Extraction golden set"; suite `papi eval --suite analyst`).
+# Drafted by an LLM (Claude) from the fixture text; the owner confirms it with `papi eval review`.
+id: 02-dividend-1688363
+event_code: distribution.dividend.cash
+fixture: detail_1688363.json
+attachments: []
+filer: FROTO
+related: []
+reviewed: false
+drafted_by: claude (LLM) from tests/fixtures/kap/detail_1688363.json, 2026-10-28
+gold:
+  payload:
+    decision_body: board
+    period_year: 2025
+    gross_per_share: 3.07
+    net_per_share: 2.6095
+    gross_rate_pct: 307
+    net_rate_pct: 260.95
+    total_gross_amount: 10772937000
+    total_net_amount: 10234498360.36
+    currency: TRY
+    ex_date: "2026-11-26"
+    payment_date: "2026-11-30"
+    installments: null
+    share_groups.0.group: A
+    share_groups.0.gross_per_share: 3.07
+    share_groups.0.net_per_share: 2.6095
+    share_groups.1.group: B
+    share_groups.1.gross_per_share: 3.07
+    share_groups.1.net_per_share: 3.07
+    share_groups.2.group: C
+    share_groups.2.gross_per_share: 3.07
+    share_groups.2.net_per_share: 2.9165
+  spans:
+    decision_body: [49]
+    gross_per_share: [13, 53]
+    net_per_share: [16, 53]
+    gross_rate_pct: [14, 53]
+    net_rate_pct: [17, 53]
+    total_gross_amount: [50, 53, 87, 88]
+    total_net_amount: [102]
+    currency: [7]
+    ex_date: [33]
+    payment_date: [34]
+    share_groups.0.gross_per_share: [13]
+    share_groups.0.net_per_share: [16]
+    share_groups.1.gross_per_share: [20]
+    share_groups.1.net_per_share: [23]
+    share_groups.2.gross_per_share: [27]
+    share_groups.2.net_per_share: [30]
+  derived: [decision_body]
+notes: >-
+  FROTO board proposal (27.10.2026) to the EGM: 10.772.937.000 TL cash from reserves, gross 3,07 TL per
+  1 TL share (%307) for every group; net 2,6095 (A, traded), 3,07 (B), 2,9165 (C); proposed ex date
+  26.11.2026, payment 30.11.2026, record 27.11.2026, paid at once ("Peşin"; no instalment count is written,
+  so installments stays null per the analyst rule "numbers only as written"). The period is
+  the 2025 distribution table (caption only, no span). Top-level net values are those of the traded A group.

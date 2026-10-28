@@ -1,0 +1,105 @@
+{
+ "fixture": "detail_1688336.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_oda-29000_Credit-Rating",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 11,
+   "span_paths": {
+    "form": 6,
+    "para": 5
+   },
+   "text_len": 902,
+   "text_sha": "316263906d447083",
+   "paragraphs": 5,
+   "form_fields": [
+    [
+     "ilgili sirketler",
+     "[]"
+    ],
+    [
+     "ilgili fonlar",
+     "[]"
+    ],
+    [
+     "oda_UpdateAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "-"
+    ],
+    [
+     "oda_DelayedAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "JCR Avrasya Derecelendirme A.Ş 2026 yılı derecelendirme çalışmaları sonucunda şirketimizin Uzun Vadeli Ulusal Kurum Kredi Rating Notu ''iyi kredi kalitesine sahip, yatırım yapılabilir\"' düzey olan BBB- (tr). Kısa Vadeli Ulusal Notu \"J3 (tr)\" ve notlara ilişkin görünümleri ise \"Durağan\" olarak revize edilmiştir.\nJCR Avrasya Derecelendirme A.Ş'nin 27.10.2026 tarihli bildirim formu ekte yer almaktadır.\nKamuoyunun bilgisine sunarız.\nSaygılarımızla ,\nİşbu açıklamamızın İngilizce çevirisi ekte yer almakta olup, açıklama metinlerinde herhangi bir farklılık olması durumunda, Türkçe açıklama esas kabul edilecektir."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  },
+  {
+   "target": "body:en",
+   "kind": "disclosure_body",
+   "language": "en",
+   "mime": "text/html",
+   "template_id": "tbl_oda-29000_Credit-Rating",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 10,
+   "span_paths": {
+    "form": 6,
+    "para": 4
+   },
+   "text_len": 976,
+   "text_sha": "ce9c9a2a92120ecc",
+   "paragraphs": 4,
+   "form_fields": [
+    [
+     "related companies",
+     "[]"
+    ],
+    [
+     "related funds",
+     "[]"
+    ],
+    [
+     "oda_UpdateAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "-"
+    ],
+    [
+     "oda_DelayedAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "As a result of the rating process conducted by JCR Avrasya Derecelendirme A.Ş. for the year 2026, our company's Long-Term National Corporate Credit Rating has been revised to \"BBB- (tr)\", indicating an \"investment grade with good credit quality\" level. The Short-Term National Rating has been revised to \"J3 (tr)\", and the outlooks for both ratings have been revised to \"Stable\".\nThe notification form dated October 27, 2026, received from JCR Avrasya Derecelendirme A.Ş., is attached hereto.\nRespectfully submitted for the information of the public and our investors.\nTurkish and English translations of this statement are available, and in case of any conflict between them, the Turkish version will prevail."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  }
+ ]
+}

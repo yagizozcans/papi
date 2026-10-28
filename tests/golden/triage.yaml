@@ -1,0 +1,2634 @@
+# Rules-triage golden set (PRD 11 §2 "Triage set"; suite `papi eval --suite triage`).
+#
+# Real KAP disclosures: the 28 recorded detail fixtures (tests/fixtures/kap, classified with their parsed
+# body) and 280 list items from six live KAP list calls (single days 2025-06-03, 2025-09-24, 2025-12-02,
+# 2026-04-01, 2026-07-07, 2026-09-22; none of them is a day of the triage slice's harvest), sampled
+# stratified by subject (packs/tr/kap_subject_frequencies.csv weights, free-text subjects oversampled).
+# List items carry only subject/class/summary, so they are classified without a body (lower bound).
+#
+# Labels were assigned by reading subject + summary (+ body for fixtures) against packs/tr/taxonomy.yaml,
+# by an LLM (Claude), 2026-10-28; reviewed: false until the owner confirms them.
+#   expect  the event code set the disclosure should get
+#   alt     other code sets accepted where the visible text is genuinely ambiguous
+#   note    why a label is not obvious
+version: 1
+labelled_by: claude (LLM), 2026-10-28
+reviewed: false
+items:
+- id: fx-1687728
+  source: fixture
+  index: 1687728
+  fixture: detail_1687728.json
+  subject: Kamuyu Aydınlatma Platformu Duyurusu
+  class: DKB
+  type: DUY
+  summary: Yatırım Fonlarına İlişkin Rehberin 9.8. maddesi gereğince yapılan açıklama
+  expect: [market.notice]
+- id: fx-1687750
+  source: fixture
+  index: 1687750
+  fixture: detail_1687750.json
+  subject: Sermaye Artırımı - Azaltımı İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Bedelli Sermaye Artırımı Hakkında.
+  expect: [capital.increase.rights]
+- id: fx-1688011
+  source: fixture
+  index: 1688011
+  fixture: detail_1688011.json
+  subject: Yeni İş İlişkisi
+  class: ODA
+  type: ODA
+  summary: Yeni İş İlişkisi
+  expect: [business.contract.award]
+- id: fx-1688065
+  source: fixture
+  index: 1688065
+  fixture: detail_1688065.json
+  subject: Temerrüt İşlemi
+  class: DKB
+  type: DUY
+  summary: Temerrüt İşleminin Tamamlanması
+  expect: [market.settlement_default]
+- id: fx-1688079
+  source: fixture
+  index: 1688079
+  fixture: detail_1688079.json
+  subject: İhraç Tavanına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Kira Sertifikası İhracına İlişkin Alınan Yönetim Kurulu Kararı Hk.
+  expect: [finance.debt.issuance_ceiling]
+- id: fx-1688153
+  source: fixture
+  index: 1688153
+  fixture: detail_1688153.json
+  subject: Pay Mali Hak Kullanım İşlemi - Nakit Ödeme
+  class: DKB
+  type: CA
+  summary: Hak Kullanım İşlemleri
+  expect: [market.corporate_action_notice]
+- id: fx-1688235
+  source: fixture
+  index: 1688235
+  fixture: detail_1688235.json
+  subject: İhale Süreci / Sonucu
+  class: ODA
+  type: ODA
+  summary: Dokuz Eylül Üniversitesi Hastanesi İhalesi Hakkında
+  expect: [business.tender_result]
+- id: fx-1688254
+  source: fixture
+  index: 1688254
+  fixture: detail_1688254.json
+  subject: Pay Bazında Devre Kesici Bildirimi
+  class: DKB
+  type: DUY
+  summary: PSGYO.E işlem sırasında Pay Bazında Devre Kesici Uygulaması devreye girmiştir
+  expect: [market.circuit_breaker]
+- id: fx-1688272
+  source: fixture
+  index: 1688272
+  fixture: detail_1688272.json
+  subject: Pay Alım Satım Bildirimi
+  class: DKB
+  type: ODA
+  summary: Pay Alım Satım Bildirimi
+  expect: [ownership.insider_trade]
+- id: fx-1688292
+  source: fixture
+  index: 1688292
+  fixture: detail_1688292.json
+  subject: Finansal Takvim
+  class: DG
+  type: DG
+  summary: 01.01.2026 - 30.09.2026 dönemine ilişkin finansal rapor ilan tarihi hakkında
+  expect: [report.financial.calendar]
+- id: fx-1688336
+  source: fixture
+  index: 1688336
+  fixture: detail_1688336.json
+  subject: Kredi Derecelendirmesi
+  class: ODA
+  type: ODA
+  summary: Kredi Derecelendirme Notu
+  expect: [finance.rating.change]
+- id: fx-1688363
+  source: fixture
+  index: 1688363
+  fixture: detail_1688363.json
+  subject: Kar Payı Dağıtım İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Kar Dağıtım Önerisi
+  expect: [distribution.dividend.cash]
+- id: fx-1688368
+  source: fixture
+  index: 1688368
+  fixture: detail_1688368.json
+  subject: Genel Kurul İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Olağanüstü Genel Kurul Daveti ve Bilgilendirme Dokümanı
+  expect: [governance.gm.notice]
+  note: extraordinary general meeting invitation
+- id: fx-1688379
+  source: fixture
+  index: 1688379
+  fixture: detail_1688379.json.gz
+  subject: Finansal Rapor
+  class: FR
+  type: FR
+  summary: null
+  expect: [report.financial.periodic]
+- id: fx-1688480
+  source: fixture
+  index: 1688480
+  fixture: detail_1688480.json
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren)
+  class: ODA
+  type: CA
+  summary: TRFOYMDE2612 Bono İtfası
+  expect: [finance.debt.payment]
+  note: commercial paper redemption
+- id: fx-1688504
+  source: fixture
+  index: 1688504
+  fixture: detail_1688504.json
+  subject: Payların Geri Alınmasına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Günlük Pay Geri Alım İşlemleri
+  expect: [buyback.execution]
+- id: fx-1688533
+  source: fixture
+  index: 1688533
+  fixture: detail_1688533.json
+  subject: Pay Alım Satım Bildirimi
+  class: ODA
+  type: ODA
+  summary: Pay Satım Bildirimi
+  expect: [ownership.insider_trade]
+- id: fx-1688545
+  source: fixture
+  index: 1688545
+  fixture: detail_1688545.json
+  subject: Payların Geri Alınmasına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Pay Geri Alım Programının Revize Edilmesi
+  expect: [buyback.program.start]
+  alt:
+  - [buyback.program.start, buyback.execution]
+  note: correction of a programme revision (form also lists trades)
+- id: fx-1688549
+  source: fixture
+  index: 1688549
+  fixture: detail_1688549.json.gz
+  subject: Finansal Rapor
+  class: FR
+  type: FR
+  summary: null
+  expect: [report.financial.periodic]
+- id: fx-1688568
+  source: fixture
+  index: 1688568
+  fixture: detail_1688568.json
+  subject: SPK Bülteni
+  class: DKB
+  type: DUY
+  summary: SPK BÜLTENİ
+  expect: [market.notice]
+  alt:
+  - [market.bulletin]
+  note: SPK weekly bulletin link only
+- id: fx-1688576
+  source: fixture
+  index: 1688576
+  fixture: detail_1688576.json.gz
+  subject: Finansal Rapor
+  class: FR
+  type: FR
+  summary: null
+  expect: [report.financial.periodic]
+- id: fx-1688581
+  source: fixture
+  index: 1688581
+  fixture: detail_1688581.json
+  subject: Genel Açıklama
+  class: DG
+  type: DG
+  summary: Pay Alım Satım Bildirimi
+  expect: [ownership.threshold_crossing]
+  alt:
+  - [ownership.insider_trade]
+  - [ownership.insider_trade, ownership.threshold_crossing]
+  note: II-15.1 m.12/1-b fund stake disclosure by the portfolio manager
+- id: fx-1688591
+  source: fixture
+  index: 1688591
+  fixture: detail_1688591.json
+  subject: Sermaye Piyasası Kurulu Tedbir Kararı
+  class: DKB
+  type: DUY
+  summary: Sermaye Piyasası Kurulu Tedbir Kararı
+  expect: [market.measure]
+- id: fx-1688597
+  source: fixture
+  index: 1688597
+  fixture: detail_1688597.json
+  subject: Esas Sözleşme Tadili
+  class: ODA
+  type: ODA
+  summary: Esas Sözleşme Tadilinin Olağanüstü Genel Kurulda Onaylanması
+  expect: [governance.articles.change]
+  alt:
+  - [governance.articles.change, governance.hq.change]
+  - [governance.articles.change, governance.gm.result]
+  note: HQ article amended at an EGM
+- id: fx-1688605
+  source: fixture
+  index: 1688605
+  fixture: detail_1688605.json
+  subject: Şirket Genel Bilgi Formu
+  class: DG
+  type: DG
+  summary: null
+  expect: [report.company_info]
+- id: fx-1688613
+  source: fixture
+  index: 1688613
+  fixture: detail_1688613.json
+  subject: Sorumluluk Beyanı (Konsolide Olmayan)
+  class: FR
+  type: FR
+  summary: 01.01.2026 30.09.2026 Golda Gıda Sanayi ve Ticaret A.Ş. Sorumluluk Beyanı
+  expect: [report.attestation]
+- id: fx-1688615
+  source: fixture
+  index: 1688615
+  fixture: detail_1688615.json
+  subject: Faaliyet Raporu (Konsolide Olmayan)
+  class: FR
+  type: FR
+  summary: 01.01.2026-30.09.2026 Dönemine Ait Faaliyet Raporu Hakkında
+  expect: [report.activity]
+- id: fx-1688616
+  source: fixture
+  index: 1688616
+  fixture: detail_1688616.json
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Yatırımcılarımızı Bilgilendirme
+  expect: [legal.investigation]
+  alt:
+  - [market.measure]
+  - [legal.investigation, market.measure]
+  note: SPK criminal complaint over trading in the shares; court measure on shareholder accounts
+- id: live-1445417
+  source: live:2025-06-03
+  index: 1445417
+  subject: BISTECH Pay Piyasası Alım Satım Sistemi Duyurusu
+  class: DKB
+  type: DUY
+  summary: Bülten Adı Değişen Pay
+  expect: [market.notice]
+- id: live-1666801
+  source: live:2026-09-22
+  index: 1666801
+  subject: BISTECH Pay Piyasası Alım Satım Sistemi Duyurusu
+  class: DKB
+  type: DUY
+  summary: Pay Piyasasında Volatilite Bazlı Tedbir Sistemi
+  expect: [market.measure]
+- id: live-1445453
+  source: live:2025-06-03
+  index: 1445453
+  subject: Bağımsız Denetim Kuruluşunun Belirlenmesi
+  class: ODA
+  type: ODA
+  summary: BağımsızDenetim Kuruluşunun Belirlenmesi
+  expect: [governance.auditor.change]
+- id: live-1582535
+  source: live:2026-04-01
+  index: 1582535
+  subject: Bağımsız Denetim Kuruluşunun Belirlenmesi
+  class: ODA
+  type: ODA
+  summary: Bağımsız denetim kuruluşu önerisi hakkında
+  expect: [governance.auditor.change]
+- id: live-1666839
+  source: live:2026-09-22
+  index: 1666839
+  subject: Bağımsız Denetim Kuruluşunun Belirlenmesi
+  class: ODA
+  type: ODA
+  summary: Bağımsız Denetim Kuruluşunun Belirlenmesi
+  expect: [governance.auditor.change]
+- id: live-1492603
+  source: live:2025-09-24
+  index: 1492603
+  subject: Bilgilendirme Politikası
+  class: ODA
+  type: ODA
+  summary: Bilgilendirme Politikasının Güncellenmesi
+  expect: [governance.policy]
+- id: live-1445441
+  source: live:2025-06-03
+  index: 1445441
+  subject: Birleşme İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Şirketimizin Dijital Gündem Medya Yayıncılık A.Ş. ile devralma suretiyle birleşme işlemi hakkında (2)
+  expect: [mna.merger]
+- id: live-1445442
+  source: live:2025-06-03
+  index: 1445442
+  subject: Birleşme İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Şirketimizin Dijital Gündem Medya Yayıncılık A.Ş. ile devralma suretiyle birleşme işlemi hakkında (3)
+  expect: [mna.merger]
+- id: live-1666369
+  source: live:2026-09-22
+  index: 1666369
+  subject: Borsa İstanbul A.Ş. Duyurusu
+  class: DKB
+  type: DUY
+  summary: Borsa İstanbul A.Ş. Duyurusu
+  expect: [market.notice]
+- id: live-1445251
+  source: live:2025-06-03
+  index: 1445251
+  subject: Borsada İşlem Gören Tipe Dönüşüm Duyurusu
+  class: DKB
+  type: CA
+  summary: DÖNÜŞÜM
+  expect: [market.share_conversion]
+- id: live-1522190
+  source: live:2025-12-02
+  index: 1522190
+  subject: Borsada İşlem Gören Tipe Dönüşüm Duyurusu
+  class: DKB
+  type: CA
+  summary: DÖNÜŞÜM
+  expect: [market.share_conversion]
+- id: live-1492589
+  source: live:2025-09-24
+  index: 1492589
+  subject: Borçlanma Araçları, Yatırım Fonları ve Varant İtfa/Kupon/Getiri/ Nakdi Uzlaşı Ödeme İşlemleri
+  class: DKB
+  type: CA
+  summary: Borçlanma Araçları, Yatırım Fonları ve Varant İtfa/Kupon/Getiri/ Nakdi Uzlaşı Ödeme İşlemleri
+  expect: [finance.debt.payment]
+- id: live-1582364
+  source: live:2026-04-01
+  index: 1582364
+  subject: Borçlanma Araçları, Yatırım Fonları ve Varant İtfa/Kupon/Getiri/ Nakdi Uzlaşı Ödeme İşlemleri
+  class: DKB
+  type: CA
+  summary: Borçlanma Araçları, Yatırım Fonları ve Varant İtfa/Kupon/Getiri/ Nakdi Uzlaşı Ödeme İşlemleri
+  expect: [finance.debt.payment]
+- id: live-1492632
+  source: live:2025-09-24
+  index: 1492632
+  subject: Borçlanma Araçlarının / Kira Sertifikalarının İşlem Görmeye Başlaması
+  class: DKB
+  type: DUY
+  summary: Borçlanma Araçlarının / Kira Sertifikalarının İşlem Görmeye Başlaması
+  expect: [finance.debt.listing]
+- id: live-1626954
+  source: live:2026-07-07
+  index: 1626954
+  subject: Borçlanma Araçlarının / Kira Sertifikalarının İşlem Görmeye Başlaması
+  class: DKB
+  type: DUY
+  summary: Borçlanma Araçlarının / Kira Sertifikalarının İşlem Görmeye Başlaması
+  expect: [finance.debt.listing]
+- id: live-1492684
+  source: live:2025-09-24
+  index: 1492684
+  subject: Bölünme İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: İştirak modeliyle kolaylaştırılmış usulde kısmi bölünmeye ilişkin Sermaye Piyasası Kurulu Onayı
+  expect: [mna.demerger]
+- id: live-1522267
+  source: live:2025-12-02
+  index: 1522267
+  subject: Değerleme Raporu
+  class: DG
+  type: DG
+  summary: Bayrampaşa Projesi Yıl Sonu Değerleme Raporu
+  expect: [report.valuation]
+- id: live-1582474
+  source: live:2026-04-01
+  index: 1582474
+  subject: Değerleme Raporu
+  class: DG
+  type: DG
+  summary: Beyoğlu Salıpazarı Arsası 2026 Yılı İlk Çeyrek Değerleme Raporu
+  expect: [report.valuation]
+- id: live-1626195
+  source: live:2026-07-07
+  index: 1626195
+  subject: Endeks Şirketlerinde Değişiklik
+  class: DKB
+  type: DUY
+  summary: '-'
+  expect: [market.index.change]
+- id: live-1666484
+  source: live:2026-09-22
+  index: 1666484
+  subject: Endekslerde Kullanılan Fiili Dolaşımdaki Pay Oranı Değişiklikleri
+  class: DKB
+  type: DUY
+  summary: '-'
+  expect: [market.index.change]
+- id: live-1521971
+  source: live:2025-12-02
+  index: 1521971
+  subject: Esas Sözleşme
+  class: DG
+  type: DG
+  summary: Esas Sözleşme
+  expect: [governance.articles.change]
+- id: live-1521981
+  source: live:2025-12-02
+  index: 1521981
+  subject: Esas Sözleşme
+  class: DG
+  type: DG
+  summary: Esas Sözleşme
+  expect: [governance.articles.change]
+- id: live-1492711
+  source: live:2025-09-24
+  index: 1492711
+  subject: Esas Sözleşme Tadili
+  class: ODA
+  type: ODA
+  summary: Esas Sözleşme Tadili
+  expect: [governance.articles.change]
+- id: live-1666649
+  source: live:2026-09-22
+  index: 1666649
+  subject: Esas Sözleşme Tadili
+  class: ODA
+  type: ODA
+  summary: Esas Sözleşme Tadili
+  expect: [governance.articles.change]
+- id: live-1582526
+  source: live:2026-04-01
+  index: 1582526
+  subject: Faaliyet Raporu (Konsolide Olmayan)
+  class: FR
+  type: FR
+  summary: Faaliyet Raporu
+  expect: [report.activity]
+- id: live-1445376
+  source: live:2025-06-03
+  index: 1445376
+  subject: Faaliyet Raporu (Konsolide)
+  class: FR
+  type: FR
+  summary: Yönetim Kurulu Faaliyet Raporu 31.03.2025
+  expect: [report.activity]
+- id: live-1582119
+  source: live:2026-04-01
+  index: 1582119
+  subject: Faaliyet Raporu Sorumluluk Beyanı
+  class: FR
+  type: FR
+  summary: Garanti Yatırım Menkul Kıymetler AŞ 31.12.2025 Faaliyet Raporu Sorumluluk Beyanı
+  expect: [report.attestation]
+- id: live-1522373
+  source: live:2025-12-02
+  index: 1522373
+  subject: Finansal Duran Varlık Edinimi
+  class: ODA
+  type: ODA
+  summary: Müşterek Yönetime Tabi Ortaklığımızın Paylarının Alımı Hk.
+  expect: [mna.acquisition]
+- id: live-1666861
+  source: live:2026-09-22
+  index: 1666861
+  subject: Finansal Duran Varlık Edinimi
+  class: ODA
+  type: ODA
+  summary: Bağlı Ortaklık Sermaye Artırımına Katılım Hakkında
+  expect: [mna.acquisition]
+  alt:
+  - [business.capex]
+  note: 'participation in a subsidiary capital increase (KAP form: financial asset acquisition)'
+- id: live-1445384
+  source: live:2025-06-03
+  index: 1445384
+  subject: Finansal Duran Varlık Satışı
+  class: ODA
+  type: ODA
+  summary: Ortopro Tıbbi Aletler Sanayi ve Ticaret A.Ş. Satışı
+  expect: [mna.disposal]
+- id: live-1445357
+  source: live:2025-06-03
+  index: 1445357
+  subject: Finansal Rapor
+  class: FR
+  type: FR
+  summary: null
+  expect: [report.financial.periodic]
+- id: live-1582553
+  source: live:2026-04-01
+  index: 1582553
+  subject: Finansal Rapor
+  class: FR
+  type: FR
+  summary: null
+  expect: [report.financial.periodic]
+- id: live-1581989
+  source: live:2026-04-01
+  index: 1581989
+  subject: Finansal Rapor Ek Süre Taleplerine İlişkin SPK Değerlendirmesi
+  class: DKB
+  type: DUY
+  summary: Finansal Rapor Ek Süre Taleplerine İlişkin SPK Değerlendirmesi
+  expect: [report.financial.extension]
+- id: live-1445115
+  source: live:2025-06-03
+  index: 1445115
+  subject: Finansal Tablo ve-veya Dipnot Değişikliği
+  class: ODA
+  type: ODA
+  summary: 01.01.2025- 31.03.2025 Dönemi Finansal Tablolar Düzeltme Hakkında
+  expect: [report.financial.restatement]
+- id: live-1582172
+  source: live:2026-04-01
+  index: 1582172
+  subject: Finansal Takvim
+  class: DG
+  type: DG
+  summary: Finansal Takvim
+  expect: [report.financial.calendar]
+- id: live-1626810
+  source: live:2026-07-07
+  index: 1626810
+  subject: Fiyat Tespit Raporuna İlişkin Analist Raporu (Halka Arza Aracılık Eden Kuruluş Dışında Farklı bir Kuruluş
+    Tarafından Hazırlanan)
+  class: DG
+  type: DG
+  summary: Şa-Ra Enerji İnşaat Ticaret ve Sanayi A.Ş. Fiyat Tespit Raporuna İlişkin Analist Raporu (Halka Arza Aracılık
+    Eden Kuruluş Dışında Farklı bir Kuruluş Tarafından Hazırlanan)
+  expect: [market.ipo]
+- id: live-1626976
+  source: live:2026-07-07
+  index: 1626976
+  subject: Fiyat Tespit Raporuna İlişkin Analist Raporu (Halka Arza Aracılık Eden Kuruluş Dışında Farklı bir Kuruluş
+    Tarafından Hazırlanan)
+  class: DG
+  type: DG
+  summary: ŞA-RA Enerji Ticaret ve Sanayi A.Ş. Fiyat Tespit Raporuna İlişkin Görüş
+  expect: [market.ipo]
+- id: live-1666645
+  source: live:2026-09-22
+  index: 1666645
+  subject: Fiyat Tespit Raporuna İlişkin Analist Raporu (Halka Arza Aracılık Eden Kuruluş Tarafından Hazırlanan)
+  class: DG
+  type: DG
+  summary: Pasifik Holding A.Ş. - Fiyat Tespit Raporuna İlişkin 2. Değerlendirme Raporu
+  expect: [market.ipo]
+- id: live-1444871
+  source: live:2025-06-03
+  index: 1444871
+  subject: Genel Açıklama
+  class: DG
+  type: DG
+  summary: QNB Portföy Kar Payı Ödeyen Serbest (Döviz-Pound) Fon kuruluşu
+  expect: [market.prospectus]
+  note: fund launch by a portfolio manager ("kar payı ödeyen" is the fund name, not a dividend)
+- id: live-1492463
+  source: live:2025-09-24
+  index: 1492463
+  subject: Genel Açıklama
+  class: DG
+  type: DG
+  summary: A1 Capital Portföy Birinci Serbest Fon İzahnamesi Hk.
+  expect: [market.prospectus]
+- id: live-1492575
+  source: live:2025-09-24
+  index: 1492575
+  subject: Genel Açıklama
+  class: DG
+  type: DG
+  summary: Özel Durumlar Tebliği'nin 12-(1). maddesi gereğince yapılan açıklama
+  expect: [ownership.threshold_crossing]
+  note: II-15.1 m.12/1 = ownership threshold disclosure
+- id: live-1521987
+  source: live:2025-12-02
+  index: 1521987
+  subject: Genel Açıklama
+  class: DG
+  type: DG
+  summary: Sermaye Artırımına İlişkin Duyuru
+  expect: [capital.change]
+- id: live-1522036
+  source: live:2025-12-02
+  index: 1522036
+  subject: Genel Açıklama
+  class: DG
+  type: DG
+  summary: Vega Portföy Parla Serbest (Döviz) Fon?un Kurul onaylı izahnamesi
+  expect: [market.prospectus]
+- id: live-1522358
+  source: live:2025-12-02
+  index: 1522358
+  subject: Genel Açıklama
+  class: DG
+  type: DG
+  summary: 'Şirketimizin LEI Kodu : 789000THZLP10VM5CH64'
+  expect: [report.company_info]
+  note: LEI code announcement
+- id: live-1582128
+  source: live:2026-04-01
+  index: 1582128
+  subject: Genel Açıklama
+  class: DG
+  type: DG
+  summary: Rota Portföy Yönetimi A.Ş.-Taksim İrtibat Bürosu'nun Kapanışı
+  expect: [business.footprint]
+- id: live-1666730
+  source: live:2026-09-22
+  index: 1666730
+  subject: Genel Açıklama
+  class: DG
+  type: DG
+  summary: TASARRUF SAHİPLERİNE DUYURU -17.09.2026 TARİHLİ DUYURUYA IZV ve IVA fonlar eklenmiştir.
+  expect: [market.notice]
+  note: notice to fund holders
+- id: live-1522249
+  source: live:2025-12-02
+  index: 1522249
+  subject: Genel Kurul Bildirimi
+  class: ODA
+  type: ODA
+  summary: null
+  expect: [governance.gm.notice]
+  note: empty summary; form default is the meeting notice
+- id: live-1522306
+  source: live:2025-12-02
+  index: 1522306
+  subject: Genel Kurul Bildirimi
+  class: ODA
+  type: ODA
+  summary: Olağanüstü Genel Kurul Toplantısı Hakkında Yönetim Kurulu Kararı
+  expect: [governance.gm.notice]
+  note: board decision to convene an EGM = notice, not a result
+- id: live-1522362
+  source: live:2025-12-02
+  index: 1522362
+  subject: Genel Kurul Bildirimi
+  class: ODA
+  type: ODA
+  summary: Genel Kurul İşlemlerine İlişkin Bildirim
+  expect: [governance.gm.notice]
+  alt:
+  - [governance.gm.result]
+  note: generic summary
+- id: live-1582209
+  source: live:2026-04-01
+  index: 1582209
+  subject: Genel Kurul Bildirimi
+  class: ODA
+  type: ODA
+  summary: 25 Mart 2025 Tarihli Olağan Genel Kurul Toplantısı Hakkında
+  expect: [governance.gm.result]
+  alt:
+  - [governance.gm.notice]
+  note: meeting date before publication
+- id: live-1626672
+  source: live:2026-07-07
+  index: 1626672
+  subject: Genel Kurul Bildirimi
+  class: ODA
+  type: ODA
+  summary: 29.06.2026 TARİHLİ OLAĞANÜSTÜ GENEL KURUL TESCİL EDİLMİŞTİR
+  expect: [governance.gm.result]
+- id: live-1445122
+  source: live:2025-06-03
+  index: 1445122
+  subject: Genel Kurul İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 2024 Olağan Genel Kurul Tescili
+  expect: [governance.gm.result]
+- id: live-1445237
+  source: live:2025-06-03
+  index: 1445237
+  subject: Genel Kurul İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 2024 Yılı 2.Olağan Genel Kurul Toplantı Çağrısı Hk.
+  expect: [governance.gm.notice]
+- id: live-1445245
+  source: live:2025-06-03
+  index: 1445245
+  subject: Genel Kurul İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 2024 Yılı Olağan Genel Kurul Toplantısı Sonucu Hk.
+  expect: [governance.gm.result]
+- id: live-1445280
+  source: live:2025-06-03
+  index: 1445280
+  subject: Genel Kurul İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 2024 YILI OLAĞAN GENEL KURUL TESCİLİ
+  expect: [governance.gm.result]
+- id: live-1445288
+  source: live:2025-06-03
+  index: 1445288
+  subject: Genel Kurul İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 2024 Yılı Olağan Genel Kurul Toplantısının Tescilinin Bildirimidir.
+  expect: [governance.gm.result]
+- id: live-1445398
+  source: live:2025-06-03
+  index: 1445398
+  subject: Genel Kurul İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 2024 YILI OLAĞAN GENEL KURUL TOPLANTISI HAKKINDA,
+  expect: [governance.gm.notice]
+  alt:
+  - [governance.gm.result]
+  note: '"toplantısı hakkında" is ambiguous without the body'
+- id: live-1492692
+  source: live:2025-09-24
+  index: 1492692
+  subject: Genel Kurul İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Genel Kurul Toplantı Kararları Tescili Hakkında.
+  expect: [governance.gm.result]
+- id: live-1582135
+  source: live:2026-04-01
+  index: 1582135
+  subject: Genel Kurul İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 2025 Yılı Olağan Genel Kurul Toplantı Çağrısı
+  expect: [governance.gm.notice]
+- id: live-1582236
+  source: live:2026-04-01
+  index: 1582236
+  subject: Genel Kurul İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Olağanüstü Genel Kurul Kararlarının Tescili
+  expect: [governance.gm.result]
+- id: live-1582412
+  source: live:2026-04-01
+  index: 1582412
+  subject: Genel Kurul İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Yönetim Kurulumuzun 2025 Yılı Olağan Genel Kurul Toplantısı Çağrısı
+  expect: [governance.gm.notice]
+- id: live-1625951
+  source: live:2026-07-07
+  index: 1625951
+  subject: Genel Kurul İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 2025 Yılı Olağan Genel Kurul Toplantısının Tescili
+  expect: [governance.gm.result]
+- id: live-1627415
+  source: live:2026-07-07
+  index: 1627415
+  subject: Genel Kurul İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 2025 Yılı Olağan Genel Kurul Toplantı Çağrısı
+  expect: [governance.gm.notice]
+- id: live-1627579
+  source: live:2026-07-07
+  index: 1627579
+  subject: Genel Kurul İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 2025 Yılı Olağan Genel Kurul Toplantısı Hakkında
+  expect: [governance.gm.notice]
+  alt:
+  - [governance.gm.result]
+  note: '"toplantısı hakkında" is ambiguous without the body'
+- id: live-1666837
+  source: live:2026-09-22
+  index: 1666837
+  subject: Genel Kurul İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Arena Bilgisayar Sanayi ve Ticaret A.Ş. 01.04.2025-31.03.2026 Hesap Dönemi Olağan Genel Kurul Toplantı
+    Çağrısı
+  expect: [governance.gm.notice]
+- id: live-1522380
+  source: live:2025-12-02
+  index: 1522380
+  subject: Geri Alınan Payların Elden Çıkarılması
+  class: ODA
+  type: ODA
+  summary: Geri Alınan Payların Elden Çıkarılması
+  expect: [buyback.disposal]
+- id: live-1666511
+  source: live:2026-09-22
+  index: 1666511
+  subject: Haber ve Söylentilere İlişkin Açıklama
+  class: ODA
+  type: ODA
+  summary: Basında Yer Alan Haberler Hakkında
+  expect: [market.rumour_response]
+- id: live-1626242
+  source: live:2026-07-07
+  index: 1626242
+  subject: Hak Kullanım Süreç İptal Bildirimi
+  class: ODA
+  type: CA
+  summary: null
+  expect: [capital.action.cancel]
+- id: live-1445259
+  source: live:2025-06-03
+  index: 1445259
+  subject: Hak Kullanımı
+  class: DKB
+  type: DUY
+  summary: null
+  expect: [market.corporate_action_notice]
+- id: live-1492590
+  source: live:2025-09-24
+  index: 1492590
+  subject: Hak Kullanımı
+  class: DKB
+  type: DUY
+  summary: null
+  expect: [market.corporate_action_notice]
+- id: live-1445397
+  source: live:2025-06-03
+  index: 1445397
+  subject: Halka Arz Fiyatının Belirlenmesinde Esas Alınan Varsayımlara İlişkin Değerlendirme Raporu
+  class: DG
+  type: DG
+  summary: Halka Arz Fiyatının Belirlenmesinde Esas Alınan Varsayımlara İlişkin Değerlendirme Raporu
+  expect: [market.ipo]
+- id: live-1625956
+  source: live:2026-07-07
+  index: 1625956
+  subject: Halka Arz Sonuçları
+  class: DG
+  type: DG
+  summary: İsvea Seramik ve Banyo Ürünleri Sanayi A.Ş. paylarının halka arzına ilişkin sonuçlar
+  expect: [market.ipo]
+- id: live-1445055
+  source: live:2025-06-03
+  index: 1445055
+  subject: Halka Arz İşlemlerinde Sermaye Piyasası Aracının % 5 inden Fazlasını Satın Alanlara İlişkin Bildirim
+  class: ODA
+  type: ODA
+  summary: DARDANEL ÖNENTAŞ GIDA SANAYİ A.Ş.
+  expect: [market.ipo]
+- id: live-1521928
+  source: live:2025-12-02
+  index: 1521928
+  subject: Kamuyu Aydınlatma Platformu Duyurusu
+  class: DKB
+  type: DUY
+  summary: Özel Durumlar Tebliği'nin 12-(4). maddesi gereğince yapılan açıklama
+  expect: [ownership.threshold_crossing]
+  note: 'II-15.1 m.12/4: MKK publishes threshold crossings of direct holders'
+- id: live-1625607
+  source: live:2026-07-07
+  index: 1625607
+  subject: Kamuyu Aydınlatma Platformu Duyurusu
+  class: DKB
+  type: DUY
+  summary: Özel Durumlar Tebliği'nin 12-(4). maddesi gereğince yapılan açıklama
+  expect: [ownership.threshold_crossing]
+  note: 'II-15.1 m.12/4: MKK publishes threshold crossings of direct holders'
+- id: live-1582539
+  source: live:2026-04-01
+  index: 1582539
+  subject: Kar Dağıtım Politikası
+  class: ODA
+  type: ODA
+  summary: Kar Dağıtım Politikası Hakkında
+  expect: [distribution.policy]
+- id: live-1582542
+  source: live:2026-04-01
+  index: 1582542
+  subject: Kar Payı Bildirimi
+  class: ODA
+  type: ODA
+  summary: Kârın Banka Bünyesinde Tutulmasına İlişkin Yönetim Kurulunun Tavsiyesi Kararı hk.
+  expect: [distribution.dividend.cash]
+  alt:
+  - [distribution.policy]
+  note: board proposes retaining the profit (no distribution)
+- id: live-1445068
+  source: live:2025-06-03
+  index: 1445068
+  subject: Kar Payı Dağıtım İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 2024 Yılı Kar dağıtımına ilişkin Genel Kurul Sonucu
+  expect: [distribution.dividend.cash]
+- id: live-1445256
+  source: live:2025-06-03
+  index: 1445256
+  subject: Kar Payı Dağıtım İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 2024 Yılı Kar Payı Dağıtımına İlişkin Genel Kurul Kararı Hk.
+  expect: [distribution.dividend.cash]
+- id: live-1492525
+  source: live:2025-09-24
+  index: 1492525
+  subject: Kar Payı Dağıtım İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Temettü 3. Taksit Ödeme Tutar ve Tarihinin Belirlenmesine İlişkin Karar hk.
+  expect: [distribution.dividend.cash]
+- id: live-1492582
+  source: live:2025-09-24
+  index: 1492582
+  subject: Kar Payı Dağıtım İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Kar Payı Dağıtım İşlemlerine İlişkin Bildirim
+  expect: [distribution.dividend.cash]
+- id: live-1582127
+  source: live:2026-04-01
+  index: 1582127
+  subject: Kar Payı Dağıtım İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Yönetim Kurulu 2025 Yılı Dönemine Ait Kar Dağıtım Önerisi
+  expect: [distribution.dividend.cash]
+- id: live-1582252
+  source: live:2026-04-01
+  index: 1582252
+  subject: Kar Payı Dağıtım İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 2025 Yılı Kâr Payı Dağıtımına İlişkin Yönetim Kurul Kararı
+  expect: [distribution.dividend.cash]
+- id: live-1582270
+  source: live:2026-04-01
+  index: 1582270
+  subject: Kar Payı Dağıtım İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 2025 Yılı Kar Payı Dağıtımına İlişkin Yönetim Kurulu Kararı
+  expect: [distribution.dividend.cash]
+- id: live-1582469
+  source: live:2026-04-01
+  index: 1582469
+  subject: Kar Payı Dağıtım İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Kar Payı Dağıtımına İlişkin Yönetim Kurulu Kararı
+  expect: [distribution.dividend.cash]
+- id: live-1582476
+  source: live:2026-04-01
+  index: 1582476
+  subject: Kar Payı Dağıtım İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 2025 Yılı Kar Payı Dağıtımı Hakkında Yönetim Kurulu Teklifi
+  expect: [distribution.dividend.cash]
+- id: live-1627376
+  source: live:2026-07-07
+  index: 1627376
+  subject: Kar Payı Dağıtım İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Kar Payı Dağıtım İşlemlerine İlişkin Bildirim
+  expect: [distribution.dividend.cash]
+- id: live-1627416
+  source: live:2026-07-07
+  index: 1627416
+  subject: Kar Payı Dağıtım İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 2025 Yılı Kar Payı Dağıtımı Hakkında Yönetim Kurulu Teklifi
+  expect: [distribution.dividend.cash]
+- id: live-1627541
+  source: live:2026-07-07
+  index: 1627541
+  subject: Kar Payı Dağıtım İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Kar Payı Dağıtımı Önerisine İlişkin Genel Kurul Kararı
+  expect: [distribution.dividend.cash]
+- id: live-1582416
+  source: live:2026-04-01
+  index: 1582416
+  subject: Katılım Finansı İlkeleri Bilgi Formu
+  class: DG
+  type: DG
+  summary: null
+  expect: [report.company_info]
+- id: live-1582420
+  source: live:2026-04-01
+  index: 1582420
+  subject: Katılım Finansı İlkeleri Bilgi Formu
+  class: DG
+  type: DG
+  summary: null
+  expect: [report.company_info]
+- id: live-1492566
+  source: live:2025-09-24
+  index: 1492566
+  subject: Kayıtlı Sermaye Tavanı İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Kayıtlı Sermaye Tavanı Artırımının T.C Ticaret Bakanlığı Tarafından Onaylanması Hk.
+  expect: [capital.registered_ceiling]
+- id: live-1522299
+  source: live:2025-12-02
+  index: 1522299
+  subject: Kayıtlı Sermaye Tavanı İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Kayıtlı Sermaye Tavanı artırılması'na ilişkin Ticaret Bakanliği onayı hk.
+  expect: [capital.registered_ceiling]
+- id: live-1582350
+  source: live:2026-04-01
+  index: 1582350
+  subject: Kredi Derecelendirmesi
+  class: ODA
+  type: ODA
+  summary: KREDİ DERECELENDİRME BİLDİRİMİ
+  expect: [finance.rating.change]
+- id: live-1666516
+  source: live:2026-09-22
+  index: 1666516
+  subject: Kredi Derecelendirmesi
+  class: ODA
+  type: ODA
+  summary: Kredi Derecelendirmesi Hk.
+  expect: [finance.rating.change]
+- id: live-1582229
+  source: live:2026-04-01
+  index: 1582229
+  subject: Kurumsal Yönetim Bilgi Formu (Güncelleme) - Pay Sahipleri
+  class: DG
+  type: DG
+  summary: Kurumsal Yönetim Bilgi Formu - Güncelleme-Pay Sahipleri
+  expect: [report.corporate_governance]
+- id: live-1627102
+  source: live:2026-07-07
+  index: 1627102
+  subject: Kurumsal Yönetim Bilgi Formu (Güncelleme) - Yönetim Kurulu-1
+  class: DG
+  type: DG
+  summary: KYBF Güncelleme Hk.
+  expect: [report.corporate_governance]
+- id: live-1582139
+  source: live:2026-04-01
+  index: 1582139
+  subject: Kurumsal Yönetim Bilgi Formu (Güncelleme) - Yönetim Kurulu-2
+  class: DG
+  type: DG
+  summary: Kurumsal Yönetim Bilgi Formu-YÖNETİM KURULU-II
+  expect: [report.corporate_governance]
+- id: live-1582424
+  source: live:2026-04-01
+  index: 1582424
+  subject: Kurumsal Yönetim Bilgi Formu (Güncelleme) - Yönetim Kurulu-2
+  class: DG
+  type: DG
+  summary: Kurumsal Yönetim Bilgi Formu (2025 Yılına Ait) (Güncelleme)
+  expect: [report.corporate_governance]
+- id: live-1492524
+  source: live:2025-09-24
+  index: 1492524
+  subject: Kurumsal Yönetim İlkelerine Uyum Derecelendirmesi
+  class: ODA
+  type: ODA
+  summary: Kurumsal Yönetim Derecelendirme Not Bildirimi
+  expect: [governance.rating]
+- id: live-1582072
+  source: live:2026-04-01
+  index: 1582072
+  subject: Kurumsal Yönetim İlkelerine Uyum Derecelendirmesi
+  class: ODA
+  type: ODA
+  summary: Kurumsal Yönetim İlkelerine Uyum Derecelendirmesi Sözleşmesinin Yenilenmesi
+  expect: [governance.rating]
+- id: live-1492628
+  source: live:2025-09-24
+  index: 1492628
+  subject: Likidite Sağlayıcılık Kapsamındaki İşlemler
+  class: DG
+  type: DG
+  summary: Allbatross Yatırım Menkul Değerler A.Ş Tarafından BIENY Paylarında Likidite Sağlayıcılık Faaliyetleri
+    Kapsamında Gerçekleştirilen İşlemler.
+  expect: [market.market_making]
+- id: live-1666796
+  source: live:2026-09-22
+  index: 1666796
+  subject: Maddi Duran Varlık Alımı
+  class: ODA
+  type: ODA
+  summary: Maddi Duran Varlık Alımı
+  expect: [business.capex]
+- id: live-1582466
+  source: live:2026-04-01
+  index: 1582466
+  subject: Maddi Duran Varlık Satımı
+  class: ODA
+  type: ODA
+  summary: YÜZER HAVUZ SATIŞI HK.
+  expect: [mna.disposal]
+- id: live-1625759
+  source: live:2026-07-07
+  index: 1625759
+  subject: Merkezi Kayıt Kuruluşu A.Ş. Duyurusu
+  class: DKB
+  type: DUY
+  summary: Hak Kullanım İşlemleri
+  expect: [market.corporate_action_notice]
+  alt:
+  - [market.notice]
+  note: MKK notice about corporate-action processing
+- id: live-1492598
+  source: live:2025-09-24
+  index: 1492598
+  subject: Olağan Dışı Fiyat ve Miktar Hareketleri
+  class: ODA
+  type: ODA
+  summary: Olağan Dışı Fiyat ve Miktar Hareketleri Hakkında
+  expect: [market.unusual_activity]
+- id: live-1492682
+  source: live:2025-09-24
+  index: 1492682
+  subject: Olağan Dışı Fiyat ve Miktar Hareketleri
+  class: ODA
+  type: ODA
+  summary: Olağandışı Fiyat ve Miktar Hareketleri Hk.
+  expect: [market.unusual_activity]
+- id: live-1521929
+  source: live:2025-12-02
+  index: 1521929
+  subject: Pay Alım Satım Bildirimi
+  class: DKB
+  type: ODA
+  summary: Pay Alım Satım Bildirimi
+  expect: [ownership.insider_trade]
+- id: live-1522330
+  source: live:2025-12-02
+  index: 1522330
+  subject: Pay Alım Satım Bildirimi
+  class: ODA
+  type: ODA
+  summary: Pay Alım Satım Bildirimi
+  expect: [ownership.insider_trade]
+- id: live-1581996
+  source: live:2026-04-01
+  index: 1581996
+  subject: Pay Alım Satım Bildirimi
+  class: DKB
+  type: ODA
+  summary: Pay Alım Satım Bildirimi
+  expect: [ownership.insider_trade]
+- id: live-1625602
+  source: live:2026-07-07
+  index: 1625602
+  subject: Pay Alım Satım Bildirimi
+  class: DKB
+  type: ODA
+  summary: Pay Alım Satım Bildirimi
+  expect: [ownership.insider_trade]
+- id: live-1627255
+  source: live:2026-07-07
+  index: 1627255
+  subject: Pay Alım Satım Bildirimi
+  class: ODA
+  type: ODA
+  summary: Pay Alım Satım Bildirimi
+  expect: [ownership.insider_trade]
+- id: live-1666366
+  source: live:2026-09-22
+  index: 1666366
+  subject: Pay Alım Satım Bildirimi
+  class: DKB
+  type: ODA
+  summary: Pay Alım Satım Bildirimi
+  expect: [ownership.insider_trade]
+- id: live-1666739
+  source: live:2026-09-22
+  index: 1666739
+  subject: Pay Alım Satım Bildirimi
+  class: DKB
+  type: ODA
+  summary: Pay Alım Satım Bildirimi
+  expect: [ownership.insider_trade]
+- id: live-1666825
+  source: live:2026-09-22
+  index: 1666825
+  subject: Pay Alım Satım Bildirimi
+  class: ODA
+  type: ODA
+  summary: Pay Sahipliği Hakkında
+  expect: [ownership.insider_trade]
+  alt:
+  - [ownership.insider_trade, ownership.threshold_crossing]
+  - [ownership.threshold_crossing]
+- id: live-1522284
+  source: live:2025-12-02
+  index: 1522284
+  subject: Pay Alım Teklifi Yoluyla Pay Toplanmasına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Senkron Siber Güvenlik Yazılım Ve Bilişim Çözümleri A.Ş. Paylarına Yönelik Zorunlu Pay Alım Teklifi
+  expect: [ownership.tender_offer]
+- id: live-1492414
+  source: live:2025-09-24
+  index: 1492414
+  subject: Pay Bazında Devre Kesici Bildirimi
+  class: DKB
+  type: DUY
+  summary: DOBUR.E İşlem Sırasında Devre Kesici Uygulaması Başlamıştır
+  expect: [market.circuit_breaker]
+- id: live-1492625
+  source: live:2025-09-24
+  index: 1492625
+  subject: Pay Bazında Devre Kesici Bildirimi
+  class: DKB
+  type: DUY
+  summary: IZINV.E İşlem Sırasında Devre Kesici Uygulaması Başlamıştır
+  expect: [market.circuit_breaker]
+- id: live-1492626
+  source: live:2025-09-24
+  index: 1492626
+  subject: Pay Bazında Devre Kesici Bildirimi
+  class: DKB
+  type: DUY
+  summary: KLMSN.E İşlem Sırasında Devre Kesici Uygulaması Başlamıştır
+  expect: [market.circuit_breaker]
+- id: live-1521940
+  source: live:2025-12-02
+  index: 1521940
+  subject: Pay Bazında Devre Kesici Bildirimi
+  class: DKB
+  type: DUY
+  summary: KRSTL.E İşlem Sırasında Devre Kesici Uygulaması Başlamıştır
+  expect: [market.circuit_breaker]
+- id: live-1582027
+  source: live:2026-04-01
+  index: 1582027
+  subject: Pay Bazında Devre Kesici Bildirimi
+  class: DKB
+  type: DUY
+  summary: SVGYO.E işlem sırasında Pay Bazında Devre Kesici Uygulaması devreye girmiştir
+  expect: [market.circuit_breaker]
+- id: live-1625781
+  source: live:2026-07-07
+  index: 1625781
+  subject: Pay Bazında Devre Kesici Bildirimi
+  class: DKB
+  type: DUY
+  summary: KGYO.E işlem sırasında Pay Bazında Devre Kesici Uygulaması devreye girmiştir
+  expect: [market.circuit_breaker]
+- id: live-1666489
+  source: live:2026-09-22
+  index: 1666489
+  subject: Pay Bazında Devre Kesici Bildirimi
+  class: DKB
+  type: DUY
+  summary: SKBNK.E işlem sırasında Pay Bazında Devre Kesici Uygulaması devreye girmiştir
+  expect: [market.circuit_breaker]
+- id: live-1666532
+  source: live:2026-09-22
+  index: 1666532
+  subject: Pay Bazında Devre Kesici Bildirimi
+  class: DKB
+  type: DUY
+  summary: EKDMR.E işlem sırasında Pay Bazında Devre Kesici Uygulaması devreye girmiştir
+  expect: [market.circuit_breaker]
+- id: live-1444869
+  source: live:2025-06-03
+  index: 1444869
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren)
+  class: ODA
+  type: CA
+  summary: TRFQNBFA2519 ISIN kodlu 927.600.000 TL nominal tutarlı 182 gün vadeli finansman bonolarının satışı tamamlanmıştır.
+  expect: [finance.debt.issuance]
+- id: live-1445243
+  source: live:2025-06-03
+  index: 1445243
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren)
+  class: ODA
+  type: CA
+  summary: TRFTAMF32615 ISIN Kodlu Finansman Bonosu Kupon Oranı Belirlenmesi Hk.
+  expect: [finance.debt.payment]
+- id: live-1445266
+  source: live:2025-06-03
+  index: 1445266
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren)
+  class: ODA
+  type: CA
+  summary: XS2952541816 ISIN Kodlu Finansman Bonosunun İtfası hk.
+  expect: [finance.debt.payment]
+- id: live-1445311
+  source: live:2025-06-03
+  index: 1445311
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren)
+  class: ODA
+  type: CA
+  summary: TRSENSA32710 ISIN Kodlu Tahvilin 1. Kupon Faiz Oranının Belirlenmesi
+  expect: [finance.debt.payment]
+- id: live-1445372
+  source: live:2025-06-03
+  index: 1445372
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren)
+  class: ODA
+  type: CA
+  summary: Yurtdışında borçlanma aracı ihracının tamamlanması
+  expect: [finance.debt.issuance]
+- id: live-1492399
+  source: live:2025-09-24
+  index: 1492399
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren)
+  class: ODA
+  type: CA
+  summary: 24.09.2025 Vadeli Borçlanma Aracının İtfası
+  expect: [finance.debt.payment]
+- id: live-1492528
+  source: live:2025-09-24
+  index: 1492528
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren)
+  class: ODA
+  type: CA
+  summary: Özkaynak hesaplamasına dahil edilebilir nitelikte yurtiçinde ihraç edilen borçlanma aracının kupon ödemesi
+  expect: [finance.debt.payment]
+- id: live-1492599
+  source: live:2025-09-24
+  index: 1492599
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren)
+  class: ODA
+  type: CA
+  summary: TRFIAZY92516 Finansman Bonosu İtfası Hk.
+  expect: [finance.debt.payment]
+- id: live-1492659
+  source: live:2025-09-24
+  index: 1492659
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren)
+  class: ODA
+  type: CA
+  summary: TRFYAZI62618 ISIN Kodlu tahvilin birinci kupon faiz oranı hakkında
+  expect: [finance.debt.payment]
+- id: live-1522168
+  source: live:2025-12-02
+  index: 1522168
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren)
+  class: ODA
+  type: CA
+  summary: Yurtdışı Piyasalara Tahvil İhracı
+  expect: [finance.debt.issuance]
+- id: live-1582009
+  source: live:2026-04-01
+  index: 1582009
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren)
+  class: ODA
+  type: CA
+  summary: TRFTCMD42615 Isın Kodlu Bono İtfası
+  expect: [finance.debt.payment]
+- id: live-1582349
+  source: live:2026-04-01
+  index: 1582349
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren)
+  class: ODA
+  type: CA
+  summary: XS3096174951 ISIN Kodlu Yurtdışı Piyasalara İhraç Edilen Tahvilin Kupon Ödemesi
+  expect: [finance.debt.payment]
+- id: live-1625667
+  source: live:2026-07-07
+  index: 1625667
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren)
+  class: ODA
+  type: CA
+  summary: TMKŞ Fibabanka Altıncı Varlık Finansmanı Fonu tarafından gerçekleştirilen Varlığa Dayalı Menkul Kıymet
+    2. İhraç A Grubu 2. Tertip Bilgileri
+  expect: [finance.debt.issuance]
+- id: live-1626892
+  source: live:2026-07-07
+  index: 1626892
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren)
+  class: ODA
+  type: CA
+  summary: GMTN Programı Çerçevesinde Türkiye Dışında Sürdürülebilir Borçlanma Aracı İhracı SPK Onayı
+  expect: [finance.debt.issuance]
+- id: live-1666488
+  source: live:2026-09-22
+  index: 1666488
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faiz İçeren)
+  class: ODA
+  type: CA
+  summary: MTN programı kapsamında yurtdışında ihraç edilen borçlanma aracının ihracı
+  expect: [finance.debt.issuance]
+- id: live-1444911
+  source: live:2025-06-03
+  index: 1444911
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faizsiz)
+  class: ODA
+  type: CA
+  summary: TRDEMVK62714 ISIN Kodlu Kira Sertifikası İhracının Nitelikli Yatırımcıya Satışının Tamamlanması Hk.
+  expect: [finance.debt.issuance]
+- id: live-1444912
+  source: live:2025-06-03
+  index: 1444912
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faizsiz)
+  class: ODA
+  type: CA
+  summary: TRDEMVK62722 ISIN Kodlu Kira Sertifikası İhracının Nitelikli Yatırımcıya Satışının Tamamlanması Hk.
+  expect: [finance.debt.issuance]
+- id: live-1492508
+  source: live:2025-09-24
+  index: 1492508
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faizsiz)
+  class: ODA
+  type: CA
+  summary: Yurtiçi Kira Sertifikası İtfa ve Getiri Ödemesi
+  expect: [finance.debt.payment]
+- id: live-1492668
+  source: live:2025-09-24
+  index: 1492668
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faizsiz)
+  class: ODA
+  type: CA
+  summary: Yurtiçi Kira Sertifikası İhracı Nitelikli Yatırımcıya Satışın Tamamlanması Hk.
+  expect: [finance.debt.issuance]
+- id: live-1522027
+  source: live:2025-12-02
+  index: 1522027
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faizsiz)
+  class: ODA
+  type: CA
+  summary: TRDEMVK62722 ISIN Kodlu Kira Sertifikasının 2. Dönemsel Getiri Ödemesi Hk.
+  expect: [finance.debt.payment]
+- id: live-1666618
+  source: live:2026-09-22
+  index: 1666618
+  subject: Pay Dışında Sermaye Piyasası Aracı İşlemlerine İlişkin Bildirim (Faizsiz)
+  class: ODA
+  type: CA
+  summary: Şirketimiz Tarafından İhraç Edilmiş Olan TRDEVKS92684 ISIN Kodlu Kira Sertifikasının İtfası Hk.
+  expect: [finance.debt.payment]
+- id: live-1492584
+  source: live:2025-09-24
+  index: 1492584
+  subject: Pay Mali Hak Kullanım İşlemi - Nakit Ödeme
+  class: DKB
+  type: CA
+  summary: Hak Kullanım İşlemleri
+  expect: [market.corporate_action_notice]
+- id: live-1522173
+  source: live:2025-12-02
+  index: 1522173
+  subject: Pay Mali Hak Kullanım İşlemi - Nakit Ödeme
+  class: DKB
+  type: CA
+  summary: Hak Kullanım İşlemleri
+  expect: [market.corporate_action_notice]
+- id: live-1492656
+  source: live:2025-09-24
+  index: 1492656
+  subject: Pay Satış Bilgi Formu
+  class: DG
+  type: DG
+  summary: Pay satış bilgi formu onayı için SPK?ya yapılan başvuru hakkında.
+  expect: [ownership.secondary_offering]
+- id: live-1492657
+  source: live:2025-09-24
+  index: 1492657
+  subject: Pay Satış Bilgi Formu
+  class: DG
+  type: DG
+  summary: Pay satış bilgi formu onayı için SPK?ya yapılan başvuru hakkında.
+  expect: [ownership.secondary_offering]
+- id: live-1445379
+  source: live:2025-06-03
+  index: 1445379
+  subject: Payların Geri Alınmasına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 03.06.2025 Tarihli Pay Geri Alım İşlemleri Hakkında,
+  expect: [buyback.execution]
+- id: live-1445444
+  source: live:2025-06-03
+  index: 1445444
+  subject: Payların Geri Alınmasına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Şirketimizin Kendi Paylarının Geri Alımı hk.
+  expect: [buyback.execution]
+  alt:
+  - [buyback.program.start]
+- id: live-1492706
+  source: live:2025-09-24
+  index: 1492706
+  subject: Payların Geri Alınmasına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Payların Geri Alınması İşlemlerine İlişkin Bildirim hk.
+  expect: [buyback.execution]
+- id: live-1522301
+  source: live:2025-12-02
+  index: 1522301
+  subject: Payların Geri Alınmasına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Pay Geri Alım Programının Başlatılması hk.
+  expect: [buyback.program.start]
+- id: live-1522424
+  source: live:2025-12-02
+  index: 1522424
+  subject: Payların Geri Alınmasına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Payların Geri Alınması İşlemlerine İlişkin Bildirim hk.
+  expect: [buyback.execution]
+- id: live-1625872
+  source: live:2026-07-07
+  index: 1625872
+  subject: Payların Geri Alınmasına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Bossa Paylarının Geri Alımı.
+  expect: [buyback.execution]
+  alt:
+  - [buyback.program.start]
+- id: live-1627337
+  source: live:2026-07-07
+  index: 1627337
+  subject: Payların Geri Alınmasına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 07.07.2026 Tarihli Pay Geri Alım İşlemleri
+  expect: [buyback.execution]
+- id: live-1627577
+  source: live:2026-07-07
+  index: 1627577
+  subject: Payların Geri Alınmasına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 07.07.2026 Tarihli Pay Geri Alım İşlemleri
+  expect: [buyback.execution]
+- id: live-1627580
+  source: live:2026-07-07
+  index: 1627580
+  subject: Payların Geri Alınmasına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 7 Temmuz 2026 Tarihli Pay Geri Alım İşlemleri
+  expect: [buyback.execution]
+- id: live-1666696
+  source: live:2026-09-22
+  index: 1666696
+  subject: Payların Geri Alınmasına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Pay Geri Alım Programı Revizesi
+  expect: [buyback.program.start]
+  note: programme revision
+- id: live-1666718
+  source: live:2026-09-22
+  index: 1666718
+  subject: Payların Geri Alınmasına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 22.09.2026 tarihli Pay Geri Alım İşlemleri
+  expect: [buyback.execution]
+- id: live-1666775
+  source: live:2026-09-22
+  index: 1666775
+  subject: Payların Geri Alınmasına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 22.09.2026 Tarihli IZENR Pay Geri Alım İşlemleri
+  expect: [buyback.execution]
+- id: live-1666806
+  source: live:2026-09-22
+  index: 1666806
+  subject: Payların Geri Alınmasına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 22.09.2026 tarihli pay geri alım işlemleri
+  expect: [buyback.execution]
+- id: live-1666813
+  source: live:2026-09-22
+  index: 1666813
+  subject: Payların Geri Alınmasına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: 22.09.2026 Tarihli Pay Geri Alım İşlemleri
+  expect: [buyback.execution]
+- id: live-1627383
+  source: live:2026-07-07
+  index: 1627383
+  subject: Piyasa Yapıcılığı Kapsamında Gerçekleştirilen İşlemler Bildirimi
+  class: DG
+  type: DG
+  summary: 07.07.2026 Tarihli Piyasa Yapıcı İşlemler
+  expect: [market.market_making]
+- id: live-1666823
+  source: live:2026-09-22
+  index: 1666823
+  subject: Piyasa Yapıcılığı Kapsamında Gerçekleştirilen İşlemler Bildirimi
+  class: DG
+  type: DG
+  summary: Borsa Yatırım Fonu Piyasa Yapıcılığı İşlemleri
+  expect: [market.market_making]
+- id: live-1627471
+  source: live:2026-07-07
+  index: 1627471
+  subject: Portföy Sınırlamalarına Uyumun Kontrolü
+  class: DG
+  type: DG
+  summary: 2025 Yılı Portföy Sınırlamalarına Uyumun Kontrolü
+  expect: [report.portfolio]
+- id: live-1666540
+  source: live:2026-09-22
+  index: 1666540
+  subject: SPK Bülteni
+  class: DKB
+  type: DUY
+  summary: SPK BÜLTENİ
+  expect: [market.notice]
+  alt:
+  - [market.bulletin]
+  note: regulator weekly bulletin
+- id: live-1444938
+  source: live:2025-06-03
+  index: 1444938
+  subject: Sermaye Artırımı - Azaltımı İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Bedelsiz Pay Alma Hakkı Kullanım Başlangıç Tarihi Hakkında
+  expect: [capital.increase.bonus]
+- id: live-1445206
+  source: live:2025-06-03
+  index: 1445206
+  subject: Sermaye Artırımı - Azaltımı İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Sermaye Artırımından Sağlanan Nakit Girişi Hk.
+  expect: [capital.change]
+  alt:
+  - [capital.increase.rights]
+  - [capital.increase.private_placement]
+  note: cash from an increase of unstated type
+- id: live-1492459
+  source: live:2025-09-24
+  index: 1492459
+  subject: Sermaye Artırımı - Azaltımı İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Sermaye Artırımının Tamamlanması ve Esas Sözleşme Tadil Metninin Tescili Hakkında
+  expect: [capital.change]
+- id: live-1492491
+  source: live:2025-09-24
+  index: 1492491
+  subject: Sermaye Artırımı - Azaltımı İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Rüçhan Haklarının Kullanılmasının Ardından Kalan Payların Borsada Satışının Tamamlanması Hk.
+  expect: [capital.increase.rights]
+- id: live-1492676
+  source: live:2025-09-24
+  index: 1492676
+  subject: Sermaye Artırımı - Azaltımı İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Bedelli Sermaye Artırımına İlişkin Yönetim Kurulu Kararı
+  expect: [capital.increase.rights]
+- id: live-1492678
+  source: live:2025-09-24
+  index: 1492678
+  subject: Sermaye Artırımı - Azaltımı İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Sermaye Artırımına ilişkin SPK Başvurusu Hk.
+  expect: [capital.change]
+- id: live-1582396
+  source: live:2026-04-01
+  index: 1582396
+  subject: Sermaye Artırımı - Azaltımı İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Bedelli Sermaye Artırımı Hk.
+  expect: [capital.increase.rights]
+- id: live-1582408
+  source: live:2026-04-01
+  index: 1582408
+  subject: Sermaye Artırımı - Azaltımı İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Şarta Bağlı Sermaye Artırımı - İhraç Belgesi Spk Onay Başvurusu
+  expect: [capital.change]
+  note: conditional capital increase (şarta bağlı)
+- id: live-1582549
+  source: live:2026-04-01
+  index: 1582549
+  subject: Sermaye Artırımı - Azaltımı İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Bedelli Sermaye Artırımına ilişkin Yönetim Kurulu Kararı
+  expect: [capital.increase.rights]
+- id: live-1582565
+  source: live:2026-04-01
+  index: 1582565
+  subject: Sermaye Artırımı - Azaltımı İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Kredi Borçlarının Kapatılması ve Tahsisli Sermaye Artırımı Hakkında
+  expect: [capital.increase.private_placement]
+- id: live-1627419
+  source: live:2026-07-07
+  index: 1627419
+  subject: Sermaye Artırımı - Azaltımı İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Tahsisli Sermaye Artırımı - SPK Onay Başvurusu Hk.
+  expect: [capital.increase.private_placement]
+- id: live-1666699
+  source: live:2026-09-22
+  index: 1666699
+  subject: Sermaye Artırımı - Azaltımı İşlemlerine İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Bedelsiz Sermaye Artırımı Kapsamında Tadil Edilen Şirketimiz Esas Sözleşme?sinin 6 ncı Maddesinin Tescili
+    Hk.
+  expect: [capital.increase.bonus]
+- id: live-1626950
+  source: live:2026-07-07
+  index: 1626950
+  subject: Sermaye Artırımı veya Azaltımı Bildirimi
+  class: ODA
+  type: ODA
+  summary: Sermaye Artışı Hakkında
+  expect: [capital.change]
+- id: live-1522335
+  source: live:2025-12-02
+  index: 1522335
+  subject: Sermaye Artırımından Elde Edilecek - Edilen Fonun Kullanımına İlişkin Rapor
+  class: DG
+  type: DG
+  summary: Sermaye Artırımından Elde Edilecek Fonun Kullanımına İlişkin Rapor
+  expect: [capital.use_of_proceeds]
+- id: live-1626685
+  source: live:2026-07-07
+  index: 1626685
+  subject: Sermaye Artırımından Elde Edilecek - Edilen Fonun Kullanımına İlişkin Rapor
+  class: DG
+  type: DG
+  summary: Tahsisli Sermaye Artırımından Elde Edilecek Fonun Kullanım Raporu
+  expect: [capital.use_of_proceeds]
+- id: live-1582527
+  source: live:2026-04-01
+  index: 1582527
+  subject: Sorumluluk Beyanı (Konsolide Olmayan)
+  class: FR
+  type: FR
+  summary: Sorumluluk Beyanı
+  expect: [report.attestation]
+- id: live-1445362
+  source: live:2025-06-03
+  index: 1445362
+  subject: Sorumluluk Beyanı (Konsolide)
+  class: FR
+  type: FR
+  summary: Sorumluluk Beyanı 31.03.2025
+  expect: [report.attestation]
+- id: live-1625939
+  source: live:2026-07-07
+  index: 1625939
+  subject: Sözleşme Feshi
+  class: ODA
+  type: ODA
+  summary: Serdar Saatçı İle Olan Sözleşmenin Feshi Hakkında.
+  expect: [business.player_transfer]
+  alt:
+  - [business.contract.termination]
+  note: football club ends a player contract
+- id: live-1627414
+  source: live:2026-07-07
+  index: 1627414
+  subject: Sürdürülebilirlik Raporu
+  class: DG
+  type: DG
+  summary: 2025 Yılı TSRS Uyumlu Sürdürülebilirlik Raporu
+  expect: [report.sustainability]
+- id: live-1582509
+  source: live:2026-04-01
+  index: 1582509
+  subject: TSRS Uyumlu Sürdürülebilirlik Raporu
+  class: FR
+  type: ODA
+  summary: 2025 TSRS Uyumlu Sürdürülebilirlik Raporu
+  expect: [report.sustainability]
+- id: live-1582564
+  source: live:2026-04-01
+  index: 1582564
+  subject: TSRS Uyumlu Sürdürülebilirlik Raporu
+  class: FR
+  type: ODA
+  summary: 31 Aralık 2025 tarihi itibarıyla TSRS Uyumlu Sürdürülebilirlik Raporu
+  expect: [report.sustainability]
+- id: live-1582422
+  source: live:2026-04-01
+  index: 1582422
+  subject: TTK'nın 376. Maddesi Kapsamında Yapılan İşlemler
+  class: ODA
+  type: ODA
+  summary: Borlease Otomotiv A.Ş 31.12.2025 TTK 376 Bilançosu
+  expect: [finance.shareholder_funding]
+  note: TTK 376 capital-loss balance sheet / remedial measures
+- id: live-1445210
+  source: live:2025-06-03
+  index: 1445210
+  subject: Takasbank Para Piyasası Günlük Bülten
+  class: DKB
+  type: DUY
+  summary: .
+  expect: [market.bulletin]
+- id: live-1582258
+  source: live:2026-04-01
+  index: 1582258
+  subject: Takasbank Para Piyasası Günlük Bülten
+  class: DKB
+  type: DUY
+  summary: .
+  expect: [market.bulletin]
+- id: live-1666717
+  source: live:2026-09-22
+  index: 1666717
+  subject: Takasbank Ödünç Pay Piyasası Günlük Bülten
+  class: DKB
+  type: DUY
+  summary: .
+  expect: [market.bulletin]
+- id: live-1666476
+  source: live:2026-09-22
+  index: 1666476
+  subject: Temerrüt İşlemi
+  class: DKB
+  type: DUY
+  summary: İşleme Açılan Temerrüt Sırası
+  expect: [market.settlement_default]
+- id: live-1666522
+  source: live:2026-09-22
+  index: 1666522
+  subject: Temerrüt İşlemi
+  class: DKB
+  type: DUY
+  summary: Temerrüt İşleminin Tamamlanması
+  expect: [market.settlement_default]
+- id: live-1521969
+  source: live:2025-12-02
+  index: 1521969
+  subject: Tertip İhraç Belgesi
+  class: DG
+  type: DG
+  summary: Tertip İhraç Belgesi
+  expect: [finance.debt.issuance]
+- id: live-1521970
+  source: live:2025-12-02
+  index: 1521970
+  subject: Tertip İhraç Belgesi
+  class: DG
+  type: DG
+  summary: Tertip İhraç Belgesi
+  expect: [finance.debt.issuance]
+- id: live-1582521
+  source: live:2026-04-01
+  index: 1582521
+  subject: Test Bildirimi
+  class: DKB
+  type: DUY
+  summary: Test bildirimi
+  expect: [other.test]
+- id: live-1492658
+  source: live:2025-09-24
+  index: 1492658
+  subject: Toptan Alış Satış İşlemi
+  class: DKB
+  type: DUY
+  summary: Toptan Alış Satış İşlemi
+  expect: [ownership.block_trade]
+- id: live-1625937
+  source: live:2026-07-07
+  index: 1625937
+  subject: Transfer Görüşmelerinin Sonuçlanması veya Sona Ermesi
+  class: ODA
+  type: ODA
+  summary: Serdar Saatçı Kesin Transferi Hakkında.
+  expect: [business.player_transfer]
+- id: live-1626674
+  source: live:2026-07-07
+  index: 1626674
+  subject: Varantların veya Sertifikaların İşlem Görmeye Başlaması
+  class: DKB
+  type: DUY
+  summary: Varantların veya Sertifikaların İşlem Görmeye Başlaması
+  expect: [finance.structured_product]
+- id: live-1444939
+  source: live:2025-06-03
+  index: 1444939
+  subject: Yatırım Kuruluşu Varant - Sertifika - Senetlerine İlişkin Bildirim
+  class: ODA
+  type: ODA
+  summary: İş Yatırım Sertifika ve Varant Alım Satım İşlemleri
+  expect: [finance.structured_product]
+- id: live-1626654
+  source: live:2026-07-07
+  index: 1626654
+  subject: Yatırım Kuruluşu Varant - Sertifika - Senetlerine İlişkin Bildirim
+  class: ODA
+  type: ODA
+  summary: İş Yatırım Sertifika ve Varant Alım Satım İşlemleri
+  expect: [finance.structured_product]
+- id: live-1582122
+  source: live:2026-04-01
+  index: 1582122
+  subject: Yatırımcı Raporu
+  class: DG
+  type: DG
+  summary: 01.01.2026 - 31.03.2026 Faaliyet Dönemine İlişkin Yatırımcı Raporu
+  expect: [report.portfolio]
+- id: live-1582167
+  source: live:2026-04-01
+  index: 1582167
+  subject: Yatırımcı Raporu
+  class: DG
+  type: DG
+  summary: 01.01.2026 - 31.03.2026 Faaliyet Dönemine İlişkin Yatırımcı Raporu
+  expect: [report.portfolio]
+- id: live-1492432
+  source: live:2025-09-24
+  index: 1492432
+  subject: Yeni İş İlişkisi
+  class: ODA
+  type: ODA
+  summary: Yeni İş İlişkisi Hakkında,
+  expect: [business.contract.award]
+- id: live-1521937
+  source: live:2025-12-02
+  index: 1521937
+  subject: Yeni İş İlişkisi
+  class: ODA
+  type: ODA
+  summary: Yeni İş İlişkisi
+  expect: [business.contract.award]
+- id: live-1582288
+  source: live:2026-04-01
+  index: 1582288
+  subject: Yönetim Kurulu Komiteleri
+  class: ODA
+  type: ODA
+  summary: Kurumsal Yönetim Komitesi Üye Değişikliği
+  expect: [governance.board.committees]
+- id: live-1666784
+  source: live:2026-09-22
+  index: 1666784
+  subject: Yönetim Kurulu Komiteleri
+  class: ODA
+  type: ODA
+  summary: Yönetim Kurulu Komiteleri Görev Dağılımı
+  expect: [governance.board.committees]
+- id: live-1445046
+  source: live:2025-06-03
+  index: 1445046
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Tüketici İlişkileri Koordinasyon Görevlisi Atanması Hk.
+  expect: [governance.executive.change]
+  note: consumer-relations coordinator appointment
+- id: live-1445273
+  source: live:2025-06-03
+  index: 1445273
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: 2025 Yılı 1. Çeyrek Yatırımcı Sunumu
+  expect: [report.investor_presentation]
+- id: live-1445403
+  source: live:2025-06-03
+  index: 1445403
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Bağımsız Yönetim Kurulu Üyeleri Hakkında SPK'dan Uygun Görüş Alınmasına İlişkin Başvuru
+  expect: [governance.board.change]
+- id: live-1445429
+  source: live:2025-06-03
+  index: 1445429
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: 2024 Yıl Sonu - 2025 1. Çeyrek Yatırımcı Sunumları
+  expect: [report.investor_presentation]
+- id: live-1445438
+  source: live:2025-06-03
+  index: 1445438
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Bağlı Ortaklığımız Denge Film Prodüksiyon Sinema Televizyon Reklam Sanayi ve Ticaret A.Ş.'nin tasfiyesi
+    hk.
+  expect: [business.operations.halt]
+  alt:
+  - [mna.disposal]
+  note: liquidation of a subsidiary
+- id: live-1492419
+  source: live:2025-09-24
+  index: 1492419
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: EPDK Lisans Onayı Hakkında
+  expect: [business.license]
+- id: live-1492522
+  source: live:2025-09-24
+  index: 1492522
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: BİAŞ'da oluşan ağırlıklı ortalama fiyatın,pay başına net aktif değerin 2 katını aşması
+  expect: [market.nav_premium]
+- id: live-1492551
+  source: live:2025-09-24
+  index: 1492551
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Ortaklık paylarının BİAŞ'ta oluşan ağırlıklı ortalama fiyatının, pay başına net aktif değerinin 2 katını
+    aşması hakkında
+  expect: [market.nav_premium]
+- id: live-1492663
+  source: live:2025-09-24
+  index: 1492663
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Sürdürülebilirlik Güvence Denetimi Kuruluşunun Belirlenmesi Hk.
+  expect: [governance.auditor.change]
+  note: sustainability assurance auditor
+- id: live-1522103
+  source: live:2025-12-02
+  index: 1522103
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Gaziantep CNG Dolum Tesisi Açılışı
+  expect: [business.footprint]
+  alt:
+  - [business.capex]
+  note: facility opening
+- id: live-1522114
+  source: live:2025-12-02
+  index: 1522114
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: BİAŞ'da oluşan ağırlıklı ortalama fiyatın,pay başına net aktif değerin 2 katını aşması
+  expect: [market.nav_premium]
+- id: live-1522128
+  source: live:2025-12-02
+  index: 1522128
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Şirketimizin BİAŞ'da oluşan ağırlıklı ortalama fiyatın, pay başına net aktif değerin 2 katını aşması
+    sebebiyle yapılan açıklamadır.
+  expect: [market.nav_premium]
+- id: live-1522233
+  source: live:2025-12-02
+  index: 1522233
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Yönetim Kurulu Üyesi İstifa Bildirimi
+  expect: [governance.board.change]
+- id: live-1522303
+  source: live:2025-12-02
+  index: 1522303
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Finansal Yeniden Yapılandırma Başvurusu Hakkında
+  expect: [finance.debt.restructuring]
+- id: live-1522305
+  source: live:2025-12-02
+  index: 1522305
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Yeka Res 2025 Yarışmalarına İlişkin Bildirim
+  expect: [business.tender_result]
+- id: live-1522401
+  source: live:2025-12-02
+  index: 1522401
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: YEKA RES-2025 Yarışmaları Hakkında
+  expect: [business.tender_result]
+- id: live-1522426
+  source: live:2025-12-02
+  index: 1522426
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Kasım 2025 Mağaza Açılışları
+  expect: [business.footprint]
+- id: live-1581981
+  source: live:2026-04-01
+  index: 1581981
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Yönetim Kurulu Komite Üyeliklerinin Belirlenmesi
+  expect: [governance.board.committees]
+- id: live-1581982
+  source: live:2026-04-01
+  index: 1581982
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Mali İşlerden Sorumlu Genel Müdür Yardımcısı (CFO) Ataması
+  expect: [governance.executive.change]
+- id: live-1582024
+  source: live:2026-04-01
+  index: 1582024
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Yönetim Kurulu Üye Değişikliği hk.
+  expect: [governance.board.change]
+- id: live-1582054
+  source: live:2026-04-01
+  index: 1582054
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Ortaklık paylarının BİAŞ'ta oluşan ağırlıklı ortalama fiyatının, pay başına net aktif değerinin 2 katını
+    aşması hakkında
+  expect: [market.nav_premium]
+- id: live-1582185
+  source: live:2026-04-01
+  index: 1582185
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Güncel Esas Sözleşme Metni
+  expect: [governance.articles.change]
+- id: live-1582254
+  source: live:2026-04-01
+  index: 1582254
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Bağımsız Yönetim Kurulu Üyeliği İçin Yapılacak Seçim hk.
+  expect: [governance.board.change]
+- id: live-1582320
+  source: live:2026-04-01
+  index: 1582320
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Bağımsız Yönetim Kurulu Üyelikleri Teklifi Hk.
+  expect: [governance.board.change]
+- id: live-1582433
+  source: live:2026-04-01
+  index: 1582433
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Yetki Verilmesi Hakkında;
+  expect: [other.unclassified]
+  note: '"Yetki verilmesi" — subject of the authorisation not stated'
+- id: live-1582436
+  source: live:2026-04-01
+  index: 1582436
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: 2025 Yıl Sonu Finansal Sonuçlarına İlişkin Yatırımcı Sunumu
+  expect: [report.investor_presentation]
+- id: live-1582442
+  source: live:2026-04-01
+  index: 1582442
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: 2025 Yılı Kar Dağıtımına İlişkin Genel Kurul Toplantı Kararı
+  expect: [distribution.dividend.cash]
+  alt:
+  - [distribution.dividend.cash, governance.gm.result]
+- id: live-1582456
+  source: live:2026-04-01
+  index: 1582456
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Bağlı Ortaklığımızın Pay Satışı Hk.da
+  expect: [mna.disposal]
+- id: live-1582464
+  source: live:2026-04-01
+  index: 1582464
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Yeni Siparişin Alınması Hk.
+  expect: [business.contract.award]
+- id: live-1582478
+  source: live:2026-04-01
+  index: 1582478
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Mart 2026 Mağaza Sayısı
+  expect: [report.operating_data]
+  alt:
+  - [business.footprint]
+  note: monthly store count
+- id: live-1582524
+  source: live:2026-04-01
+  index: 1582524
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Ankara Gölbaşı Taşpınar İhalesi 2. Oturum Tarihi
+  expect: [business.tender_result]
+- id: live-1582532
+  source: live:2026-04-01
+  index: 1582532
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Yatırımcı İlişkileri Bölüm Yöneticisi Ataması Hakkında
+  expect: [governance.executive.change]
+- id: live-1582533
+  source: live:2026-04-01
+  index: 1582533
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: CFO ve CTO pozisyonlarına vekaleten atamalar hakkında
+  expect: [governance.executive.change]
+- id: live-1625589
+  source: live:2026-07-07
+  index: 1625589
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Şirket Çoğunluk Paylarının Satışı Hakkında Pay Alım Satım Sözleşmesi İmzalanması
+  expect: [ownership.threshold_crossing]
+  alt:
+  - [mna.disposal]
+  note: SPA for the sale of the issuer's majority shares (change of control), not an insider trade
+- id: live-1625753
+  source: live:2026-07-07
+  index: 1625753
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Ortaklık paylarının BİAŞ'ta oluşan ağırlıklı ortalama fiyatının, pay başına net aktif değerinin 2 katını
+    aşması hakkında
+  expect: [market.nav_premium]
+- id: live-1626214
+  source: live:2026-07-07
+  index: 1626214
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: BİAŞ'da oluşan ağırlıklı ortalama fiyatın,pay başına net aktif değerin 2 katını aşması
+  expect: [market.nav_premium]
+- id: live-1626378
+  source: live:2026-07-07
+  index: 1626378
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: İstanbul Portföy Bayraktar Serbest Özel Fon'un tasfiyesi hk.
+  expect: [market.notice]
+  alt:
+  - [business.operations.halt]
+  note: a fund of the portfolio manager is liquidated
+- id: live-1626670
+  source: live:2026-07-07
+  index: 1626670
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Yatırımcı İlişkileri Yöneticisinin Görevden Ayrılması Hk.
+  expect: [governance.executive.change]
+- id: live-1627397
+  source: live:2026-07-07
+  index: 1627397
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: 06.2026 Dönemi Brüt Prim Üretimi
+  expect: [report.operating_data]
+- id: live-1666364
+  source: live:2026-09-22
+  index: 1666364
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Yatırım Fonlarının Şirketimiz Paylarındaki Pozisyonlarına İlişkin Kamuoyu Bilgilendirmesi
+  expect: [ownership.threshold_crossing]
+  alt:
+  - [market.rumour_response]
+  note: investment funds' positions in the issuer's shares
+- id: live-1666393
+  source: live:2026-09-22
+  index: 1666393
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Şirketimizin BIST 30 Endeksi?ne Dâhil Edilmesi Hakkında
+  expect: [market.index.change]
+- id: live-1666509
+  source: live:2026-09-22
+  index: 1666509
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Şirketimizin VANET A.Ş. (VANGD) Hakkında Başlatmış Olduğu Hukuki Süreç Hususunda.
+  expect: [legal.lawsuit]
+- id: live-1666604
+  source: live:2026-09-22
+  index: 1666604
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Adıyaman Şubemizin Faaliyete Başlaması Hk.
+  expect: [business.footprint]
+- id: live-1666647
+  source: live:2026-09-22
+  index: 1666647
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Şeker Üretimi Hakkında
+  expect: [report.operating_data]
+  alt:
+  - [business.capacity]
+  note: sugar production update
+- id: live-1666707
+  source: live:2026-09-22
+  index: 1666707
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Turktell Bilişim Servisleri A.Ş. Sermaye Artışı
+  expect: [business.capex]
+  alt:
+  - [mna.acquisition]
+  note: capital increase of a subsidiary (Turktell, Turkcell group), not of the issuer
+- id: live-1666729
+  source: live:2026-09-22
+  index: 1666729
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Şirket Faaliyetleri Hakkında Bilgilendirme
+  expect: [other.unclassified]
+  alt:
+  - [report.investor_presentation]
+  note: generic "company activities" summary
+- id: live-1666732
+  source: live:2026-09-22
+  index: 1666732
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Atlantis Yatırım Holding A.Ş. Paylarına Yönelik Pay Alım Teklifi Sürecine İlişkin Açıklama
+  expect: [ownership.tender_offer]
+- id: live-1666755
+  source: live:2026-09-22
+  index: 1666755
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Yönetim Kurulu Üyesi Ataması Hk.
+  expect: [governance.board.change]
+- id: live-1666770
+  source: live:2026-09-22
+  index: 1666770
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Yatırımcı İlişkileri Bölüm Yöneticisi Ataması Hakkında
+  expect: [governance.executive.change]
+- id: live-1666868
+  source: live:2026-09-22
+  index: 1666868
+  subject: Özel Durum Açıklaması (Genel)
+  class: ODA
+  type: ODA
+  summary: Borçlanma Aracı İtfa ve Kupon Ödemesi Hakkında
+  expect: [finance.debt.payment]
+- id: live-1582208
+  source: live:2026-04-01
+  index: 1582208
+  subject: Özsermaye Hallerine İlişkin Borsa Duyurusu
+  class: DKB
+  type: DUY
+  summary: '-'
+  expect: [market.notice]
+- id: live-1445242
+  source: live:2025-06-03
+  index: 1445242
+  subject: Ünvan Değişikliği
+  class: ODA
+  type: ODA
+  summary: Şirketimizin Ünvan Değişikliği Hakkında
+  expect: [governance.name.change]
+- id: live-1522297
+  source: live:2025-12-02
+  index: 1522297
+  subject: İhale Süreci / Sonucu
+  class: ODA
+  type: ODA
+  summary: İstanbul Ataşehir Küçükbakkalköy Arsa Satışı Karşılığı Gelir Paylaşımı İşi İhalesi Hk.
+  expect: [business.tender_result]
+- id: live-1582173
+  source: live:2026-04-01
+  index: 1582173
+  subject: İhraç Belgesi
+  class: DG
+  type: DG
+  summary: İhraç Limit Bildirimi
+  expect: [finance.debt.issuance_ceiling]
+  alt:
+  - [finance.debt.issuance]
+  note: '"İhraç limit bildirimi"'
+- id: live-1627339
+  source: live:2026-07-07
+  index: 1627339
+  subject: İhraç Belgesi
+  class: DG
+  type: DG
+  summary: Yurt Dışı Borçlanma Aracı İhraç Belgesi Hk.
+  expect: [finance.debt.issuance]
+- id: live-1445439
+  source: live:2025-06-03
+  index: 1445439
+  subject: İhraç Tavanına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Borçlanma aracı ihracı için yetki verilmesine ilişkin Yönetim Kurulu Kararı ve Sermaye Piyasası Kurulu
+    Başvurusu
+  expect: [finance.debt.issuance_ceiling]
+- id: live-1522004
+  source: live:2025-12-02
+  index: 1522004
+  subject: İhraç Tavanına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: NUROL HOLDİNG A.Ş. SPK tarafından onaylanan Borçlanma Aracı İhraç Belgesi
+  expect: [finance.debt.issuance_ceiling]
+  alt:
+  - [finance.debt.issuance]
+- id: live-1522207
+  source: live:2025-12-02
+  index: 1522207
+  subject: İhraç Tavanına İlişkin Bildirim
+  class: ODA
+  type: CA
+  summary: Yurtdışı sürdürülebilir/yeşil/mavi/sosyal borçlanma aracı ihraç limitine ilişkin SPK başvurusu
+  expect: [finance.debt.issuance_ceiling]
+- id: live-1582419
+  source: live:2026-04-01
+  index: 1582419
+  subject: İlişkili Taraf İşlemleri
+  class: ODA
+  type: ODA
+  summary: Yaygın ve süreklilik arz eden işlemlere ilişkin yönetim kurulu raporu
+  expect: [business.related_party]
+- id: live-1582495
+  source: live:2026-04-01
+  index: 1582495
+  subject: İlişkili Taraf İşlemleri
+  class: ODA
+  type: ODA
+  summary: İlişkili Taraf İşlemleri Hk
+  expect: [business.related_party]
+- id: live-1522329
+  source: live:2025-12-02
+  index: 1522329
+  subject: İzahname (SPK Onayına Sunulan)
+  class: DG
+  type: DG
+  summary: Otosor Otomotiv A.Ş. Halka Arz Başvurusuna İlişkin Taslak İzahname
+  expect: [market.prospectus]
+  alt:
+  - [market.ipo]
+  note: draft IPO prospectus
+- id: live-1522079
+  source: live:2025-12-02
+  index: 1522079
+  subject: İzahname-Sermaye Piyasası Aracı Notu (SPK Tarafından Onaylanan)
+  class: DG
+  type: DG
+  summary: BNP Paribas Issuance B.V. 04/12/2025 tarihinde ihraç edilecek Yatırım Kuruluşu Varantları ile ilgili
+    Sermaye Piyasası Aracı Notu
+  expect: [market.prospectus]
+- id: live-1522080
+  source: live:2025-12-02
+  index: 1522080
+  subject: İzahname-Sermaye Piyasası Aracı Notu (SPK Tarafından Onaylanan)
+  class: DG
+  type: DG
+  summary: BNP Paribas Issuance B.V. 04/12/2025 tarihinde ihraç edilecek Yatırım Kuruluşu Varantları ile ilgili
+    Sermaye Piyasası Aracı Notu
+  expect: [market.prospectus]
+- id: live-1522078
+  source: live:2025-12-02
+  index: 1522078
+  subject: İzahname-Özet (SPK Tarafından Onaylanan)
+  class: DG
+  type: DG
+  summary: BNP Paribas Issuance B.V. 04/12/2025 tarihinde ihraç edilecek Yatırım Kuruluşu Varantları ile ilgili
+    Özet
+  expect: [market.prospectus]
+- id: live-1627377
+  source: live:2026-07-07
+  index: 1627377
+  subject: İzahname-İhraççı Bİlgi Dokümanı (SPK Tarafından Onaylanan)
+  class: DG
+  type: DG
+  summary: İhraççı Bilgi Dokümanı Hk.
+  expect: [market.prospectus]
+- id: live-1522250
+  source: live:2025-12-02
+  index: 1522250
+  subject: İşlem İptali
+  class: DKB
+  type: DUY
+  summary: BAP İşlem İptali
+  expect: [market.trade_cancellation]
+- id: live-1582374
+  source: live:2026-04-01
+  index: 1582374
+  subject: İşlem İptali
+  class: DKB
+  type: DUY
+  summary: BAP İşlem İptali
+  expect: [market.trade_cancellation]
+- id: live-1444875
+  source: live:2025-06-03
+  index: 1444875
+  subject: Şirket Genel Bilgi Formu
+  class: DG
+  type: DG
+  summary: null
+  expect: [report.company_info]
+- id: live-1582480
+  source: live:2026-04-01
+  index: 1582480
+  subject: Şirket Genel Bilgi Formu
+  class: DG
+  type: DG
+  summary: null
+  expect: [report.company_info]
+- id: live-1626384
+  source: live:2026-07-07
+  index: 1626384
+  subject: Şirket Genel Bilgi Formu
+  class: DG
+  type: DG
+  summary: null
+  expect: [report.company_info]
+- id: live-1627020
+  source: live:2026-07-07
+  index: 1627020
+  subject: Şirket Genel Bilgi Formu
+  class: DG
+  type: DG
+  summary: null
+  expect: [report.company_info]
+- id: live-1627011
+  source: live:2026-07-07
+  index: 1627011
+  subject: Şirket Merkezi Değişikliği
+  class: ODA
+  type: ODA
+  summary: Şirket Merkez Adresinin Değiştirilmesi
+  expect: [governance.hq.change]

@@ -40,6 +40,18 @@ def test_rendered_default_config_round_trips(papi_home):
     assert parsed.model_dump(exclude={"packs"}) == defaults.model_dump(exclude={"packs"})
 
 
+def test_uncommenting_the_focus_example_in_place_keeps_the_config_valid(papi_home):
+    # The example used to sit inside [llm]: uncommenting `[[llm.focus]]` there turned the following
+    # `include_position` key into a focus-window field and the whole config failed validation.
+    text = render_default_config()
+    start = text.index("# [[llm.focus]]")
+    block = text[start : text.index("\n\n", start)]
+    data = tomllib.loads(text.replace(block, block.replace("# ", "")))
+    data.setdefault("paths", {})["home"] = papi_home
+    parsed = Settings.model_validate(data)
+    assert parsed.llm.focus[0].max_priority == "P1" and parsed.llm.include_position is True
+
+
 def test_config_file_overrides_and_extra_sections(papi_home):
     (papi_home / "config.toml").write_text(
         '[kap]\ncontact = "me@example.org"\n[llm.models]\nchecker = "haiku"\n'

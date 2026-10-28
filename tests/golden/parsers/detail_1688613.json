@@ -1,0 +1,113 @@
+{
+ "fixture": "detail_1688613.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_oda-26500_Representation-Letter",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 20,
+   "span_paths": {
+    "form": 7,
+    "para": 13
+   },
+   "text_len": 2681,
+   "text_sha": "5085b22d1df0649e",
+   "paragraphs": 13,
+   "form_fields": [
+    [
+     "finansal tablo niteligi",
+     "Konsolide Olmayan"
+    ],
+    [
+     "ilgili sirketler",
+     "[]"
+    ],
+    [
+     "ilgili fonlar",
+     "[]"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "-"
+    ],
+    [
+     "oda_BoardDecisionDate",
+     "27/10/2026"
+    ],
+    [
+     "oda_BoardDecisionNumber",
+     "EDTS 2026 21"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "SERMAYE PİYASASI KURULUNUN \"SERMAYE PİYASASINDA FİNANSAL RAPORLAMAYA İLİŞKİN II 14-1 ESASLAR TEBLİĞİ\"NİN İKİNCİ BÖLÜMÜNÜN 9. MADDESİ GEREĞİNCE SORUMLULUK BEYANI\nFİNANSAL TABLO VE FAALİYET RAPORLARININ KABULÜNE İLİŞKİN YÖNETİM KURULU'NUN\nKARAR TARİHİ: 27/10/2026\nKARAR SAYISI: EDTS-2026/21\nŞirketin 01.01.2026- 30.09.2026 dönemine ait; Sermaye Piyasası Kurulu'nun II 14-1 \"Sermaye Piyasasında Finansal Raporlamaya İlişkin Esaslar Tebliği\" hükümleri uyarınca Kamu Gözetimi, Muhasebe ve Denetim Standartları Kurumu tarafından yayınlanan Türkiye Muhasebe Standartları / Türkiye Finansal Raporlama Standartları (TMS/TFRS) çerçevesinde, SPK tarafından belirlenen formatlar ile uyumlu hazırlanmış Dipnotları ile birlikte Konsolide Olmayan Finansal Tablolar ile TTK ve SPK Tebliğine uyumlu olarak hazırlanan Konsolide Olmayan Faaliyet Raporumuz onaylanmıştır.\nŞirketimizce hazırlanan Eren Bağımsız Denetim A.Ş. tarafından Sınırlı Denetime tabi tutulan 01.01.2026- 30.09.2026 Dönemine ait Dipnotları ile birlikte Konsolide Olmayan Finansal Durum Tablosu, Kar Zarar ve Diğer Kapsamlı Gelir Tablosu, Nakit Akım Tablosu, Öz Sermaye Değişim Tablosu ile Ara Dönem Konsolide Olmayan Faaliyet Raporunun, SPK düzenlemeleri doğrultusunda;\na- Tarafımızca incelendiğini,\nb- Şirketimizdeki görev ve sorumluluk alanında sahip olduğu bilgiler çerçevesinde raporun önemli konularda gerçeğe aykırı bir açıklama ya da açıklamanın yapıldığı tarih itibari ile yanıltıcı olması sonucu doğurabilecek herhangi bir eksiklik içermediğini,\nc- Şirketimizdeki görev ve sorumluluk alanında sahip olduğu bilgiler çerçevesinde ilişkin olduğu dönem itibari ile, tebliğ ve yürürlükteki finansal raporlama standartlarına göre hazırlanmış ara dönem finansal tabloların işletmenin aktifleri, pasifleri, finansal durumu ve kar zararı ile gerçeği dürüst bir biçimde yansıttığı ve Faaliyet Raporunun performansı ve şirketin finansal durumunu, karşı karşıya olduğu önemli riskler ve belirsizliklerle birlikte dürüstçe yansıttığını bilgilerinize sunar, yapılan açıklamadan dolayı sorumlu olduğumuzu beyan ederiz.\nSaygılarımızla,\nDenetimden Sorumlu Denetimden Sorumlu\nKomite Başkanı Komite Üyesi\nAdil BEYATLI Fethi ŞİMŞEK"
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  },
+  {
+   "target": "body:en",
+   "kind": "disclosure_body",
+   "language": "en",
+   "mime": "text/html",
+   "template_id": "tbl_oda-26500_Representation-Letter",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 20,
+   "span_paths": {
+    "form": 7,
+    "para": 13
+   },
+   "text_len": 3112,
+   "text_sha": "e523a8ff0cf17d39",
+   "paragraphs": 13,
+   "form_fields": [
+    [
+     "finansal tablo niteligi",
+     "Konsolide Olmayan"
+    ],
+    [
+     "related companies",
+     "[]"
+    ],
+    [
+     "related funds",
+     "[]"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "-"
+    ],
+    [
+     "oda_BoardDecisionDate",
+     "27/10/2026"
+    ],
+    [
+     "oda_BoardDecisionNumber",
+     "EDTS 2026 21"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "STATEMENT OF RESPONSIBILITY PURSUANT TO ARTICLE 9 OF SECTION TWO OF THE CAPITAL MARKETS BOARD'S COMMUNIQUÉ ON PRINCIPLES OF FINANCIAL REPORTING IN CAPITAL MARKETS (II-14.1)\nBOARD OF DIRECTORS' RESOLUTION ON THE APPROVAL OF THE FINANCIAL STATEMENTS AND INTERİM ACTİVİTY REPORT\nRESOLUTION DATE:27/10/2026\nRESOLUTION NO:EDTS-2026/21\nThe Company's Unconsolidated Financial Statements, together with their accompanying notes, for the period from 01.01.2026 to 30.09.2026, prepared in accordance with the Turkish Accounting Standards / Turkish Financial Reporting Standards (TAS/TFRS) issued by the Public Oversight, Accounting and Auditing Standards Authority (POA), pursuant to the provisions of the Capital Markets Board's Communiqué on Principles of Financial Reporting in Capital Markets (II-14.1), and in compliance with the formats prescribed by the Capital Markets Board (CMB), as well as the Unconsolidated Interim Activity Report prepared in accordance with the Turkish Commercial Code (TCC) and the relevant CMB regulations, have been approved.\nIn accordance with the CMB regulations, regarding the Unconsolidated Statement of Financial Position, Statement of Profit or Loss and Other Comprehensive Income, Statement of Cash Flows, Statement of Changes in Equity and the accompanying notes for the period from 01.01.2026 to 30.09.2026, prepared by our Company and subject to limited review by Eren Bağımsız Denetim A.Ş., together with the Unconsolidated Interim Activity Report, we hereby declare that:\na) We have reviewed the aforementioned financial statements and interim activity report;\nb)To the best of our knowledge within the scope of our duties and responsibilities at the Company, the financial statements and interim activity report do not contain any material misstatements or omissions that could render the disclosures misleading as of the date on which they were made;\nc)To the best of our knowledge within the scope of our duties and responsibilities at the Company, the interim financial statements, prepared in accordance with the Communiqué and the applicable financial reporting standards, fairly present the Company's assets, liabilities, financial position and profit or loss for the relevant period, and the interim activity report fairly presents the Company's operating performance and financial position, together with the material risks and uncertainties it faces.\nWe hereby submit the above information and declare that we assume responsibility for this statement.\nYours sincerely,\nChairman of the Audit Committee Member of the Audit Committee\nAdil BEYATLI Fethi ŞİMŞEK"
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  }
+ ]
+}

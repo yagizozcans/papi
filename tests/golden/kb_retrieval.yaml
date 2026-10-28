@@ -1,0 +1,100 @@
+# KB retrieval golden set (PRD 11 §2 "Legal retrieval set"; suite `papi eval --suite kb_retrieval`).
+#
+# Runs against the fixture KB in kb/kb.json (built from tests/kb/fixtures with `papi eval kb-build`:
+# II-15.1 consolidated + original RG text, 6362 excerpt, KAP bildirim yönergesi, Özel Durumlar / Kâr Payı /
+# Önemli Nitelikteki İşlemler rehberleri, BIST Pay Piyasası Yönergesi excerpts).
+#
+# search items: `query` (keywords as an analyst/chat agent would pass them, or the KAP subject for
+#   `kind: event` — what the analyst context pack falls back to), optional `as_of` (default 2026-10-28)
+#   and `filters`; `expect` = the most specific provision(s) whose text (heading included) answers the
+#   query, which must be in the top 5 (a more specific sub-provision of an expected id also counts);
+#   `absent` = citation ids that must NOT be returned on that date.
+#   `kind: event` items are retrieved exactly as the analyst context pack does (approved obligations of
+#   `event_code`, else full-text search on the KAP subject, top 3) on a fresh KB: nothing approved.
+# as_of items: `citation` + `as_of` → `none` (not in force / not yet enacted) or text that the version in
+#   force must (`contains`) / must not (`not_contains`) include.
+# Drafted by an LLM (Claude) from the provision texts, 2026-10-28; reviewed: false.
+version: 1
+reviewed: false
+default_as_of: "2026-10-28"
+
+search:
+  - {id: q01, query: "içsel bilgi nedir", expect: ["tr:spk-guide:ozel-durumlar:II.2"]}
+  - {id: q02, query: "geleceğe yönelik değerlendirmeler yılda dört defa", expect: ["tr:spk:II-15.1:m10:f1:b"]}
+  - {id: q03, query: "geleceğe yönelik değerlendirme yönetim kurulu kararı yazılı onay", expect: ["tr:spk:II-15.1:m10:f1:a"]}
+  - {id: q04, query: "geleceğe yönelik değerlendirmeler gerçekleşmeler önemli farklılık", expect: ["tr:spk:II-15.1:m10:f1:c"]}
+  - {id: q05, query: "sermayesindeki payının oy haklarının ulaşması altına düşmesi", expect: ["tr:spk:II-15.1:m12:f1:a"]}
+  - {id: q06, query: "kurucuya ait yatırım fonları oy hakları", expect: ["tr:spk:II-15.1:m12:f1:b"]}
+  - {id: q07, query: "pay oranı açıklama MKK tarafından yapılır", expect: ["tr:spk:II-15.1:m12:f4"]}
+  - {id: q08, query: "halka açık olmayan ortaklıklar %25 %50 %67", expect: ["tr:spk:II-15.1:m12:f2"]}
+  - {id: q09, query: "oy hakkının donduğu durumlar", expect: ["tr:spk:II-15.1:m12:f3"]}
+  - {id: q10, query: "idari sorumluluğu bulunan kişiler ana ortak işlemleri", expect: ["tr:spk:II-15.1:m11"]}
+  - {id: q11, query: "yakından ilişkili kişiler eşi çocukları", expect: ["tr:spk:II-15.1:m4:f1:g"]}
+  - {id: q12, query: "birlikte hareket eden kişiler", expect: ["tr:spk:II-15.1:m4:f1:c"]}
+  - {id: q13, query: "açıklamalar yanlış yanıltıcı abartılı", expect: ["tr:spk:II-15.1:m24:f3"]}
+  - {id: q14, query: "henüz kesinleşmemiş belirsiz özel durumlar", expect: ["tr:spk:II-15.1:m24:f2"]}
+  - {id: q15, query: "özel durum açıklamaları internet sitesinde yayınlanması",
+     expect: ["tr:spk:II-15.1:m24:f5", "tr:spk-guide:ozel-durumlar:V"]}
+  - {id: q16, query: "yurtdışı borsalarda işlem gören ihraççılar açıklama", expect: ["tr:spk:II-15.1:m24:f7"]}
+  - {id: q17, query: "gizlilik özel durumlar bilgi sahibi", expect: ["tr:spk:II-15.1:m25"]}
+  - {id: q18, query: "Kurul basın yayın organlarında ilan", expect: ["tr:spk:II-15.1:m26:f2"]}
+  - {id: q19, query: "Tebliğ yayımı tarihinden bir ay sonra yürürlüğe girer", expect: ["tr:spk:II-15.1:m30:f1"]}
+  - {id: q20, query: "Seri VIII No 54 tebliğ", expect: ["tr:spk:II-15.1:m29:f1"]}
+  - {id: q21, query: "tahsisli ihraç halka açık olmayan ortaklıklar özel hükümler", expect: ["tr:spk:II-15.1:gm2"]}
+  - {id: q22, query: "nitelikli yatırımcıya satış ihraççılar özel hükümler", expect: ["tr:spk:II-15.1:gm3"]}
+  - {id: q23, query: "6362 sayılı Kanun 15 inci madde dayanılarak", expect: ["tr:spk:II-15.1:m3:f1"]}
+  - {id: q24, query: "Kamuyu Aydınlatma Platformu elektronik imzalı", expect: ["tr:spk:II-15.1:m4:f1:ı"]}
+  - {id: q25, query: "kontrol edilen işletme oy haklarının çoğunluğu", expect: ["tr:spk:II-15.1:m4:f1:k"]}
+  - {id: q26, query: "aktif toplamının %10 yakından ilişkili", expect: ["tr:spk:II-15.1:m4:f1:g"]}
+  - {id: q27, query: "bilgi suistimali", expect: ["tr:law:6362:m106"]}
+  - {id: q28, query: "piyasa dolandırıcılığı yanıltıcı izlenim alım satım", expect: ["tr:law:6362:m107"]}
+  - {id: q29, query: "yalan yanlış yanıltıcı bilgi söylenti", expect: ["tr:law:6362:m107:f2"]}
+  - {id: q30, query: "ayrılma hakkı önemli nitelikteki işlemler olumsuz oy", expect: ["tr:law:6362:m24:f1"]}
+  - {id: q31, query: "borçlanma aracı sahipleri kurulu", expect: ["tr:law:6362:m31A:f1"]}
+  - {id: q32, query: "merkezi karşı taraf takas", expect: ["tr:law:6362:m78"]}
+  - {id: q33, query: "aracı kurum yatırım hizmet faaliyetleri", expect: ["tr:law:6362:m3:f1:a"]}
+  - {id: q34, query: "başlangıç sermayesi kayıtlı sermayeli", expect: ["tr:law:6362:m3:f1:b"]}
+  - {id: q35, query: "işlemlerin geçici olarak durdurulması Genel Müdür bir ay", expect: ["tr:bist:pay-piyasasi-yonergesi:m30"]}
+  - {id: q36, query: "olağan dışı fiyat miktar emirler sağlıklı piyasa", expect: ["tr:bist:pay-piyasasi-yonergesi:m30:f1:b"]}
+  - {id: q37, query: "işlemlerin durdurulması KAP gerekçesiyle duyurulur", expect: ["tr:bist:pay-piyasasi-yonergesi:m30:f3"]}
+  - {id: q38, query: "piyasa yapıcılık likidite sağlayıcılık", expect: ["tr:bist:pay-piyasasi-yonergesi:m2:f1:d"]}
+  - {id: q39, query: "toptan alış satış resmi müzayede birincil piyasa", expect: ["tr:bist:pay-piyasasi-yonergesi:m2:f1:f"]}
+  - {id: q40, query: "kâr payı taksitlerle ödenebilir", expect: ["tr:spk-guide:kar-payi:A.4"]}
+  - {id: q41, query: "kâr dağıtım politikası nakit bedelsiz", expect: ["tr:spk-guide:kar-payi:A.3"]}
+  - {id: q42, query: "kâr payı dağıtılıp dağıtılmayacağı politika", expect: ["tr:spk-guide:kar-payi:A.2"]}
+  - {id: q43, query: "kârlarını genel kurul kâr dağıtım politikaları", expect: ["tr:spk-guide:kar-payi:A.1"]}
+  - {id: q44, query: "özel durum açıklamalarının dili Türkçe", expect: ["tr:spk-guide:ozel-durumlar:IV"]}
+  - {id: q45, query: "içsel bilginin kamuya duyurulması", expect: ["tr:spk-guide:ozel-durumlar:II.2.2"]}
+  - {id: q46, query: "bilginin niteliklerinin belirli olması", expect: ["tr:spk-guide:ozel-durumlar:II.2.1"]}
+  - {id: q47, query: "nitelikli elektronik sertifika KAP üyeliği", expect: ["tr:kap:bildirim-yonergesi:m1:f1"]}
+  - {id: q48, query: "mal varlığının devri TFRS 16 kiralama", expect: ["tr:spk-guide:onemli-nitelikteki-islemler:2"]}
+  - {id: q49, query: "mal varlığı üzerinde Kurumsal Yönetim Tebliği", expect: ["tr:spk-guide:onemli-nitelikteki-islemler:1"]}
+  - {id: q50, query: "piyasa dolandırıcılığı", filters: {authority: TBMM}, expect: ["tr:law:6362:m107"]}
+  # KAP subject as query (the analyst context's full-text fallback for codes without approved obligations)
+  - {id: e01, kind: event, event_code: ownership.insider_trade, query: "Pay Alım Satım Bildirimi", expect: ["tr:spk:II-15.1:m11"]}
+  - {id: e02, kind: event, event_code: report.financial.guidance, query: "Geleceğe Dönük Değerlendirmeler", expect: ["tr:spk:II-15.1:m10"]}
+  - {id: e03, kind: event, event_code: market.halt, query: "Pay İşlem Sırası Kapatma / Açma", expect: ["tr:bist:pay-piyasasi-yonergesi:m30"]}
+  - {id: e04, kind: event, event_code: mna.withdrawal_right, query: "Ayrılma Hakkı Kullanımına İlişkin Bildirim", expect: ["tr:law:6362:m24"]}
+  - {id: e05, kind: event, event_code: distribution.dividend.cash, query: "Kar Payı Dağıtım İşlemlerine İlişkin Bildirim", expect: ["tr:spk-guide:kar-payi:A"]}
+  - {id: e06, kind: event, event_code: market.unusual_activity, query: "Olağan Dışı Fiyat ve Miktar Hareketleri", expect: ["tr:bist:pay-piyasasi-yonergesi:m30:f1:b"]}
+  # versions in force on a date
+  - {id: s01, query: "tahsisli yurt dışında halka açık olmayan ortaklıklar uygulanmaz", as_of: "2015-06-01", expect: ["tr:spk:II-15.1:m2:f4"]}
+  - {id: s02, query: "tahsisli yurt dışında halka açık olmayan ortaklıklar uygulanmaz", as_of: "2026-10-28", absent: ["tr:spk:II-15.1:m2:f4"]}
+  - {id: s03, query: "Nitelikli Yatırımcı İşlem Pazarında", as_of: "2026-10-28", expect: ["tr:spk:II-15.1:m2:f3"]}
+  - {id: s04, query: "Nitelikli Yatırımcı İşlem Pazarında", as_of: "2015-06-01", absent: ["tr:spk:II-15.1:m2:f3"]}
+  - {id: s05, query: "tahsisli ihraç halka açık olmayan ortaklıklar özel hükümler", as_of: "2016-06-01", absent: ["tr:spk:II-15.1:gm2"]}
+
+as_of:
+  - {id: a01, citation: "tr:spk:II-15.1:m2:f4", as_of: "2016-01-01", contains: "tahsisli"}
+  - {id: a02, citation: "tr:spk:II-15.1:m2:f4", as_of: "2018-01-01", not_contains: "tahsisli"}
+  - {id: a03, citation: "tr:spk:II-15.1:m1:f1", as_of: "2014-01-30", none: true}
+  - {id: a04, citation: "tr:spk:II-15.1:m1:f1", as_of: "2014-02-23", contains: "Bu Tebliğin amacı"}
+  - {id: a05, citation: "tr:spk:II-15.1:gm2:f1", as_of: "2016-12-31", none: true}
+  - {id: a06, citation: "tr:spk:II-15.1:gm2:f1", as_of: "2017-02-10", contains: "tahsisli"}
+  - {id: a07, citation: "tr:spk:II-15.1:m11:f1", as_of: "2016-06-01", contains: "ihraççının ana ortaklığı tarafından"}
+  - {id: a08, citation: "tr:spk:II-15.1:m11:f1", as_of: "2026-10-28", contains: "gerçek ya da tüzel kişi ana"}
+  - {id: a09, citation: "tr:spk:II-15.1:m12:f4", as_of: "2017-06-01", none: true}
+  - {id: a10, citation: "tr:spk:II-15.1:m12:f4", as_of: "2026-10-28", contains: "MKK tarafından yapılır"}
+  - {id: a11, citation: "tr:bist:pay-piyasasi-yonergesi:m48:f1", as_of: "2015-01-01", none: true}
+  - {id: a12, citation: "tr:spk:II-15.1:m2:f2", as_of: "2015-06-01", not_contains: "izahnamenin Kurulca onaylandığı"}
+  - {id: a13, citation: "tr:spk:II-15.1:m2:f2", as_of: "2026-10-28", contains: "izahnamenin Kurulca onaylandığı"}

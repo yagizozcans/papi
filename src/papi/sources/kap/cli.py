@@ -101,9 +101,11 @@ def poll_once_cmd(
         if process and report.new:
             counts = _process_refs(conn, client, report.new, report.mode, limit)
             console.print(f"İşlendi: {counts}; toplam istek {client.request_count}.")
-        gr = gaps_mod.detect_gaps(conn)
-        conn.commit()
-        console.print(f"Boşluk taraması: {len(gr.new_missing)} yeni eksik indeks, {gr.open} açık.")
+        gr = gaps_mod.scan_gaps(conn, client)
+        console.print(
+            f"Boşluk taraması: {gr.funds_skipped} fon bildirimi atlandı, {len(gr.new_missing)} yeni eksik "
+            f"indeks, {gr.open} açık."
+        )
 
 
 @app.command("sync-companies")

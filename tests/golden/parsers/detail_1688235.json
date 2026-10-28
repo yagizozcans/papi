@@ -1,0 +1,193 @@
+{
+ "fixture": "detail_1688235.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_oda-32000_Winning-A-Tender",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 21,
+   "span_paths": {
+    "form": 17,
+    "para": 4
+   },
+   "text_len": 1548,
+   "text_sha": "e0642f58b1933192",
+   "paragraphs": 4,
+   "form_fields": [
+    [
+     "ilgili sirketler",
+     "[]"
+    ],
+    [
+     "ilgili fonlar",
+     "[]"
+    ],
+    [
+     "oda_UpdateAnnouncementFlag",
+     "Evet (Yes)"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "26/10/2026"
+    ],
+    [
+     "oda_DelayedAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_SubjectOfTender",
+     "2027 Yılı Kemoterapi Malzemeleri"
+    ],
+    [
+     "oda_PartyOpenedTender",
+     "Dokuz Eylül Üniversitesi Rektörlüğü Uygulama ve Araştırma Hastanesi"
+    ],
+    [
+     "oda_BoardDecisionOnBidForTender",
+     "2026/38"
+    ],
+    [
+     "oda_OtherPartiesIfParticipatedInTheTenderAsAGroup",
+     "-"
+    ],
+    [
+     "oda_ShareOfTheCompanyIfParticipatedInTheTenderAsAGroup",
+     "-"
+    ],
+    [
+     "oda_DateOfTenderBid",
+     "26/10/2026"
+    ],
+    [
+     "oda_EndingUpDateOfTheTender",
+     "27/10/2026"
+    ],
+    [
+     "oda_TenderResult",
+     "İhale Komisyon kararı hükümleri dahilinde uhdemizde kalmıştır."
+    ],
+    [
+     "oda_TenderValue",
+     "48.804.230,00 TL"
+    ],
+    [
+     "oda_ShareOfCompanyInTenderValue",
+     "48.315.170,00 TL"
+    ],
+    [
+     "oda_RatioOfTenderValueCorporateShareAmountToGrossSalesRevenueOnPubliclyDisclosedTheLatestFinancialStatementOfCompany",
+     "3,55"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "26/10/2026 tarihli Özel Durum Açıklamamıza istinaden;\nDokuz Eylül Üniversitesi Rektörlüğü Uygulama ve Araştırma Hastanesi tarafından 26/10/2026 tarihinde gerçekleştirilen \"2027 Yılı Kemoterapi Malzemeleri\" konulu ihaleye verilen teklif tutarı 48.315.170,00 TL olup, 27/10/2026 (bugün) tarihi itibariyle teklif verilen tutarın tamamının lehimize sonuçlandığı tarafımıza bildirilmiştir.\nKamuoyuna saygıyla duyurulur.\nİşbu açıklamamızın İngilizce çevirisi eş anlı yapılmakta olup, açıklama metinlerinde herhangi bir farklılık olması durumunda Türkçe açıklama esas kabul edilecektir."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  },
+  {
+   "target": "body:en",
+   "kind": "disclosure_body",
+   "language": "en",
+   "mime": "text/html",
+   "template_id": "tbl_oda-32000_Winning-A-Tender",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 21,
+   "span_paths": {
+    "form": 17,
+    "para": 4
+   },
+   "text_len": 1634,
+   "text_sha": "13a88496099d7e50",
+   "paragraphs": 4,
+   "form_fields": [
+    [
+     "related companies",
+     "[]"
+    ],
+    [
+     "related funds",
+     "[]"
+    ],
+    [
+     "oda_UpdateAnnouncementFlag",
+     "Evet (Yes)"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "26/10/2026"
+    ],
+    [
+     "oda_DelayedAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_SubjectOfTender",
+     "2027 Tender for Chemotherapy Supplies"
+    ],
+    [
+     "oda_PartyOpenedTender",
+     "Dokuz Eylül University Rectorate, University Hospital and Research Center"
+    ],
+    [
+     "oda_BoardDecisionOnBidForTender",
+     "2026/38"
+    ],
+    [
+     "oda_OtherPartiesIfParticipatedInTheTenderAsAGroup",
+     "-"
+    ],
+    [
+     "oda_ShareOfTheCompanyIfParticipatedInTheTenderAsAGroup",
+     "-"
+    ],
+    [
+     "oda_DateOfTenderBid",
+     "26/10/2026"
+    ],
+    [
+     "oda_EndingUpDateOfTheTender",
+     "27/10/2026"
+    ],
+    [
+     "oda_TenderResult",
+     "The tender has been awarded to our Company in accordance with the decision of the Tender Commission."
+    ],
+    [
+     "oda_TenderValue",
+     "TRY 48.804.230,00"
+    ],
+    [
+     "oda_ShareOfCompanyInTenderValue",
+     "TRY 48.315.170,00"
+    ],
+    [
+     "oda_RatioOfTenderValueCorporateShareAmountToGrossSalesRevenueOnPubliclyDisclosedTheLatestFinancialStatementOfCompany",
+     "3,55"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "With reference to our material event disclosure dated 26 October 2026;\nWe hereby announce that the bid submitted in the amount of TRY 48,315,170.00 for the tender entitled \"2027 Chemotherapy Supplies,\" held on 26 October 2026 by the Rectorate of Dokuz Eylül University, University Hospital, has been awarded to our Company in its entirety, as notified to us on 27 October 2026 (today).\nRespectfully announced to the public.\nThe English translation of this disclosure is being prepared simultaneously with the Turkish version. In the event of any discrepancy between the two versions, the Turkish version shall prevail."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  }
+ ]
+}

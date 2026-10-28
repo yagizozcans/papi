@@ -1,0 +1,42 @@
+# Extraction golden item (PRD 11 §2 "Extraction golden set"; suite `papi eval --suite analyst`).
+# Drafted by an LLM (Claude) from the fixture text; the owner confirms it with `papi eval review`.
+id: 05-insider-buy-pdf-1688272
+event_code: ownership.insider_trade
+fixture: detail_1688272.json
+attachments: [file_4028328ca16c7de401a17de5e8772c7f.bin]
+filer: MHRGY
+related: []
+reviewed: false
+drafted_by: claude (LLM) from tests/fixtures/kap/detail_1688272.json + its PDF attachment, 2026-10-28
+gold:
+  payload:
+    person.name: Corpus Sigorta
+    person.is_legal_entity: true
+    side: buy
+    trades.0.date: "2026-10-27"
+    trades.0.side: buy
+    trades.0.shares_nominal: 7000000
+    total_shares_nominal: 7000000
+    total_amount: null
+    avg_price: null
+    currency: TRY
+    holding_before_pct: 13.26
+    holding_after_pct: 13.63
+    voting_before_pct: 13.26
+    voting_after_pct: 13.63
+  spans:
+    person.name: [1011]
+    side: [1007, 1030]
+    trades.0.date: [1006, 1030]
+    trades.0.shares_nominal: [1007, 1030]
+    total_shares_nominal: [1007, 1030]
+    currency: [1006]
+    holding_before_pct: [1030]
+    holding_after_pct: [1009, 1030]
+    voting_before_pct: [1030]
+    voting_after_pct: [1009, 1030]
+  derived: [person.is_legal_entity]
+notes: >-
+  KAP relay (DKB) of Corpus Sigorta A.Ş.'s purchase of 7.000.000 TL nominal MHRGY shares on 27.10.2026
+  (1,67–1,73 TL range); stake %13,26 → %13,63 in capital and votes. The trade table is in the PDF
+  attachment (pack spans S1001…).

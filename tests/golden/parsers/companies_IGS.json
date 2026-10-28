@@ -1,0 +1,13 @@
+{
+ "fixture": "companies_IGS.json.gz",
+ "documents": [
+  {
+   "target": "companies",
+   "items": 756,
+   "tickers": 761,
+   "member_codes": 44,
+   "multi_code_items": 45,
+   "digest": "4ab2ddf402efd759"
+  }
+ ]
+}

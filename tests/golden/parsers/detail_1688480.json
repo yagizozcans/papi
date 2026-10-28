@@ -1,0 +1,194 @@
+{
+ "fixture": "detail_1688480.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_SPAF_Report_ID",
+   "families": [
+    "report"
+   ],
+   "span_count": 44,
+   "span_paths": {
+    "form": 40,
+    "table": 4
+   },
+   "text_len": 1802,
+   "text_sha": "3b4da6c0f16bca80",
+   "paragraphs": 0,
+   "form_fields": [
+    [
+     "ozet bilgi",
+     "TRFOYMDE2612 Bono İtfası"
+    ],
+    [
+     "yapilan aciklama guncelleme mi",
+     "Evet"
+    ],
+    [
+     "yapilan aciklama duzeltme mi",
+     "Hayır"
+    ],
+    [
+     "yapilan aciklama ertelenmis bir aciklama mi",
+     "Hayır"
+    ],
+    [
+     "bildirim konusu",
+     "İtfa"
+    ],
+    [
+     "yonetim kurulu karar tarihi",
+     "17.06.2025"
+    ],
+    [
+     "para birimi",
+     "TRY"
+    ],
+    [
+     "tutar",
+     "25.000.000.000"
+    ],
+    [
+     "ihrac tavani kiymet turu",
+     "Borçlanma Aracı"
+    ],
+    [
+     "satis turu",
+     "Tahsisli-Nitelikli Yatırımcıya Satış"
+    ],
+    [
+     "yurt ici yurt disi",
+     "Yurt İçi"
+    ],
+    [
+     "kurul onay tarihi",
+     "05.09.2025"
+    ],
+    [
+     "turu",
+     "Finansman Bonosu"
+    ],
+    [
+     "vade tarihi",
+     "27.10.2026"
+    ],
+    [
+     "vade gun sayisi",
+     "90"
+    ],
+    [
+     "satis sekli",
+     "Nitelikli Yatırımcıya Satış"
+    ],
+    [
+     "ihracin gerceklesecegi gerceklestigi ulke",
+     "Türkiye"
+    ],
+    [
+     "tertip ihrac belgesi onay tarihi",
+     "05.09.2025"
+    ],
+    [
+     "aracilik hizmeti alinan yatirim kurulusu",
+     "OYAK YATIRIM MENKUL DEĞERLER A.Ş."
+    ],
+    [
+     "merkezi saklamaci kurulus",
+     "Merkezi Kayıt Kuruluşu A.Ş."
+    ],
+    [
+     "satisi gerceklestirilen nominal tutar",
+     "500.000.000"
+    ],
+    [
+     "vade baslangic tarihi",
+     "29.07.2026"
+    ],
+    [
+     "ihrac fiyati",
+     "0,90819"
+    ],
+    [
+     "faiz orani turu",
+     "İskontolu"
+    ],
+    [
+     "faiz orani vadeye isabet eden",
+     "10,10"
+    ],
+    [
+     "faiz orani yillik basit",
+     "41,00"
+    ],
+    [
+     "faiz orani yillik bilesik",
+     "47,78"
+    ],
+    [
+     "borsada islem gorme durumu",
+     "Evet"
+    ],
+    [
+     "odeme turu",
+     "TL Ödemeli"
+    ],
+    [
+     "isin kodu",
+     "TRFOYMDE2612"
+    ],
+    [
+     "kupon sayisi",
+     "0"
+    ],
+    [
+     "anapara vadesonu odeme tutari",
+     "500.000.000"
+    ],
+    [
+     "itfa tarihi",
+     "27.10.2026"
+    ],
+    [
+     "kayit tarihi",
+     "26.10.2026 * Hak sahiplerinin belirlendiği tarih."
+    ],
+    [
+     "odeme gerceklestirildi mi",
+     "Evet"
+    ],
+    [
+     "yatirimci hesaplarina odenme tarihi",
+     "27.10.2026"
+    ],
+    [
+     "doviz cinsi",
+     "TRY"
+    ],
+    [
+     "ihraccinin derecelendirme notu var mi",
+     "Evet"
+    ],
+    [
+     "sermaye piyasasi aracinin derecelendirme notu var mi",
+     "Hayır"
+    ],
+    [
+     "kaynak kurulus un derecelendirme notu var mi",
+     "Hayır"
+    ]
+   ],
+   "tables": [
+    {
+     "caption": "Derecelendirme",
+     "header_len": 4,
+     "rows": 1,
+     "cols": 4
+    }
+   ],
+   "extra": {}
+  }
+ ]
+}

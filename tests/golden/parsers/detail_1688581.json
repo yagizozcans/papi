@@ -1,0 +1,59 @@
+{
+ "fixture": "detail_1688581.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_oda-36000_General-Notification",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 18,
+   "span_paths": {
+    "form": 5,
+    "para": 3,
+    "table": 10
+   },
+   "text_len": 2201,
+   "text_sha": "800616e6b0da15a7",
+   "paragraphs": 3,
+   "form_fields": [
+    [
+     "ilgili sirketler",
+     "[GZNMI]"
+    ],
+    [
+     "ilgili fonlar",
+     "[ABJ, TMH, LLA, KHT]"
+    ],
+    [
+     "oda_UpdateAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "-"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "\"Sermaye Piyasası Kurulu, Özel Durumlar Tebliği'nin (II.-15.1) Sermaye yapısına ve yönetim kontrolüne ilişkin değişiklikler ile ilgili 12. maddesinin 1. fıkrasının b) bendi; \"Bir kurucuya ait yatırım fonlarının doğrudan veya dolaylı olarak ihraççının sermayesindeki payının veya toplam oy haklarının %3, %5, %10, %15, %20, %25, %33, %50, %67 veya %95'ine ulaşması ve söz konusu oranların altına düşmesi halinde kurucu tarafından, yerine getirilir.\" Şeklindedir. Allbatross Portföy Yönetimi A.Ş'nin kurucusu olduğu yatırım fonlarının portföylerindeki GZNMI - Gezinomi Seyahat Turizm Ticaret A.Ş. hisselerinde 23/10/2026 tarihinde toplam 170.000 nominal hisse satımı gerçekleşmiş, bu işlem sonucunda Allbatross Portföy Yönetimi A.Ş'nin kurucusu olduğu yatırım fonlarının portföylerindeki GZNMI hisseleri oy hakkı oranı % 6,9050 den %6.7283'e ve sermaye pay oranı % 10,2194 sınırından % 9,9578'e ulaşmıştır/aşmıştır/altına düşmüştür. İşlemin detaylarına ilişkin bilgiler aşağıdaki tabloda yer almaktadır.\nKurucusu olduğumuz yatırım fonlarından KHT ( Kartal Hisse Senedi Fonu ) ve LLA ( Aydın Hisse Senedi Serbest) fonlarının TEFAS da işlem gördüğü dikkate alınarak bu fonların sahip olduğu payların MKK -VAP verilerine göre fiili dolaşımdaki pay oranı % 0,44 seviyesindedir.\nKamuoyuna saygı ile duyurulur.\""
+    ]
+   ],
+   "tables": [
+    {
+     "caption": null,
+     "header_len": 10,
+     "rows": 1,
+     "cols": 10
+    }
+   ],
+   "extra": {}
+  }
+ ]
+}

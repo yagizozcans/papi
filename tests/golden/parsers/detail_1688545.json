@@ -1,0 +1,79 @@
+{
+ "fixture": "detail_1688545.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_GAI_Report_ID",
+   "families": [
+    "report"
+   ],
+   "span_count": 486,
+   "span_paths": {
+    "form": 11,
+    "para": 15,
+    "table": 460
+   },
+   "text_len": 9545,
+   "text_sha": "a18878c877f737fc",
+   "paragraphs": 15,
+   "form_fields": [
+    [
+     "ozet bilgi",
+     "Pay Geri Alım Programının Revize Edilmesi"
+    ],
+    [
+     "yapilan aciklama guncelleme mi",
+     "Hayır"
+    ],
+    [
+     "yapilan aciklama duzeltme mi",
+     "Evet"
+    ],
+    [
+     "yapilan aciklama ertelenmis bir aciklama mi",
+     "Hayır"
+    ],
+    [
+     "geri alim islemini gerceklestiren ortaklik",
+     "TATLIPINAR ENERJİ ÜRETİM A.Ş."
+    ],
+    [
+     "geri alim islemine konu ortaklik",
+     "TATLIPINAR ENERJİ ÜRETİM A.Ş."
+    ],
+    [
+     "geri alim isleminin niteligi",
+     "Diğer"
+    ],
+    [
+     "soz konusu geri alimin amaci",
+     "Pay sahiplerinin menfaatlerinin korunması, pay fiyatının sağlıklı ve istikrarlı oluşumuna katkı sağlanması ve yatırımcı güveninin desteklenmesi amacıyla"
+    ],
+    [
+     "yonetim kurulu karar tarihi",
+     "30.09.2026"
+    ],
+    [
+     "geri alima konu pay miktari nominal tl",
+     "40.000.000"
+    ],
+    [
+     "odenecek azami tutar tl",
+     "500.000.000"
+    ]
+   ],
+   "tables": [
+    {
+     "caption": "Geri Alım İşlemlerinin Detayları",
+     "header_len": 6,
+     "rows": 92,
+     "cols": 6
+    }
+   ],
+   "extra": {}
+  }
+ ]
+}

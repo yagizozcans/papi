@@ -1,0 +1,47 @@
+{
+ "fixture": "detail_1687728.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_oda-24400_Public-Disclosure-Platform-Announcement",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 5,
+   "span_paths": {
+    "form": 4,
+    "para": 1
+   },
+   "text_len": 445,
+   "text_sha": "b6b165c29a805e2f",
+   "paragraphs": 1,
+   "form_fields": [
+    [
+     "ilgili sirketler",
+     "[]"
+    ],
+    [
+     "ilgili fonlar",
+     "[DOL, LKT, RCV, IKV, EIL, DAP, FCK, BDA, AEV, IRT, IRV, DKL, NZT, NVT, FS5, LTL, TLK]"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "-"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "Sermaye Piyasası Kurulu'nun Yatırım Fonlarına İlişkin Rehber'inin 9.8. Fonlara İlişkin Diğer Açıklamalar maddesi gereğince yapılan açıklama ekte yer almaktadır."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  }
+ ]
+}

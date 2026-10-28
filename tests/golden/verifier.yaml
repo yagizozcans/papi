@@ -1,0 +1,243 @@
+# Verifier golden set (suite `papi eval --suite verifier`): canned analyst outputs → expected verdicts of
+# papi.verify.verify (PRD 04 §2 VD, PRD 11 §3 "Summaries: every number traceable 100 %").
+#
+# `sources` is what the analyst was shown (spans by pack ordinal, KB provisions, context text, allowed
+# codes, payload schemas by code from contracts/schemas, rules payloads); a case may override any key.
+# `output` is merged over `base_output`. `expect` keys (all optional):
+#   ok                 VerifyReport.ok
+#   failed_claims      indexes of claims that must fail (exactly this set)
+#   claim_issue        substring that must appear in the first failed claim's issues
+#   dropped            text fields that must lose at least one sentence (exactly this set)
+#   payload_fields     {code: [field paths flagged]} (exactly)
+#   payload_errors     codes with a payload schema error (exactly)
+#   advice             0 = no advice-language hit, n > 0 = at least n hits
+#   unknown_codes      unknown event codes (exactly)
+#   schema_error       whole-output schema invalid (validated against analyst.v1)
+#   watch_next_dropped number of watch_next items not kept
+#   bad                the output contains a defect the verifier must catch (catch-rate metric)
+version: 1
+
+sources:
+  spans:
+    5: "Karar Tarihi: 27.10.2026"
+    13: "1 TL Nominal Değerli Paya Ödenecek Nakit Kar Payı - Brüt(TL): 3,0700000"
+    14: "Şirketimiz bugün (27.10.2026) yurt içi yerleşik bir şirketten sipariş almıştır. Sipariş bedeli KDV hariç 1.325.000 EUR'dur."
+    20: "Önceki yıl hasılatı 26.500.000 EUR"
+    21: "Teslim süresi 4. çeyrek 2026 sonu olarak planlanmıştır."
+    22: "Mevcut Sermaye (TL): 791.000.000"
+    23: "Ulaşılacak Sermaye (TL): 1.582.000.000"
+  provisions:
+    "tr:spk:II-15.1:m5": "II-15.1 m.5 tr:spk:II-15.1:m5\nİçsel bilgiler gecikmeksizin kamuya açıklanır."
+  context_text: "Son kapanış (MEKAG, 24.10.2026): 41,2 TL\nPozisyon: MEKAG 1.200 adet"
+  allowed_codes: [business.contract.award, distribution.dividend.cash, capital.increase.rights]
+  payload_schemas_from: [business.contract.award, distribution.dividend.cash]
+  form_payloads: {}
+
+base_output:
+  event_codes: [business.contract.award]
+  payload: {}
+  payload_spans: {}
+  fundamental_channels: [revenue]
+  fundamental_direction: positive
+  materiality: 40
+  materiality_rationale: "Sipariş tutarı orta büyüklükte."
+  claims: []
+  summary_tr: "MEKAG yurt içinden sipariş aldı."
+  summary_en: "MEKAG received a domestic order."
+  headline_tr: "MEKAG sipariş aldı"
+  watch_next: []
+  confidence: 0.8
+
+cases:
+  - id: good_full
+    note: every number traced to its cited span; payload fields traced to their spans
+    output:
+      claims:
+        - {kind: fact, text_tr: "Sipariş bedeli KDV hariç 1.325.000 EUR.", text_en: null, span_ordinals: [14], citation_ids: [], value: "1325000", unit: EUR, formula_id: null}
+      summary_tr: "MEKAG 27.10.2026 tarihinde KDV hariç 1.325.000 EUR tutarında sipariş aldı."
+      payload:
+        business.contract.award: {counterparty: {name: "Yurt içi yerleşik şirket", issuer_id: null, is_related_party: null, is_public_sector: null}, value: 1325000, currency: EUR, vat_included: false, duration_months: null, start_date: "2026-10-27", scope: null, is_framework: null, ratios: {value_to_ttm_revenue: null, value_to_market_cap: null}}
+      payload_spans:
+        business.contract.award: {value: [14], start_date: [14]}
+    schema: true
+    expect: {ok: true, failed_claims: [], dropped: [], payload_fields: {}, advice: 0}
+
+  - id: hallucinated_number_claim
+    note: claim states a value that is not in the cited span
+    output:
+      claims:
+        - {kind: fact, text_tr: "Sipariş bedeli 1.500.000 EUR.", text_en: null, span_ordinals: [14], citation_ids: [], value: "1500000", unit: EUR, formula_id: null}
+    expect: {ok: false, failed_claims: [0], claim_issue: "1.500.000", bad: true}
+
+  - id: hallucinated_number_summary
+    note: summary sentence with an untraceable amount is dropped, the clean sentence is kept
+    output:
+      summary_tr: "MEKAG sipariş aldı. Siparişin bedeli 2.000.000 EUR."
+    expect: {ok: false, dropped: [summary_tr], bad: true}
+
+  - id: number_from_wrong_span
+    note: the number exists in the pack (S20) but not in the cited span S14
+    output:
+      claims:
+        - {kind: fact, text_tr: "Önceki yıl hasılatı 26.500.000 EUR.", text_en: null, span_ordinals: [14], citation_ids: [], value: null, unit: null, formula_id: null}
+    expect: {ok: false, failed_claims: [0], bad: true}
+
+  - id: missing_span
+    note: a fact claim without any span or KB citation
+    output:
+      claims:
+        - {kind: fact, text_tr: "Şirket sipariş almıştır.", text_en: null, span_ordinals: [], citation_ids: [], value: null, unit: null, formula_id: null}
+    expect: {ok: false, failed_claims: [0], claim_issue: "kaynak yok", bad: true}
+
+  - id: unresolvable_span
+    note: a claim cites a span marker that is not in the pack
+    output:
+      claims:
+        - {kind: fact, text_tr: "Sipariş bedeli 1.325.000 EUR.", text_en: null, span_ordinals: [99], citation_ids: [], value: null, unit: null, formula_id: null}
+    expect: {ok: false, failed_claims: [0], claim_issue: "S99", bad: true}
+
+  - id: payload_field_without_span
+    note: a numeric payload field with no payload span
+    output:
+      payload:
+        business.contract.award: {counterparty: {name: null}, value: 1325000, currency: EUR, duration_months: 12}
+      payload_spans:
+        business.contract.award: {value: [14]}
+    expect: {ok: false, payload_fields: {business.contract.award: [duration_months]}, bad: true}
+
+  - id: payload_value_not_in_span
+    note: a payload value that differs from its span text
+    output:
+      payload:
+        business.contract.award: {counterparty: {name: null}, value: 1300000, currency: EUR}
+      payload_spans:
+        business.contract.award: {value: [14]}
+    expect: {ok: false, payload_fields: {business.contract.award: [value]}, bad: true}
+
+  - id: payload_schema_invalid
+    note: currency must be a string
+    output:
+      payload:
+        business.contract.award: {counterparty: {name: null}, value: 1325000, currency: 978}
+      payload_spans:
+        business.contract.award: {value: [14]}
+    expect: {ok: false, payload_errors: [business.contract.award], bad: true}
+
+  - id: advice_phrase_summary
+    note: Turkish recommendation language in the summary
+    output:
+      summary_tr: "MEKAG sipariş aldı. Bu bir alım fırsatı."
+    expect: {ok: false, advice: 1, dropped: [summary_tr], bad: true}
+
+  - id: advice_phrase_claim
+    note: imperative advice inside an inference claim
+    output:
+      claims:
+        - {kind: inference, text_tr: "Yatırımcılar hisseyi satın alın.", text_en: null, span_ordinals: [], citation_ids: [], value: null, unit: null, formula_id: null}
+    expect: {ok: false, failed_claims: [0], advice: 1, bad: true}
+
+  - id: advice_phrase_english
+    note: English recommendation language
+    output:
+      summary_en: "MEKAG received an order. Investors should buy the shares."
+    expect: {ok: false, advice: 1, dropped: [summary_en], bad: true}
+
+  - id: ordinal_not_a_number
+    note: '"4. çeyrek" and "3''üncü" are ordinals, not amounts to trace'
+    output:
+      claims:
+        - {kind: fact, text_tr: "Teslim 4. çeyrek 2026 sonunda planlanıyor.", text_en: null, span_ordinals: [21], citation_ids: [], value: null, unit: null, formula_id: null}
+      summary_tr: "Teslimin 4. çeyrek sonunda tamamlanması planlanıyor. Bu, şirketin bu yılki 3'üncü sipariş duyurusu."
+    expect: {ok: true, failed_claims: [], dropped: []}
+
+  - id: derived_value_good
+    note: percentage computed from two cited inputs, reused in the summary
+    output:
+      claims:
+        - {kind: computation, text_tr: "Sipariş, önceki yıl hasılatının yaklaşık %5'i.", text_en: null, span_ordinals: [14, 20], citation_ids: [], value: "%5", unit: "%", formula_id: percent_of}
+      summary_tr: "Sipariş tutarı önceki yıl hasılatının yaklaşık %5'i."
+    expect: {ok: true, failed_claims: [], dropped: []}
+
+  - id: derived_value_wrong
+    note: claimed percentage is not reproducible from the cited inputs
+    output:
+      claims:
+        - {kind: computation, text_tr: "Sipariş hasılatın %12'si.", text_en: null, span_ordinals: [14, 20], citation_ids: [], value: "%12", unit: "%", formula_id: percent_of}
+    expect: {ok: false, failed_claims: [0], claim_issue: "üretilemedi", bad: true}
+
+  - id: derived_value_no_formula
+    note: computation claim without formula_id
+    output:
+      claims:
+        - {kind: computation, text_tr: "Oran 5.", text_en: null, span_ordinals: [14, 20], citation_ids: [], value: "5", unit: null, formula_id: null}
+    expect: {ok: false, failed_claims: [0], claim_issue: "formula_id", bad: true}
+
+  - id: derived_capital_ratio
+    note: capital increase rate (difference / ratio of two cited spans)
+    output:
+      event_codes: [capital.increase.rights]
+      claims:
+        - {kind: computation, text_tr: "Artırım tutarı 791.000.000 TL.", text_en: null, span_ordinals: [22, 23], citation_ids: [], value: "791.000.000", unit: TRY, formula_id: difference}
+        - {kind: computation, text_tr: "Sermaye %100 artırılıyor.", text_en: null, span_ordinals: [22, 23], citation_ids: [], value: "%100", unit: "%", formula_id: percent_change}
+    expect: {ok: true, failed_claims: []}
+
+  - id: unknown_event_code
+    output:
+      event_codes: [business.contract.mega_award]
+    expect: {ok: false, unknown_codes: [business.contract.mega_award], bad: true}
+
+  - id: kb_citation_supports_fact
+    output:
+      claims:
+        - {kind: fact, text_tr: "II-15.1 m.5 içsel bilgilerin gecikmeksizin açıklanmasını öngörür.", text_en: null, span_ordinals: [], citation_ids: ["tr:spk:II-15.1:m5"], value: null, unit: null, formula_id: null}
+    expect: {ok: true, failed_claims: []}
+
+  - id: kb_citation_not_in_pack
+    output:
+      claims:
+        - {kind: fact, text_tr: "Pay Tebliği m.12 bunu düzenler.", text_en: null, span_ordinals: [], citation_ids: ["tr:spk:VII-128.1:m12"], value: null, unit: null, formula_id: null}
+    expect: {ok: false, failed_claims: [0], claim_issue: "VII-128.1", bad: true}
+
+  - id: turkish_number_formats
+    note: '"1,325 milyon EUR" and "1.325 bin EUR" read as 1.325.000; "27 Ekim 2026" as the span date'
+    output:
+      claims:
+        - {kind: fact, text_tr: "Sipariş bedeli 1,325 milyon EUR.", text_en: null, span_ordinals: [14], citation_ids: [], value: null, unit: null, formula_id: null}
+      summary_tr: "MEKAG 27 Ekim 2026'da 1.325 bin EUR tutarında sipariş aldı."
+    expect: {ok: true, failed_claims: [], dropped: []}
+
+  - id: wrong_date
+    note: a date that is not in the pack
+    output:
+      summary_tr: "MEKAG 28.10.2026 tarihinde sipariş aldı."
+    expect: {ok: false, dropped: [summary_tr], bad: true}
+
+  - id: watch_next_untraced
+    output:
+      watch_next: ["Teslimatın 4. çeyrekte tamamlanması", "Hisse 55 TL seviyesine ulaşabilir"]
+    expect: {ok: false, watch_next_dropped: 1, bad: true}
+
+  - id: position_context_number
+    note: numbers from the position/price context section are traceable
+    output:
+      summary_tr: "Son kapanış 41,2 TL; portföyde 1.200 adet MEKAG var."
+    expect: {ok: true, dropped: []}
+
+  - id: rules_payload_not_rechecked
+    note: fields fixed by the rules triage (form payload) are not re-traced
+    sources:
+      form_payloads:
+        distribution.dividend.cash: {period_year: 2025}
+    output:
+      event_codes: [distribution.dividend.cash]
+      payload:
+        distribution.dividend.cash: {decision_body: board, period_year: 2025, gross_per_share: 3.07, net_per_share: null, gross_rate_pct: null, net_rate_pct: null, total_gross_amount: null, total_net_amount: null, currency: TRY, ex_date: null, payment_date: null, installments: null, share_groups: null}
+      payload_spans:
+        distribution.dividend.cash: {gross_per_share: [13]}
+    expect: {ok: true, payload_fields: {}}
+
+  - id: schema_invalid_output
+    note: required top-level field missing
+    drop: [confidence]
+    schema: true
+    expect: {ok: false, schema_error: true, bad: true}

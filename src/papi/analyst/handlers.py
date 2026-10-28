@@ -29,7 +29,10 @@ def on_event_classified(ev: CloudEvent, ctx: Any) -> None:
     data = ev.data_as(EventClassified)
     if data.priority not in ANALYSED_PRIORITIES:
         return
-    with connect() as conn:
+    # IMMEDIATE: the pipeline reads then writes (inflight lock, analysis rows) on this connection; a
+    # deferred snapshot overtaken by the busy KAP/triage writers fails with "database is locked".
+    # The pipeline commits before every Claude call, so the write lock is never held across one.
+    with connect(immediate=True) as conn:
         try:
             out = analyse_event(conn, data.event_id, ctx=ctx)
         except EventNotFound as exc:
@@ -40,7 +43,7 @@ def on_event_classified(ev: CloudEvent, ctx: Any) -> None:
 
 @job_kind(checker.CHECK_JOB, max_attempts=3)
 def run_check(payload: dict[str, Any], ctx: Any) -> None:
-    with connect() as conn:
+    with connect(immediate=True) as conn:
         state = checker.run_for_call(conn, [payload["analysis_id"]], raise_deferred=True)
         conn.commit()
     log.info("checker for analysis %s: %s", payload["analysis_id"], state)

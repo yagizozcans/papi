@@ -1,0 +1,105 @@
+{
+ "fixture": "detail_1688597.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_oda-21300_Change-In-Articles-Of-Association",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 8,
+   "span_paths": {
+    "form": 6,
+    "para": 2
+   },
+   "text_len": 690,
+   "text_sha": "27353457fa3c07e3",
+   "paragraphs": 2,
+   "form_fields": [
+    [
+     "ilgili sirketler",
+     "[]"
+    ],
+    [
+     "ilgili fonlar",
+     "[]"
+    ],
+    [
+     "oda_UpdateAnnouncementFlag",
+     "Evet (Yes)"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "24.09.2026"
+    ],
+    [
+     "oda_DelayedAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "Şirketimiz Esas Sözleşmesi'nin \"Şirketin Merkezi\" başlıklı 4'ncü maddesinin tadili, 27.10.2026 tarihinde gerçekleştirilen Olağanüstü Genel Kurul Toplantısı'nda pay sahiplerinin onayına sunularak kabul edilmiştir.\nSöz konusu esas sözleşme değişikliğinin Gebze Ticaret Sicili Müdürlüğü nezdinde tescil ve Türkiye Ticaret Sicili Gazetesi'nde ilan edilmesine ilişkin işlemler gerçekleştirilecektir."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  },
+  {
+   "target": "body:en",
+   "kind": "disclosure_body",
+   "language": "en",
+   "mime": "text/html",
+   "template_id": "tbl_oda-21300_Change-In-Articles-Of-Association",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 9,
+   "span_paths": {
+    "form": 6,
+    "para": 3
+   },
+   "text_len": 932,
+   "text_sha": "2b40e51403f0dc4a",
+   "paragraphs": 3,
+   "form_fields": [
+    [
+     "related companies",
+     "[]"
+    ],
+    [
+     "related funds",
+     "[]"
+    ],
+    [
+     "oda_UpdateAnnouncementFlag",
+     "Evet (Yes)"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "24.09.2026"
+    ],
+    [
+     "oda_DelayedAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "The amendment to Article 4 of our Company's Articles of Association, titled \"Company Headquarters\", was submitted to and approved by the shareholders at the Extraordinary General Assembly Meeting held on 27 October 2026.\nThe necessary procedures will be carried out for the registration of the said amendment to the Articles of Association with the Gebze Trade Registry Office and its announcement in the Turkish Trade Registry Gazette.\nThis statement was translated into English for information purposes only. In case of any discrepancy between the Turkish and the English versions of this disclosure, the Turkish version shall prevail."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  }
+ ]
+}

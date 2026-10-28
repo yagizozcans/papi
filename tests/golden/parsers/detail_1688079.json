@@ -1,0 +1,75 @@
+{
+ "fixture": "detail_1688079.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_IT_Report_ID",
+   "families": [
+    "report"
+   ],
+   "span_count": 13,
+   "span_paths": {
+    "form": 12,
+    "para": 1
+   },
+   "text_len": 1230,
+   "text_sha": "2e7e9bcd4bbc8425",
+   "paragraphs": 1,
+   "form_fields": [
+    [
+     "ozet bilgi",
+     "Kira Sertifikası İhracına İlişkin Alınan Yönetim Kurulu Kararı Hk."
+    ],
+    [
+     "yapilan aciklama guncelleme mi",
+     "Hayır"
+    ],
+    [
+     "yapilan aciklama duzeltme mi",
+     "Hayır"
+    ],
+    [
+     "yapilan aciklama ertelenmis bir aciklama mi",
+     "Hayır"
+    ],
+    [
+     "ilgili sirketler",
+     "EKT"
+    ],
+    [
+     "yetkili organ karar tarihi",
+     "27.10.2026"
+    ],
+    [
+     "ihrac tavani tutari",
+     "100.000.000.000"
+    ],
+    [
+     "para birimi",
+     "TRY"
+    ],
+    [
+     "ihrac tavani kiymet turu",
+     "Kira Sertifikası"
+    ],
+    [
+     "satis turu",
+     "Tahsisli-Nitelikli Yatırımcıya Satış"
+    ],
+    [
+     "yurt ici yurt disi",
+     "Yurt İçi"
+    ],
+    [
+     "fon kullanicisi",
+     "Türkiye Emlak Katılım Bankası A.Ş."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  }
+ ]
+}

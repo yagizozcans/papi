@@ -1,0 +1,89 @@
+{
+ "fixture": "detail_1687750.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_SA_Report_ID",
+   "families": [
+    "report"
+   ],
+   "span_count": 33,
+   "span_paths": {
+    "form": 12,
+    "para": 10,
+    "table": 11
+   },
+   "text_len": 3034,
+   "text_sha": "c0405c62a45265b2",
+   "paragraphs": 10,
+   "form_fields": [
+    [
+     "ozet bilgi",
+     "Bedelli Sermaye Artırımı Hakkında."
+    ],
+    [
+     "yapilan aciklama guncelleme mi",
+     "Hayır"
+    ],
+    [
+     "yapilan aciklama duzeltme mi",
+     "Hayır"
+    ],
+    [
+     "yapilan aciklama ertelenmis bir aciklama mi",
+     "Hayır"
+    ],
+    [
+     "yonetim kurulu karar tarihi",
+     "26.10.2026"
+    ],
+    [
+     "kayitli sermaye tavani tl",
+     "2.000.000.000"
+    ],
+    [
+     "mevcut sermaye tl",
+     "791.000.000"
+    ],
+    [
+     "ulasilacak sermaye tl",
+     "1.582.000.000"
+    ],
+    [
+     "satilamayan paylarin taahhudune iliskin aciklama",
+     "Satılamayan Paylar İçin Taahhhüd Bulunmamaktadır."
+    ],
+    [
+     "para birimi",
+     "TRY"
+    ],
+    [
+     "artirilan sermayeyi temsil eden paylarin niteligi",
+     "Kaydi Pay"
+    ],
+    [
+     "ek 1",
+     "Çemaş Sermaye Artırımı Y.K.K. 26.10.26.pdf"
+    ]
+   ],
+   "tables": [
+    {
+     "caption": "Bedelli Sermaye Artırımı (Rüçhan hakkı kullandırılarak)",
+     "header_len": 11,
+     "rows": 1,
+     "cols": 11
+    },
+    {
+     "caption": null,
+     "header_len": 6,
+     "rows": 1,
+     "cols": 6
+    }
+   ],
+   "extra": {}
+  }
+ ]
+}

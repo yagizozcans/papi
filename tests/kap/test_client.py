@@ -13,8 +13,10 @@ from papi.core.state import get_state, set_state
 from papi.core.timeutil import now_utc
 from papi.sources.kap.client import (
     CIRCUIT_KEY,
+    FAILURE_THRESHOLD,
     LIST_CAP,
     KapBlocked,
+    KapHttpError,
     KapNotFound,
     KapPublicWebClient,
     split_window,
@@ -134,14 +136,34 @@ def test_waf_status_opens_circuit_and_blocks_further_requests(
 def test_5xx_spike_opens_circuit(db, kap_deps) -> None:
     with respx.mock(base_url=BASE) as router:
         route = router.get("/tr/api/company/items/IGS/A").mock(return_value=httpx.Response(503, text="busy"))
-        with (
-            KapPublicWebClient(min_interval=0, sleep=lambda s: None, max_retries=10) as client,
-            pytest.raises(KapBlocked),
-        ):
-            client.companies()
-    assert route.call_count == 5  # FAILURE_THRESHOLD consecutive failures
+        with KapPublicWebClient(min_interval=0, sleep=lambda s: None, max_retries=1) as client:
+            for _ in range(FAILURE_THRESHOLD - 1):
+                with pytest.raises(KapHttpError):
+                    client.companies()
+            with pytest.raises(KapBlocked):
+                client.companies()
+    assert route.call_count == 2 * FAILURE_THRESHOLD  # each failed request: one try + one retry
     db.rollback()
     assert get_state(db, CIRCUIT_KEY)["state"] == "open"
+
+
+def test_one_object_kap_refuses_does_not_open_circuit(db, kap_deps) -> None:
+    # Live 2026-10-28: KAP dropped every download of one attachment ("Server disconnected without
+    # sending a response"). Counting each retry tripped the breaker and halted all ingestion for 5 min,
+    # again on every job retry. The object's own fetch fails; other requests keep flowing.
+    dropped = httpx.RemoteProtocolError("Server disconnected without sending a response.")
+    with respx.mock(base_url=BASE) as router:
+        bad = router.get("/tr/api/file/download/4028328ca16c7de401a17cc6e79764f5").mock(side_effect=dropped)
+        router.get("/tr/api/company/items/IGS/A").mock(return_value=httpx.Response(200, json=[]))
+        with KapPublicWebClient(min_interval=0, sleep=lambda s: None) as client:
+            for _ in range(FAILURE_THRESHOLD):  # job retries: detail etc. succeed in between
+                with pytest.raises(KapHttpError):
+                    client.download_attachment("4028328ca16c7de401a17cc6e79764f5", index=1688055)
+                client.companies()
+            retries = client.max_retries
+    assert bad.call_count == FAILURE_THRESHOLD * (retries + 1)
+    db.rollback()
+    assert (get_state(db, CIRCUIT_KEY, {}) or {}).get("state") != "open"
 
 
 def test_retries_transient_errors_then_succeeds(db, kap_deps) -> None:

@@ -1,0 +1,121 @@
+{
+ "fixture": "detail_1688533.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_oda-10400_Shares-Transaction-Notification",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 21,
+   "span_paths": {
+    "form": 6,
+    "para": 5,
+    "table": 10
+   },
+   "text_len": 1561,
+   "text_sha": "b695ec9bd32ceee6",
+   "paragraphs": 5,
+   "form_fields": [
+    [
+     "ilgili sirketler",
+     "[METRO]"
+    ],
+    [
+     "ilgili fonlar",
+     "[]"
+    ],
+    [
+     "oda_UpdateAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "-"
+    ],
+    [
+     "oda_DelayedAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "27.10.2026 tarihinde Metro Ticari ve Mali Yatırımlar Holding A.Ş. (METRO) payları ile ilgili olarak 7,52-7,60 TL fiyat aralığından 750.000-TL toplam nominal tutarlı Satım işlemi ortaklığımızca gerçekleştirilmiştir.\nBu işlemle birlikte Metro Ticari ve Mali Yatırımlar Holding A.Ş. (METRO) sermayesindeki paylarımız 27.10.2026 tarihi itibariyle % 1,01 olmuştur.\nKamuoyuna duyurulur.\nSaygılarımızla.\nBu açıklamamızın İngilizce çevirisi eş anlı kamuya açıklanmış olup, açıklama metinlerinde herhangi bir farklılık olması durumunda Türkçe açıklama esas kabul edilecektir."
+    ]
+   ],
+   "tables": [
+    {
+     "caption": "Pay Alım Satım Bilgileri",
+     "header_len": 10,
+     "rows": 1,
+     "cols": 10
+    }
+   ],
+   "extra": {}
+  },
+  {
+   "target": "body:en",
+   "kind": "disclosure_body",
+   "language": "en",
+   "mime": "text/html",
+   "template_id": "tbl_oda-10400_Shares-Transaction-Notification",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 21,
+   "span_paths": {
+    "form": 6,
+    "para": 5,
+    "table": 10
+   },
+   "text_len": 1541,
+   "text_sha": "353a475f36cbac30",
+   "paragraphs": 5,
+   "form_fields": [
+    [
+     "related companies",
+     "[METRO]"
+    ],
+    [
+     "related funds",
+     "[]"
+    ],
+    [
+     "oda_UpdateAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "-"
+    ],
+    [
+     "oda_DelayedAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "On 27.10.2026, our Company sold shares of Metro Ticari ve Mali Yatırımlar Holding A.Ş. (METRO) with a total nominal value of TRY 750,000, at prices ranging from TRY 7.52 to TRY 7.60 per share.\nFollowing this transaction, our shareholding in the capital of Metro Ticari ve Mali Yatırımlar Holding A.Ş. (METRO) stood at 1.01% as of 27.10.2026.\nThis announcement is made to the public.\nYours sincerely,\nThis statement has been translated into English and simultaneously announced for informational purposes. In the event of any discrepancy between the Turkish and the English versions, the Turkish version shall prevail."
+    ]
+   ],
+   "tables": [
+    {
+     "caption": "Shares Transaction Information",
+     "header_len": 10,
+     "rows": 1,
+     "cols": 10
+    }
+   ],
+   "extra": {}
+  }
+ ]
+}

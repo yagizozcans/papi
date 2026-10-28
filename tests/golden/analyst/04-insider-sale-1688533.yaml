@@ -1,0 +1,38 @@
+# Extraction golden item (PRD 11 §2 "Extraction golden set"; suite `papi eval --suite analyst`).
+# Drafted by an LLM (Claude) from the fixture text; the owner confirms it with `papi eval review`.
+id: 04-insider-sale-1688533
+event_code: ownership.insider_trade
+fixture: detail_1688533.json
+attachments: []
+filer: MTRYO
+related: [METRO]
+reviewed: false
+drafted_by: claude (LLM) from tests/fixtures/kap/detail_1688533.json, 2026-10-28
+gold:
+  payload:
+    side: sell
+    trades.0.date: "2026-10-27"
+    trades.0.side: sell
+    trades.0.shares_nominal: 750000
+    total_shares_nominal: 750000
+    total_amount: null
+    avg_price: null
+    currency: TRY
+    holding_before_pct: 1.15
+    holding_after_pct: 1.01
+    voting_before_pct: 1.15
+    voting_after_pct: 1.01
+  spans:
+    side: [7, 14]
+    trades.0.date: [7, 12]
+    trades.0.shares_nominal: [7, 14]
+    total_shares_nominal: [7, 14, 15]
+    currency: [7]
+    holding_before_pct: [18]
+    holding_after_pct: [8, 20]
+    voting_before_pct: [19]
+    voting_after_pct: [21]
+  derived: []
+notes: >-
+  MTRYO sold 750.000 TL nominal METRO shares on 27.10.2026 in a 7,52–7,60 TL range; its stake fell from
+  %1,15 to %1,01 (capital and votes). No average price or amount is given, so both must stay null.

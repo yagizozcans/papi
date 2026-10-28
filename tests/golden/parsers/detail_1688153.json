@@ -1,0 +1,43 @@
+{
+ "fixture": "detail_1688153.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_MKK_CSV_Report_ID",
+   "families": [
+    "report"
+   ],
+   "span_count": 12,
+   "span_paths": {
+    "form": 2,
+    "para": 1,
+    "table": 9
+   },
+   "text_len": 495,
+   "text_sha": "8262a5cfaeccf6da",
+   "paragraphs": 1,
+   "form_fields": [
+    [
+     "ozet bilgi",
+     "Hak Kullanım İşlemleri"
+    ],
+    [
+     "ilgili sirketler",
+     "MCARD"
+    ]
+   ],
+   "tables": [
+    {
+     "caption": null,
+     "header_len": 11,
+     "rows": 1,
+     "cols": 11
+    }
+   ],
+   "extra": {}
+  }
+ ]
+}

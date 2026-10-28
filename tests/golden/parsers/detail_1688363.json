@@ -1,0 +1,119 @@
+{
+ "fixture": "detail_1688363.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_KP_Report_ID",
+   "families": [
+    "report"
+   ],
+   "span_count": 108,
+   "span_paths": {
+    "form": 15,
+    "para": 18,
+    "table": 75
+   },
+   "text_len": 7288,
+   "text_sha": "1dace41b3b1b8bba",
+   "paragraphs": 18,
+   "form_fields": [
+    [
+     "ozet bilgi",
+     "Kar Dağıtım Önerisi"
+    ],
+    [
+     "yapilan aciklama guncelleme mi",
+     "Hayır"
+    ],
+    [
+     "yapilan aciklama duzeltme mi",
+     "Hayır"
+    ],
+    [
+     "yapilan aciklama ertelenmis bir aciklama mi",
+     "Hayır"
+    ],
+    [
+     "karar tarihi",
+     "27.10.2026"
+    ],
+    [
+     "nakit kar payi odeme sekli",
+     "Peşin"
+    ],
+    [
+     "para birimi",
+     "TRY"
+    ],
+    [
+     "pay biciminde odeme",
+     "Ödenmeyecek"
+    ],
+    [
+     "net tutarin hesaplanmasinda yururlukteki genel kar payi stopaj oranindan daha dusuk bir oran uygulanmasinin nedeni",
+     "B grubu paylar için yürürlükteki mevcut stopaj oranları, C Grubu paylar için çifte vergiyi önleme anlaşmasındaki oran kullanılmıştır."
+    ],
+    [
+     "genel kar payi stopaj oranindan daha dusuk bir oranin nasil hesaplandigina iliskin bilgi",
+     "B grubu paylar Türkiye'de mukim tam vergi mükellefi şirketler olduğu için stopaj oranı yüzde 0 (sıfır) olarak kullanılmıştır, C Grubu paylar için çifte vergiyi önleme anlaşmasındaki oran olan yüzde 5 (beş) kullanılmıştır."
+    ],
+    [
+     "ek 1",
+     "Kar Dağıtım Önerisi.pdf"
+    ],
+    [
+     "ek 2",
+     "Dividend Distribution Proposal.pdf"
+    ],
+    [
+     "1 odenmis cikarilmis sermaye",
+     "3.509.100.000"
+    ],
+    [
+     "2 genel kanuni yedek akce yasal kayitlara gore",
+     "5.137.330.652"
+    ],
+    [
+     "esas sozlesme uyarinca kar dagitiminda imtiyaz var ise soz konusu imtiyaza iliskin bilgi",
+     "-"
+    ]
+   ],
+   "tables": [
+    {
+     "caption": "Nakit Kar Payı Ödeme Tutar ve Oranları",
+     "header_len": 7,
+     "rows": 3,
+     "cols": 7
+    },
+    {
+     "caption": "Kar Payı Ödeme Tarihleri",
+     "header_len": 5,
+     "rows": 1,
+     "cols": 5
+    },
+    {
+     "caption": "Pay Olarak Kar Payı Ödeme Tutar ve Oranları",
+     "header_len": 3,
+     "rows": 3,
+     "cols": 3
+    },
+    {
+     "caption": "FORD OTOMOTİV SANAYİ A.Ş. 01.01.2025/31.12.2025 Dönemi Kâr Payı Dağıtım Tablosu (TL)",
+     "header_len": 3,
+     "rows": 25,
+     "cols": 3
+    },
+    {
+     "caption": "Kar Payı Oranları Tablosu",
+     "header_len": 6,
+     "rows": 4,
+     "cols": 6
+    }
+   ],
+   "extra": {}
+  }
+ ]
+}

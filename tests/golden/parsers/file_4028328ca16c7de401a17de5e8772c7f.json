@@ -1,0 +1,33 @@
+{
+ "fixture": "file_4028328ca16c7de401a17de5e8772c7f.bin",
+ "documents": [
+  {
+   "target": "attachment",
+   "file_name": "MHRGY_56659.pdf",
+   "kind": "attachment",
+   "language": "tr",
+   "mime": "application/pdf",
+   "template_id": null,
+   "families": null,
+   "span_count": 31,
+   "span_paths": {
+    "pdf": 31
+   },
+   "text_len": 1620,
+   "text_sha": "26e082b02f492837",
+   "paragraphs": 0,
+   "form_fields": [],
+   "tables": [
+    {
+     "caption": null,
+     "header_len": 10,
+     "rows": 1,
+     "cols": 10
+    }
+   ],
+   "extra": {
+    "pages": 1
+   }
+  }
+ ]
+}

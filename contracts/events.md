@@ -25,7 +25,7 @@ there (extra fields allowed). `source` is the producer path, e.g. `ingest/kap`, 
 | `ALERT_TRIGGERED` | `alert.triggered.v1` | alert engine → notifier | `alert_rule_id?`, `event_id?`, `notification_id?` (`AlertTriggered`) |
 | `KB_VERSION_PUBLISHED` | `kb.version.published.v1` | KB admin → agents (cache bust) | `kb_snapshot` (`KbVersionPublished`) |
 | `CHAT_MESSAGE_RECEIVED` | `chat.message.received.v1` | telegram poller → chat/trade handlers | `chat_message_id`, `telegram_chat_id`, `telegram_message_id?` (`ChatMessageReceived`) |
-| `PORTFOLIO_CHANGED` | `portfolio.changed.v1` | portfolio → triage priority cache, UI | `portfolio_id`, `instrument_ids[]`, `transaction_ids[]`, `reason?` (`trade`/`undo`/`import`/`reconcile`/`corporate_action`) (`PortfolioChanged`) |
+| `PORTFOLIO_CHANGED` | `portfolio.changed.v1` | portfolio → triage priority cache, KAP fetch queue (re-prioritise), UI | `portfolio_id`, `instrument_ids[]`, `transaction_ids[]`, `reason?` (`trade`/`undo`/`import`/`reconcile`/`corporate_action`) (`PortfolioChanged`) |
 
 ## Job priorities
 

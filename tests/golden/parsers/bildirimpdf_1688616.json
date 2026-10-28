@@ -1,0 +1,32 @@
+{
+ "fixture": "bildirimpdf_1688616.pdf",
+ "documents": [
+  {
+   "target": "kap_pdf",
+   "kind": "kap_pdf",
+   "language": "tr",
+   "mime": "application/pdf",
+   "template_id": null,
+   "families": null,
+   "span_count": 31,
+   "span_paths": {
+    "pdf": 31
+   },
+   "text_len": 2190,
+   "text_sha": "14c4f5d318e3c926",
+   "paragraphs": 0,
+   "form_fields": [],
+   "tables": [
+    {
+     "caption": null,
+     "header_len": 2,
+     "rows": 6,
+     "cols": 2
+    }
+   ],
+   "extra": {
+    "pages": 2
+   }
+  }
+ ]
+}

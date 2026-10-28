@@ -44,12 +44,15 @@ def log_paths(settings: Settings | None = None) -> tuple[Path, Path]:
 
 
 def current_papi_executable() -> Path | None:
-    """Absolute path of the running ``papi`` console script, else ``papi`` on PATH."""
+    """Absolute path of the running ``papi`` console script, else ``papi`` on PATH.
+
+    Symlinks are kept (not resolved): Homebrew/uv shims point into versioned directories that an
+    upgrade removes, which would leave the LaunchAgent pointing at a missing binary."""
     argv0 = Path(sys.argv[0])
     if argv0.name == "papi" and argv0.exists():
-        return argv0.resolve()
+        return argv0.absolute()
     found = shutil.which("papi")
-    return Path(found).resolve() if found else None
+    return Path(found).absolute() if found else None
 
 
 def program_arguments(*, use_uv: bool = False, project: Path | None = None) -> list[str]:
@@ -61,7 +64,7 @@ def program_arguments(*, use_uv: bool = False, project: Path | None = None) -> l
     uv = shutil.which("uv")
     if uv is None:
         raise RuntimeError("neither a `papi` executable nor `uv` was found on PATH")
-    return [str(Path(uv).resolve()), "run", "--project", str(project or REPO_ROOT), "papi", "run"]
+    return [str(Path(uv).absolute()), "run", "--project", str(project or REPO_ROOT), "papi", "run"]
 
 
 @dataclass

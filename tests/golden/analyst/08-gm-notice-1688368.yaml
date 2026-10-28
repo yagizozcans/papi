@@ -1,0 +1,18 @@
+# Extraction golden item (PRD 11 §2 "Extraction golden set"; suite `papi eval --suite analyst`).
+# Drafted by an LLM (Claude) from the fixture text; the owner confirms it with `papi eval review`.
+id: 08-gm-notice-1688368
+event_code: governance.gm.notice
+fixture: detail_1688368.json
+attachments: []
+filer: FROTO
+related: []
+reviewed: false
+drafted_by: claude (LLM) from tests/fixtures/kap/detail_1688368.json, 2026-10-28
+gold:
+  payload: {}
+  spans: {}
+  derived: []
+notes: >-
+  FROTO EGM invitation: meeting 24.11.2026 13:00 at the Sancaktepe head office, agenda includes a 2026
+  dividend from reserves. governance.gm.notice has no payload schema, so only the event code, claims'
+  citations and the verifier are scored.

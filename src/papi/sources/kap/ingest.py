@@ -14,13 +14,13 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import Connection, select, update
+from sqlalchemy import Connection, and_, select, update
 from sqlalchemy.dialects.sqlite import insert
 
 from papi.core import events, jobs, metrics
 from papi.core.config import get_settings
 from papi.core.ids import uuid7
-from papi.core.schema import disclosure
+from papi.core.schema import disclosure, job
 from papi.core.timeutil import ist_date, now_utc
 from papi.sources.kap import companies, deps, drift
 from papi.sources.kap.client import KapClient, KapFile, KapHttpError, KapJson, KapNotFound
@@ -137,6 +137,51 @@ def enqueue_fetch(
         dedupe_key=key,
         max_attempts=get_settings().kap.max_retries,
     )
+
+
+def reprioritize_queued(conn: Connection) -> int:
+    """Raise queued ``kap:fetch`` jobs to the P1/P2 lane when their issuer is now held or watched.
+
+    A disclosure listed before the owner bought or watched its issuer was enqueued at the plain
+    live/catch-up priority and would wait behind the whole backlog. Only upgrades (selling does not
+    demote queued work). Caller commits; returns the number of jobs raised.
+    """
+    queued = conn.execute(
+        select(job.c.id, job.c.payload, job.c.priority).where(
+            and_(job.c.kind == JOB_FETCH, job.c.status == "queued")
+        )
+    ).all()
+    if not queued:
+        return 0
+    rows = known_refs(conn, kap_source_id(conn), sorted({str((q.payload or {}).get("ref")) for q in queued}))
+    labels: dict[tuple[str, ...], str | None] = {}
+    raised = 0
+    for q in queued:
+        payload = dict(q.payload or {})
+        row = rows.get(str(payload.get("ref")))
+        item = ((row.source_payload or {}).get("list") if row is not None else None) or {}
+        filer, related = item_tickers(item)
+        key = tuple(filer + related)
+        if not key:
+            continue
+        if key not in labels:
+            labels[key] = holding_label(conn, item, None)[0]
+        label = labels[key]
+        if label is None:
+            continue
+        prio = priority_value(label, str(payload.get("mode") or "live"))
+        if prio >= q.priority:
+            continue
+        payload["priority"] = label
+        conn.execute(
+            update(job)
+            .where(job.c.id == q.id, job.c.status == "queued")
+            .values(priority=prio, payload=payload, updated_at=now_utc())
+        )
+        raised += 1
+    if raised:
+        log.info("kap: %d queued fetch job(s) raised to holdings/watchlist priority", raised)
+    return raised
 
 
 def record_listing(

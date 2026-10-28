@@ -56,6 +56,10 @@ def list_items() -> list[dict[str, Any]]:
     return load_json("list_2026-10-27_2026-10-28.json.gz")
 
 
+def fund_items() -> list[dict[str, Any]]:
+    return load_json("funds_2026-10-27_2026-10-28.json.gz")
+
+
 def fixture_list(indices: list[int] | None = None) -> list[dict[str, Any]]:
     wanted = set(indices or LISTED)
     return [it for it in list_items() if it["disclosureIndex"] in wanted]
@@ -72,6 +76,7 @@ class FakeKap:
 
     items: list[dict[str, Any]] = field(default_factory=fixture_list)
     details: dict[int, Any] = field(default_factory=dict)
+    fund_items: list[dict[str, Any]] = field(default_factory=list)
     files: dict[str, bytes] = field(default_factory=dict)
     default_file: bytes = b""
     companies: list[dict[str, Any]] = field(default_factory=list)
@@ -105,11 +110,18 @@ def kap_http(fake_kap: FakeKap) -> Iterator[respx.MockRouter]:
 
         def by_criteria(request: httpx.Request) -> httpx.Response:
             fake_kap.calls.append("list")
+            return _listing(request, fake_kap.items)
+
+        def funds_by_criteria(request: httpx.Request) -> httpx.Response:
+            fake_kap.calls.append("funds")
+            return _listing(request, fake_kap.fund_items)
+
+        def _listing(request: httpx.Request, items: list[dict[str, Any]]) -> httpx.Response:
             if fake_kap.list_status != 200:
                 return httpx.Response(fake_kap.list_status, text="blocked")
             body = json.loads(request.content)
             lo, hi = date.fromisoformat(body["fromDate"]), date.fromisoformat(body["toDate"])
-            out = [it for it in fake_kap.items if lo <= _item_day(it) <= hi]
+            out = [it for it in items if lo <= _item_day(it) <= hi]
             out.sort(key=lambda x: -x["disclosureIndex"])
             return httpx.Response(200, json=out[:2000])
 
@@ -160,6 +172,7 @@ def kap_http(fake_kap: FakeKap) -> Iterator[respx.MockRouter]:
             return httpx.Response(200, content=html, headers={"content-type": "text/html; charset=utf-8"})
 
         router.post("/tr/api/disclosure/members/byCriteria").mock(side_effect=by_criteria)
+        router.post("/tr/api/disclosure/funds/byCriteria").mock(side_effect=funds_by_criteria)
         router.get(path__regex=r"/tr/api/notification/attachment-detail/(?P<index>\d+)").mock(
             side_effect=detail
         )

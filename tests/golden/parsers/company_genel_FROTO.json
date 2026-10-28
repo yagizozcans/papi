@@ -1,0 +1,48 @@
+{
+ "fixture": "company_genel_FROTO.html.gz",
+ "documents": [
+  {
+   "target": "capital",
+   "paid_in_capital": "3509100000",
+   "registered_capital_ceiling": "10000000000",
+   "share_groups": [
+    {
+     "group": "A",
+     "registered": "Nama",
+     "nominal_per_share": "0.01",
+     "nominal_total": "689257737.7",
+     "capital_pct": "19.64",
+     "privilege": "-",
+     "traded": true
+    },
+    {
+     "group": "B",
+     "registered": "Nama",
+     "nominal_per_share": "0.01",
+     "nominal_total": "1379871894.7",
+     "capital_pct": "39.32",
+     "privilege": "Yönetim İmtiyazlı",
+     "traded": false
+    },
+    {
+     "group": "C",
+     "registered": "Nama",
+     "nominal_per_share": "0.01",
+     "nominal_total": "1439970367.6",
+     "capital_pct": "41.04",
+     "privilege": "Yönetim İmtiyazlı",
+     "traded": false
+    }
+   ],
+   "free_float": {
+    "FROTO": {
+     "total_shares": "3509100000.00",
+     "non_traded_shares": "2883985158.10",
+     "traded_shares": "625114841.90",
+     "free_float_shares": "613481245.38",
+     "free_float_pct": "17.48"
+    }
+   }
+  }
+ ]
+}

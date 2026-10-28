@@ -1,0 +1,85 @@
+{
+ "fixture": "detail_1688591.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_oda-24100_Capital-Market-Board-Administrative-Mesasures",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 184,
+   "span_paths": {
+    "form": 4,
+    "para": 4,
+    "table": 176
+   },
+   "text_len": 4512,
+   "text_sha": "4d9f3e0c38bfa0e8",
+   "paragraphs": 4,
+   "form_fields": [
+    [
+     "ilgili sirketler",
+     "[SELEC, MANAS, PASEU]"
+    ],
+    [
+     "ilgili fonlar",
+     "[]"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "-"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "a) Selçuk Ecza Deposu Ticaret ve Sanayi A.Ş. (SELEC) pay piyasasında gerçekleştirilen işlemlerde sorumluluğu bulunan aşağıdaki tabloda yer verilen kişiler hakkında, Aura Portföy Yönetimi AŞ ve Tera Yatırım Menkul Değerler AŞ'nin SELEC payında kendi nam ve hesabına olan işlemlerle sınırlı olmak üzere, 6362 sayılı SPKn'nun 101 inci maddesinin birinci fıkrası ve Kurulumuzun V-101.1 sayılı Bilgi Suistimali ve Piyasa Dolandırıcılığı İncelemelerinde Uygulanacak Tedbirler Tebliği'nin 5/2 ve 6/2 maddeleri uyarınca Borsa ve teşkilatlanmış diğer piyasalarda 2 yıl işlem yapma yasağı uygulanmasına karar verilmiştir.\nb) Manas Enerji Yönetimi Sanayi ve Ticaret AŞ (MANAS) pay piyasasında gerçekleştirilen işlemlerde sorumluluğu bulunan aşağıdaki tabloda yer verilen kişiler hakkında, Tera Portföy Yönetimi AŞ ve Tera Yatırım Menkul Değerler AŞ'nin MANAS payında kendi nam ve hesabına olan işlemlerle sınırlı olmak üzere, 6362 sayılı SPKn'nun 101 inci maddesinin birinci fıkrası ve Kurulumuzun V-101.1 sayılı Bilgi Suistimali ve Piyasa Dolandırıcılığı İncelemelerinde Uygulanacak Tedbirler Tebliği'nin 5/2 ve 6/2 maddeleri uyarınca Borsa ve teşkilatlanmış diğer piyasalarda 2 yıl işlem yapma yasağı uygulanmasına karar verilmiştir.\nc) Pasifik Eurasia Lojistik Dış Ticaret AŞ (PASEU) pay piyasasında gerçekleştirilen işlemlerde sorumluluğu bulunan aşağıdaki tabloda yer verilen kişiler hakkında, 6362 sayılı SPKn'nun 101 inci maddesinin birinci fıkrası ve Kurulumuzun V-101.1 sayılı Bilgi Suistimali ve Piyasa Dolandırıcılığı İncelemelerinde Uygulanacak Tedbirler Tebliği'nin 5/2 ve 6/2 maddeleri uyarınca Borsa ve teşkilatlanmış diğer piyasalarda 2 yıl işlem yapma yasağı uygulanmasına karar verilmiştir.\nKarar 2026/77 sayılı SPK Bülteninde yer almaktadır."
+    ]
+   ],
+   "tables": [
+    {
+     "caption": null,
+     "header_len": 2,
+     "rows": 20,
+     "cols": 2
+    },
+    {
+     "caption": null,
+     "header_len": 2,
+     "rows": 18,
+     "cols": 2
+    },
+    {
+     "caption": null,
+     "header_len": 2,
+     "rows": 20,
+     "cols": 2
+    },
+    {
+     "caption": null,
+     "header_len": 2,
+     "rows": 7,
+     "cols": 2
+    },
+    {
+     "caption": null,
+     "header_len": 2,
+     "rows": 20,
+     "cols": 2
+    },
+    {
+     "caption": null,
+     "header_len": 2,
+     "rows": 3,
+     "cols": 2
+    }
+   ],
+   "extra": {}
+  }
+ ]
+}

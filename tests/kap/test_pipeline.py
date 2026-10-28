@@ -18,15 +18,15 @@ from papi.core.schema import disclosure, document, document_span, event_log, ide
 from papi.core.state import get_state, set_state
 from papi.core.timeutil import parse_iso
 from papi.sources.kap import cadence, gaps, normalize
-from papi.sources.kap.client import KapBlocked
+from papi.sources.kap.client import KapBlocked, KapHttpError
 from papi.sources.kap.common import JOB_FETCH, JOB_PROBE, kap_source_id
 from papi.sources.kap.companies import apply_companies, resolve_tickers
 from papi.sources.kap.discovery import BACKFILL_KEY, LAST_POLL_OK_KEY, backfill, poll_once, reconcile
 from papi.sources.kap.drift import DRIFT_KEY, UNKNOWN_TEMPLATES_KEY
-from papi.sources.kap.ingest import insert_seen, process_disclosure, record_listing
+from papi.sources.kap.ingest import insert_seen, process_disclosure, record_listing, reprioritize_queued
 from papi.sources.kap.reprocess import refresh_disclosure, reparse
 
-from .conftest import LISTED, detail_json, fixture_list, load_json
+from .conftest import LISTED, detail_json, fixture_list, fund_items, list_items, load_json
 
 NOW = parse_iso("2026-10-28T08:00:00Z")  # Wednesday 11:00 Istanbul
 D0 = date(2026, 10, 28)
@@ -416,6 +416,66 @@ def test_gap_retry_spacing(db, kap_deps, client) -> None:
     assert rep.enqueued == 1
 
 
+def test_gap_scan_resolves_fund_indices_with_one_list_request(db, kap_deps, client, fake_kap) -> None:
+    # Live 2026-10-27/28: the members list skipped 219 indices, all fund disclosures (FON) that the
+    # fund list returns. They must not cost 219 detail probes.
+    fake_kap.items = list_items()
+    fake_kap.fund_items = fund_items()
+    record_listing(db, fake_kap.items, mode="catchup", now=NOW)
+    db.commit()
+    rep = gaps.scan_gaps(db, client, now=NOW)
+    assert (rep.funds_skipped, rep.new_missing, rep.open, rep.enqueued) == (219, [], 0, 0)
+    assert rep.watermark == 1688616
+    assert fake_kap.calls == ["funds"]
+    assert db.execute(select(func.count()).select_from(job).where(job.c.kind == JOB_PROBE)).scalar() == 0
+    assert events_of(db, events.INGEST_GAP_DETECTED) == []
+    rep = gaps.scan_gaps(db, client, now=NOW + timedelta(minutes=5))
+    assert fake_kap.calls == ["funds"]  # nothing unresolved → no further request
+
+
+def test_gap_scan_lists_funds_once_then_probes_the_rest(db, kap_deps, client, fake_kap, monkeypatch) -> None:
+    _seed_refs(db, [1688551, 1688554])
+    fake_kap.fund_items = [it for it in fund_items() if it["disclosureIndex"] == 1688553]
+    rep = gaps.scan_gaps(db, client, now=NOW)
+    assert (rep.funds_skipped, rep.new_missing, rep.open, rep.enqueued) == (1, [1688552], 1, 1)
+    assert gaps.load_state(db)["open"]["1688552"]["fund_checked"] is True
+    gaps.scan_gaps(db, client, now=NOW + timedelta(minutes=5))
+    assert fake_kap.calls == ["funds"]  # 1688552 already checked against the fund list
+    # A probe queued before the fund list resolved its index costs no request.
+    assert gaps.probe_index(db, client, 1688553, now=NOW) == "skipped"
+    assert "detail:1688553" not in fake_kap.calls
+
+
+def test_gap_scan_falls_back_to_probes_when_fund_list_fails(db, kap_deps, client, monkeypatch) -> None:
+    def boom(*a: Any, **k: Any) -> Any:
+        raise KapHttpError("down", 503)
+
+    monkeypatch.setattr(client, "list_fund_disclosures", boom)
+    _seed_refs(db, [1688551, 1688554])
+    rep = gaps.scan_gaps(db, client, now=NOW)
+    assert (rep.funds_skipped, rep.new_missing, rep.open, rep.enqueued) == (0, [1688552, 1688553], 2, 2)
+    assert not any(e.get("fund_checked") for e in gaps.load_state(db)["open"].values())
+
+
+def test_reprioritize_raises_queued_fetches_of_newly_held_issuers(db, kap_deps) -> None:
+    seed_companies(db)
+    record_listing(db, fixture_list(), mode="catchup", now=NOW)
+    db.commit()
+    before = fetch_jobs(db)
+    assert {r.priority for r in before.values()} == {55}
+    assert reprioritize_queued(db) == 0
+    kap_deps.held[inst(db, "FROTO")] = "P1"
+    kap_deps.held[inst(db, "MEKAG")] = "P2"
+    assert reprioritize_queued(db) == 3  # FROTO 1688363 + 1688368, MEKAG 1688011
+    db.commit()
+    after = fetch_jobs(db)
+    for ref in ("1688363", "1688368"):
+        assert (after[ref].priority, after[ref].payload["priority"]) == (jobs.PRIORITY_P1, "P1")
+    assert (after["1688011"].priority, after["1688011"].payload["priority"]) == (jobs.PRIORITY_P2, "P2")
+    assert {r.priority for k, r in after.items() if k not in {"1688363", "1688368", "1688011"}} == {55}
+    assert reprioritize_queued(db) == 0  # idempotent; never demotes
+
+
 # ------------------------------------------------------------------------------------------ reconcile
 
 
@@ -495,7 +555,12 @@ def test_handlers_registered_and_circuit_defers(db, kap_deps, monkeypatch) -> No
     from papi.sources.kap import handlers
 
     importlib.reload(handlers)
-    assert {"kap:poll", "kap:gaps", "kap:reconcile", "kap:companies"} <= set(REGISTRY.periodics)
+    assert {"kap:poll", "kap:gaps", "kap:reconcile", "kap:companies", "kap:reprioritize"} <= set(
+        REGISTRY.periodics
+    )
+    assert "kap.reprioritize_on_portfolio_change" in {
+        h.name for h in REGISTRY.handlers_for(events.PORTFOLIO_CHANGED)
+    }
     assert {"kap:fetch", "kap:probe", "kap:refresh"} <= set(REGISTRY.job_kinds)
     assert REGISTRY.periodics["kap:poll"].seconds(NOW) == 30
 

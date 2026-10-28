@@ -1,0 +1,32 @@
+{
+ "fixture": "detail_1688605.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_oda-21900_General-Info-Form",
+   "families": [
+    "report"
+   ],
+   "span_count": 117,
+   "span_paths": {
+    "table": 117
+   },
+   "text_len": 6410,
+   "text_sha": "7c1b0a8475a42562",
+   "paragraphs": 0,
+   "form_fields": [],
+   "tables": [
+    {
+     "caption": "Yönetime İlişkin Bilgiler",
+     "header_len": 17,
+     "rows": 9,
+     "cols": 17
+    }
+   ],
+   "extra": {}
+  }
+ ]
+}

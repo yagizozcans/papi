@@ -1,0 +1,28 @@
+{
+  "accepted_at": "2026-10-28T04:05:34.687673Z",
+  "note": "initial baseline (2026-10-28): kb_retrieval.recall_at_5 below gate — event-subject KB retrieval returns nothing (integration request to KB/analyst)",
+  "metrics": {
+    "kb_retrieval.as_of_checks": 89,
+    "kb_retrieval.as_of_correctness": 1.0,
+    "kb_retrieval.event_recall": 0.0,
+    "kb_retrieval.event_recall_obligations_approved": 0.3333333333333333,
+    "kb_retrieval.question_recall_at_5": 0.9711538461538461,
+    "kb_retrieval.recall_at_5": 0.8706896551724138,
+    "kb_retrieval.search_items": 61,
+    "parsers.documents": 49,
+    "parsers.documents_exact": 1.0,
+    "parsers.field_exact_match": 1.0,
+    "parsers.fields": 1084,
+    "trade_parsing.cases": 167,
+    "trade_parsing.exact": 1.0,
+    "trade_parsing.silent_guesses": 0,
+    "triage.any_code_overlap": 0.922077922077922,
+    "triage.code_accuracy": 0.9448051948051948,
+    "triage.items": 308,
+    "triage.unclassified_share": 0.03571428571428571,
+    "verifier.cases": 26,
+    "verifier.defect_catch_rate": 1.0,
+    "verifier.false_alarm_rate": 0.0,
+    "verifier.outcome_accuracy": 1.0
+  }
+}

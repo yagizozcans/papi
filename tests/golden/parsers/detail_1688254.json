@@ -1,0 +1,81 @@
+{
+ "fixture": "detail_1688254.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_oda-23900_Notification-About-Suspension-of-BIST-Stock",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 4,
+   "span_paths": {
+    "form": 3,
+    "para": 1
+   },
+   "text_len": 351,
+   "text_sha": "eae33597e4694f76",
+   "paragraphs": 1,
+   "form_fields": [
+    [
+     "ilgili sirketler",
+     "[PSGYO]"
+    ],
+    [
+     "ilgili fonlar",
+     "[]"
+    ],
+    [
+     "oda_EmptyField",
+     ""
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "PSGYO.E işlem sırasında sürekli işleme ara verilmiş, tek fiyat emir toplama başlamıştır. Devre kesici emir toplama aşaması kapanış seansı emir toplama aşaması ile birleşerek devam edecek, eşleştirme kapanış seansı eşleştirme aşamasında gerçekleşecektir."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  },
+  {
+   "target": "body:en",
+   "kind": "disclosure_body",
+   "language": "en",
+   "mime": "text/html",
+   "template_id": "tbl_oda-23900_Notification-About-Suspension-of-BIST-Stock",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 4,
+   "span_paths": {
+    "form": 3,
+    "para": 1
+   },
+   "text_len": 359,
+   "text_sha": "f9ae235f8effdd03",
+   "paragraphs": 1,
+   "form_fields": [
+    [
+     "related companies",
+     "[PSGYO]"
+    ],
+    [
+     "related funds",
+     "[]"
+    ],
+    [
+     "oda_EmptyField",
+     ""
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "In PSGYO.E continuous trading is suspended and order collection of the call auction period has started. Circuit breaker order collection period will merge with closing auction and uncrossing will take place after closing session order collection period."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  }
+ ]
+}

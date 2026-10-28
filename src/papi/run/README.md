@@ -51,7 +51,9 @@ papi run service install [--uv] | uninstall | status | logs [-n 40] [-f]
 `service install` writes `~/Library/LaunchAgents/com.papi.run.plist` (`PAPI_LAUNCH_AGENTS_DIR`
 overrides the directory) and loads it with `launchctl bootstrap gui/<uid>`. The plist sets RunAtLoad,
 KeepAlive, ExitTimeOut 40 s and ThrottleInterval 10 s. Its ProgramArguments are the absolute path of the current
-`papi` executable plus `run`, or `uv run --project <repo> papi run` with `--uv`. EnvironmentVariables
+`papi` executable plus `run`, or `uv run --project <repo> papi run` with `--uv`. Symlinks such as
+Homebrew's `/opt/homebrew/bin/uv` are kept as they are (not resolved into a versioned `Cellar/…`
+directory that the next `brew upgrade` removes). EnvironmentVariables
 holds `PAPI_HOME` and the installing shell's `PATH` (so `claude` is found). stdout/stderr go to
 `$PAPI_HOME/logs/launchd.{out,err}.log`.
 

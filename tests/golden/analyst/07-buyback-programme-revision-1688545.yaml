@@ -1,0 +1,28 @@
+# Extraction golden item (PRD 11 §2 "Extraction golden set"; suite `papi eval --suite analyst`).
+# Drafted by an LLM (Claude) from the fixture text; the owner confirms it with `papi eval review`.
+id: 07-buyback-programme-revision-1688545
+event_code: buyback.program.start
+fixture: detail_1688545.json
+attachments: []
+filer: TATEN
+related: []
+reviewed: false
+drafted_by: claude (LLM) from tests/fixtures/kap/detail_1688545.json, 2026-10-28
+gold:
+  payload:
+    board_decision_date: "2026-09-30"
+    max_shares_nominal: 40000000
+    max_fund_amount: 500000000
+    currency: TRY
+    duration_months: null
+  spans:
+    board_decision_date: [11]
+    max_shares_nominal: [12, 477]
+    max_fund_amount: [13, 479]
+    currency: [13, 479]
+  derived: []
+notes: >-
+  TATEN corrects/revises its 30.09.2026 buyback programme (board decision 27.10.2026): up to 40.000.000
+  TL nominal B shares (≈%3,57 of 1.122.000.000 TL capital), fund raised to 500.000.000 TL, max price 12,50
+  TL kept, duration kept at one year. "bir yıllık" is not a written number, so duration_months stays null
+  (analyst rule: no unit conversion, e.g. "3 yıl" → null).

@@ -1,0 +1,79 @@
+{
+ "fixture": "detail_1688504.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_GAI_Report_ID",
+   "families": [
+    "report"
+   ],
+   "span_count": 31,
+   "span_paths": {
+    "form": 11,
+    "para": 2,
+    "table": 18
+   },
+   "text_len": 1558,
+   "text_sha": "1dc12bca720cb8ad",
+   "paragraphs": 2,
+   "form_fields": [
+    [
+     "ozet bilgi",
+     "Günlük Pay Geri Alım İşlemleri"
+    ],
+    [
+     "yapilan aciklama guncelleme mi",
+     "Evet"
+    ],
+    [
+     "yapilan aciklama duzeltme mi",
+     "Hayır"
+    ],
+    [
+     "yapilan aciklama ertelenmis bir aciklama mi",
+     "Hayır"
+    ],
+    [
+     "geri alim islemini gerceklestiren ortaklik",
+     "HACI ÖMER SABANCI HOLDİNG A.Ş."
+    ],
+    [
+     "geri alim islemine konu ortaklik",
+     "HACI ÖMER SABANCI HOLDİNG A.Ş."
+    ],
+    [
+     "geri alim isleminin niteligi",
+     "Diğer"
+    ],
+    [
+     "soz konusu geri alimin amaci",
+     "Pay fiyatında sağlıklı ve istikrarlı fiyat oluşumunun desteklenmesi, pay sahiplerinin menfaatlerinin korunması ve pay fiyatının Şirketin faaliyetlerinin gerçek performansını yansıtmasının sağlanması"
+    ],
+    [
+     "yonetim kurulu karar tarihi",
+     "16.10.2026"
+    ],
+    [
+     "geri alima konu pay miktari nominal tl",
+     "42.000.000"
+    ],
+    [
+     "odenecek azami tutar tl",
+     "7.000.000.000"
+    ]
+   ],
+   "tables": [
+    {
+     "caption": "Geri Alım İşlemlerinin Detayları",
+     "header_len": 6,
+     "rows": 3,
+     "cols": 6
+    }
+   ],
+   "extra": {}
+  }
+ ]
+}

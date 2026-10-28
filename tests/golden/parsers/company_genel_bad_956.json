@@ -1,0 +1,9 @@
+{
+ "fixture": "company_genel_bad_956.html.gz",
+ "documents": [
+  {
+   "target": "capital",
+   "error": "CapitalSectionMissing"
+  }
+ ]
+}

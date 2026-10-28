@@ -1,0 +1,137 @@
+{
+ "fixture": "detail_1688292.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_oda-54000_Financial-Calender",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 13,
+   "span_paths": {
+    "form": 10,
+    "para": 3
+   },
+   "text_len": 561,
+   "text_sha": "cb9444ce429e1895",
+   "paragraphs": 3,
+   "form_fields": [
+    [
+     "ilgili sirketler",
+     "[]"
+    ],
+    [
+     "ilgili fonlar",
+     "[]"
+    ],
+    [
+     "oda_UpdateAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "-"
+    ],
+    [
+     "oda_DelayedAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "Sayın Paydaşlarımız;\nŞirketimizin 01.01.2026-30.09.2026 dönemine ilişkin finansal raporlarının 30.10.2026 tarihinde kamuya açıklanması planlanmaktadır.\nKamuoyuna saygıyla duyurulur."
+    ],
+    [
+     "oda_FirstQuarter",
+     ""
+    ],
+    [
+     "oda_SecondQuarter",
+     ""
+    ],
+    [
+     "oda_ThirdQuarter",
+     "01/01/2026 30/09/2026 30/10/2026"
+    ],
+    [
+     "oda_Annual",
+     ""
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  },
+  {
+   "target": "body:en",
+   "kind": "disclosure_body",
+   "language": "en",
+   "mime": "text/html",
+   "template_id": "tbl_oda-54000_Financial-Calender",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 14,
+   "span_paths": {
+    "form": 10,
+    "para": 4
+   },
+   "text_len": 692,
+   "text_sha": "6be9091ff97e60e1",
+   "paragraphs": 4,
+   "form_fields": [
+    [
+     "related companies",
+     "[]"
+    ],
+    [
+     "related funds",
+     "[]"
+    ],
+    [
+     "oda_UpdateAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "-"
+    ],
+    [
+     "oda_DelayedAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "Dear Stakeholders,\nOur Company's financial reports for the period 01.01.2026-30.09.2026 are planned to be disclosed to the public on 30.10.2026.\nRespectfully announced to the public.\nIn case of a discrepancy between the Turkish and the English versions of this disclosure, the Turkish version shall prevail."
+    ],
+    [
+     "oda_FirstQuarter",
+     ""
+    ],
+    [
+     "oda_SecondQuarter",
+     ""
+    ],
+    [
+     "oda_ThirdQuarter",
+     "01/01/2026 30/09/2026 30/10/2026"
+    ],
+    [
+     "oda_Annual",
+     ""
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  }
+ ]
+}

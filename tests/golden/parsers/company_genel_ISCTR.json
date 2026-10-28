@@ -1,0 +1,69 @@
+{
+ "fixture": "company_genel_ISCTR.html.gz",
+ "documents": [
+  {
+   "target": "capital",
+   "paid_in_capital": "25000000000",
+   "registered_capital_ceiling": "100000000000",
+   "share_groups": [
+    {
+     "group": "A",
+     "registered": "Nama",
+     "nominal_per_share": "0.01",
+     "nominal_total": "1000",
+     "capital_pct": "0",
+     "privilege": "Olağanüstü yedek akçelerden veya yasalara göre yapılacak değerlendirmelerden oluşacak kaynaklardan verilecek bedelsiz pay alımında 20 kat pay alımı, rüçhan hakkı kullanımında 20 kat hak kullanımı ve tasfiye işlemlerine ilişkin imtiyazı mevcuttur. Ayrıca, kar dağıtımında da imtiyazları bulunmaktadır.",
+     "traded": true
+    },
+    {
+     "group": "B",
+     "registered": "Nama",
+     "nominal_per_share": "0.01",
+     "nominal_total": "29000",
+     "capital_pct": "0",
+     "privilege": "Daha düşük nominal değere sahip olmalarına rağmen, A grubu için sayılan hususlarda C Grubu paylar ile aynı haklara sahiptir. Ayrıca, kar dağıtımında da imtiyazları bulunmaktadır.",
+     "traded": true
+    },
+    {
+     "group": "C",
+     "registered": "Nama",
+     "nominal_per_share": null,
+     "nominal_total": null,
+     "capital_pct": null,
+     "privilege": null,
+     "traded": false
+    }
+   ],
+   "free_float": {
+    "ISATR": {
+     "total_shares": "1000.00",
+     "non_traded_shares": "747.18",
+     "traded_shares": "252.82",
+     "free_float_shares": "235.47",
+     "free_float_pct": "23.54"
+    },
+    "ISBTR": {
+     "total_shares": "29000.00",
+     "non_traded_shares": "16004.55",
+     "traded_shares": "12995.45",
+     "free_float_shares": "7380",
+     "free_float_pct": "25.44"
+    },
+    "ISCTR": {
+     "total_shares": "24999970000.00",
+     "non_traded_shares": "16119590056.09",
+     "traded_shares": "8880379943.91",
+     "free_float_shares": "7329384879.60",
+     "free_float_pct": "29.31"
+    },
+    "ISKUR": {
+     "total_shares": "2458.00",
+     "non_traded_shares": "1701.00",
+     "traded_shares": "757.00",
+     "free_float_shares": "687.99",
+     "free_float_pct": "27.98"
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,161 @@
+{
+ "fixture": "detail_1688011.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_oda-12000_New-Business-Relation",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 16,
+   "span_paths": {
+    "form": 13,
+    "para": 3
+   },
+   "text_len": 1280,
+   "text_sha": "ed71f56ffd350485",
+   "paragraphs": 3,
+   "form_fields": [
+    [
+     "ilgili sirketler",
+     "[]"
+    ],
+    [
+     "ilgili fonlar",
+     "[]"
+    ],
+    [
+     "oda_UpdateAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "-"
+    ],
+    [
+     "oda_DelayedAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_NatureOfTheOtherPartyWithWhichNewBusinessRelationWillStart",
+     "Müşteri (Customer)"
+    ],
+    [
+     "oda_NameSurnameOrCompanyTitleOfCustomerOrSupplier",
+     "Yurt İçi Yerleşik Şirket"
+    ],
+    [
+     "oda_IfExistsShareOfCustomerOrSupplierInNetSalesOrCostOfGoodsSoldOnLatestDisclosedProfitOrLossAndOtherComprehensiveIncomeStatementOfCompany",
+     "-"
+    ],
+    [
+     "oda_IfExistsShareOfCustomerOrSupplierInTradeReceivablesOrDebtsOnLatestDisclosedStatementofFinancialPositionOfCompany",
+     "-"
+    ],
+    [
+     "oda_ExpectedStartingDateOfNewBusinessRelation",
+     "27/10/2026"
+    ],
+    [
+     "oda_IfExistSignificantProvisionsOfTheContractTextBlock",
+     "-"
+    ],
+    [
+     "oda_ImpactOfNewBusinessRelationOnCompanyActivities",
+     "Şirketin cirosunu ve karlılığını olumlu etkileyecektir."
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "Şirketimiz, yurt içi yerleşik bir şirketten bugün (27.10.2026) kırma eleme tesisi siparişi almıştır. Sipariş bedelleri toplamı KDV hariç 1.325.000 (BirMilyonÜçYüzYirmiBeşBin) EUR 'dır.\nKamuoyuna saygıyla duyurulur.\nİşbu açıklamanın İngilizce çevirisi de eş zamanlı olarak kamuoyuna açıklanmış olup, metinler arasında herhangi bir farklılık olması durumunda Türkçe versiyon esas alınacaktır."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  },
+  {
+   "target": "body:en",
+   "kind": "disclosure_body",
+   "language": "en",
+   "mime": "text/html",
+   "template_id": "tbl_oda-12000_New-Business-Relation",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 16,
+   "span_paths": {
+    "form": 13,
+    "para": 3
+   },
+   "text_len": 1444,
+   "text_sha": "d5af3831090ac566",
+   "paragraphs": 3,
+   "form_fields": [
+    [
+     "related companies",
+     "[]"
+    ],
+    [
+     "related funds",
+     "[]"
+    ],
+    [
+     "oda_UpdateAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "-"
+    ],
+    [
+     "oda_DelayedAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_NatureOfTheOtherPartyWithWhichNewBusinessRelationWillStart",
+     "Müşteri (Customer)"
+    ],
+    [
+     "oda_NameSurnameOrCompanyTitleOfCustomerOrSupplier",
+     "Domestic Company"
+    ],
+    [
+     "oda_IfExistsShareOfCustomerOrSupplierInNetSalesOrCostOfGoodsSoldOnLatestDisclosedProfitOrLossAndOtherComprehensiveIncomeStatementOfCompany",
+     "-"
+    ],
+    [
+     "oda_IfExistsShareOfCustomerOrSupplierInTradeReceivablesOrDebtsOnLatestDisclosedStatementofFinancialPositionOfCompany",
+     "-"
+    ],
+    [
+     "oda_ExpectedStartingDateOfNewBusinessRelation",
+     "27/10/2026"
+    ],
+    [
+     "oda_IfExistSignificantProvisionsOfTheContractTextBlock",
+     "-"
+    ],
+    [
+     "oda_ImpactOfNewBusinessRelationOnCompanyActivities",
+     "This will positively impact the company's revenue and profitability."
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "Our company has received an order for a crushing and screening plant from a domestic company today (October 27, 2026). The total value of the order, excluding VAT, is 1,325,000 (One Million Three Hundred Twenty-Five Thousand) EUR.\nThis is respectfully announced to the public.\nThe English translation of this disclosure has been publicly announced simultaneously, and in the event of any discrepancy between the texts of the disclosures, the Turkish version shall prevail."
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+# Extraction golden item (PRD 11 §2 "Extraction golden set"; suite `papi eval --suite analyst`).
+# Drafted by an LLM (Claude) from the fixture text; the owner confirms it with `papi eval review`.
+id: 03-rights-issue-1687750
+event_code: capital.increase.rights
+fixture: detail_1687750.json
+attachments: []
+filer: CEMAS
+related: []
+reviewed: false
+drafted_by: claude (LLM) from tests/fixtures/kap/detail_1687750.json, 2026-10-28
+gold:
+  payload:
+    board_decision_date: "2026-10-26"
+    current_capital: 791000000
+    target_capital: 1582000000
+    rights_amount: 791000000
+    rights_rate_pct: 100
+    subscription_price: 1
+    rights_start_date: null
+    rights_end_date: null
+    registered_capital_ceiling: 2000000000
+    currency: TRY
+  spans:
+    board_decision_date: [5, 23]
+    current_capital: [7, 10, 17, 25]
+    target_capital: [8, 25]
+    rights_amount: [11, 18, 25, 26]
+    rights_rate_pct: [12, 19, 25]
+    subscription_price: [13, 26]
+    registered_capital_ceiling: [6, 25]
+    currency: [21]
+  derived: []
+notes: >-
+  CEMAS board (26.10.2026): 791.000.000 TL → 1.582.000.000 TL (%100 bedelli, all as rights at 1 TL per
+  1 TL share), ceiling 2.000.000.000 TL, 15-day subscription period whose dates are not set yet. No
+  private placement (not scored: null vs 0 is a convention, not a fact).

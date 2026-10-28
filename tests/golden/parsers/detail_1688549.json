@@ -1,0 +1,356 @@
+{
+ "fixture": "detail_1688549.json.gz",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_general_role_210015",
+   "families": [
+    "taxonomy",
+    "taxonomy",
+    "taxonomy",
+    "taxonomy",
+    "taxonomy"
+   ],
+   "span_count": 803,
+   "span_paths": {
+    "form": 72,
+    "table": 731
+   },
+   "text_len": 23464,
+   "text_sha": "400ffde6bd66d0f4",
+   "paragraphs": 0,
+   "form_fields": [
+    [
+     "sunum para birimi",
+     "TL"
+    ],
+    [
+     "finansal tablo niteligi",
+     "Konsolide"
+    ],
+    [
+     "sunum para birimi",
+     "TL"
+    ],
+    [
+     "finansal tablo niteligi",
+     "Konsolide"
+    ],
+    [
+     "sunum para birimi",
+     "TL"
+    ],
+    [
+     "finansal tablo niteligi",
+     "Konsolide"
+    ],
+    [
+     "sunum para birimi",
+     "TL"
+    ],
+    [
+     "finansal tablo niteligi",
+     "Konsolide"
+    ],
+    [
+     "sunum para birimi",
+     "TL"
+    ],
+    [
+     "finansal tablo niteligi",
+     "Konsolide"
+    ],
+    [
+     "ifrs-full_Equity",
+     "194.529.076 62.052.856 -753.189.126 -105.971.754 40.027.097 1.967.355.158 10.780.943.130 63.647.527 -954.135.431 -270.151 458.633.027 2.840.775.345 -1.096.131.983 13.498.264.771 3.706.940.789 17.205.205.560"
+    ],
+    [
+     "kap-fr_FinancialEffectOfChangesInAccountingPolicy",
+     ""
+    ],
+    [
+     "kap-fr_IncreaseDecreaseDueToChangesInAccountingPolicyRequiredByIFRSs",
+     ""
+    ],
+    [
+     "kap-fr_IncreaseDecreaseDueToVoluntaryChangesInAccountingPolicy",
+     ""
+    ],
+    [
+     "kap-fr_FinancialEffectOfCorrectionsOfAccountingErrors",
+     ""
+    ],
+    [
+     "kap-fr_OtherRestatements",
+     ""
+    ],
+    [
+     "kap-fr_RestatedBalances",
+     ""
+    ],
+    [
+     "kap-fr_Transfers",
+     "1.303.423 -1.097.435.406 1.096.131.983"
+    ],
+    [
+     "ifrs-full_ComprehensiveIncome",
+     "-677.550 999.941.398 1.813.400.201 -296.714.802 -34.008.819 -858.871.941 1.623.068.487 674.260.694 2.297.329.181"
+    ],
+    [
+     "ifrs-full_ProfitLoss",
+     ""
+    ],
+    [
+     "ifrs-full_OtherComprehensiveIncome",
+     ""
+    ],
+    [
+     "ifrs-full_IssueOfEquity",
+     ""
+    ],
+    [
+     "kap-fr_CapitalDecrease",
+     ""
+    ],
+    [
+     "kap-fr_EffectOfCapitalAdvance",
+     ""
+    ],
+    [
+     "kap-fr_EffectOfMergerOrLiquidationOrDivision",
+     ""
+    ],
+    [
+     "kap-fr_EffectsOfBusinessCombinationsUnderCommonControl",
+     ""
+    ],
+    [
+     "kap-fr_EffectsOfAdvanceDividendPayments",
+     ""
+    ],
+    [
+     "ifrs-full_DividendsPaid",
+     "-70.320.124 -70.320.124"
+    ],
+    [
+     "ifrs-full_IncreaseDecreaseThroughOtherDistributionsToOwners",
+     ""
+    ],
+    [
+     "ifrs-full_IncreaseDecreaseThroughTreasuryShareTransactions",
+     ""
+    ],
+    [
+     "ifrs-full_IncreaseDecreaseThroughSharebasedPaymentTransactions",
+     ""
+    ],
+    [
+     "kap-fr_AcquisitionOrDisposalOfASubsidiary",
+     ""
+    ],
+    [
+     "ifrs-full_IncreaseDecreaseThroughChangesInOwnershipInterestsInSubsidiariesThatDoNotResultInLossOfControl",
+     ""
+    ],
+    [
+     "kap-fr_TransactionsWithNoncontrollingShareholders",
+     "753.189.126 579.418.304 20.375.239 -1.198.454.599 154.528.070 -344.342.796 -189.814.726"
+    ],
+    [
+     "ifrs-full_IncreaseDecreaseThroughOtherContributionsByOwners",
+     ""
+    ],
+    [
+     "ifrs-full_AmountRemovedFromReserveOfCashFlowHedgesAndIncludedInInitialCostOrOtherCarryingAmountOfNonfinancialAssetLiabilityOrFirmCommitmentForWhichFairValueHedgeAccountingIsApplied",
+     ""
+    ],
+    [
+     "ifrs-full_AmountRemovedFromReserveOfChangeInValueOfTimeValueOfOptionsAndIncludedInInitialCostOrOtherCarryingAmountOfNonfinancialAssetLiabilityOrFirmCommitmentForWhichFairValueHedgeAccountingIsApplied",
+     ""
+    ],
+    [
+     "ifrs-full_AmountRemovedFromReserveOfChangeInValueOfForwardElementsOfForwardContractsAndIncludedInInitialCostOrOtherCarryingAmountOfNonfinancialAssetLiabilityOrFirmCommitmentForWhichFairValueHedgeAccountingIsApplied",
+     ""
+    ],
+    [
+     "ifrs-full_AmountRemovedFromReserveOfChangeInValueOfForeignCurrencyBasisSpreadsAndIncludedInInitialCostOrOtherCarryingAmountOfNonfinancialAssetLiabilityOrFirmCommitmentForWhichFairValueHedgeAccountingIsApplied",
+     ""
+    ],
+    [
+     "ifrs-full_IncreaseDecreaseThroughTransfersAndOtherChangesEquity",
+     ""
+    ],
+    [
+     "ifrs-full_Equity",
+     "194.529.076 62.052.856 0 -106.649.304 40.027.097 2.967.296.556 13.173.761.635 -233.067.275 -988.144.250 -270.151 480.311.689 544.885.340 -858.871.941 15.275.861.328 3.966.538.563 19.242.399.891"
+    ],
+    [
+     "ifrs-full_Equity",
+     "194.529.076 2.060.570.002 62.052.856 0 -80.934.912 40.027.097 4.354.219.373 12.214.736.236 -35.556.453 -989.086.966 -270.151 480.427.363 544.769.666 -1.491.314.822 17.354.168.365 4.042.992.887 21.397.161.252"
+    ],
+    [
+     "kap-fr_FinancialEffectOfChangesInAccountingPolicy",
+     ""
+    ],
+    [
+     "kap-fr_IncreaseDecreaseDueToChangesInAccountingPolicyRequiredByIFRSs",
+     ""
+    ],
+    [
+     "kap-fr_IncreaseDecreaseDueToVoluntaryChangesInAccountingPolicy",
+     ""
+    ],
+    [
+     "kap-fr_FinancialEffectOfCorrectionsOfAccountingErrors",
+     ""
+    ],
+    [
+     "kap-fr_OtherRestatements",
+     ""
+    ],
+    [
+     "kap-fr_RestatedBalances",
+     ""
+    ],
+    [
+     "kap-fr_Transfers",
+     "-1.491.314.822 1.491.314.822"
+    ],
+    [
+     "ifrs-full_ComprehensiveIncome",
+     "12.557.713 551.007.192 1.822.638.805 61.756.790 -5.445.296 769.496.893 3.212.012.097 790.852.347 4.002.864.444"
+    ],
+    [
+     "ifrs-full_ProfitLoss",
+     ""
+    ],
+    [
+     "ifrs-full_OtherComprehensiveIncome",
+     ""
+    ],
+    [
+     "ifrs-full_IssueOfEquity",
+     "3.501.331.196 -3.501.331.196"
+    ],
+    [
+     "kap-fr_CapitalDecrease",
+     ""
+    ],
+    [
+     "kap-fr_EffectOfCapitalAdvance",
+     "505.888.562 505.888.562 505.888.562"
+    ],
+    [
+     "kap-fr_EffectOfMergerOrLiquidationOrDivision",
+     ""
+    ],
+    [
+     "kap-fr_EffectsOfBusinessCombinationsUnderCommonControl",
+     ""
+    ],
+    [
+     "kap-fr_EffectsOfAdvanceDividendPayments",
+     ""
+    ],
+    [
+     "ifrs-full_DividendsPaid",
+     "-123.966.950 -123.966.950"
+    ],
+    [
+     "ifrs-full_IncreaseDecreaseThroughOtherDistributionsToOwners",
+     ""
+    ],
+    [
+     "ifrs-full_IncreaseDecreaseThroughTreasuryShareTransactions",
+     ""
+    ],
+    [
+     "ifrs-full_IncreaseDecreaseThroughSharebasedPaymentTransactions",
+     ""
+    ],
+    [
+     "kap-fr_AcquisitionOrDisposalOfASubsidiary",
+     ""
+    ],
+    [
+     "ifrs-full_IncreaseDecreaseThroughChangesInOwnershipInterestsInSubsidiariesThatDoNotResultInLossOfControl",
+     ""
+    ],
+    [
+     "kap-fr_TransactionsWithNoncontrollingShareholders",
+     ""
+    ],
+    [
+     "ifrs-full_IncreaseDecreaseThroughOtherContributionsByOwners",
+     ""
+    ],
+    [
+     "ifrs-full_AmountRemovedFromReserveOfCashFlowHedgesAndIncludedInInitialCostOrOtherCarryingAmountOfNonfinancialAssetLiabilityOrFirmCommitmentForWhichFairValueHedgeAccountingIsApplied",
+     ""
+    ],
+    [
+     "ifrs-full_AmountRemovedFromReserveOfChangeInValueOfTimeValueOfOptionsAndIncludedInInitialCostOrOtherCarryingAmountOfNonfinancialAssetLiabilityOrFirmCommitmentForWhichFairValueHedgeAccountingIsApplied",
+     ""
+    ],
+    [
+     "ifrs-full_AmountRemovedFromReserveOfChangeInValueOfForwardElementsOfForwardContractsAndIncludedInInitialCostOrOtherCarryingAmountOfNonfinancialAssetLiabilityOrFirmCommitmentForWhichFairValueHedgeAccountingIsApplied",
+     ""
+    ],
+    [
+     "ifrs-full_AmountRemovedFromReserveOfChangeInValueOfForeignCurrencyBasisSpreadsAndIncludedInInitialCostOrOtherCarryingAmountOfNonfinancialAssetLiabilityOrFirmCommitmentForWhichFairValueHedgeAccountingIsApplied",
+     ""
+    ],
+    [
+     "ifrs-full_IncreaseDecreaseThroughTransfersAndOtherChangesEquity",
+     ""
+    ],
+    [
+     "ifrs-full_Equity",
+     "3.695.860.272 2.566.458.564 62.052.856 0 -68.377.199 40.027.097 1.403.895.369 14.037.375.041 26.200.337 -994.532.262 -270.151 480.427.363 -946.545.156 769.496.893 21.072.069.024 4.709.878.284 25.781.947.308"
+    ]
+   ],
+   "tables": [
+    {
+     "caption": "Finansal Durum Tablosu (Bilanço)",
+     "header_len": 4,
+     "rows": 90,
+     "cols": 4
+    },
+    {
+     "caption": "Pay Başına Kazanç (Zarar)",
+     "header_len": 0,
+     "rows": 1,
+     "cols": 4
+    },
+    {
+     "caption": "Pay Başına Kazanç (Zarar)",
+     "header_len": 0,
+     "rows": 1,
+     "cols": 4
+    },
+    {
+     "caption": "Kar veya Zarar Tablosu",
+     "header_len": 6,
+     "rows": 26,
+     "cols": 6
+    },
+    {
+     "caption": "Diğer Kapsamlı Gelir Tablosu",
+     "header_len": 6,
+     "rows": 22,
+     "cols": 6
+    },
+    {
+     "caption": "Nakit Akış Tablosu (Dolaylı Yöntem)",
+     "header_len": 4,
+     "rows": 65,
+     "cols": 4
+    }
+   ],
+   "extra": {}
+  }
+ ]
+}

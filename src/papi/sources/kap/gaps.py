@@ -8,9 +8,12 @@ State (kv_state ``kap:gaps``)::
      "dead": [1688599]}               # never answered after MAX_TRIES (non-public / never published)
 
 Many integers are legitimately absent from the company list: fund disclosures (``disclosureType``
-``FON``) share the sequence. Probing fetches ``attachment-detail/<index>``; in-scope hits are
-ingested (``discovered_by = gap``), fund hits are skipped, unknown indices (HTTP 500 ``success:false``)
-are retried with growing spacing and given up after ``MAX_TRIES``.
+``FON``) share the sequence (about a third of all indices). ``scan_gaps`` resolves them with one
+request to KAP's fund-disclosure list for the gap's days and records them as skipped; only the rest
+are probed: ``attachment-detail/<index>``; in-scope hits are ingested (``discovered_by = gap``), fund
+hits are skipped, unknown indices (HTTP 500 ``success:false``) are retried with growing spacing
+(10 min doubling) and given up after ``MAX_TRIES``; at most ``PROBES_PER_RUN`` probes are enqueued per
+scan, at ``PRIO_GAP`` (behind live and catch-up fetches).
 """
 
 from __future__ import annotations
@@ -25,8 +28,8 @@ from sqlalchemy import Connection, Integer, cast, select
 from papi.core import events, jobs, metrics
 from papi.core.schema import disclosure
 from papi.core.state import get_state, set_state
-from papi.core.timeutil import now_utc, parse_iso
-from papi.sources.kap.client import KapClient, KapJson, KapNotFound
+from papi.core.timeutil import ist_date, now_utc, parse_iso
+from papi.sources.kap.client import KapClient, KapError, KapJson, KapNotFound
 from papi.sources.kap.common import EVENT_SOURCE, JOB_PROBE, PRIO_GAP, kap_source_id, published_at, release
 from papi.sources.kap.ingest import FetchOutcome, process_disclosure
 
@@ -37,6 +40,7 @@ MAX_TRIES = 5
 RETRY_BASE_S = 600.0  # 10 min, doubling per try
 PROBES_PER_RUN = 50
 CATCHUP_AGE = timedelta(minutes=15)
+FUND_LIST_MAX_DAYS = 31
 
 
 @dataclass
@@ -46,6 +50,7 @@ class GapReport:
     new_missing: list[int] = field(default_factory=list)
     enqueued: int = 0
     closed: int = 0
+    funds_skipped: int = 0
 
 
 def load_state(conn: Connection) -> dict[str, Any]:
@@ -73,9 +78,12 @@ def _advance(st: dict[str, Any], known: set[int]) -> None:
     st["dead"] = sorted(i for i in st["dead"] if wm is None or i > wm)
 
 
-def detect_gaps(conn: Connection, *, now: datetime | None = None, enqueue: bool = True) -> GapReport:
+def detect_gaps(
+    conn: Connection, *, now: datetime | None = None, enqueue: bool = True, client: KapClient | None = None
+) -> GapReport:
     """Find missing indices between the watermark and the highest known ref; enqueue probes (caller
-    commits)."""
+    commits). With ``client``, open indices never probed yet that KAP lists as fund disclosures are
+    skipped without probing (one list request; the open transaction is committed first)."""
     now = now or now_utc()
     sid = kap_source_id(conn)
     st = load_state(conn)
@@ -103,6 +111,21 @@ def detect_gaps(conn: Connection, *, now: datetime | None = None, enqueue: bool 
         report.new_missing.append(i)
     _advance(st, known)
     st["open"] = {k: v for k, v in open_.items() if st["watermark"] is None or int(k) > st["watermark"]}
+    unprobed = {int(k) for k, v in st["open"].items() if not v.get("tries") and not v.get("fund_checked")}
+    if client is not None and unprobed:
+        set_state(conn, GAPS_KEY, st)
+        funds = _listed_funds(conn, client, st["watermark"], now)
+        st = load_state(conn)
+        if funds is not None:
+            for i in funds:
+                st["open"].pop(str(i), None)
+            for i in unprobed - funds:
+                if str(i) in st["open"]:
+                    st["open"][str(i)]["fund_checked"] = True
+            st["skipped"] = sorted(set(st["skipped"]) | funds)
+            _advance(st, known)
+            report.new_missing = [i for i in report.new_missing if i not in funds]
+            report.funds_skipped = len(unprobed & funds)
     report.watermark = st["watermark"]
     report.open = len(st["open"])
     if report.new_missing:
@@ -118,6 +141,44 @@ def detect_gaps(conn: Connection, *, now: datetime | None = None, enqueue: bool 
     set_state(conn, GAPS_KEY, st)
     metrics.record("kap.gaps.open", report.open, conn=conn)
     return report
+
+
+def scan_gaps(conn: Connection, client: KapClient, *, now: datetime | None = None) -> GapReport:
+    """Periodic gap scan: ``detect_gaps`` with fund-list resolution, committed."""
+    report = detect_gaps(conn, now=now, client=client)
+    conn.commit()
+    return report
+
+
+def _listed_funds(
+    conn: Connection, client: KapClient, watermark: int | None, now: datetime
+) -> set[int] | None:
+    """Fund-disclosure indices above ``watermark`` from KAP's fund list, for the days since the
+    watermark's disclosure (at most ``FUND_LIST_MAX_DAYS``). ``None`` on any KAP error (the indices
+    are then probed one by one)."""
+    sid = kap_source_id(conn)
+    idx = cast(disclosure.c.source_ref, Integer)
+    base = select(disclosure.c.published_at).where(
+        disclosure.c.source_id == sid, disclosure.c.published_at.is_not(None)
+    )
+    pub = None
+    if watermark is not None:
+        pub = conn.execute(base.where(idx <= watermark).order_by(idx.desc()).limit(1)).scalar()
+        if pub is None:
+            pub = conn.execute(base.where(idx > watermark).order_by(idx).limit(1)).scalar()
+    today = ist_date(now)
+    start = max(ist_date(pub) if pub is not None else today, today - timedelta(days=FUND_LIST_MAX_DAYS))
+    release(conn)
+    try:
+        res = client.list_fund_disclosures(min(start, today), today)
+    except KapError as exc:
+        log.warning("kap gaps: fund list unavailable (%s); probing instead", exc)
+        return None
+    return {
+        i
+        for it in res.items
+        if isinstance(i := it.get("disclosureIndex"), int) and (watermark is None or i > watermark)
+    }
 
 
 def _due(entry: dict[str, Any], now: datetime) -> bool:
@@ -164,6 +225,11 @@ def probe_index(conn: Connection, client: KapClient, index: int, *, now: datetim
         _close(conn, index, None)
         conn.commit()
         return "known"
+    st = load_state(conn)
+    if index in st["skipped"] or (st["watermark"] is not None and index <= st["watermark"]):
+        return "skipped"  # resolved meanwhile (fund list), no request needed
+    if index in st["dead"]:
+        return "dead"
     release(conn)
     try:
         detail: KapJson = client.disclosure_detail(index)

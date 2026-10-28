@@ -329,6 +329,9 @@ def _toml_value(value: Any) -> str:
 def _render_section(prefix: str, model: BaseModel, lines: list[str]) -> None:
     lines.append(f"[{prefix}]")
     nested: list[tuple[str, BaseModel]] = []
+    # Array-of-tables examples go after the section and its sub-tables: uncommented in place, a
+    # ``[[llm.focus]]`` header would capture every key that follows it.
+    table_examples: list[str] = []
     for name, field in type(model).model_fields.items():
         if prefix == "paths" and name == "home":
             lines.append('# home = "~/.papi"  # not read from this file; set the PAPI_HOME env var')
@@ -346,17 +349,21 @@ def _render_section(prefix: str, model: BaseModel, lines: list[str]) -> None:
             continue
         elif isinstance(value, list) and not value and name == "focus":
             example = FocusWindow()
-            lines.append(f"# Focus schedule example ({field.description}):")
-            lines.append("# [[llm.focus]]")
-            lines.append(f"# days = {_toml_value(example.days)}")
-            lines.append(f"# start = {_toml_value(example.start)}")
-            lines.append(f"# end = {_toml_value(example.end)}")
-            lines.append(f"# max_priority = {_toml_value(example.max_priority)}")
+            table_examples += [
+                f"# Focus schedule example ({field.description}):",
+                "# [[llm.focus]]",
+                f"# days = {_toml_value(example.days)}",
+                f"# start = {_toml_value(example.start)}",
+                f"# end = {_toml_value(example.end)}",
+                f"# max_priority = {_toml_value(example.max_priority)}",
+                "",
+            ]
         else:
             lines.append(f"{name} = {_toml_value(value)}{desc}")
     lines.append("")
     for name, sub in nested:
         _render_section(f"{prefix}.{name}", sub, lines)
+    lines.extend(table_examples)
 
 
 def render_default_config() -> str:

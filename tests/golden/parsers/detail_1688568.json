@@ -1,0 +1,55 @@
+{
+ "fixture": "detail_1688568.json",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_oda-12800_CMB-Bulletin",
+   "families": [
+    "taxonomy"
+   ],
+   "span_count": 7,
+   "span_paths": {
+    "form": 6,
+    "para": 1
+   },
+   "text_len": 261,
+   "text_sha": "f81e4f46ba8b4739",
+   "paragraphs": 1,
+   "form_fields": [
+    [
+     "ilgili sirketler",
+     "[]"
+    ],
+    [
+     "ilgili fonlar",
+     "[]"
+    ],
+    [
+     "oda_CorrectionAnnouncementFlag",
+     "Hayır (No)"
+    ],
+    [
+     "oda_DateOfThePreviousNotificationAboutTheSameSubject",
+     "-"
+    ],
+    [
+     "oda_Date",
+     "27/10/2026"
+    ],
+    [
+     "oda_NumberOfIssue",
+     "2026-77"
+    ],
+    [
+     "oda_ExplanationTextBlock",
+     "spk.gov.tr/data/6ae0e2ce8f95dc0c1408d476/2026-77.pdf"
+    ]
+   ],
+   "tables": [],
+   "extra": {}
+  }
+ ]
+}

@@ -9,7 +9,8 @@ respx, so the tests make no network calls.
 
 | File | Endpoint | Notes |
 |---|---|---|
-| `list_2026-10-27_2026-10-28.json.gz` | `POST /tr/api/disclosure/members/byCriteria` with `{"fromDate":"2026-10-27","toDate":"2026-10-28","mkkMemberOidList":[],"subjectList":[]}` | 679 items, newest first. Indices run from 1687719 to 1688616; the 219 missing integers are mostly fund disclosures. A 2026-10-01…26 window returned exactly 2000 rows (the cap) — the newest 2000. |
+| `list_2026-10-27_2026-10-28.json.gz` | `POST /tr/api/disclosure/members/byCriteria` with `{"fromDate":"2026-10-27","toDate":"2026-10-28","mkkMemberOidList":[],"subjectList":[]}` | 679 items, newest first. Indices run from 1687719 to 1688616; the 219 missing integers are all fund disclosures (see the next row). A 2026-10-01…26 window returned exactly 2000 rows (the cap) — the newest 2000. |
+| `funds_2026-10-27_2026-10-28.json.gz` | `POST /tr/api/disclosure/funds/byCriteria` with the same body (recorded 2026-10-28 06:46, trimmed to indices ≤ 1688616) | 219 fund disclosures (`disclosureType` `FON`, `fundCode` set) — exactly the indices missing from the members list. Gap detection skips them with this one request instead of 219 detail probes. |
 | `companies_IGS.json.gz` | `GET /tr/api/company/items/IGS/A` | 756 listed companies. `stockCode` may hold several codes, e.g. `"ISATR, ISBTR, ISCTR, ISKUR, TIB"` or `"AKM, AKMEN"`. There is no ISIN field. |
 | `detail_<index>.json[.gz]` | `GET /tr/api/notification/attachment-detail/<index>` | `[{disclosure:{disclosureBasic, disclosureDetail}, disclosureBody:[html…], attachments:[{objId,fileName,fileExtension}]}]` |
 | `detail_1688553_fund.json` | the same detail endpoint | An index **missing from the list**: it is a fund disclosure (`disclosureType` `FON`, `fundType` `SYF`), so a gap probe skips it. |

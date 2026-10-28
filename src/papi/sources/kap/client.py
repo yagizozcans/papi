@@ -5,8 +5,9 @@ Pipeline code depends only on ``KapClient``. The public-web client is polite by 
 * **one request at a time** process-wide (a lock) with at least ``kap.min_request_interval`` seconds
   between requests, an honest User-Agent, and bounded retries with exponential backoff + jitter;
 * a **circuit breaker** (state in ``kv_state`` ``kap:circuit`` so every process honours it) that opens
-  immediately on WAF-style answers (non-standard status such as 666, 403, 429) and on a spike of 5xx /
-  network failures; the triggering fetch is logged with ``fetch_log.outcome = 'blocked'``;
+  immediately on WAF-style answers (non-standard status such as 666, 403, 429) and after consecutive
+  requests that still failed (5xx / network) after their retries; the triggering fetch is logged with
+  ``fetch_log.outcome = 'blocked'``;
 * **every response body is archived** through ``papi.core.rawstore.put_bytes`` (source ``kap``) in its
   own short transaction, so bytes survive any later parse failure. Callers must not hold an open
   write transaction on the same database while calling the client.
@@ -16,6 +17,8 @@ Endpoints (verified live 2026-10-28; unofficial, may change — see drift checks
 * ``POST /tr/api/disclosure/members/byCriteria`` ``{"fromDate","toDate","mkkMemberOidList",
   "subjectList"}`` → JSON array, newest first, **capped at 2000 rows** (windows are split).
   Fund disclosures (``disclosureType`` ``FON``) are not included.
+* ``POST /tr/api/disclosure/funds/byCriteria`` (same body) → the fund disclosures (``FON``) of the
+  window: the indices the members list skips (gap detection marks them out of scope in one request).
 * ``GET /tr/api/notification/attachment-detail/<index>`` → ``[{disclosure, disclosureBody, attachments}]``;
   an unknown/non-public index answers HTTP 500 ``{"success":false,...}``.
 * ``GET /tr/api/file/download/<objId>`` → Java-serialised ``byte[]`` wrapping the file.
@@ -50,6 +53,8 @@ log = logging.getLogger("papi.kap.client")
 SOURCE_CODE = "kap"
 FETCHER_VERSION = "kap-public-web/1"
 LIST_CAP = 2000
+MEMBERS_LIST_PATH = "/tr/api/disclosure/members/byCriteria"
+FUNDS_LIST_PATH = "/tr/api/disclosure/funds/byCriteria"
 CIRCUIT_KEY = "kap:circuit"
 
 # Statuses a normal web stack returns; anything else (KAP's WAF answers 666) is treated as a block.
@@ -60,7 +65,7 @@ _STANDARD_STATUSES = frozenset(
 _BLOCK_STATUSES = frozenset({403, 429})
 _RETRY_STATUSES = frozenset({408, 500, 502, 503, 504})
 
-FAILURE_THRESHOLD = 5  # consecutive 5xx/network failures that open the circuit
+FAILURE_THRESHOLD = 5  # consecutive requests failing after their retries (5xx/network) open the circuit
 OPEN_BASE_S = 300.0
 OPEN_MAX_S = 3600.0
 BACKOFF_BASE_S = 1.0
@@ -130,6 +135,11 @@ class KapClient(Protocol):
     ) -> KapListResult:
         """All disclosures published in ``[from_date, to_date]`` (Istanbul dates), de-duplicated and
         sorted by index; ``member_oids`` (``mkkMemberOid``) restricts to those filers."""
+        ...
+
+    def list_fund_disclosures(self, from_date: date, to_date: date) -> KapListResult:
+        """Fund disclosures (``disclosureType`` ``FON``) published in ``[from_date, to_date]``: the
+        indices missing from ``list_disclosures``. Same shape, splitting and ordering."""
         ...
 
     def disclosure_detail(self, index: int) -> KapJson:
@@ -228,11 +238,16 @@ _GATE = _Gate()
 
 
 class CircuitBreaker:
-    """Persisted breaker: ``closed`` → ``open`` (until a time) → closed again after the cool-down."""
+    """Persisted breaker: ``closed`` → ``open`` (until a time) → closed again after the cool-down.
+
+    WAF-style answers open it at once. Otherwise it counts *requests* that still failed after their
+    retries (5xx/network), consecutively across clients and jobs (the count lives in ``kv_state``), and
+    opens at ``failure_threshold``; any success resets the count. Retries of one URL count once, so a
+    single object KAP refuses to serve (e.g. one attachment whose download is always dropped) fails its
+    own fetch instead of halting all ingestion."""
 
     def __init__(self, *, failure_threshold: int = FAILURE_THRESHOLD) -> None:
         self.failure_threshold = failure_threshold
-        self.failures = 0
 
     @staticmethod
     def state() -> dict[str, Any]:
@@ -248,20 +263,23 @@ class CircuitBreaker:
                 raise KapBlocked(f"KAP circuit open: {st.get('reason')}", until_dt)
 
     def success(self) -> None:
-        self.failures = 0
         st = self.state()
-        if st.get("state") == "open" or st.get("opens"):
+        if st.get("state") == "open" or st.get("opens") or st.get("failures"):
             with db.transaction() as conn:
                 set_state(
                     conn, CIRCUIT_KEY, {"state": "closed", "opens": 0, "closed_at": now_utc().isoformat()}
                 )
 
     def failure(self, reason: str) -> datetime | None:
-        """Count a 5xx/network failure; returns ``open_until`` if this opened the circuit."""
-        self.failures += 1
-        if self.failures >= self.failure_threshold:
-            return self.open(f"{self.failures} consecutive failures: {reason}")
-        return None
+        """Count a request that failed after its retries; returns ``open_until`` if this opened the
+        circuit."""
+        with db.transaction() as conn:
+            st = get_state(conn, CIRCUIT_KEY, {}) or {}
+            failures = int(st.get("failures") or 0) + 1
+            if failures < self.failure_threshold:
+                set_state(conn, CIRCUIT_KEY, {**st, "failures": failures})
+                return None
+        return self.open(f"{failures} consecutive failed requests: {reason}")
 
     def open(self, reason: str) -> datetime:
         from papi.sources.kap import deps
@@ -270,7 +288,6 @@ class CircuitBreaker:
         opens = int(st.get("opens") or 0) + 1
         seconds = min(OPEN_BASE_S * 2 ** (opens - 1), OPEN_MAX_S)
         until = now_utc() + timedelta(seconds=seconds)
-        self.failures = 0
         with db.transaction() as conn:
             set_state(
                 conn,
@@ -377,10 +394,9 @@ class KapPublicWebClient:
                     fetcher_version=FETCHER_VERSION,
                     started_at=started,
                 )
-                until = self.breaker.failure(f"{outcome}: {url}")
-                if until is not None:
-                    raise KapBlocked(f"KAP circuit opened after network failures ({url})", until)
-                attempt = self._backoff_or_raise(attempt, KapHttpError(f"{outcome} for {url}: {error}"))
+                attempt = self._backoff_or_raise(
+                    attempt, KapHttpError(f"{outcome} for {url}: {error}"), f"{outcome}: {url}"
+                )
                 continue
             status = resp.status_code
             if status not in _STANDARD_STATUSES or status in _BLOCK_STATUSES:
@@ -430,15 +446,21 @@ class KapPublicWebClient:
                 started_at=started,
             )
             if status in _RETRY_STATUSES:
-                until = self.breaker.failure(f"HTTP {status}: {path}")
-                if until is not None:
-                    raise KapBlocked(f"KAP circuit opened after HTTP {status} spike", until)
-                attempt = self._backoff_or_raise(attempt, KapHttpError(f"HTTP {status} for {url}", status))
+                attempt = self._backoff_or_raise(
+                    attempt, KapHttpError(f"HTTP {status} for {url}", status), f"HTTP {status}: {path}"
+                )
                 continue
             raise KapHttpError(f"HTTP {status} for {url}", status)
 
-    def _backoff_or_raise(self, attempt: int, exc: KapError) -> int:
+    def _backoff_or_raise(self, attempt: int, exc: KapError, reason: str) -> int:
+        """Sleep before the next retry; after the last one count the failed request on the breaker and
+        raise (``KapBlocked`` when that opened the circuit)."""
         if attempt >= self.max_retries:
+            until = self.breaker.failure(reason)
+            if until is not None:
+                raise KapBlocked(
+                    f"KAP circuit opened after repeated failed requests ({reason})", until
+                ) from exc
             raise exc
         delay = min(BACKOFF_BASE_S * 2**attempt, BACKOFF_MAX_S) * (1 + random.random() * 0.25)
         self.sleep(delay)
@@ -457,13 +479,16 @@ class KapPublicWebClient:
     # -- endpoints -----------------------------------------------------------------------------
     def list_once(self, from_date: date, to_date: date, *, member_oids: Sequence[str] = ()) -> KapJson:
         """Single list request (no splitting)."""
+        return self._list_once(MEMBERS_LIST_PATH, from_date, to_date, member_oids)
+
+    def _list_once(self, path: str, from_date: date, to_date: date, member_oids: Sequence[str]) -> KapJson:
         body = {
             "fromDate": from_date.isoformat(),
             "toDate": to_date.isoformat(),
             "mkkMemberOidList": list(member_oids),
             "subjectList": [],
         }
-        res = self._json("POST", "/tr/api/disclosure/members/byCriteria", body=body)
+        res = self._json("POST", path, body=body)
         if not isinstance(res.data, list):
             raise KapHttpError(f"list response is {type(res.data).__name__}, expected array")
         return res
@@ -471,12 +496,18 @@ class KapPublicWebClient:
     def list_disclosures(
         self, from_date: date, to_date: date, *, member_oids: Sequence[str] = ()
     ) -> KapListResult:
+        return self._list(MEMBERS_LIST_PATH, from_date, to_date, member_oids)
+
+    def list_fund_disclosures(self, from_date: date, to_date: date) -> KapListResult:
+        return self._list(FUNDS_LIST_PATH, from_date, to_date, ())
+
+    def _list(self, path: str, from_date: date, to_date: date, member_oids: Sequence[str]) -> KapListResult:
         out = KapListResult(items=[])
         seen: set[int] = set()
         stack = [(from_date, to_date)]
         while stack:
             lo, hi = stack.pop()
-            res = self.list_once(lo, hi, member_oids=member_oids)
+            res = self._list_once(path, lo, hi, member_oids)
             out.requests += 1
             out.raw_sha256s.append(res.raw_sha256)
             if len(res.data) >= LIST_CAP:

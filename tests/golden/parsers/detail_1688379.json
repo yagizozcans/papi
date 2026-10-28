@@ -1,0 +1,209 @@
+{
+ "fixture": "detail_1688379.json.gz",
+ "documents": [
+  {
+   "target": "body:tr",
+   "kind": "disclosure_body",
+   "language": "tr",
+   "mime": "text/html",
+   "template_id": "tbl_insurance_role_210004",
+   "families": [
+    "taxonomy",
+    "taxonomy",
+    "taxonomy",
+    "taxonomy"
+   ],
+   "span_count": 1748,
+   "span_paths": {
+    "form": 40,
+    "table": 1708
+   },
+   "text_len": 31654,
+   "text_sha": "668f29ded94cffea",
+   "paragraphs": 0,
+   "form_fields": [
+    [
+     "sunum para birimi",
+     "TL"
+    ],
+    [
+     "finansal tablo niteligi",
+     "Konsolide"
+    ],
+    [
+     "sunum para birimi",
+     "TL"
+    ],
+    [
+     "finansal tablo niteligi",
+     "Konsolide"
+    ],
+    [
+     "sunum para birimi",
+     "TL"
+    ],
+    [
+     "finansal tablo niteligi",
+     "Konsolide"
+    ],
+    [
+     "sunum para birimi",
+     "TL"
+    ],
+    [
+     "finansal tablo niteligi",
+     "Konsolide"
+    ],
+    [
+     "ifrs-full_Equity",
+     "500.000.000 0 2.032.513.284 0 0 212.924.562 991.410.914 7.797.858.561 11.538.847.383 652.582.741 23.726.137.445 23.726.137.445"
+    ],
+    [
+     "kap-fr_FinancialEffectOfChangesInAccountingPolicy",
+     "0 0 0 0 0 0 0 0 0 0 0 0"
+    ],
+    [
+     "kap-fr_RestatedBalances",
+     "500.000.000 0 2.032.513.284 0 0 212.924.562 991.410.914 7.797.858.561 11.538.847.383 652.582.741 23.726.137.445 23.726.137.445"
+    ],
+    [
+     "ifrs-full_IssueOfEquity",
+     "1.500.000.000 0 0 0 0 0 0 0 0 0 1.500.000.000 1.500.000.000"
+    ],
+    [
+     "kap-fr_CapitalIncreaseInCash",
+     "0 0 0 0 0 0 0 0 0 0 0 0"
+    ],
+    [
+     "kap-fr_CapitalIncreaseTroughInternalReserves",
+     "1.500.000.000 0 0 0 0 0 0 0 0 0 1.500.000.000 1.500.000.000"
+    ],
+    [
+     "ifrs-full_IncreaseDecreaseThroughTreasuryShareTransactions",
+     "0 0 0 0 0 0 0 0 0 0 0 0"
+    ],
+    [
+     "kap-fr_GainsLossesThatWillNotBeReclassifiedToProfitOrLoss",
+     "0 0 0 0 0 0 0 -35.825.362 0 0 -35.825.362 -35.825.362"
+    ],
+    [
+     "kap-fr_IncreaseInValueOfAsssets",
+     "0 0 229.176.351 0 0 0 0 0 0 0 229.176.351 229.176.351"
+    ],
+    [
+     "kap-fr_ExchangeDifferencesOnTranslation",
+     "0 0 0 0 0 0 0 0 0 0 0 0"
+    ],
+    [
+     "kap-fr_OtherGainsLossses",
+     "0 0 0 0 0 0 0 0 0 0 0 0"
+    ],
+    [
+     "kap-fr_InflationAdjustments",
+     "0 0 0 0 0 0 0 0 0 0 0 0"
+    ],
+    [
+     "ifrs-full_ProfitLoss",
+     "0 0 0 0 0 0 0 0 8.957.601.981 0 8.957.601.981 8.957.601.981"
+    ],
+    [
+     "ifrs-full_DividendsPaid",
+     "0 0 0 0 0 0 0 0 -3.600.000.000 0 -3.600.000.000 -3.600.000.000"
+    ],
+    [
+     "kap-fr_TransfersToReserves",
+     "0 0 0 0 0 409.938.671 896.996.772 6.278.374.923 -7.938.847.383 353.537.017 0 0"
+    ],
+    [
+     "ifrs-full_Equity",
+     "2.000.000.000 0 2.261.689.635 0 0 622.863.233 1.888.407.686 14.040.408.122 8.957.601.981 1.006.119.758 30.777.090.415 30.777.090.415"
+    ],
+    [
+     "ifrs-full_Equity",
+     "2.000.000.000 0 2.605.102.546 0 0 622.863.233 1.888.407.686 14.026.629.524 13.431.245.293 979.151.064 35.553.399.346 35.553.399.346"
+    ],
+    [
+     "kap-fr_FinancialEffectOfChangesInAccountingPolicy",
+     "0 0 0 0 0 0 0 0 0 0 0"
+    ],
+    [
+     "kap-fr_RestatedBalances",
+     "2.000.000.000 0 2.605.102.546 0 0 622.863.233 1.888.407.686 14.026.629.524 13.431.245.293 979.151.064 35.553.399.346 35.553.399.346"
+    ],
+    [
+     "ifrs-full_IssueOfEquity",
+     "0 0 0 0 0 0 0 0 0 0 0"
+    ],
+    [
+     "kap-fr_CapitalIncreaseInCash",
+     "0 0 0 0 0 0 0 0 0 0 0 0"
+    ],
+    [
+     "kap-fr_CapitalIncreaseTroughInternalReserves",
+     "0 0 0 0 0 0 0 0 0 0 0"
+    ],
+    [
+     "ifrs-full_IncreaseDecreaseThroughTreasuryShareTransactions",
+     "0 0 0 0 0 0 0 0 0 0 0 0"
+    ],
+    [
+     "kap-fr_GainsLossesThatWillNotBeReclassifiedToProfitOrLoss",
+     "0 0 0 0 0 0 0 -55.398.349 0 0 -55.398.349 -55.398.349"
+    ],
+    [
+     "kap-fr_IncreaseInValueOfAsssets",
+     "0 0 -614.078.409 0 0 0 0 0 0 0 -614.078.409 -614.078.409"
+    ],
+    [
+     "kap-fr_ExchangeDifferencesOnTranslation",
+     "0 0 0 0 0 0 0 0 0 0 0 0"
+    ],
+    [
+     "kap-fr_OtherGainsLossses",
+     "0 0 0 0 0 0 0 0 0 0 0 0"
+    ],
+    [
+     "kap-fr_InflationAdjustments",
+     "0 0 0 0 0 0 0 0 0 0 0 0"
+    ],
+    [
+     "ifrs-full_ProfitLoss",
+     "0 0 0 0 0 0 0 0 11.553.098.651 0 11.553.098.651 11.553.098.651"
+    ],
+    [
+     "ifrs-full_DividendsPaid",
+     "0 0 0 0 0 0 0 0 -2.750.000.000 0 -2.750.000.000 -2.750.000.000"
+    ],
+    [
+     "kap-fr_TransfersToReserves",
+     "0 0 0 0 0 341.017.137 1.147.226.040 8.895.623.248 -10.681.245.293 297.378.868 0 0"
+    ],
+    [
+     "ifrs-full_Equity",
+     "2.000.000.000 0 1.991.024.137 0 0 963.880.370 3.035.633.726 22.866.854.423 11.553.098.651 1.276.529.932 43.687.021.239 43.687.021.239"
+    ]
+   ],
+   "tables": [
+    {
+     "caption": "Bilanço",
+     "header_len": 4,
+     "rows": 272,
+     "cols": 4
+    },
+    {
+     "caption": "Gelir Tablosu",
+     "header_len": 6,
+     "rows": 137,
+     "cols": 6
+    },
+    {
+     "caption": "Nakit Akım Tablosu",
+     "header_len": 4,
+     "rows": 35,
+     "cols": 4
+    }
+   ],
+   "extra": {}
+  }
+ ]
+}
