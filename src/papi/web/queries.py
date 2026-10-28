@@ -14,7 +14,9 @@ from typing import Any
 
 from sqlalchemy import (
     Connection,
+    Integer,
     and_,
+    cast,
     exists,
     false,
     func,
@@ -54,7 +56,7 @@ from papi.core.schema import (
 )
 from papi.core.state import get_state
 from papi.core.text import normalize_tr, parse_tr_number, tr_upper
-from papi.core.timeutil import IST, ist_date, now_utc, to_utc
+from papi.core.timeutil import IST, iso_utc, ist_date, now_utc, to_utc
 from papi.web import integrations
 
 KAP_URL = "https://www.kap.org.tr/tr/Bildirim/{ref}"
@@ -200,40 +202,95 @@ def load_scope(conn: Connection) -> Scope:
 # ------------------------------------------------------------------------------------------ feed
 
 
+SORTS: dict[str, str] = {
+    "time_desc": "Yayın zamanı (yeni→eski)",
+    "time_asc": "Yayın zamanı (eski→yeni)",
+    "materiality": "Önemlilik (yüksek→düşük, sonra zaman)",
+}
+DEFAULT_SORT = "time_desc"
+BANDS = ("low", "medium", "high", "critical")  # triage materiality bands, ascending
+BAND_LABELS = {"low": "Düşük+", "medium": "Orta+", "high": "Yüksek+", "critical": "Kritik"}
+RANGES = {"today": "Bugün", "yesterday": "Dün", "7d": "Son 7 gün"}
+
+# Feed order key: the disclosure's publish time (never processing / created_at time), then the KAP
+# disclosure index as a stable tie-break.
+published_col = func.coalesce(event.c.announced_at, disclosure.c.published_at)
+kap_index_col = cast(disclosure.c.source_ref, Integer)
+
+
 @dataclass
 class FeedFilters:
     scope: str = "mine"
     ticker: str | None = None
     family: str | None = None
     code: str | None = None
+    band: str | None = None  # low|medium|high|critical → that band or above
     materiality_gte: int | None = None
     priority: str | None = None  # P1..P4 → that priority or more urgent
     hide_routine: bool = False
-    date_from: date | None = None
+    range: str | None = None  # today|yesterday|7d (Istanbul days); None = custom dates / all
+    date_from: date | None = None  # Istanbul dates, inclusive
     date_to: date | None = None
     as_of: datetime | None = None  # point-in-time: only events papi knew by then
+    sort: str = DEFAULT_SORT
     limit: int = 100
 
-    def query_string(self) -> str:
-        from urllib.parse import urlencode
+    def dates(self, today: date | None = None) -> tuple[date | None, date | None]:
+        """Effective Istanbul date bounds (inclusive); quick ranges are relative to today in Istanbul."""
+        if self.range in RANGES:
+            day = today or ist_date()
+            if self.range == "today":
+                return day, day
+            if self.range == "yesterday":
+                return day - timedelta(days=1), day - timedelta(days=1)
+            return day - timedelta(days=6), day
+        return self.date_from, self.date_to
 
+    def params(self, **overrides: Any) -> dict[str, Any]:
+        """Non-default parameters as a query dict (``None`` override removes a key)."""
         params: dict[str, Any] = {}
-        for key in (
-            "scope",
-            "ticker",
-            "family",
-            "code",
-            "materiality_gte",
-            "priority",
-            "date_from",
-            "date_to",
-        ):
+        for key in ("scope", "ticker", "family", "code", "band", "materiality_gte", "priority", "range"):
             val = getattr(self, key)
             if val not in (None, ""):
                 params[key] = val
+        if self.range not in RANGES:
+            if self.date_from:
+                params["from"] = self.date_from.isoformat()
+            if self.date_to:
+                params["to"] = self.date_to.isoformat()
         if self.hide_routine:
             params["hide_routine"] = "1"
-        return urlencode(params)
+        if self.sort != DEFAULT_SORT:
+            params["sort"] = self.sort
+        for key, val in overrides.items():
+            if val is None:
+                params.pop(key, None)
+            else:
+                params[key] = val
+        return params
+
+    def query_string(self, **overrides: Any) -> str:
+        from urllib.parse import urlencode
+
+        return urlencode(self.params(**overrides))
+
+    @property
+    def active_count(self) -> int:
+        """Number of active filters (scope and sort are views, not filters)."""
+        d_from, d_to = self.dates()
+        return sum(
+            bool(v)
+            for v in (
+                self.ticker,
+                self.family,
+                self.code,
+                self.band,
+                self.materiality_gte is not None,
+                self.priority,
+                self.hide_routine,
+                d_from or d_to,
+            )
+        )
 
 
 def _instrument_overlap(ids: set[str]) -> Any:
@@ -243,9 +300,17 @@ def _instrument_overlap(ids: set[str]) -> Any:
     return exists(select(literal(1)).select_from(je).where(je.c.value.in_(sorted(ids))))
 
 
-def _event_select() -> Any:
+def _order(sort: str) -> tuple[Any, ...]:
+    if sort == "time_asc":
+        return (published_col.asc().nulls_last(), kap_index_col.asc().nulls_last(), event.c.id.asc())
+    newest = (published_col.desc().nulls_last(), kap_index_col.desc().nulls_last(), event.c.id.desc())
+    if sort == "materiality":
+        return (event.c.materiality.desc().nulls_last(), *newest)
+    return newest
+
+
+def _event_select(sort: str = DEFAULT_SORT) -> Any:
     """Events outer-joined with their primary disclosure (columns used by feed items)."""
-    sort_ts = func.coalesce(event.c.announced_at, event.c.created_at)
     return (
         select(
             event,
@@ -260,13 +325,20 @@ def _event_select() -> Any:
             disclosure.c.filer_issuer_id,
         )
         .select_from(event.outerjoin(disclosure, disclosure.c.id == event.c.primary_disclosure_id))
-        .order_by(sort_ts.desc(), event.c.id.desc())
+        .order_by(*_order(sort))
     )
 
 
+def band_condition(band: str) -> Any:
+    """``band`` or above: triage's score cut-offs when available, else the stored band label."""
+    floors = integrations.band_floors()
+    if floors is not None and band in floors:
+        return event.c.materiality >= floors[band]
+    return event.c.materiality_band.in_(BANDS[BANDS.index(band) :])
+
+
 def _feed_stmt(conn: Connection, f: FeedFilters, scope: Scope) -> Any:
-    sort_ts = func.coalesce(event.c.announced_at, event.c.created_at)
-    stmt = _event_select().where(event.c.superseded_by.is_(None))
+    stmt = _event_select(f.sort).where(event.c.superseded_by.is_(None))
     if f.scope == "holdings":
         stmt = stmt.where(_instrument_overlap(scope.holdings))
     elif f.scope == "watchlist":
@@ -281,6 +353,8 @@ def _feed_stmt(conn: Connection, f: FeedFilters, scope: Scope) -> Any:
         stmt = stmt.where(or_(fam_cond, event.c.code.in_(codes)) if codes else fam_cond)
     if f.code:
         stmt = stmt.where(event.c.code == f.code)
+    if f.band in BANDS:
+        stmt = stmt.where(band_condition(f.band))
     if f.materiality_gte is not None:
         stmt = stmt.where(event.c.materiality >= f.materiality_gte)
     if f.priority in PRIORITIES:
@@ -288,11 +362,12 @@ def _feed_stmt(conn: Connection, f: FeedFilters, scope: Scope) -> Any:
         stmt = stmt.where(event.c.priority.in_(allowed))
     if f.hide_routine:
         stmt = stmt.where(or_(event.c.priority.is_(None), event.c.priority != "P4"))
-    if f.date_from:
-        stmt = stmt.where(sort_ts >= to_utc(datetime.combine(f.date_from, time.min), assume_tz=IST))
-    if f.date_to:
-        end = datetime.combine(f.date_to + timedelta(days=1), time.min)
-        stmt = stmt.where(sort_ts < to_utc(end, assume_tz=IST))
+    d_from, d_to = f.dates()
+    if d_from:
+        stmt = stmt.where(published_col >= to_utc(datetime.combine(d_from, time.min), assume_tz=IST))
+    if d_to:
+        end = datetime.combine(d_to + timedelta(days=1), time.min)
+        stmt = stmt.where(published_col < to_utc(end, assume_tz=IST))
     if f.as_of:
         stmt = stmt.where(event.c.created_at <= f.as_of)
     return stmt
@@ -363,6 +438,9 @@ def _decorate(conn: Connection, rows: list[Any], scope: Scope) -> list[dict[str,
                 "status": r.status,
                 "stage": "analysed" if r.id in analysed else "rules",
                 "announced_at": r.announced_at or r.published_at or r.created_at,
+                # sort key exposed to the live feed client (fixed-width UTC, sorts lexically)
+                "published_key": iso_utc(sort_at) if (sort_at := r.announced_at or r.published_at) else "",
+                "kap_index": int(r.source_ref) if r.source_ref and r.source_ref.isdigit() else 0,
                 "published_at": r.published_at,
                 "first_seen_at": r.first_seen_at,
                 "latency_s": latency,

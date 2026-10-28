@@ -1,5 +1,5 @@
 {% import "_macros.html" as m %}
-<article class="item{% if it.holding %} is-hold{% elif it.watch %} is-watch{% endif %}" id="ev-{{ it.id }}" data-id="{{ it.id }}" data-disclosure="{{ it.disclosure_id or "" }}" tabindex="-1">
+<article class="item{% if it.holding %} is-hold{% elif it.watch %} is-watch{% endif %}" id="ev-{{ it.id }}" data-id="{{ it.id }}" data-disclosure="{{ it.disclosure_id or "" }}" data-published="{{ it.published_key }}" data-ref="{{ it.kap_index }}" data-mat="{{ it.materiality if it.materiality is not none else -1 }}" data-code="{{ it.code }}" tabindex="-1">
   <div class="when" title="Yayın: {{ it.published_at | ist('%d.%m.%Y %H:%M:%S') }} · papi: {{ it.first_seen_at | ist('%H:%M:%S') }}">
     <time>{{ it.announced_at | ist('%H:%M') }}</time><small>{{ it.announced_at | ist('%d.%m') }}</small>
   </div>

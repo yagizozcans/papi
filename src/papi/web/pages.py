@@ -52,17 +52,31 @@ def feed_page(request: Request, conn: Conn) -> HTMLResponse:
     scope = queries.load_scope(conn)
     items = queries.feed_items(conn, filters, scope)
     qs = filters.query_string()
+    clear = filters.query_string(**{k: None for k in filters.params() if k not in ("scope", "sort")})
+    no_dates = {"range": None, "from": None, "to": None}
+    range_urls = {key: "/?" + filters.query_string(**{**no_dates, "range": key}) for key in queries.RANGES}
+    range_urls["all"] = "/?" + filters.query_string(**no_dates)
+    active_range = filters.range or ("custom" if filters.date_from or filters.date_to else "all")
     return _page(
         request,
         "feed.html",
         filters=filters,
         groups=queries.group_bursts(items),
         count=len(items),
+        has_more=len(items) >= filters.limit,
         families=queries.feed_families(conn),
         priorities=queries.PRIORITIES,
+        bands=queries.BAND_LABELS,
+        band_floors=integrations.band_floors(),
+        sorts=queries.SORTS,
+        ranges=queries.RANGES,
+        dates=filters.dates(),
+        range_urls=range_urls,
+        active_range=active_range,
         scope=scope,
         stream_url="/stream" + (f"?{qs}" if qs else ""),
         query_string=qs,
+        clear_url="/" + (f"?{clear}" if clear else ""),
     )
 
 

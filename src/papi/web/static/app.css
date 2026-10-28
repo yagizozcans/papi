@@ -60,3 +60,9 @@ tr.reversed td { color:var(--muted); text-decoration:line-through; }
   .item { grid-template-columns:3.2rem 1fr; } .item .links { grid-column:2; }
   .tbl { font-size:12px; } main { padding:.5rem; } .jump { margin-left:0; }
 }
+.js .js-hide { display:none; }
+.dates { display:flex; flex-wrap:wrap; gap:.3rem; align-items:center; }
+.qbtn { border:1px solid #ccc; border-radius:5px; padding:.2rem .5rem; background:#fff; color:var(--ink); }
+.qbtn.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+.fcount { font-size:12px; color:var(--muted); }
+#reloadpill a { display:inline-block; background:var(--accent); color:#fff; border-radius:20px; padding:.25rem .8rem; }

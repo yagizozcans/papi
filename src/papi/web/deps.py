@@ -16,7 +16,7 @@ from sqlalchemy import Connection
 from papi.core import db
 from papi.core.timeutil import to_ist, to_utc
 from papi.web.app import WEB_DIR
-from papi.web.queries import PRIORITIES, SCOPES, FeedFilters
+from papi.web.queries import BANDS, DEFAULT_SORT, PRIORITIES, RANGES, SCOPES, SORTS, FeedFilters
 
 
 def get_conn() -> Iterator[Connection]:
@@ -172,20 +172,31 @@ def _datetime(value: str | None) -> datetime | None:
 
 
 def parse_feed_filters(params: Mapping[str, str], *, default_scope: str = "mine") -> FeedFilters:
-    """Feed / ``/v1/events`` / stream filters from query parameters (invalid values are ignored)."""
+    """Feed / ``/v1/events`` / stream filters from query parameters (invalid values are ignored).
+
+    Custom ``from``/``to`` dates (Istanbul) override a quick ``range`` (today|yesterday|7d).
+    """
     scope = params.get("scope") or default_scope
     priority = (params.get("priority") or "").upper() or None
+    band = (params.get("band") or "").lower() or None
+    sort = params.get("sort") or DEFAULT_SORT
     limit = _int(params.get("limit")) or 100
+    date_from = _date(params.get("from") or params.get("date_from"))
+    date_to = _date(params.get("to") or params.get("date_to"))
+    quick = params.get("range")
     return FeedFilters(
         scope=scope if scope in SCOPES else default_scope,
         ticker=(params.get("ticker") or "").strip() or None,
         family=(params.get("family") or "").strip() or None,
         code=(params.get("code") or "").strip() or None,
+        band=band if band in BANDS else None,
         materiality_gte=_int(params.get("materiality_gte")),
         priority=priority if priority in PRIORITIES else None,
         hide_routine=params.get("hide_routine") in ("1", "true", "on"),
-        date_from=_date(params.get("from") or params.get("date_from")),
-        date_to=_date(params.get("to") or params.get("date_to")),
+        range=quick if quick in RANGES and not (date_from or date_to) else None,
+        date_from=date_from,
+        date_to=date_to,
         as_of=_datetime(params.get("as_of")),
+        sort=sort if sort in SORTS else DEFAULT_SORT,
         limit=max(1, min(limit, 500)),
     )

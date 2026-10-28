@@ -120,7 +120,8 @@ def test_feed_renders_bursts(client: TestClient, world: dict[str, Any], db: Conn
         )
     db.commit()
     r = client.get("/?scope=holdings")
-    assert '<details class="burst">' in r.text and "5 × reporting.financials" in r.text
+    assert '<details class="burst" data-code="reporting.financials">' in r.text
+    assert '<span class="burst-n">5</span> × reporting.financials' in r.text
 
 
 # ------------------------------------------------------------------------------------------ event detail

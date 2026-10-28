@@ -28,43 +28,79 @@
     if (target && target.classList.contains("span")) target.classList.add("hl");
   }
 
+  // ---- filter form: auto-submit on change (the "Filtrele" button stays for no-JS use) --------------
+  document.documentElement.classList.add("js");
+  document.querySelectorAll("form[data-autosubmit]").forEach(function (form) {
+    form.addEventListener("change", function () {
+      if (form.requestSubmit) form.requestSubmit(); else form.submit();
+    });
+    form.addEventListener("submit", function () {  // keep the URL short: drop empty parameters
+      Array.prototype.forEach.call(form.elements, function (el) {
+        if (el.name && !el.value && el.type !== "radio" && el.type !== "checkbox") el.disabled = true;
+      });
+    });
+  });
+
   // ---- live feed ---------------------------------------------------------------------------------
+  // Items are placed by their publish time (data-published, see feedorder.js), never at the top just
+  // because they were processed now: catch-up/backfill items slot into their place or, when they sort
+  // below the rendered page, are only counted. Only items newer than everything shown animate.
   var feed = document.getElementById("feed");
   var pill = document.getElementById("newpill");
+  var reloadPill = document.getElementById("reloadpill");
+  var oldNote = document.getElementById("oldnote");
   var live = document.getElementById("live");
   var pending = [];
+  var oldCount = 0;
   function fragment(html) { var t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstElementChild; }
-  function insert(node) {
+  function feedItems() { return Array.prototype.slice.call(feed.querySelectorAll(".item")); }
+  function burstCount(details) {
+    var n = details.querySelectorAll(".item").length, el = details.querySelector(".burst-n");
+    if (el) el.textContent = n;
+  }
+  function insertBefore(node, target) {
+    if (!target) { feed.appendChild(node); return; }
+    var burst = target.closest("details.burst");
+    if (!burst) { target.parentNode.insertBefore(node, target); return; }
+    if (burst.dataset.code === node.dataset.code) { burst.insertBefore(node, target); burstCount(burst); return; }
+    feed.insertBefore(node, burst);  // different code: keep the burst intact, place just above it
+  }
+  function place(node) {
     var old = document.getElementById(node.id);
-    if (old) { old.replaceWith(node); return; }
+    if (old) { old.replaceWith(node); return; }  // status update (e.g. analysed) keeps its position
+    var list = feedItems(), sort = feed.dataset.sort || "time_desc";
+    var d = papiFeed.decide(papiFeed.keyOf(node), list.map(papiFeed.keyOf), sort, feed.dataset.hasMore === "1");
+    if (d.beyond) {
+      if (sort === "time_desc") { oldCount += 1; oldNote.hidden = false; oldNote.querySelector(".n").textContent = oldCount; }
+      else { reloadPill.hidden = false; }
+      return;
+    }
     var empty = document.getElementById("feed-empty"); if (empty) empty.remove();
-    node.classList.add("fresh");
-    feed.insertBefore(node, feed.firstElementChild);
+    insertBefore(node, d.index === -1 ? null : list[d.index]);
+    if (d.isNew) node.classList.add("fresh");
   }
   function flush() {
-    pending.splice(0).reverse().forEach(insert);
+    pending.splice(0).forEach(place);
     pill.hidden = true;
   }
-  if (feed && feed.dataset.stream && window.EventSource) {
+  if (feed && feed.dataset.stream && window.EventSource && window.papiFeed) {
     var es = new EventSource(feed.dataset.stream);
     es.onopen = function () { live.classList.add("on"); };
     es.onerror = function () { live.classList.remove("on"); };
     var onItem = function (ev) {
       var msg = JSON.parse(ev.data); if (!msg.html) return;
       var node = fragment(msg.html);
-      if (document.getElementById(node.id)) { insert(node); return; }  // status update (e.g. analysed)
-      if (window.scrollY > 200) {
+      var key = papiFeed.keyOf(node), list = feedItems().map(papiFeed.keyOf);
+      var d = papiFeed.decide(key, list, feed.dataset.sort || "time_desc", feed.dataset.hasMore === "1");
+      // Brand-new items at the top of a newest-first feed wait behind the "N yeni" pill while scrolled.
+      if (!document.getElementById(node.id) && d.isNew && d.index === 0 && window.scrollY > 200) {
         pending.push(node);
         pill.hidden = false; pill.querySelector("button").textContent = pending.length + " yeni";
-      } else { insert(node); }
+        return;
+      }
+      place(node);
     };
     ["event.classified", "analysis.completed", "forecast.created"].forEach(function (t) { es.addEventListener(t, onItem); });
-    es.addEventListener("disclosure.revised", function (ev) {
-      var msg = JSON.parse(ev.data), id = msg.data && msg.data.revision_of;
-      document.querySelectorAll(".item").forEach(function (it) {
-        if (id && it.dataset.disclosure === id) it.classList.add("fresh");
-      });
-    });
     pill.querySelector("button").addEventListener("click", function () { flush(); window.scrollTo({ top: 0 }); });
     window.addEventListener("scroll", function () { if (window.scrollY < 50 && pending.length) flush(); });
   }

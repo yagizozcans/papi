@@ -125,3 +125,17 @@ def family_codes(family: str) -> list[str] | None:
     if tax is None:
         return None
     return [c.code for c in tax.codes.values() if c.family == family]
+
+
+def band_floors() -> dict[str, int] | None:
+    """Lowest materiality score of each band (``low`` 0 … ``critical``) from triage; None if missing."""
+    mod = _optional("papi.triage.materiality")
+    if mod is None:
+        return None
+    floors = {}
+    lower = 0
+    for bound, name in mod.BANDS:  # ((30, "low"), (60, "medium"), (80, "high")): score < bound → name
+        floors[name] = lower
+        lower = bound
+    floors["critical"] = lower
+    return floors

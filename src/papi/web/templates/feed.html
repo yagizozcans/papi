@@ -1,35 +1,52 @@
 {% extends "base.html" %}
 {% block title %}Akış{% endblock %}
 {% block main %}
-<form class="filters" method="get" action="/">
+<form class="filters" method="get" action="/" data-autosubmit>
   <div class="seg" role="radiogroup" aria-label="Kapsam">
     {% for val, label in [('mine', 'Portföyüm + izleme + P3'), ('holdings', 'Portföy'), ('watchlist', 'İzleme'), ('all', 'Tüm KAP')] %}
-    <label class="{{ 'on' if filters.scope == val }}"><input type="radio" name="scope" value="{{ val }}" {{ 'checked' if filters.scope == val }} onchange="this.form.submit()">{{ label }}</label>
+    <label class="{{ 'on' if filters.scope == val }}"><input type="radio" name="scope" value="{{ val }}" {{ 'checked' if filters.scope == val }}>{{ label }}</label>
     {% endfor %}
   </div>
-  <input id="f-ticker" name="ticker" value="{{ filters.ticker or '' }}" placeholder="Hisse (/)" size="8" autocomplete="off">
+  <input id="f-ticker" name="ticker" value="{{ filters.ticker or '' }}" placeholder="Hisse (/)" size="8" autocomplete="off" aria-label="Hisse">
   <select name="family" aria-label="Olay ailesi">
     <option value="">Tüm aileler</option>
     {% for code, label in families %}<option value="{{ code }}" {{ 'selected' if filters.family == code }}>{{ label }}</option>{% endfor %}
   </select>
-  <label>Önemlilik ≥ <input type="number" name="materiality_gte" min="0" max="100" step="5" value="{{ filters.materiality_gte if filters.materiality_gte is not none else '' }}" style="width:4.5em"></label>
+  <select name="band" aria-label="Önemlilik">
+    <option value="">Önemlilik: Tümü</option>
+    {% for key, label in bands.items() %}<option value="{{ key }}" {{ 'selected' if filters.band == key }}>{{ label }}{% if band_floors %} (≥{{ band_floors[key] }}){% endif %}</option>{% endfor %}
+  </select>
   <select name="priority" aria-label="Öncelik">
     <option value="">Tüm öncelikler</option>
     {% for p in priorities %}<option value="{{ p }}" {{ 'selected' if filters.priority == p }}>≤ {{ p }}</option>{% endfor %}
   </select>
   <label><input type="checkbox" name="hide_routine" value="1" {{ 'checked' if filters.hide_routine }}> Rutini gizle</label>
-  <button type="submit">Filtrele</button>
+  <select name="sort" aria-label="Sıralama">
+    {% for key, label in sorts.items() %}<option value="{{ key }}" {{ 'selected' if filters.sort == key }}>{{ label }}</option>{% endfor %}
+  </select>
+  <div class="dates" role="group" aria-label="Tarih">
+    {% for key, label in ranges.items() %}<a class="qbtn {{ 'on' if active_range == key }}" href="{{ range_urls[key] }}">{{ label }}</a>{% endfor %}
+    <a class="qbtn {{ 'on' if active_range == 'all' }}" href="{{ range_urls['all'] }}">Tümü</a>
+    <label>Başlangıç <input type="date" name="from" value="{{ filters.date_from.isoformat() if filters.date_from else '' }}"></label>
+    <label>Bitiş <input type="date" name="to" value="{{ filters.date_to.isoformat() if filters.date_to else '' }}"></label>
+    {% if filters.range %}<input type="hidden" name="range" value="{{ filters.range }}"><span class="small">{{ dates[0] | ist }}{% if dates[1] != dates[0] %} – {{ dates[1] | ist }}{% endif %}</span>{% endif %}
+  </div>
+  {% if filters.code %}<input type="hidden" name="code" value="{{ filters.code }}">{% endif %}
+  {% if filters.materiality_gte is not none %}<input type="hidden" name="materiality_gte" value="{{ filters.materiality_gte }}">{% endif %}
+  <button type="submit" class="js-hide">Filtrele</button>
+  {% if filters.active_count %}<span class="fcount">{{ filters.active_count }} filtre etkin · <a href="{{ clear_url }}">Filtreleri temizle</a></span>{% endif %}
   {% if not scope.portfolio_available %}<span class="warn">Portföy modülü yok: HOLDING rozetleri gösterilemiyor.</span>{% endif %}
 </form>
 
 <div id="newpill" class="pill" hidden><button type="button">0 yeni</button></div>
+<div id="reloadpill" class="pill" hidden><a href="/?{{ query_string }}">Yeni öğeler var — yenile</a></div>
 <div id="live" class="live" title="Canlı akış bağlantısı">●</div>
 
-<section id="feed" class="feed" data-stream="{{ stream_url }}">
+<section id="feed" class="feed" data-stream="{{ stream_url }}" data-sort="{{ filters.sort }}" data-has-more="{{ '1' if has_more else '0' }}">
   {% for g in groups %}
     {% if g.burst %}
-      <details class="burst">
-        <summary>{{ g['items'] | length }} × {{ g.label }} · {{ g['items'][-1].announced_at | ist('%H:%M') }}–{{ g['items'][0].announced_at | ist('%H:%M') }}</summary>
+      <details class="burst" data-code="{{ g.code }}">
+        <summary><span class="burst-n">{{ g['items'] | length }}</span> × {{ g.label }} · {{ g['items'] | map(attribute='announced_at') | min | ist('%H:%M') }}–{{ g['items'] | map(attribute='announced_at') | max | ist('%H:%M') }}</summary>
         {% for it in g['items'] %}{% include "_feed_item.html" %}{% endfor %}
       </details>
     {% else %}
@@ -39,6 +56,7 @@
     <p class="empty" id="feed-empty">Bu filtrelerle olay yok.{% if filters.scope != 'all' %} <a href="/?scope=all">Tüm KAP'ı göster</a>{% endif %}</p>
   {% endfor %}
 </section>
-{% if count >= filters.limit and filters.limit < 500 %}<p class="more"><a href="/?{{ query_string ~ '&' if query_string }}limit={{ [filters.limit + 100, 500] | min }}">Daha fazla göster</a></p>{% endif %}
+<p id="oldnote" class="small" hidden><span class="n">0</span> eski bildirim işlendi (listenin altına düşüyor){% if has_more %} · <a href="/?{{ query_string ~ '&' if query_string }}limit={{ [filters.limit + 100, 500] | min }}">daha fazla göster</a>{% endif %}</p>
+{% if has_more and filters.limit < 500 %}<p class="more"><a href="/?{{ query_string ~ '&' if query_string }}limit={{ [filters.limit + 100, 500] | min }}">Daha fazla göster</a></p>{% endif %}
 <p class="hint">Kısayollar: <kbd>j</kbd>/<kbd>k</kbd> gezin · <kbd>Enter</kbd> aç · <kbd>o</kbd> KAP'ta aç · <kbd>/</kbd> hisse ara · {{ count }} olay</p>
 {% endblock %}
