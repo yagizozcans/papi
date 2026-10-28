@@ -83,11 +83,9 @@
     pending.splice(0).forEach(place);
     pill.hidden = true;
   }
-  if (feed && feed.dataset.stream && window.EventSource && window.papiFeed) {
-    var es = new EventSource(feed.dataset.stream);
-    es.onopen = function () { live.classList.add("on"); };
-    es.onerror = function () { live.classList.remove("on"); };
-    var onItem = function (ev) {
+  if (feed && feed.dataset.stream && window.EventSource && window.papiFeed && window.papiLive) {
+    var onItem = function (type, ev) {
+      if (type === "papi.cursor") return;  // resume-point only
       var msg = JSON.parse(ev.data); if (!msg.html) return;
       var node = fragment(msg.html);
       var key = papiFeed.keyOf(node), list = feedItems().map(papiFeed.keyOf);
@@ -100,7 +98,17 @@
       }
       place(node);
     };
-    ["event.classified", "analysis.completed", "forecast.created"].forEach(function (t) { es.addEventListener(t, onItem); });
+    // One EventSource per page, closed on pagehide/hidden/navigation (frees the browser's 6 per-host
+    // connections), reopened on pageshow/visible resuming with ?after=<last id>.
+    var stream = papiLive.createLiveStream({
+      url: feed.dataset.stream,
+      types: ["event.classified", "analysis.completed", "forecast.created", "papi.cursor"],
+      onMessage: onItem,
+      onState: function (on) { live.classList.toggle("on", on); },
+    });
+    papiLive.bindLifecycle(stream, window, document, function (ev) {
+      return papiLive.isInAppNavClick(ev, location.origin);
+    });
     pill.querySelector("button").addEventListener("click", function () { flush(); window.scrollTo({ top: 0 }); });
     window.addEventListener("scroll", function () { if (window.scrollY < 50 && pending.length) flush(); });
   }

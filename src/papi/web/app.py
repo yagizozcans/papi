@@ -105,13 +105,14 @@ def create_app(
     host: str | None = None,
     token: str | None = None,
     stream_poll_seconds: float = 1.0,
-    stream_max_seconds: float = 300.0,
+    stream_max_seconds: float = 60.0,
 ) -> FastAPI:
     """Build the dashboard app.
 
     ``host`` is the address the server will bind (default ``web.host``); when it is not loopback a
     token is mandatory (``token`` argument, else ``get_web_token()``) and enforced on all routes.
-    ``stream_max_seconds`` bounds one SSE connection; browsers reconnect with ``Last-Event-ID``.
+    ``stream_max_seconds`` bounds one SSE connection; browsers reconnect with ``Last-Event-ID`` (or
+    the page reopens with ``?after=``).
     """
     settings = get_settings()
     bind = host or settings.web.host

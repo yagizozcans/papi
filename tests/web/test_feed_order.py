@@ -288,7 +288,7 @@ def _sse(text: str) -> list[dict[str, Any]]:
     out = []
     for block in text.replace("\r\n", "\n").split("\n\n"):
         data = [ln[5:].lstrip() for ln in block.splitlines() if ln.startswith("data:")]
-        if data:
+        if data and "event: papi.cursor" not in block:
             out.append(json.loads("".join(data)))
     return out
 
