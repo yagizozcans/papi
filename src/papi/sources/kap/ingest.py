@@ -27,6 +27,7 @@ from papi.sources.kap.client import KapClient, KapFile, KapHttpError, KapJson, K
 from papi.sources.kap.common import (
     EVENT_SOURCE,
     JOB_FETCH,
+    is_db_busy,
     item_hash,
     item_tickers,
     kap_source_id,
@@ -408,6 +409,8 @@ def process_disclosure(
         conn.commit()
     except Exception as exc:
         conn.rollback()
+        if is_db_busy(exc):
+            raise  # contention: the job retries (raw is archived, status stays ``fetched``)
         mark_failed(conn, ref, "parse", f"{type(exc).__name__}: {exc}")
         conn.commit()
         raise ParseFailed(f"{ref}: {type(exc).__name__}: {exc}") from exc

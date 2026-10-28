@@ -144,6 +144,21 @@ def kap_http(fake_kap: FakeKap) -> Iterator[respx.MockRouter]:
             fake_kap.calls.append("companies")
             return httpx.Response(200, json=fake_kap.companies)
 
+        def member_filter(request: httpx.Request, code: str) -> httpx.Response:
+            fake_kap.calls.append(f"filter:{code}")
+            path = FIXTURES / f"member_filter_{code}.json"
+            return httpx.Response(200, content=path.read_bytes() if path.exists() else b"[]")
+
+        def genel(request: httpx.Request, link: str) -> httpx.Response:
+            fake_kap.calls.append(f"genel:{link}")
+            ticker = {
+                "956-ford-otomotiv-sanayi-a-s": "FROTO",
+                "2425-turkiye-is-bankasi-a-s": "ISCTR",
+                "5826-pasifik-eurasia-lojistik-dis-ticaret-a-s": "PASEU",
+            }.get(link, "bad_956")  # KAP answers 200 with a generic page for unknown links
+            html = gzip.decompress((FIXTURES / f"company_genel_{ticker}.html.gz").read_bytes())
+            return httpx.Response(200, content=html, headers={"content-type": "text/html; charset=utf-8"})
+
         router.post("/tr/api/disclosure/members/byCriteria").mock(side_effect=by_criteria)
         router.get(path__regex=r"/tr/api/notification/attachment-detail/(?P<index>\d+)").mock(
             side_effect=detail
@@ -151,6 +166,8 @@ def kap_http(fake_kap: FakeKap) -> Iterator[respx.MockRouter]:
         router.get(path__regex=r"/tr/api/file/download/(?P<obj_id>\w+)").mock(side_effect=download)
         router.get(path__regex=r"/tr/api/BildirimPdf/(?P<index>\d+)").mock(side_effect=kap_pdf)
         router.get("/tr/api/company/items/IGS/A").mock(side_effect=companies)
+        router.get(path__regex=r"/tr/api/member/filter/(?P<code>\w+)").mock(side_effect=member_filter)
+        router.get(path__regex=r"/tr/sirket-bilgileri/genel/(?P<link>[\w-]+)").mock(side_effect=genel)
         yield router
 
 

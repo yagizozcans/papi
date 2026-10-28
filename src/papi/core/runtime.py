@@ -167,22 +167,45 @@ def _periodic_state_key(name: str) -> str:
     return f"periodic:{name}"
 
 
+def _is_due(spec, state: dict, now: datetime) -> bool:
+    last = state.get("last_enqueued_at")
+    if last is None:
+        return True  # first sighting: either run now or just record the start marker
+    return now >= parse_iso(last) + timedelta(seconds=spec.seconds(now))
+
+
 def schedule_due(now: datetime | None = None) -> list[str]:
-    """Enqueue every due periodic task (one scheduler tick). Returns names enqueued."""
+    """Enqueue every due periodic task (one scheduler tick). Returns names enqueued.
+
+    A read-only pass picks candidates first, so idle ticks take no write lock; each candidate is
+    then re-checked inside its own ``BEGIN IMMEDIATE`` transaction.
+    """
     now = now or now_utc()
+    specs = list(REGISTRY.periodics.values())
+    with db.connect() as conn:
+        active_kinds = {
+            row[0]
+            for row in conn.execute(
+                select(job_table.c.kind)
+                .where(job_table.c.status.in_(("queued", "running")))
+                .where(job_table.c.kind.in_([spec.job_kind for spec in specs]))
+                .distinct()
+            )
+        }
+        candidates = [
+            spec
+            for spec in specs
+            if spec.job_kind not in active_kinds
+            and _is_due(spec, get_state(conn, _periodic_state_key(spec.name), {}) or {}, now)
+        ]
     enqueued: list[str] = []
-    for spec in list(REGISTRY.periodics.values()):
+    for spec in candidates:
         with db.transaction() as conn:
             state = get_state(conn, _periodic_state_key(spec.name), {}) or {}
-            last = state.get("last_enqueued_at")
-            if last is None:
-                due = spec.run_on_start
-                if not due:
-                    set_state(conn, _periodic_state_key(spec.name), {"last_enqueued_at": now.isoformat()})
-                    continue
-            else:
-                due = now >= parse_iso(last) + timedelta(seconds=spec.seconds(now))
-            if not due:
+            if state.get("last_enqueued_at") is None and not spec.run_on_start:
+                set_state(conn, _periodic_state_key(spec.name), {"last_enqueued_at": now.isoformat()})
+                continue
+            if not _is_due(spec, state, now):
                 continue
             active = conn.execute(
                 select(job_table.c.id).where(

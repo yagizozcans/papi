@@ -1,5 +1,6 @@
 """Deterministic Telegram commands (08 §4.2): ``/yardim``, ``/portfoy``, ``/izle``, ``/birak``,
-``/mutabakat``, ``/geri``, ``/bugun``, ``/bekleyen``, ``/iptal``.
+``/mutabakat``, ``/geri``, ``/bugun``, ``/bekleyen``, ``/iptal`` and the Claude controls ``/durdur``,
+``/devam``, ``/kullanim``.
 
 Callback data: ``rc:ok`` / ``rc:no`` (reconcile), ``pa:ok:<pending_action>`` / ``pa:no:<pending_action>``.
 """
@@ -7,14 +8,16 @@ Callback data: ``rc:ok`` / ``rc:no`` (reconcile), ``pa:ok:<pending_action>`` / `
 from __future__ import annotations
 
 import re
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 from decimal import Decimal, InvalidOperation
 from typing import Any
 
 from papi.core.text import normalize_tr, parse_tr_number
 from papi.core.timeutil import IST, to_ist
-from papi.notify.alerts import format_line
+from papi.llm import governor
+from papi.notify.alerts import fmt_local, format_line
 from papi.notify.context import events_since, load_event_facts, load_universe
+from papi.notify.usage import usage_lines
 from papi.portfolio.fmt import fmt_date, fmt_num, fmt_pct, fmt_qty
 from papi.portfolio.service import (
     apply_pending_action,
@@ -47,6 +50,13 @@ HELP_TEXT = """🤖 <b>papi</b> — KAP bildirimleri ve portföy asistanı
 /mutabakat — İşCep ile adım adım karşılaştırma
 /geri — son Telegram işlemini geri al
 /iptal — yarım kalan diyaloğu bırak
+
+<b>Claude analizi</b>
+/durdur [3s · 90dk · 1s30dk · 2g] — analizi durdur (süresiz: /devam'a kadar)
+/devam — analizi sürdür
+/kullanim — papi kullanımı, abonelik çubukları, bekleyen işler
+
+Pazar akşamları haftalık değerlendirme, her sabah günlük özet gelir.
 /yardim — bu mesaj"""
 
 SHORT_HELP = (
@@ -60,6 +70,64 @@ QUESTION_REPLY = (
 OK_WORDS = {"ok", "tamam", "evet", "ayni", "dogru", "yes", "same", "+", "✓", "✅"}
 DONE_WORDS = {"yok", "bitti", "hayir", "no", "none", "done", "tamam", "ok"}
 _PAIR = re.compile(r"([A-Za-zÇĞİÖŞÜçğıöşü][A-Za-zÇĞİÖŞÜçğıöşü0-9]{1,11})\s*[:=]?\s+(\d[\d.,]*)")
+_DURATION = re.compile(r"^(?:(\d+)(?:g|gun))?(?:(\d+)(?:s|sa|saat|h))?(?:(\d+)(?:dk|dak|dakika|m|min))?$")
+MAX_PAUSE = timedelta(days=30)
+
+
+def parse_duration(text: str) -> timedelta | None:
+    """``3s`` (saat), ``90dk``, ``1s30dk``, ``2g`` (gün), ``2 saat 15 dakika`` → timedelta; else None."""
+    key = normalize_tr(text).replace(" ", "")
+    m = _DURATION.match(key)
+    if not key or not m or not any(m.groups()):
+        return None
+    days, hours, minutes = (int(g) if g else 0 for g in m.groups())
+    value = timedelta(days=days, hours=hours, minutes=minutes)
+    return value if timedelta(0) < value <= MAX_PAUSE else None
+
+
+def _human(d: timedelta) -> str:
+    minutes = int(d.total_seconds() // 60)
+    days, rem = divmod(minutes, 1440)
+    hours, mins = divmod(rem, 60)
+    parts = [
+        f"{days} gün" if days else "",
+        f"{hours} saat" if hours else "",
+        f"{mins} dakika" if mins else "",
+    ]
+    return " ".join(p for p in parts if p)
+
+
+def cmd_pause(turn: Turn, arg: str) -> None:
+    if not arg:
+        governor.pause(turn.conn, None, reason="telegram", now=turn.now)
+        turn.reply("⏸ Claude analizi durduruldu — /devam yazana kadar. Kural tabanlı uyarılar sürüyor.")
+        return
+    duration = parse_duration(arg)
+    if duration is None:
+        turn.reply(
+            "Süre anlaşılamadı. Örnekler: <code>/durdur 3s</code> (3 saat), <code>/durdur 90dk</code>, "
+            "<code>/durdur 1s30dk</code>, <code>/durdur 2g</code> (en fazla 30 gün)."
+        )
+        return
+    until = turn.now + duration
+    governor.pause(turn.conn, until, reason="telegram", now=turn.now)
+    turn.reply(
+        f"⏸ Claude analizi {_human(duration)} durduruldu ({fmt_local(until)}'e kadar). "
+        "Kural tabanlı uyarılar sürüyor; erken sürdürmek için /devam."
+    )
+
+
+def cmd_resume(turn: Turn, arg: str) -> None:
+    if governor.pause_state(turn.conn, turn.now) is None:
+        turn.reply("▶️ Claude analizi zaten çalışıyor.")
+        return
+    governor.resume(turn.conn)
+    turn.reply("▶️ Claude analizi sürüyor; bekleyen işler sırayla işlenecek.")
+
+
+def cmd_usage(turn: Turn, arg: str) -> None:
+    st = governor.status(turn.conn, now=turn.now)
+    turn.reply("📊 <b>Claude kullanımı</b>\n" + "\n".join(usage_lines(st)))
 
 
 def cmd_help(turn: Turn, arg: str) -> None:
@@ -336,4 +404,7 @@ COMMANDS = {
     "bugun": cmd_today,
     "bekleyen": cmd_pending,
     "iptal": cmd_cancel,
+    "durdur": cmd_pause,
+    "devam": cmd_resume,
+    "kullanim": cmd_usage,
 }

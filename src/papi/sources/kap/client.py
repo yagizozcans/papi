@@ -21,6 +21,9 @@ Endpoints (verified live 2026-10-28; unofficial, may change — see drift checks
 * ``GET /tr/api/file/download/<objId>`` → Java-serialised ``byte[]`` wrapping the file.
 * ``GET /tr/api/BildirimPdf/<index>`` → KAP-rendered PDF (plain).
 * ``GET /tr/api/company/items/<memberType>/A`` → member list (``IGS`` = listed companies).
+* ``GET /tr/api/member/filter/<code>`` → ``[{companyCode, mkkMemberOid, title, permaLink}]``.
+* ``GET /tr/sirket-bilgileri/genel/<permaLink>`` → server-rendered company page (capital structure,
+  share groups, free float per code); an unknown link answers 200 with a generic page.
 """
 
 from __future__ import annotations
@@ -138,6 +141,14 @@ class KapClient(Protocol):
     def disclosure_pdf(self, index: int) -> KapFile: ...
 
     def companies(self, member_type: str = "IGS") -> KapJson: ...
+
+    def member_lookup(self, code: str) -> KapJson:
+        """``[{companyCode, mkkMemberOid, title, permaLink}]`` for a stock/member code."""
+        ...
+
+    def company_general_page(self, permalink: str) -> KapFile:
+        """Company "Genel Bilgiler" page (HTML; holds the capital structure)."""
+        ...
 
 
 # ------------------------------------------------------------------------------------------ helpers
@@ -527,6 +538,22 @@ class KapPublicWebClient:
         if not isinstance(res.data, list):
             raise KapHttpError(f"company list is {type(res.data).__name__}, expected array")
         return res
+
+    def member_lookup(self, code: str) -> KapJson:
+        res = self._json("GET", f"/tr/api/member/filter/{code.strip().upper()}")
+        if not isinstance(res.data, list):
+            raise KapHttpError(f"member filter is {type(res.data).__name__}, expected array")
+        return res
+
+    def company_general_page(self, permalink: str) -> KapFile:
+        resp, sha = self._request("GET", f"/tr/sirket-bilgileri/genel/{permalink}")
+        return KapFile(
+            content=resp.content,
+            raw_sha256=sha,
+            url=str(resp.request.url),
+            content_type=resp.headers.get("content-type"),
+            file_name=f"{permalink}.html",
+        )
 
 
 def _kept_headers(headers: httpx.Headers) -> dict[str, str]:

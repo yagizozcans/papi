@@ -8,8 +8,9 @@ from datetime import datetime
 from typing import Any
 
 from sqlalchemy import Connection
+from sqlalchemy.exc import OperationalError
 
-from papi.core import jobs
+from papi.core import db, jobs
 from papi.core.rawstore import source_id_for
 from papi.core.timeutil import parse_kap_datetime
 
@@ -39,6 +40,26 @@ def release(conn: Connection) -> None:
     """End ``conn``'s transaction (commit) before network I/O so no SQLite lock/snapshot is held."""
     if conn.in_transaction():
         conn.commit()
+
+
+def writer(conn: Connection) -> Connection:
+    """Make every transaction on ``conn`` start with ``BEGIN IMMEDIATE``.
+
+    A deferred transaction that reads and then writes fails at once with ``database is locked``
+    (SQLITE_BUSY_SNAPSHOT) when another connection committed in between; ``BEGIN IMMEDIATE`` takes the
+    write lock up front and waits ``busy_timeout``. Used by the worker/CLI entry points; pipeline code
+    keeps lock windows short (``release`` before network I/O, parsing outside transactions).
+    """
+    release(conn)
+    return conn.execution_options(**{db._IMMEDIATE_OPTION: True})
+
+
+def is_db_busy(exc: BaseException) -> bool:
+    """Transient SQLite contention (retry the job; never a parse/permanent failure)."""
+    if not isinstance(exc, OperationalError):
+        return False
+    msg = str(exc.orig if exc.orig is not None else exc).lower()
+    return "locked" in msg or "busy" in msg
 
 
 def item_hash(item: dict[str, Any]) -> str:

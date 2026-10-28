@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import json
 import statistics
+from collections.abc import Iterator
+from contextlib import contextmanager
 from datetime import date, timedelta
 from typing import Annotated, Any
 
@@ -16,11 +18,12 @@ from papi.core import db, jobs
 from papi.core.metrics import series
 from papi.core.schema import disclosure, document, document_span, event_log, job
 from papi.core.state import get_state
-from papi.core.timeutil import now_utc, to_ist
+from papi.core.timeutil import ist_date, now_utc, to_ist
 from papi.sources.kap import gaps as gaps_mod
+from papi.sources.kap.capital import refresh_batch
 from papi.sources.kap.client import CIRCUIT_KEY, KapBlocked, KapError, KapPublicWebClient
-from papi.sources.kap.common import kap_source_id
-from papi.sources.kap.companies import sync_companies
+from papi.sources.kap.common import kap_source_id, writer
+from papi.sources.kap.companies import resolve_tickers, sync_companies
 from papi.sources.kap.discovery import BACKFILL_KEY, LAST_INDEX_KEY, LAST_POLL_OK_KEY, backfill, poll_once
 from papi.sources.kap.drift import DRIFT_KEY, UNKNOWN_TEMPLATES_KEY
 from papi.sources.kap.ingest import FetchOutcome, ParseFailed, process_disclosure
@@ -35,6 +38,13 @@ console = Console()
 def _fail(msg: str) -> None:
     console.print(f"[red]{msg}[/red]")
     raise typer.Exit(1)
+
+
+@contextmanager
+def _writer() -> Iterator[Connection]:
+    """Connection whose transactions begin IMMEDIATE (safe next to a running worker)."""
+    with db.connect() as conn:
+        yield writer(conn)
 
 
 def _process_refs(
@@ -77,7 +87,7 @@ def poll_once_cmd(
     limit: Annotated[int, typer.Option(help="En fazla bu kadar yeni bildirimi işle (0 = hepsi)")] = 0,
 ) -> None:
     """Bugün + dün listesini tara (uykudan sonra kaçan pencereyi de), yenileri kaydet ve işle."""
-    with KapPublicWebClient() as client, db.connect() as conn:
+    with KapPublicWebClient() as client, _writer() as conn:
         try:
             report = poll_once(conn, client)
         except KapBlocked as exc:
@@ -99,10 +109,35 @@ def poll_once_cmd(
 @app.command("sync-companies")
 def sync_companies_cmd() -> None:
     """KAP şirket listesini (IGS) çek, issuer/instrument/identifier kayıtlarını güncelle."""
-    with KapPublicWebClient() as client, db.connect() as conn:
+    with KapPublicWebClient() as client, _writer() as conn:
         report = sync_companies(conn, client)
         conn.commit()
     console.print(f"Şirket eşitleme: {report.as_dict()}")
+
+
+@app.command("capital")
+def capital_cmd(
+    tickers: Annotated[
+        str | None, typer.Option(help="Virgülle ayrılmış hisse kodları (boşsa vadesi gelenler)")
+    ] = None,
+    limit: Annotated[int, typer.Option(help="En fazla bu kadar şirket")] = 10,
+) -> None:
+    """Ödenmiş sermaye ve pay adetlerini KAP şirket sayfasından güncelle (önce portföy/izleme)."""
+    with KapPublicWebClient() as client, _writer() as conn:
+        ids: list[str] | None = None
+        if tickers:
+            codes = [t.strip().upper() for t in tickers.split(",") if t.strip()]
+            found = resolve_tickers(conn, codes, ist_date())
+            missing = [c for c in codes if c not in found]
+            if missing:
+                _fail(f"bilinmeyen hisse kodu: {', '.join(missing)} (önce `papi kap sync-companies`)")
+            ids = list(dict.fromkeys(v[1] for v in found.values() if v[1]))
+        try:
+            counts = refresh_batch(conn, client, limit=limit, issuer_ids=ids)
+        except KapBlocked as exc:
+            _fail(f"KAP erişimi geçici olarak durduruldu (devre kesici): {exc}")
+            return
+    console.print(f"Sermaye güncelleme: {counts}; istek {client.request_count}.")
 
 
 @app.command("fetch")
@@ -112,7 +147,7 @@ def fetch_cmd(
     kap_pdf: Annotated[bool, typer.Option("--kap-pdf", help="KAP PDF'ini de indir")] = False,
 ) -> None:
     """Tek bir bildirimi indeks ile çek, ayrıştır ve normalize et."""
-    with KapPublicWebClient() as client, db.connect() as conn:
+    with KapPublicWebClient() as client, _writer() as conn:
         try:
             out = process_disclosure(conn, client, str(index), mode="manual", force=force, kap_pdf=kap_pdf)
         except (KapError, ParseFailed) as exc:
@@ -141,7 +176,7 @@ def backfill_cmd(
     if start > end:
         _fail("--from, --to'dan sonra olamaz")
     codes = [t.strip().upper() for t in tickers.split(",")] if tickers else None
-    with KapPublicWebClient() as client, db.connect() as conn:
+    with KapPublicWebClient() as client, _writer() as conn:
         try:
             totals = backfill(
                 conn, client, start, end, tickers=codes, max_windows=max_windows, restart=restart
@@ -162,7 +197,7 @@ def reparse_cmd(
     ] = True,
 ) -> None:
     """Arşivlenmiş ham veriden yeniden ayrıştır/normalize et; yalnız çıktısı değişenler revize edilir."""
-    with db.connect() as conn:
+    with _writer() as conn:
         stats = reparse(
             conn, date.fromisoformat(from_), date.fromisoformat(to), template=template, publish=publish
         )

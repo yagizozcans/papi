@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "checker/1",
+  "title": "papi checker output v1",
+  "description": "Entailment check of analyst claims against their cited source text (PRD 04 §4.3).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["results"],
+  "properties": {
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim_index", "status", "reason"],
+        "properties": {
+          "claim_index": {"type": "integer", "minimum": 0},
+          "status": {"type": "string", "enum": ["supported", "unsupported", "partial"]},
+          "reason": {"type": "string", "maxLength": 500}
+        }
+      }
+    }
+  }
+}

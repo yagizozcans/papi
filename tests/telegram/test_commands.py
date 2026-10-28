@@ -39,7 +39,7 @@ def book(db: Connection) -> dict[str, str]:
 
 def test_help_and_unknown(chat: Chat) -> None:
     assert "/mutabakat" in chat.say("/yardim")
-    assert "Bilinmeyen komut: /durdur" in chat.say("/durdur")
+    assert "Bilinmeyen komut: /uydur" in chat.say("/uydur")
     assert "işlem olarak anlayamadım" in chat.say("merhaba")
     assert "henüz açık değil" in chat.say("ASELS alsam ne olur?")
 

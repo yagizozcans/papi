@@ -24,7 +24,7 @@ from papi.core.schema import disclosure, document, document_span
 from papi.core.timeutil import ist_date, now_utc
 from papi.sources.kap import companies, deps, drift
 from papi.sources.kap.client import unwrap_java_bytes
-from papi.sources.kap.common import EVENT_SOURCE, item_tickers, published_at, split_list
+from papi.sources.kap.common import EVENT_SOURCE, item_tickers, published_at, release, split_list
 from papi.sources.kap.parsing.doc import ParsedDocument
 from papi.sources.kap.parsing.files import parse_file
 from papi.sources.kap.parsing.html import languages, parse_body
@@ -363,26 +363,36 @@ def parse_and_normalize(
     is_catchup: bool | None = None,
     publish: bool = True,
 ) -> NormalizeResult:
-    """Parse archived raw + normalize one disclosure in ``conn``'s transaction (caller commits).
+    """Parse archived raw + normalize one disclosure (caller commits the write phase).
+
+    ``conn``'s open transaction is committed first and parsing runs outside any transaction, so the
+    (possibly ``BEGIN IMMEDIATE``) write phase holds the SQLite write lock only for the DB work.
 
     ``reason``: ``ingest`` (first pass, always publishes), ``refresh`` (KAP content re-fetched) or
     ``reparse`` (new parser) — the latter two publish ``disclosure.revised`` only if output changed.
     """
     now = now_utc()
-    row = conn.execute(select(disclosure).where(disclosure.c.id == disclosure_id)).one()
-    extra: dict[str, Any] = dict(row.extra or {})
-    raw = extra.get("raw") or {}
-    if not raw.get("detail"):
-        raise ValueError(f"disclosure {row.source_ref} has no archived detail")
-    detail = load_detail(raw["detail"])
+    registry = drift.TemplateRegistry.load()
+    planned_raw: dict[str, Any] | None = None
+    planned: list[PlannedDoc] = []
+    while True:
+        row = conn.execute(select(disclosure).where(disclosure.c.id == disclosure_id)).one()
+        extra: dict[str, Any] = dict(row.extra or {})
+        raw = extra.get("raw") or {}
+        if not raw.get("detail"):
+            raise ValueError(f"disclosure {row.source_ref} has no archived detail")
+        if raw == planned_raw:
+            break  # row re-read inside the write transaction; parse output still matches its raw
+        release(conn)
+        detail = load_detail(raw["detail"])
+        planned = plan_documents(raw, detail, registry)
+        planned_raw = raw
     basic = (detail.get("disclosure") or {}).get("disclosureBasic") or {}
     ddet = (detail.get("disclosure") or {}).get("disclosureDetail") or {}
     payload = dict(row.source_payload or {})
     list_item = payload.get("list") or {}
     first_pass = not extra.get("normalized_at")
 
-    registry = drift.TemplateRegistry.load()
-    planned = plan_documents(raw, detail, registry)
     doc_ids, docs_changed = persist_documents(conn, disclosure_id, planned, now)
     body = next((p.doc for p in planned if p.role == "body"), None)
     if body is not None and not body.extra.get("template_known"):

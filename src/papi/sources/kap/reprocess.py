@@ -13,7 +13,7 @@ from sqlalchemy import Connection, select
 from papi.core.schema import disclosure
 from papi.core.timeutil import IST
 from papi.sources.kap.client import KapClient, KapNotFound
-from papi.sources.kap.common import kap_source_id, release
+from papi.sources.kap.common import is_db_busy, kap_source_id, release
 from papi.sources.kap.ingest import mark_failed, process_disclosure
 from papi.sources.kap.normalize import mark_blocked, parse_and_normalize
 
@@ -89,8 +89,9 @@ def reparse(
             conn.commit()
         except Exception as exc:
             conn.rollback()
-            mark_failed(conn, r.source_ref, "parse", f"{type(exc).__name__}: {exc}")
-            conn.commit()
+            if not is_db_busy(exc):  # contention is retryable, not a parser failure
+                mark_failed(conn, r.source_ref, "parse", f"{type(exc).__name__}: {exc}")
+                conn.commit()
             stats["failed"] += 1
             stats["errors"].append(f"{r.source_ref}: {exc}")
             continue

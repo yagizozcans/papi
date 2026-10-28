@@ -1,7 +1,8 @@
 """Background work of the KAP slice (auto-imported by ``papi.core.registry.load_plugins``).
 
 Periodics: ``kap:poll`` (session-aware cadence), ``kap:gaps`` (5 min), ``kap:reconcile``
-(``kap.reconcile_every_hours``), ``kap:companies`` (daily).
+(``kap.reconcile_every_hours``), ``kap:companies`` (daily; then capital of held/watched issuers due),
+``kap:capital`` (hourly; a few remaining issuers whose capital is older than 7 days).
 Job kinds: ``kap:fetch`` {ref, mode, is_catchup, priority}, ``kap:probe`` {index},
 ``kap:refresh`` {ref, reason}.
 A circuit-open answer defers the job (no attempt used); not-found is permanent.
@@ -17,8 +18,9 @@ from papi.core import db, jobs
 from papi.core.config import get_settings
 from papi.core.registry import job_kind, periodic
 from papi.sources.kap import cadence
+from papi.sources.kap.capital import HELD_BATCH, SLOW_BATCH, refresh_batch
 from papi.sources.kap.client import KapBlocked, KapClient, KapNotFound, default_client
-from papi.sources.kap.common import JOB_FETCH, JOB_PROBE, JOB_REFRESH
+from papi.sources.kap.common import JOB_FETCH, JOB_PROBE, JOB_REFRESH, writer
 from papi.sources.kap.companies import sync_companies
 from papi.sources.kap.discovery import poll_once, reconcile
 from papi.sources.kap.gaps import detect_gaps, probe_index
@@ -30,6 +32,7 @@ log = logging.getLogger("papi.kap.handlers")
 POLL_PRIORITY = 12  # ahead of everything but P1 work and chat
 GAPS_INTERVAL_S = 300.0
 COMPANIES_INTERVAL_S = 86400.0
+CAPITAL_INTERVAL_S = 3600.0
 
 
 def _client() -> KapClient:
@@ -39,7 +42,8 @@ def _client() -> KapClient:
 def _run(fn: Any, *args: Any, **kwargs: Any) -> Any:
     client = _client()
     try:
-        with db.connect() as conn:
+        with db.connect() as raw_conn:
+            conn = writer(raw_conn)
             result = fn(conn, client, *args, **kwargs)
             if conn.in_transaction():
                 conn.commit()
@@ -64,7 +68,8 @@ def poll_job(ctx: Any) -> None:
 
 @periodic("kap:gaps", GAPS_INTERVAL_S, priority=60)
 def gaps_job(ctx: Any) -> None:
-    with db.connect() as conn:
+    with db.connect() as raw_conn:
+        conn = writer(raw_conn)
         report = detect_gaps(conn)
         conn.commit()
     if report.new_missing:
@@ -81,6 +86,14 @@ def reconcile_job(ctx: Any) -> None:
 def companies_job(ctx: Any) -> None:
     report = _run(sync_companies)
     log.info("kap companies: %s", report.as_dict())
+    counts = _run(refresh_batch, limit=HELD_BATCH, held_only=True)
+    log.info("kap capital (held/watched): %s", counts)
+
+
+@periodic("kap:capital", CAPITAL_INTERVAL_S, priority=75)
+def capital_job(ctx: Any) -> None:
+    counts = _run(refresh_batch, limit=SLOW_BATCH)
+    log.info("kap capital: %s", counts)
 
 
 @job_kind(JOB_FETCH, max_attempts=5)

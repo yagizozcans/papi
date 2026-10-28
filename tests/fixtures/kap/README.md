@@ -17,6 +17,9 @@ respx, so the tests make no network calls.
 | `file_4028328ca16c7de401a17de5e8772c7f.bin` | `GET /tr/api/file/download/<objId>` | The PDF attachment of 1688272 (MHRGY DKB pay alım bildirimi), wrapped in a **Java-serialised `byte[]`** (`AC ED 00 05 75 72 00 02 5B 42 …`). |
 | `file_4028328da16c7fe501a17db833540bc8.bin` | the same download endpoint | The **English** PDF attachment "Dividend Distribution Proposal.pdf" of 1688363 (FROTO). It is Java-wrapped too. |
 | `bildirimpdf_1688616.pdf` | `GET /tr/api/BildirimPdf/1688616` | The PDF that KAP renders for a disclosure. It is a plain PDF, not wrapped. |
+| `member_filter_{FROTO,ISCTR,PASEU}.json` | `GET /tr/api/member/filter/<code>` (recorded 2026-10-28 02:5x) | Returns `[{companyCode, mkkMemberOid, title, permaLink}]`. |
+| `company_genel_{FROTO,ISCTR,PASEU}.html.gz` | `GET /tr/sirket-bilgileri/genel/<permaLink>` | Server-rendered "Genel Bilgiler" page. Its "SERMAYE VE ORTAKLIK YAPISI BİLGİLERİ" section holds `Ödenmiş/Çıkarılmış Sermaye`, `Kayıtlı Sermaye Tavanı`, the share-group table and the per-code "Fiili Dolaşımdaki Paylar" table. The values are: FROTO paid capital 3.509.100.000 with one traded code, whose count covers the non-traded B/C groups; ISCTR 25.000.000.000 split across ISATR/ISBTR/ISCTR/ISKUR, with share group C served truncated; PASEU 672.000.000. The company list's `paidCapital` for FROTO is a stale 350.910.000. |
+| `company_genel_bad_956.html.gz` | `GET /tr/sirket-bilgileri/genel/956` (company code without the slug) | Returns HTTP 200 with a generic page that has no capital section. papi treats it as a stale or wrong permaLink. |
 
 ## Disclosure details
 

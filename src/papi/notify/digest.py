@@ -59,26 +59,10 @@ def build_digest(conn: Connection, *, now: datetime | None = None) -> tuple[str,
     if held_lines:
         sections.append(["🔕 <b>Sessiz saatlerde bekletilenler</b>", *held_lines])
 
-    pending = pending_actions(conn)
-    if pending:
-        plines = ["📌 <b>Bekleyen kurumsal işlemler</b> (/bekleyen)"]
-        for pa in pending:
-            proposal = pa.get("proposal") or {}
-            desc = proposal.get("text_tr") or pa.get("kind")
-            when = f" · hak kullanım {fmt_date(pa['ex_date'])}" if pa.get("ex_date") else ""
-            plines.append(f"• <b>{esc(pa.get('ticker') or '—')}</b>: {esc(desc)}{when}")
+    if plines := pending_lines(conn):
         sections.append(plines)
 
-    ops_sent = conn.execute(
-        select(notification.c.text).where(
-            notification.c.kind == "ops",
-            notification.c.channel == "telegram",
-            notification.c.created_at >= since,
-            notification.c.delivered.is_(True),
-        )
-    ).scalars()
-    for text in ops_sent:
-        line = "• " + (text or "").split("\n", 1)[-1]
+    for line in sent_ops_lines(conn, since):
         if line not in ops_lines:
             ops_lines.append(line)
     if ops_lines:
@@ -89,6 +73,40 @@ def build_digest(conn: Connection, *, now: datetime | None = None) -> tuple[str,
         body = "Son 24 saatte portföyünüzde yeni olay yok; bekleyen işlem ve operasyon sorunu yok."
         return f"{header}\n\n{body}", [r["id"] for r in held]
     return header + "\n\n" + "\n\n".join("\n".join(s) for s in sections), [r["id"] for r in held]
+
+
+def pending_lines(conn: Connection) -> list[str]:
+    """Section listing expected corporate actions (empty if none)."""
+    pending = pending_actions(conn)
+    if not pending:
+        return []
+    lines = ["📌 <b>Bekleyen kurumsal işlemler</b> (/bekleyen)"]
+    for pa in pending:
+        proposal = pa.get("proposal") or {}
+        desc = proposal.get("text_tr") or pa.get("kind")
+        when = f" · hak kullanım {fmt_date(pa['ex_date'])}" if pa.get("ex_date") else ""
+        lines.append(f"• <b>{esc(pa.get('ticker') or '—')}</b>: {esc(desc)}{when}")
+    return lines
+
+
+def sent_ops_lines(conn: Connection, since: datetime) -> list[str]:
+    """Distinct ops alerts sent (or delivered via a digest) since ``since``, as bullet lines."""
+    out: list[str] = []
+    rows = conn.execute(
+        select(notification.c.text)
+        .where(
+            notification.c.kind == "ops",
+            notification.c.channel == "telegram",
+            notification.c.created_at >= since,
+            notification.c.delivered.is_(True),
+        )
+        .order_by(notification.c.created_at)
+    ).scalars()
+    for text in rows:
+        line = "• " + (text or "").split("\n", 1)[-1]
+        if line not in out:
+            out.append(line)
+    return out
 
 
 def digest_due(conn: Connection, now: datetime) -> bool:

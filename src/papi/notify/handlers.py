@@ -4,7 +4,8 @@
 - ``analysis.completed.v1`` → threaded follow-up (``notify.follow_up``)
 - ``disclosure.revised.v1`` → revision notice reply (``notify.revision``)
 - job kinds ``notify:ops`` (C4) and ``notify:flush`` (catch-up / rate-limit batches)
-- periodics ``notify:digest`` (checks every minute; sends once a day after ``alerts.digest_time``) and
+- periodics ``notify:digest`` (checks every minute; sends once a day after ``alerts.digest_time``),
+  ``notify:weekly_review`` (checks every minute; sends at ``alerts.weekly_review``) and
   ``notify:seed_rules`` (default alert rules on first worker start)
 """
 
@@ -15,7 +16,7 @@ from typing import Any
 from papi.core import db
 from papi.core.events import ANALYSIS_COMPLETED, DISCLOSURE_REVISED, EVENT_CLASSIFIED, CloudEvent
 from papi.core.registry import handles, job_kind, periodic
-from papi.notify import alerts, digest
+from papi.notify import alerts, digest, weekly
 from papi.notify.ops import OPS_JOB_KIND
 from papi.notify.store import seed_default_rules
 
@@ -55,6 +56,12 @@ def flush(payload: dict[str, Any], ctx: Any) -> None:
 def daily_digest(ctx: Any) -> None:
     with db.transaction() as conn:
         digest.send_digest(conn)
+
+
+@periodic("notify:weekly_review", 60, priority=40)
+def weekly_review(ctx: Any) -> None:
+    with db.transaction() as conn:
+        weekly.send_weekly_review(conn)
 
 
 @periodic("notify:seed_rules", 86400, priority=40)
