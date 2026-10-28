@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Literal
 
@@ -27,6 +27,9 @@ class LlmResult:
     # Last ``rate_limit_info`` from the CLI (status, resetsAt, unifiedWindows.{five_hour,seven_day}
     # .utilization 0..1): the subscription bars, shared with interactive use.
     rate_limit: dict[str, Any] | None = None
+    # Ids of every ``llm_usage_ledger`` row ``papi.llm.call.call()`` wrote for this call (incl. the
+    # repair retry); link them with ``governor.link_ledger`` once the analysis row exists.
+    ledger_ids: list[str] = field(default_factory=list)
 
     @property
     def ok(self) -> bool:

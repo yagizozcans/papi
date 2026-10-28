@@ -64,6 +64,7 @@ def call(
     backend = backend or get_backend()
     retries_left = 1 if repair_retry else 0
     current = prompt
+    ledger_ids: list[str] = []
     while True:
         admission = governor.admit(conn, task, priority)
         if not admission.ok:
@@ -76,7 +77,10 @@ def call(
                 )
         except governor.SlotBusy as exc:
             raise Deferred(now_utc() + governor.SLOT_RETRY, f"llm:concurrency: {exc}") from exc
-        governor.record_usage(conn, result, task=task, priority=priority, analysis_id=analysis_id)
+        ledger_ids.append(
+            governor.record_usage(conn, result, task=task, priority=priority, analysis_id=analysis_id)
+        )
+        result.ledger_ids = list(ledger_ids)
         conn.commit()
         log.info(
             "llm call task=%s priority=%s outcome=%s cost=%.4f ms=%d models=%s",

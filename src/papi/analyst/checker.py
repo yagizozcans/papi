@@ -14,7 +14,6 @@ from typing import Any
 
 from sqlalchemy import Connection, select, update
 
-from papi.analyst.usage import link_ledger
 from papi.core import jobs
 from papi.core.config import get_settings
 from papi.core.ids import uuid7
@@ -24,6 +23,7 @@ from papi.core.schema import analysis, claim
 from papi.core.timeutil import now_utc
 from papi.llm import call as llm_call
 from papi.llm.backend import LlmBackend
+from papi.llm.governor import link_ledger
 from papi.triage.materiality import band_for
 from papi.verify import VerifyReport
 
@@ -153,7 +153,6 @@ def run_for_call(
     spec = checker_spec()
     label = primary["priority"] or "P2"
     checker_id = uuid7()
-    called_at = now_utc()
     try:
         result = llm_call.call(
             conn,
@@ -216,7 +215,7 @@ def run_for_call(
             review_state="auto",
         )
     )
-    link_ledger(conn, checker_id, task="checker", priority=label, since=called_at)
+    link_ledger(conn, result.ledger_ids, checker_id)
     status_by_index = {
         r["claim_index"]: r["status"] for r in out.get("results") or [] if r.get("claim_index") in indices
     }

@@ -36,7 +36,6 @@ from papi import kb
 from papi.analyst import checker as checker_mod
 from papi.analyst.context import ContextPack, EventNotFound, build_context, live_events
 from papi.analyst.spec import AgentSpec, analyst_spec
-from papi.analyst.usage import link_ledger
 from papi.core.config import get_settings
 from papi.core.events import ANALYSIS_COMPLETED, EVENT_CLASSIFIED, publish
 from papi.core.ids import uuid7
@@ -47,6 +46,7 @@ from papi.core.state import delete_state, get_state, set_state
 from papi.core.timeutil import now_utc, parse_iso
 from papi.llm import call as llm_call
 from papi.llm.backend import LlmBackend
+from papi.llm.governor import link_ledger
 from papi.llm.types import LlmResult
 from papi.triage import taxonomy as tax_mod
 from papi.triage.materiality import band_for
@@ -180,7 +180,6 @@ def analyse_event(
     try:
         if ctx is not None:
             ctx.heartbeat(2 * get_settings().llm.timeout_s + 120)
-        called_at = now_utc()
         result = llm_call.call(
             conn,
             task="analyst",
@@ -195,9 +194,7 @@ def analyse_event(
             if result.error_kind == "timeout":
                 raise RetryLater(TIMEOUT_RETRY_S, f"analyst timeout: {result.error}")
             raise PermanentError(f"analyst call failed ({result.error_kind}): {(result.error or '')[:500]}")
-        out = record_result(
-            conn, pack, spec, result, primary_id=primary_id, label=label, backend=backend, called_at=called_at
-        )
+        out = record_result(conn, pack, spec, result, primary_id=primary_id, label=label, backend=backend)
         conn.commit()
     finally:
         _release(conn, pack.disclosure_id)
@@ -575,7 +572,6 @@ def record_invalid(
     *,
     primary_id: str,
     label: str,
-    called_at: datetime | None = None,
 ) -> Outcome:
     """Schema-invalid output: one flagged analysis row (review list), nothing applied or published."""
     output = {"_papi": {"verify": rep.to_json(), "context": pack.manifest(), "call_analysis_id": primary_id}}
@@ -588,8 +584,7 @@ def record_invalid(
             )
         )
     )  # fmt: skip
-    if called_at is not None:
-        link_ledger(conn, primary_id, task="analyst", priority=label, since=called_at)
+    link_ledger(conn, result.ledger_ids, primary_id)
     log.warning(
         "analyst output schema-invalid for event %s: %s", pack.event_id, "; ".join(rep.schema_errors[:3])
     )
@@ -605,17 +600,14 @@ def record_result(
     primary_id: str,
     label: str,
     backend: LlmBackend | None = None,
-    called_at: datetime | None = None,
 ) -> Outcome:
     """Verify + persist one analyst result for every live event of the pack's disclosure, run the
-    checker when required and publish ``analysis.completed.v1``. ``called_at`` (call start) links
-    the call's ledger rows to the first analysis row."""
+    checker when required and publish ``analysis.completed.v1``. The call's ledger rows
+    (``result.ledger_ids``) are linked to the first analysis row."""
     so = normalize_output(result.structured_output or {})
     rep = verify(so, pack.sources(), schema=spec.schema)
     if rep.schema_errors:
-        return record_invalid(
-            conn, pack, spec, result, rep, primary_id=primary_id, label=label, called_at=called_at
-        )
+        return record_invalid(conn, pack, spec, result, rep, primary_id=primary_id, label=label)
 
     tax = tax_mod.load()
     triage_headline = next((e.headline_tr for e in pack.events if e.headline_tr), None)
@@ -654,8 +646,8 @@ def record_result(
                 )
             )
         )  # fmt: skip
-        if i == 0 and called_at is not None:
-            link_ledger(conn, aid, task="analyst", priority=label, since=called_at)
+        if i == 0:
+            link_ledger(conn, result.ledger_ids, aid)
         _insert_claims(conn, aid, so, rep, pack)
         upsert_summary(
             conn, ev["id"], "tr", curated["headline_tr"] or None, curated.get("summary_tr") or None, aid

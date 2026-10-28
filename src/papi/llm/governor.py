@@ -86,13 +86,14 @@ def record_usage(
     priority: str,
     analysis_id: str | None = None,
     now: datetime | None = None,
-) -> None:
-    """Append a ledger row; a usage-limit result also pauses all Claude work (auto-pause)."""
+) -> str:
+    """Append a ledger row and return its id; a usage-limit result also pauses all Claude work."""
     now = now or now_utc()
     error = None if result.error_kind is None else f"{result.error_kind}: {result.error or ''}".strip()
+    ledger_id = uuid7()
     conn.execute(
         llm_usage_ledger.insert().values(
-            id=uuid7(),
+            id=ledger_id,
             analysis_id=analysis_id,
             task=task[:16],
             priority=ledger_label(priority),
@@ -109,6 +110,17 @@ def record_usage(
     if result.error_kind == "limit":
         until = result.limit_reset_at if result.limit_reset_at and result.limit_reset_at > now else None
         pause(conn, until or now + LIMIT_PAUSE_DEFAULT, reason="limit", now=now)
+    return ledger_id
+
+
+def link_ledger(conn: Connection, ledger_ids: list[str], analysis_id: str) -> int:
+    """Set ``analysis_id`` on the given ledger rows (after the analysis row exists); returns rows updated."""
+    if not ledger_ids:
+        return 0
+    res = conn.execute(
+        llm_usage_ledger.update().where(llm_usage_ledger.c.id.in_(ledger_ids)).values(analysis_id=analysis_id)
+    )
+    return res.rowcount
 
 
 def subscription_bars(conn: Connection) -> dict[str, Any] | None:

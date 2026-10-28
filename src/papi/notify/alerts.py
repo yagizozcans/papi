@@ -164,34 +164,66 @@ def format_line(f: EventFacts) -> str:
     return " · ".join(parts)
 
 
+FLAGGED_NOTE = "⚠️ doğrulama uyarısı — panelde kontrol et"
+
+
+def _claim_usable(verify_status: Any, check_status: Any) -> bool:
+    """Claims that failed deterministic verification or the checker are never shown."""
+    return verify_status != "fail" and check_status != "unsupported"
+
+
 def format_follow_up(conn: Connection, f: EventFacts, analysis_ids: list[str]) -> str | None:
-    """Summary + key facts of a completed analysis; ``None`` if there is nothing to say."""
+    """Summary + key facts of a completed analysis; ``None`` if there is nothing to say.
+
+    - ``checker`` analyses are never a source of text;
+    - the ``summary`` row (lang ``tr``) wins; ``analysis.output`` text is used only when it is absent;
+    - claims with ``verify_status='fail'`` or ``check_status='unsupported'`` are dropped;
+    - a ``flagged`` analysis keeps its text but gets a short warning line.
+    """
+    rows = conn.execute(
+        select(analysis.c.id, analysis.c.agent, analysis.c.output, analysis.c.review_state).where(
+            analysis.c.id.in_(analysis_ids)
+        )
+    ).all()
+    sources = [r for r in rows if r.agent != "checker"]
+    if not sources:
+        return None
+    source_ids = [r.id for r in sources]
+    checker_ids = {r.id for r in rows if r.agent == "checker"}
+
     srow = conn.execute(
-        select(summary.c.headline, summary.c.body).where(
+        select(summary.c.headline, summary.c.body, summary.c.analysis_id).where(
             summary.c.event_id == f.event["id"], summary.c.lang == "tr"
         )
     ).first()
-    headline, body = (srow.headline, srow.body) if srow else (None, None)
-    outputs = [
-        r.output or {}
-        for r in conn.execute(select(analysis.c.output).where(analysis.c.id.in_(analysis_ids))).all()
-    ]
-    for out in outputs:
-        headline = headline or out.get("headline_tr")
-        body = body or out.get("summary_tr")
+    if srow is not None and srow.analysis_id not in checker_ids:
+        headline, body = srow.headline, srow.body
+    else:
+        headline = body = None
+        for r in sources:
+            out = r.output or {}
+            headline = headline or out.get("headline_tr")
+            body = body or out.get("summary_tr")
+
+    claim_rows = conn.execute(
+        select(claim.c.text_tr, claim.c.kind, claim.c.verify_status, claim.c.check_status)
+        .where(claim.c.analysis_id.in_(source_ids))
+        .order_by(claim.c.id)
+    ).all()
     facts = [
         r.text_tr
-        for r in conn.execute(
-            select(claim.c.text_tr)
-            .where(claim.c.analysis_id.in_(analysis_ids), claim.c.kind.in_(("fact", "computation")))
-            .order_by(claim.c.id)
-        ).all()
-        if r.text_tr
+        for r in claim_rows
+        if r.text_tr and r.kind in ("fact", "computation") and _claim_usable(r.verify_status, r.check_status)
     ]
-    if not facts:
-        for out in outputs:
-            for c in out.get("claims") or []:
-                if isinstance(c, dict) and c.get("kind") in ("fact", "computation") and c.get("text_tr"):
+    if not claim_rows:  # claims not persisted as rows: use the (curated) output claims
+        for r in sources:
+            for c in (r.output or {}).get("claims") or []:
+                if (
+                    isinstance(c, dict)
+                    and c.get("kind") in ("fact", "computation")
+                    and c.get("text_tr")
+                    and _claim_usable(c.get("verify_status"), c.get("check_status"))
+                ):
                     facts.append(str(c["text_tr"]))
     if not (headline or body or facts):
         return None
@@ -204,6 +236,9 @@ def format_follow_up(conn: Connection, f: EventFacts, analysis_ids: list[str]) -
         lines.append("")
         lines.append("<b>Öne çıkanlar</b>")
         lines.extend(f"• {esc(_trunc(x, 300))}" for x in facts[:5])
+    if any(r.review_state == "flagged" for r in sources):
+        lines.append("")
+        lines.append(FLAGGED_NOTE)
     return "\n".join(lines)
 
 

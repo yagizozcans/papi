@@ -6,8 +6,9 @@ import pytest
 from sqlalchemy import func, select
 
 from papi.core.db import connect
+from papi.core.ids import uuid7
 from papi.core.jobs import Deferred
-from papi.core.schema import llm_usage_ledger
+from papi.core.schema import analysis, event, llm_usage_ledger
 from papi.core.timeutil import now_utc
 from papi.llm import call as call_mod
 from papi.llm import governor
@@ -77,6 +78,8 @@ def test_call_success_records_and_commits(db, alerts):
     assert backend.calls[0]["schema"] == SCHEMA
     assert _ledger_count() == 1  # visible to another connection → committed
     assert alerts == []
+    ids = db.execute(select(llm_usage_ledger.c.id)).scalars().all()
+    assert out.ledger_ids == ids
 
 
 def test_call_not_admitted_defers_without_backend(db, alerts):
@@ -123,6 +126,28 @@ def test_call_schema_failure_retries_once_with_repair_hint(db, alerts):
         "P\n\n---\nYour previous answer was rejected: schema failure"
     )
     assert _ledger_count() == 2
+    rows = db.execute(select(llm_usage_ledger.c.id).order_by(llm_usage_ledger.c.at)).scalars().all()
+    assert out.ledger_ids == rows and len(set(rows)) == 2
+
+
+def test_link_ledger_sets_analysis_id_only_on_given_rows(db, alerts):
+    out = _call(db, ScriptedBackend(res("schema"), res()))
+    other = _call(db, ScriptedBackend(res()))
+    now = now_utc()
+    event_id, analysis_id = uuid7(), uuid7()
+    db.execute(
+        event.insert().values(id=event_id, disclosure_ids=[], code="x", taxonomy_version="1", created_at=now)
+    )
+    db.execute(
+        analysis.insert().values(
+            id=analysis_id, event_id=event_id, agent="analyst", backend="cli", created_at=now
+        )
+    )
+    assert governor.link_ledger(db, out.ledger_ids, analysis_id) == 2
+    assert governor.link_ledger(db, [], analysis_id) == 0
+    linked = dict(db.execute(select(llm_usage_ledger.c.id, llm_usage_ledger.c.analysis_id)).all())
+    assert {i: linked[i] for i in out.ledger_ids} == dict.fromkeys(out.ledger_ids, analysis_id)
+    assert linked[other.ledger_ids[0]] is None
 
 
 def test_call_returns_final_failure_after_retry(db, alerts):

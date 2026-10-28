@@ -90,6 +90,30 @@ def test_good_output_persists_analysis_claims_citations_summaries(db, world):
     assert _published(db, ANALYSIS_COMPLETED) == [{"event_id": world.event_id, "analysis_ids": [a["id"]]}]
 
 
+def test_repair_retry_ledger_rows_linked_exactly(db, world):
+    from papi.llm.types import LlmResult
+
+    # an unrelated, unlinked ledger row written during the same window must stay unlinked
+    stray = LlmResult(None, None, ["m"], 0.01, 5, 0, None, None, None)
+    governor.record_usage(db, stray, task="analyst", priority="P1")
+    db.commit()
+    failed = LlmResult(None, None, [], 0.02, 10, 1, None, "schema", "schema boom")
+    res = analyse_event(db, world.event_id, backend=ScriptedBackend(analyst=[failed, contract_output()]))
+    rows = _rows(db, llm_usage_ledger)
+    linked = [r for r in rows if r["analysis_id"] == res.analysis_ids[0]]
+    assert len(rows) == 3 and len(linked) == 2
+    assert {r["outcome"] for r in linked} == {"schema_fail", "ok"}
+
+
+def test_checker_ledger_row_linked_to_checker_analysis(db, world):
+    checker_out = {"results": [{"claim_index": 0, "status": "supported", "reason": "ok"}]}
+    analyse_event(db, world.event_id, backend=ScriptedBackend(analyst=[contract_output(materiality=72)],
+                                                              checker=[checker_out]))  # fmt: skip
+    chk = db.execute(select(analysis.c.id).where(analysis.c.agent == "checker")).scalar_one()
+    (row,) = _rows(db, llm_usage_ledger, llm_usage_ledger.c.task == "checker")
+    assert row["analysis_id"] == chk
+
+
 def test_idempotent_redelivery_and_same_input_hash(db, world):
     backend = ScriptedBackend(analyst=[contract_output()])
     analyse_event(db, world.event_id, backend=backend)
