@@ -111,8 +111,8 @@ def create_app(
 
     ``host`` is the address the server will bind (default ``web.host``); when it is not loopback a
     token is mandatory (``token`` argument, else ``get_web_token()``) and enforced on all routes.
-    ``stream_max_seconds`` bounds one SSE connection; browsers reconnect with ``Last-Event-ID`` (or
-    the page reopens with ``?after=``).
+    ``stream_max_seconds`` bounds one ``/v1/stream`` SSE connection; API clients reconnect with
+    ``Last-Event-ID``. The dashboard itself short-polls ``/stream/poll`` (no long-lived connections).
     """
     settings = get_settings()
     bind = host or settings.web.host

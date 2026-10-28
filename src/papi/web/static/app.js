@@ -83,11 +83,10 @@
     pending.splice(0).forEach(place);
     pill.hidden = true;
   }
-  if (feed && feed.dataset.stream && window.EventSource && window.papiFeed && window.papiLive) {
-    var onItem = function (type, ev) {
-      if (type === "papi.cursor") return;  // resume-point only
-      var msg = JSON.parse(ev.data); if (!msg.html) return;
-      var node = fragment(msg.html);
+  if (feed && feed.dataset.poll && window.fetch && window.papiFeed && window.papiLive) {
+    var onItem = function (item) {
+      if (!item.html) return;
+      var node = fragment(item.html);
       var key = papiFeed.keyOf(node), list = feedItems().map(papiFeed.keyOf);
       var d = papiFeed.decide(key, list, feed.dataset.sort || "time_desc", feed.dataset.hasMore === "1");
       // Brand-new items at the top of a newest-first feed wait behind the "N yeni" pill while scrolled.
@@ -98,15 +97,15 @@
       }
       place(node);
     };
-    // One EventSource per page, closed on pagehide/hidden/navigation (frees the browser's 6 per-host
-    // connections), reopened on pageshow/visible resuming with ?after=<last id>.
-    var stream = papiLive.createLiveStream({
-      url: feed.dataset.stream,
-      types: ["event.classified", "analysis.completed", "forecast.created", "papi.cursor"],
-      onMessage: onItem,
-      onState: function (on) { live.classList.toggle("on", on); },
+    // Short polling (see livestream.js): one request at a time, none while hidden, aborted on navigation.
+    var poller = papiLive.createPoller({
+      url: feed.dataset.poll,
+      cursor: feed.dataset.cursor,
+      onItems: function (list) { list.forEach(onItem); },
+      onState: function () { live.classList.toggle("on", poller.healthy()); },
     });
-    papiLive.bindLifecycle(stream, window, document, function (ev) {
+    setInterval(function () { live.classList.toggle("on", poller.isRunning() && poller.healthy()); }, 2500);
+    papiLive.bindLifecycle(poller, window, document, function (ev) {
       return papiLive.isInAppNavClick(ev, location.origin);
     });
     pill.querySelector("button").addEventListener("click", function () { flush(); window.scrollTo({ top: 0 }); });

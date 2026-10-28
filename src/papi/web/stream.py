@@ -1,12 +1,15 @@
-"""Server-Sent Events: tails ``event_log`` (≈1 s poll) for feed-relevant event types.
+"""Live updates from ``event_log`` for feed-relevant event types.
 
-``/stream`` (dashboard) applies the page's feed filters and ships rendered feed-item HTML;
-``/v1/stream`` ships the raw CloudEvent data. Both resume from ``Last-Event-ID`` (the ``event_log.id``) or,
-for a fresh EventSource opened by the page, from ``?after=<event_log.id>``. One connection lives at most
-``stream_max_seconds`` (default 60 s); the browser then reconnects with ``Last-Event-ID``.
+- ``GET /stream/poll`` (dashboard): short polling. Returns at once with the rows handled since ``?after=``
+  (rendered feed items matching the page's filters) and the next cursor. The page polls every few seconds
+  with plain ``fetch``: no long-lived connections, so it can never exhaust the browser's per-host
+  connection limit.
+- ``GET /v1/stream`` (API clients): Server-Sent Events with the raw CloudEvent data, resumable from
+  ``Last-Event-ID`` or ``?after=``; one connection lives at most ``stream_max_seconds`` (default 60 s).
 
-Ids are UUIDv7 minted by several processes, so commit order can differ from id order. The tail therefore
-re-reads a short overlap window and de-duplicates by id instead of trusting ``id > last``.
+Cursors are an ``event_log.id`` or ``t:<ISO UTC>`` (see :meth:`Tail.token`). Ids are UUIDv7 minted by
+several processes, so commit order can differ from id order; the tail re-reads a short overlap window and
+de-duplicates by id instead of trusting ``id > last``.
 """
 
 from __future__ import annotations
@@ -18,6 +21,7 @@ from datetime import datetime, timedelta
 from typing import Any
 
 from fastapi import APIRouter, Header, Request
+from fastapi.responses import JSONResponse
 from sse_starlette import EventSourceResponse, ServerSentEvent
 
 from papi.core import db
@@ -29,6 +33,7 @@ router = APIRouter()
 
 OVERLAP = timedelta(seconds=10)
 BATCH = 1000
+POLL_CAP = 100
 PING_SECONDS = 15
 CURSOR_SECONDS = 15.0
 CURSOR_EVENT = "papi.cursor"
@@ -79,18 +84,23 @@ class Tail:
             if (r.time, r.id) <= (anchor, token)
         }
 
-    def poll(self, conn: Any) -> list[Any]:
+    def poll(self, conn: Any, limit: int | None = None) -> tuple[list[Any], bool]:
+        """New rows since the last poll (time, id order). With ``limit`` only the first ``limit`` are
+        handed out (and marked seen); the flag says whether more were waiting."""
         assert self.cursor is not None
         self.polled_at = now_utc()
         rows = queries.stream_rows(conn, self.cursor, limit=BATCH)
         fresh = [r for r in rows if r.id not in self.seen]
+        more = limit is not None and len(fresh) > limit
+        if more:
+            fresh = fresh[:limit]
         for r in fresh:
             self.seen[r.id] = r.time
-        if rows:
+        if rows and not more:
             latest = rows[-1].time
             self.cursor = latest if len(rows) == BATCH else max(self.cursor, latest - OVERLAP)
             self.seen = {k: t for k, t in self.seen.items() if t >= self.cursor}
-        return fresh
+        return fresh, more
 
     def token(self) -> str:
         """Resume point covering everything this tail has handled (sent or filtered out)."""
@@ -100,11 +110,63 @@ class Tail:
         return "t:" + iso_utc(self.polled_at)
 
 
-def _payloads(conn: Any, rows: list[Any], filters: queries.FeedFilters | None) -> list[ServerSentEvent]:
-    """SSE messages for new rows; with ``filters`` (dashboard mode) attach rendered feed items."""
+def current_cursor(conn: Any) -> str:
+    """Cursor for "now" (rendered into the feed page so its first poll misses nothing)."""
+    tail = Tail(None)
+    tail.start(conn)
+    return tail.token()
+
+
+def feed_poll(
+    conn: Any, after: str | None, filters: queries.FeedFilters, *, cap: int = POLL_CAP
+) -> dict[str, Any]:
+    """Rendered feed items for rows handled since ``after`` (at most ``cap`` rows; ``more`` if capped).
+
+    Rows outside the filters (or without a feed item) are consumed silently, so the cursor still advances.
+    """
+    tail = Tail(after)
+    tail.start(conn)
+    if not after:
+        return {"cursor": tail.token(), "items": [], "more": False}
+    rows, more = tail.poll(conn, limit=cap)
+    items: list[dict[str, Any]] = []
+    wanted = [r for r in rows if r.type in ITEM_TYPES and (r.data or {}).get("event_id")]
+    if wanted:
+        scope = queries.load_scope(conn)
+        tpl = templates.get_template("_feed_item.html")
+        for r in wanted:
+            found = queries.feed_items(conn, filters, scope, event_ids=[r.data["event_id"]])
+            if not found:
+                continue
+            it = found[0]
+            items.append(
+                {
+                    "id": r.id,
+                    "type": short_type(r.type),
+                    "event_id": it["id"],
+                    "html": tpl.render(it=it),
+                    "published": it["published_key"],
+                    "ref": it["kap_index"],
+                    "mat": it["materiality"] if it["materiality"] is not None else -1,
+                    "code": it["code"],
+                }
+            )
+    return {"cursor": tail.token(), "items": items, "more": more}
+
+
+@router.get("/stream/poll")
+def stream_poll(request: Request) -> JSONResponse:
+    """Dashboard short poll: ``?after=<cursor>`` plus the feed's filter/sort parameters."""
+    params = request.query_params
+    filters = parse_feed_filters(params)
+    with db.connect() as conn:
+        body = feed_poll(conn, params.get("after") or None, filters, cap=POLL_CAP)
+    return JSONResponse(body, headers={"Cache-Control": "no-store"})
+
+
+def _payloads(rows: list[Any]) -> list[ServerSentEvent]:
+    """SSE messages (raw CloudEvent data) for new rows."""
     out: list[ServerSentEvent] = []
-    scope = queries.load_scope(conn) if filters is not None and rows else None
-    tpl = templates.get_template("_feed_item.html") if filters is not None else None
     for r in rows:
         data = r.data or {}
         body: dict[str, Any] = {
@@ -114,14 +176,6 @@ def _payloads(conn: Any, rows: list[Any], filters: queries.FeedFilters | None) -
             "event_id": data.get("event_id"),
             "data": data,
         }
-        dashboard = filters is not None and tpl is not None and scope is not None
-        if dashboard and r.type in ITEM_TYPES and data.get("event_id"):
-            items = queries.feed_items(conn, filters, scope, event_ids=[data["event_id"]])
-            if items:
-                body["html"] = tpl.render(it=items[0])
-                body["event_id"] = items[0]["id"]
-            elif r.type == "event.classified.v1":
-                continue  # outside the page's filters
         out.append(
             ServerSentEvent(
                 data=json.dumps(body, ensure_ascii=False, default=str), event=short_type(r.type), id=r.id
@@ -134,7 +188,6 @@ async def sse_events(
     request: Request,
     *,
     last_event_id: str | None,
-    filters: queries.FeedFilters | None,
     poll_seconds: float,
     max_seconds: float,
 ) -> AsyncIterator[ServerSentEvent]:
@@ -146,11 +199,10 @@ async def sse_events(
 
     def _poll() -> list[ServerSentEvent]:
         with db.connect() as conn:
-            return _payloads(conn, tail.poll(conn), filters)
+            return _payloads(tail.poll(conn)[0])
 
     def cursor() -> ServerSentEvent:
-        # Dispatched (not a comment) so both the browser's Last-Event-ID and the page's `?after=`
-        # resume point advance even when every row was filtered out or none arrived.
+        # Dispatched (not a comment) so the client's Last-Event-ID advances even when nothing arrived.
         return ServerSentEvent(data="{}", event=CURSOR_EVENT, id=tail.token())
 
     await asyncio.to_thread(_start)
@@ -171,31 +223,19 @@ async def sse_events(
     yield cursor()  # lifetime over: the client reconnects from here
 
 
-def _response(request: Request, last_event_id: str | None, *, dashboard: bool) -> EventSourceResponse:
-    """Resume point: the ``Last-Event-ID`` header (native EventSource reconnect) wins over ``?after=``
-    (a fresh EventSource opened by the page after pagehide/visibility changes cannot set headers)."""
+@router.get("/v1/stream")
+async def api_stream(request: Request, last_event_id: str | None = Header(None)) -> EventSourceResponse:
+    """SSE: event.classified, analysis.completed, forecast.created, disclosure.revised (08 §1).
+
+    Resume point: the ``Last-Event-ID`` header wins over ``?after=``. A comment ping every 15 s detects
+    half-open connections."""
     params = request.query_params
-    filters = parse_feed_filters(params) if dashboard else None
     gen = sse_events(
         request,
         last_event_id=last_event_id or params.get("after") or params.get("last_event_id"),
-        filters=filters,
         poll_seconds=request.app.state.stream_poll_seconds,
         max_seconds=request.app.state.stream_max_seconds,
     )
-    # Comment ping every 15 s so half-open connections are detected and closed.
     return EventSourceResponse(
         gen, ping=PING_SECONDS, headers={"Cache-Control": "no-store", "X-Accel-Buffering": "no"}
     )
-
-
-@router.get("/stream")
-async def dashboard_stream(request: Request, last_event_id: str | None = Header(None)) -> EventSourceResponse:
-    """Feed live updates (rendered items, filtered like the page that opened the stream)."""
-    return _response(request, last_event_id, dashboard=True)
-
-
-@router.get("/v1/stream")
-async def api_stream(request: Request, last_event_id: str | None = Header(None)) -> EventSourceResponse:
-    """SSE: event.classified, analysis.completed, forecast.created, disclosure.revised (08 §1)."""
-    return _response(request, last_event_id, dashboard=False)

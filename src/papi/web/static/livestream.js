@@ -1,69 +1,128 @@
-// papi live stream lifecycle: at most one EventSource per page, closed whenever the page is not in use.
+// papi live feed: short polling over plain fetch (no long-lived connections).
 //
-// Browsers allow ~6 HTTP/1.1 connections per host. Pages kept in the back/forward cache (or hidden tabs)
-// would otherwise hold their EventSource open and starve new navigations, so the stream is closed on
-// pagehide / beforeunload / hidden / before in-app navigation, and reopened on pageshow / visible.
-// A reopened EventSource resumes with `?after=<last event id>` (a new EventSource cannot set
-// Last-Event-ID); the browser's own automatic reconnects send the Last-Event-ID header.
+// Long-lived EventSource connections exhausted the browser's ~6 HTTP/1.1 connections per host when pages
+// sat in the back/forward cache or several tabs were open. The page now asks `/stream/poll?after=<cursor>`
+// every few seconds; each request returns immediately. One request at a time (setTimeout chaining), none
+// while hidden, and the in-flight request is aborted on pagehide / form submit / in-app link clicks.
 (function (root) {
   "use strict";
 
-  // opts: { url, types: [event names], factory(url) -> EventSource-like, onMessage(type, ev), onState(bool) }
-  function createLiveStream(opts) {
-    var es = null;
-    var lastId = null;
-    var factory = opts.factory || function (u) { return new root.EventSource(u); };
+  var INTERVAL_MS = 2500;
+  var ERROR_BACKOFF_MS = 10000;
+  var JITTER_MS = 1000;
+  var HEALTHY_MS = 10000;
+
+  // opts: { url, cursor, onItems(items), onState(ok),
+  //         fetch, AbortController, setTimeout, clearTimeout, now, random }   (injectable for tests)
+  function createPoller(opts) {
+    var fetchFn = opts.fetch || root.fetch.bind(root);
+    var Abort = opts.AbortController || root.AbortController;
+    var setT = opts.setTimeout || root.setTimeout.bind(root);
+    var clearT = opts.clearTimeout || root.clearTimeout.bind(root);
+    var now = opts.now || Date.now;
+    var random = opts.random || Math.random;
     var onState = opts.onState || function () {};
+    var cursor = opts.cursor || null;
+    var running = false;
+    var timer = null;
+    var ctrl = null;  // the in-flight request's controller (null when idle)
+    var lastOk = 0;
+    var requests = 0;
 
     function urlFor() {
-      if (!lastId) return opts.url;
-      return opts.url + (opts.url.indexOf("?") === -1 ? "?" : "&") + "after=" + encodeURIComponent(lastId);
+      if (!cursor) return opts.url;
+      return opts.url + (opts.url.indexOf("?") === -1 ? "?" : "&") + "after=" + encodeURIComponent(cursor);
     }
 
-    function open() {
-      if (es) return false;  // never more than one per page
-      var src = factory(urlFor());
-      es = src;
-      src.onopen = function () { if (es === src) onState(true); };
-      src.onerror = function () { if (es === src) onState(false); };
-      (opts.types || []).forEach(function (type) {
-        src.addEventListener(type, function (ev) {
-          if (es !== src) return;  // late event from a closed source
-          if (ev.lastEventId) lastId = ev.lastEventId;
-          opts.onMessage(type, ev);
+    function schedule(ms) {
+      if (timer !== null) clearT(timer);
+      timer = setT(tick, ms);
+    }
+
+    function finish(mine, delay) {
+      if (ctrl !== mine) return;  // aborted or superseded: someone else owns the state now
+      ctrl = null;
+      if (running) schedule(delay);
+    }
+
+    function tick() {
+      timer = null;
+      if (!running || ctrl) return;  // never two requests at once
+      var mine = Abort ? new Abort() : {};
+      ctrl = mine;
+      requests += 1;
+      fetchFn(urlFor(), {
+        signal: mine.signal,
+        cache: "no-store",
+        credentials: "same-origin",
+        headers: { Accept: "application/json" },
+      })
+        .then(function (r) {
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          return r.json();
+        })
+        .then(function (body) {
+          if (ctrl !== mine) return;
+          if (body.cursor) cursor = body.cursor;
+          lastOk = now();
+          onState(true);
+          if (body.items && body.items.length) opts.onItems(body.items);
+          finish(mine, body.more ? 0 : INTERVAL_MS);
+        })
+        .catch(function () {
+          if (ctrl !== mine) return;  // aborted on purpose
+          onState(false);
+          finish(mine, ERROR_BACKOFF_MS + Math.floor(random() * JITTER_MS));
         });
-      });
+    }
+
+    function start() {  // poll now, then keep polling
+      if (running) return false;
+      running = true;
+      schedule(0);
       return true;
     }
 
-    function close() {
-      if (!es) return false;
-      var src = es;
-      es = null;
-      src.close();
-      onState(false);
-      return true;
+    function stop() {  // stop polling and abort the in-flight request
+      var was = running || ctrl !== null;
+      running = false;
+      if (timer !== null) { clearT(timer); timer = null; }
+      if (ctrl) {
+        var c = ctrl;
+        ctrl = null;
+        if (c.abort) c.abort();
+      }
+      return was;
     }
 
     return {
-      open: open,
-      close: close,
-      isOpen: function () { return es !== null; },
-      lastId: function () { return lastId; },
+      start: start,
+      stop: stop,
+      isRunning: function () { return running; },
+      inFlight: function () { return ctrl !== null; },
+      cursor: function () { return cursor; },
       url: urlFor,
+      requests: function () { return requests; },
+      healthy: function () { return lastOk > 0 && now() - lastOk < HEALTHY_MS; },
     };
   }
 
-  // Wire `stream` to page lifecycle events of `win`/`doc`. `isInAppNav(ev)` decides whether a click
-  // navigates this tab within papi (then the stream closes before the request is sent).
-  function bindLifecycle(stream, win, doc, isInAppNav) {
-    function sync() { if (doc.visibilityState === "hidden") stream.close(); else stream.open(); }
-    win.addEventListener("pagehide", function () { stream.close(); });
-    win.addEventListener("beforeunload", function () { stream.close(); });
-    win.addEventListener("pageshow", function () { sync(); });  // incl. event.persisted (bfcache restore)
+  // Wire `poller` to page lifecycle events of `win`/`doc`. `isInAppNav(ev)` decides whether a click
+  // navigates this tab within papi. After a submit/click the poller restarts if the page is still here
+  // (navigation cancelled), using `setT`.
+  function bindLifecycle(poller, win, doc, isInAppNav, setT) {
+    var later = setT || (win.setTimeout ? win.setTimeout.bind(win) : null);
+    function sync() { if (doc.visibilityState === "hidden") poller.stop(); else poller.start(); }
+    function leaving() {
+      poller.stop();
+      if (later) later(sync, 5000);
+    }
+    win.addEventListener("pagehide", function () { poller.stop(); });
+    win.addEventListener("beforeunload", function () { poller.stop(); });
+    win.addEventListener("pageshow", sync);  // incl. event.persisted (bfcache restore)
     doc.addEventListener("visibilitychange", sync);
-    doc.addEventListener("submit", function () { stream.close(); }, true);
-    doc.addEventListener("click", function (ev) { if (isInAppNav && isInAppNav(ev)) stream.close(); }, true);
+    doc.addEventListener("submit", leaving, true);
+    doc.addEventListener("click", function (ev) { if (isInAppNav && isInAppNav(ev)) leaving(); }, true);
     sync();
   }
 
@@ -77,5 +136,12 @@
     return a.href.indexOf(origin + "/") === 0;
   }
 
-  root.papiLive = { createLiveStream: createLiveStream, bindLifecycle: bindLifecycle, isInAppNavClick: isInAppNavClick };
+  root.papiLive = {
+    createPoller: createPoller,
+    bindLifecycle: bindLifecycle,
+    isInAppNavClick: isInAppNavClick,
+    INTERVAL_MS: INTERVAL_MS,
+    ERROR_BACKOFF_MS: ERROR_BACKOFF_MS,
+    JITTER_MS: JITTER_MS,
+  };
 })(typeof window !== "undefined" ? window : globalThis);

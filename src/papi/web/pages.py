@@ -15,6 +15,7 @@ from papi.core.ids import uuid7
 from papi.core.schema import feedback, raw_object
 from papi.core.timeutil import now_utc
 from papi.web import integrations, queries
+from papi.web import stream as live
 from papi.web.deps import get_conn, parse_feed_filters, templates
 
 router = APIRouter()
@@ -49,6 +50,7 @@ def _notice(text: str, *, level: str = "ok", status_code: int = 200) -> HTMLResp
 @router.get("/", response_class=HTMLResponse)
 def feed_page(request: Request, conn: Conn) -> HTMLResponse:
     filters = parse_feed_filters(request.query_params)
+    cursor = live.current_cursor(conn)  # before the items: anything later arrives via /stream/poll
     scope = queries.load_scope(conn)
     items = queries.feed_items(conn, filters, scope)
     qs = filters.query_string()
@@ -74,7 +76,8 @@ def feed_page(request: Request, conn: Conn) -> HTMLResponse:
         range_urls=range_urls,
         active_range=active_range,
         scope=scope,
-        stream_url="/stream" + (f"?{qs}" if qs else ""),
+        poll_url="/stream/poll" + (f"?{qs}" if qs else ""),
+        cursor=cursor,
         query_string=qs,
         clear_url="/" + (f"?{clear}" if clear else ""),
     )

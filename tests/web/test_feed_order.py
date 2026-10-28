@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import itertools
 import re
-import threading
 from datetime import UTC, date, datetime, timedelta
 from typing import Any
 
@@ -265,8 +264,8 @@ def test_filter_bar(client: TestClient, world: dict[str, Any]) -> None:
     assert "4 filtre etkin" in html
     assert 'href="/?scope=all&amp;sort=materiality">Filtreleri temizle' in html
     assert '<option value="high" selected>' in html and '<option value="materiality" selected>' in html
-    # every filter and the sort travel to the stream and the load-more links
-    stream = re.search(r'data-stream="([^"]+)"', html)
+    # every filter and the sort travel to the poll URL and the load-more links
+    stream = re.search(r'data-poll="([^"]+)"', html)
     assert stream is not None
     for part in ("band=high", "hide_routine=1", "family=distribution", "sort=materiality", "range=7d"):
         assert part in stream.group(1)
@@ -282,41 +281,31 @@ def test_filter_bar(client: TestClient, world: dict[str, Any]) -> None:
 # ------------------------------------------------------------------------------------------ stream
 
 
-def _sse(text: str) -> list[dict[str, Any]]:
-    import json
-
-    out = []
-    for block in text.replace("\r\n", "\n").split("\n\n"):
-        data = [ln[5:].lstrip() for ln in block.splitlines() if ln.startswith("data:")]
-        if data and "event: papi.cursor" not in block:
-            out.append(json.loads("".join(data)))
-    return out
+def _poll(client: TestClient, after: str, **params: Any) -> list[dict[str, Any]]:
+    return client.get("/stream/poll", params={"after": after, **params}).json()["items"]
 
 
-def test_stream_honours_band_and_date_filters(
+def test_poll_honours_band_and_date_filters(
     clean_registry: Any, client: TestClient, world: dict[str, Any], db: Connection
 ) -> None:
     first = publish_classified(db, world["e_gar"], "reporting.annual_report", "P4")
     publish_classified(db, world["e_thy"], "business.contract.award", "P3")  # 65 → high
     publish_classified(db, world["e_div"], "distribution.dividend.cash", "P1")  # 75 → high
     db.commit()
-    msgs = _sse(
-        client.get("/stream?scope=all&band=high&sort=materiality", headers={"Last-Event-ID": first}).text
-    )
-    assert [m["event_id"] for m in msgs] == [world["e_thy"], world["e_div"]]
-    assert all('data-published="' in m["html"] and 'data-mat="' in m["html"] for m in msgs)
-    msgs = _sse(client.get("/stream?scope=all&band=critical", headers={"Last-Event-ID": first}).text)
-    assert msgs == []
-    msgs = _sse(
-        client.get("/stream?scope=all&from=2000-01-01&to=2000-01-02", headers={"Last-Event-ID": first}).text
-    )
-    assert msgs == []
+    items = _poll(client, first, scope="all", band="high", sort="materiality")
+    assert [i["event_id"] for i in items] == [world["e_thy"], world["e_div"]]
+    assert all('data-published="' in i["html"] and 'data-mat="' in i["html"] for i in items)
+    assert [i["mat"] for i in items] == [65, 75]
+    assert _poll(client, first, scope="all", band="critical") == []
+    assert _poll(client, first, scope="all", **{"from": "2000-01-01", "to": "2000-01-02"}) == []
+    with time_machine.travel(datetime(2000, 1, 1, 12, 0, tzinfo=UTC), tick=True):
+        assert _poll(client, first, scope="all", range="today") == []
 
 
-def test_stream_catchup_item_carries_its_publish_time(
+def test_poll_catchup_item_carries_its_publish_time(
     clean_registry: Any, client: TestClient, world: dict[str, Any], db: Connection
 ) -> None:
-    """A backlog item processed now is streamed with its old publish time (the client places it)."""
+    """A backlog item processed now is delivered with its old publish time (the client places it)."""
     old = _add(
         db,
         world,
@@ -325,17 +314,11 @@ def test_stream_catchup_item_carries_its_publish_time(
         created=datetime(2026, 10, 28, 7, 0, tzinfo=UTC),
     )
     db.commit()
-
-    def later() -> None:
-        with core_db.transaction() as conn:
-            publish_classified(conn, old, "business.contract.award", "P2")
-
-    timer = threading.Timer(0.3, later)
-    timer.start()
-    try:
-        msgs = _sse(client.get("/stream?scope=all").text)
-    finally:
-        timer.join()
-    assert len(msgs) == 1
-    assert 'data-published="2026-10-01T09:00:00.000000Z"' in msgs[0]["html"]
-    assert 'data-ref="1990001"' in msgs[0]["html"]
+    cursor = client.get("/stream/poll").json()["cursor"]
+    with core_db.transaction() as conn:
+        publish_classified(conn, old, "business.contract.award", "P2")
+    items = _poll(client, cursor, scope="all")
+    assert len(items) == 1
+    assert items[0]["published"] == "2026-10-01T09:00:00.000000Z" and items[0]["ref"] == 1990001
+    assert 'data-published="2026-10-01T09:00:00.000000Z"' in items[0]["html"]
+    assert 'data-ref="1990001"' in items[0]["html"]

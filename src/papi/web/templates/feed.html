@@ -42,7 +42,7 @@
 <div id="reloadpill" class="pill" hidden><a href="/?{{ query_string }}">Yeni öğeler var — yenile</a></div>
 <div id="live" class="live" title="Canlı akış bağlantısı">●</div>
 
-<section id="feed" class="feed" data-stream="{{ stream_url }}" data-sort="{{ filters.sort }}" data-has-more="{{ '1' if has_more else '0' }}">
+<section id="feed" class="feed" data-poll="{{ poll_url }}" data-cursor="{{ cursor }}" data-sort="{{ filters.sort }}" data-has-more="{{ '1' if has_more else '0' }}">
   {% for g in groups %}
     {% if g.burst %}
       <details class="burst" data-code="{{ g.code }}">

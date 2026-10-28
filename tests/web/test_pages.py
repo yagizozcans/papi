@@ -37,7 +37,7 @@ def test_feed_default_scope_is_holdings_watchlist_p3(client: TestClient) -> None
     assert "https://www.kap.org.tr/tr/Bildirim/1500002" in r.text
     assert "Geç görüldü" in r.text  # THYAO catch-up marker
     assert "Düzeltme" in r.text  # revision marker
-    assert 'data-stream="/stream?scope=mine"' in r.text
+    assert 'data-poll="/stream/poll?scope=mine"' in r.text
 
 
 def test_feed_all_kap_toggle(client: TestClient) -> None:

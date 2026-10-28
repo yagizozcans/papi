@@ -22,7 +22,7 @@ def test_non_loopback_requires_configured_token() -> None:
         create_app(host="0.0.0.0")
 
 
-@pytest.mark.parametrize("path", ["/", "/ops", "/v1/events", "/static/app.css", "/v1/stream", "/stream"])
+@pytest.mark.parametrize("path", ["/", "/ops", "/v1/events", "/static/app.css", "/v1/stream", "/stream/poll"])
 def test_token_enforced_on_all_routes(
     world: dict[str, Any], monkeypatch: pytest.MonkeyPatch, path: str
 ) -> None:

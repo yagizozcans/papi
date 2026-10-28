@@ -12,78 +12,174 @@ class FakeTarget {
   dispatch(type, ev = {}) { (this.listeners[type] || []).forEach((fn) => fn(ev)); }
 }
 
-class FakeES extends FakeTarget {
-  constructor(url) { super(); this.url = url; this.closed = false; }
-  close() { this.closed = true; }
-  emit(type, id, data = "{}") { this.dispatch(type, { lastEventId: id, data }); }
+// Manual clock: timers fire only when the test advances time.
+class Clock {
+  constructor() { this.t = 0; this.timers = new Map(); this.seq = 0; }
+  setTimeout = (fn, ms) => { const id = ++this.seq; this.timers.set(id, { at: this.t + ms, fn }); return id; };
+  clearTimeout = (id) => { this.timers.delete(id); };
+  now = () => this.t;
+  pendingDelays() { return [...this.timers.values()].map((x) => x.at - this.t); }
+  async advance(ms) {
+    const end = this.t + ms;
+    for (;;) {
+      const due = [...this.timers.entries()].filter(([, x]) => x.at <= end).sort((a, b) => a[1].at - b[1].at)[0];
+      if (!due) break;
+      this.timers.delete(due[0]);
+      this.t = due[1].at;
+      due[1].fn();
+      await flushMicrotasks();
+    }
+    this.t = end;
+    await flushMicrotasks();
+  }
 }
 
-function harness() {
-  const made = [];
+async function flushMicrotasks() { for (let i = 0; i < 10; i++) await Promise.resolve(); }
+
+class FakeAbort {
+  constructor() { this.signal = { aborted: false }; }
+  abort() { this.signal.aborted = true; }
+}
+
+// fetch that resolves only when the test says so; records every request.
+function fakeFetch() {
+  const calls = [];
+  const fn = (url, init) => new Promise((resolve, reject) => {
+    calls.push({ url, init, resolve: (body, ok = true) => resolve({ ok, status: ok ? 200 : 500, json: async () => body }), reject });
+  });
+  fn.calls = calls;
+  return fn;
+}
+
+function harness(cursor = "c0") {
+  const clock = new Clock();
+  const fetch = fakeFetch();
   const got = [];
-  const states = [];
-  const stream = globalThis.papiLive.createLiveStream({
-    url: "/stream?scope=all",
-    types: ["event.classified", "papi.cursor"],
-    factory: (u) => { const es = new FakeES(u); made.push(es); return es; },
-    onMessage: (type, ev) => got.push([type, ev.lastEventId]),
-    onState: (on) => states.push(on),
+  const poller = globalThis.papiLive.createPoller({
+    url: "/stream/poll?scope=all",
+    cursor,
+    onItems: (items) => got.push(...items.map((i) => i.id)),
+    fetch,
+    AbortController: FakeAbort,
+    setTimeout: clock.setTimeout,
+    clearTimeout: clock.clearTimeout,
+    now: clock.now,
+    random: () => 0.5,
   });
   const win = new FakeTarget();
   const doc = new FakeTarget();
   doc.visibilityState = "visible";
-  const open = () => made.filter((es) => !es.closed);
-  return { stream, made, got, states, win, doc, open };
+  return { clock, fetch, got, poller, win, doc };
 }
 
-describe("live stream lifecycle", () => {
-  test("opens once, resumes with ?after= after close", () => {
+describe("poll loop", () => {
+  test("chains requests without overlap and follows the cursor", async () => {
     const h = harness();
-    expect(h.stream.open()).toBe(true);
-    expect(h.stream.open()).toBe(false);  // never two per page
-    expect(h.made.length).toBe(1);
-    expect(h.made[0].url).toBe("/stream?scope=all");
-    h.made[0].emit("event.classified", "01a-1");
-    h.made[0].emit("papi.cursor", "t:2026-10-28T09:00:00.000000Z");
-    expect(h.stream.close()).toBe(true);
-    expect(h.made[0].closed).toBe(true);
-    h.made[0].emit("event.classified", "late");  // ignored after close
-    expect(h.got).toEqual([["event.classified", "01a-1"], ["papi.cursor", "t:2026-10-28T09:00:00.000000Z"]]);
-    h.stream.open();
-    expect(h.made[1].url).toBe("/stream?scope=all&after=t%3A2026-10-28T09%3A00%3A00.000000Z");
+    h.poller.start();
+    await h.clock.advance(0);
+    expect(h.fetch.calls.length).toBe(1);
+    expect(h.fetch.calls[0].url).toBe("/stream/poll?scope=all&after=c0");
+    expect(h.fetch.calls[0].init.cache).toBe("no-store");
+    await h.clock.advance(60000);  // a slow response: no second request meanwhile
+    expect(h.fetch.calls.length).toBe(1);
+    h.fetch.calls[0].resolve({ cursor: "c1", items: [{ id: "a" }], more: false });
+    await flushMicrotasks();
+    expect(h.got).toEqual(["a"]);
+    expect(h.clock.pendingDelays()).toEqual([globalThis.papiLive.INTERVAL_MS]);
+    await h.clock.advance(2499);
+    expect(h.fetch.calls.length).toBe(1);
+    await h.clock.advance(1);
+    expect(h.fetch.calls.length).toBe(2);
+    expect(h.fetch.calls[1].url).toBe("/stream/poll?scope=all&after=c1");
+    h.fetch.calls[1].resolve({ cursor: "c2", items: [{ id: "b" }], more: true });  // capped: fetch again at once
+    await flushMicrotasks();
+    expect(h.clock.pendingDelays()).toEqual([0]);
+    await h.clock.advance(0);
+    expect(h.fetch.calls[2].url).toBe("/stream/poll?scope=all&after=c2");
+    expect(h.poller.healthy()).toBe(true);
   });
 
-  test("pagehide / beforeunload / hidden / submit / in-app click close; pageshow / visible reopen", () => {
+  test("backs off to 10 s plus jitter after errors, then recovers", async () => {
     const h = harness();
-    globalThis.papiLive.bindLifecycle(h.stream, h.win, h.doc, (ev) => ev.inApp === true);
-    expect(h.open().length).toBe(1);
+    h.poller.start();
+    await h.clock.advance(0);
+    h.fetch.calls[0].resolve({}, false);  // HTTP 500
+    await flushMicrotasks();
+    expect(h.clock.pendingDelays()).toEqual([10000 + 500]);
+    await h.clock.advance(10500);
+    expect(h.fetch.calls.length).toBe(2);
+    expect(h.fetch.calls[1].url).toBe("/stream/poll?scope=all&after=c0");  // cursor kept
+    h.fetch.calls[1].reject(new Error("network"));
+    await flushMicrotasks();
+    expect(h.clock.pendingDelays()).toEqual([10500]);
+    await h.clock.advance(10500);
+    h.fetch.calls[2].resolve({ cursor: "c1", items: [], more: false });
+    await flushMicrotasks();
+    expect(h.clock.pendingDelays()).toEqual([2500]);
+    expect(h.poller.healthy()).toBe(true);
+    await h.clock.advance(20000);
+    // the next poll goes out 2.5 s later (and waits for its response: no overlap)
+    expect(h.fetch.calls.length).toBe(3 + 1);
+  });
 
-    h.win.dispatch("pagehide", { persisted: true });
-    expect(h.open().length).toBe(0);
-    h.win.dispatch("pageshow", { persisted: true });  // bfcache restore
-    expect(h.open().length).toBe(1);
+  test("stop aborts the in-flight request; a late response is ignored", async () => {
+    const h = harness();
+    h.poller.start();
+    await h.clock.advance(0);
+    const first = h.fetch.calls[0];
+    expect(h.poller.stop()).toBe(true);
+    expect(first.init.signal.aborted).toBe(true);
+    expect(h.clock.pendingDelays()).toEqual([]);
+    first.resolve({ cursor: "late", items: [{ id: "late" }], more: false });
+    await flushMicrotasks();
+    expect(h.got).toEqual([]);
+    expect(h.poller.cursor()).toBe("c0");
+    h.poller.start();
+    await h.clock.advance(0);
+    expect(h.fetch.calls.length).toBe(2);
+    expect(h.poller.inFlight()).toBe(true);
+  });
+
+  test("lifecycle: hidden / pagehide stop, visible / pageshow poll immediately, navigation aborts", async () => {
+    const h = harness();
+    globalThis.papiLive.bindLifecycle(h.poller, h.win, h.doc, (ev) => ev.inApp === true, h.clock.setTimeout);
+    await h.clock.advance(0);
+    expect(h.fetch.calls.length).toBe(1);
+    h.fetch.calls[0].resolve({ cursor: "c1", items: [], more: false });
+    await flushMicrotasks();
 
     h.doc.visibilityState = "hidden";
     h.doc.dispatch("visibilitychange");
-    expect(h.open().length).toBe(0);
-    h.win.dispatch("pageshow", { persisted: true });  // restored but still hidden: stay closed
-    expect(h.open().length).toBe(0);
+    expect(h.poller.isRunning()).toBe(false);
+    await h.clock.advance(60000);
+    expect(h.fetch.calls.length).toBe(1);  // nothing while hidden
+    h.win.dispatch("pageshow", { persisted: true });  // still hidden: stay stopped
+    expect(h.poller.isRunning()).toBe(false);
     h.doc.visibilityState = "visible";
     h.doc.dispatch("visibilitychange");
-    expect(h.open().length).toBe(1);
+    await h.clock.advance(0);
+    expect(h.fetch.calls.length).toBe(2);
+    expect(h.fetch.calls[1].url).toBe("/stream/poll?scope=all&after=c1");  // stored cursor
+
+    h.win.dispatch("pagehide", { persisted: true });
+    expect(h.fetch.calls[1].init.signal.aborted).toBe(true);
+    h.win.dispatch("pageshow", { persisted: true });
+    await h.clock.advance(0);
+    expect(h.fetch.calls.length).toBe(3);
 
     h.doc.dispatch("click", { inApp: false });
-    expect(h.open().length).toBe(1);
+    expect(h.fetch.calls[2].init.signal.aborted).toBe(false);
     h.doc.dispatch("click", { inApp: true });
-    expect(h.open().length).toBe(0);
-    h.win.dispatch("pageshow", {});
+    expect(h.fetch.calls[2].init.signal.aborted).toBe(true);
+    expect(h.poller.isRunning()).toBe(false);
+    await h.clock.advance(5000);  // navigation did not happen: resume
+    expect(h.fetch.calls.length).toBe(4);
     h.doc.dispatch("submit");
-    expect(h.open().length).toBe(0);
-    h.win.dispatch("pageshow", {});
+    expect(h.fetch.calls[3].init.signal.aborted).toBe(true);
     h.win.dispatch("beforeunload");
-    expect(h.open().length).toBe(0);
-    // through every transition there was never more than one live EventSource
-    expect(h.made.length).toBe(5);
+    expect(h.poller.isRunning()).toBe(false);
+    // never more than one request in flight
+    expect(h.fetch.calls.filter((c) => !c.init.signal.aborted).length).toBeLessThanOrEqual(1);
   });
 
   test("in-app click detection", () => {
