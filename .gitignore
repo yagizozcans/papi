@@ -6,3 +6,4 @@ __pycache__/
 *.egg-info/
 .papi-dev/
 .DS_Store
+graphify-out/
