@@ -110,8 +110,31 @@ describe('feed', () => {
     for (const name of ['Senin için', 'Özet', 'Temel bilgiler', 'Analiz', 'Belgeler']) {
       expect(within(reader).getByRole('region', { name })).toBeInTheDocument()
     }
-    expect(within(reader).getByRole('button', { name: 'Ajan çalıştır' })).toBeDisabled()
+    expect(within(reader).getByRole('button', { name: 'Ajan çalıştır' })).toBeEnabled()
     expect(within(reader).getByText('metin')).toBeInTheDocument()
+  })
+
+  it('reader "Ajan çalıştır" opens the run dialog prefilled with the disclosure and POSTs', async () => {
+    const posts: unknown[] = []
+    setup(async (url, req) => {
+      if (url.pathname === '/v1/feed') return Response.json(feed([item(1)]))
+      if (url.pathname === '/v1/events/ev-1/detail') return Response.json(detail(1))
+      if (url.pathname === '/v1/agents')
+        return Response.json({ agents: [{ name: 'kap-analyst', description: 'd', version: 'v', model: 'sonnet', max_turns: 14, max_budget_usd: 0.6, timeout_s: 600, priority: 'P2', skills: [], tools: [], builtin_tools: [], ref_kind: 'disclosure' }] })
+      if (url.pathname === '/v1/agent-runs' && req.method === 'POST') {
+        posts.push(await req.clone().json())
+        return Response.json({ run_id: 'run-9', agent: 'kap-analyst', ref: '1', max_budget_usd: 0.6 }, { status: 202 })
+      }
+    })
+    const { router } = await renderApp('/feed/ev-1')
+    const reader = await screen.findByRole('region', { name: 'Bildirim okuyucu' })
+    await userEvent.click(await within(reader).findByRole('button', { name: 'Ajan çalıştır' }))
+    const dialog = await screen.findByRole('dialog')
+    expect(within(dialog).getByRole('textbox')).toHaveValue('1')
+    expect(within(dialog).getByRole('combobox')).toBeDisabled()
+    await userEvent.click(await within(dialog).findByRole('button', { name: 'Başlat' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/research/agents/runs/run-9'))
+    expect(posts).toEqual([{ agent: 'kap-analyst', ref: '1' }])
   })
 
   it('shows a 404 state for an unknown event', async () => {

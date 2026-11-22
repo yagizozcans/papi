@@ -401,6 +401,137 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/agent-runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Agent Runs */
+        get: operations["list_agent_runs_v1_agent_runs_get"];
+        put?: never;
+        /**
+         * Start Agent Run
+         * @description Start a run in the background (the CLI process); poll ``GET /agent-runs/{id}`` for progress.
+         */
+        post: operations["start_agent_run_v1_agent_runs_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/agent-runs/{run_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Agent Run */
+        get: operations["get_agent_run_v1_agent_runs__run_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/agents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Agent Defs */
+        get: operations["list_agent_defs_v1_agents_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/alerts/rules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Alert Rules */
+        get: operations["get_alert_rules_v1_alerts_rules_get"];
+        put?: never;
+        /** Create Alert Rule */
+        post: operations["create_alert_rule_v1_alerts_rules_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/alerts/rules/validate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Validate Alert Rule */
+        post: operations["validate_alert_rule_v1_alerts_rules_validate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/alerts/rules/{rule_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Alert Rule
+         * @description Delete a rule; notifications it already sent stay (their ``alert_rule_id`` is cleared).
+         */
+        delete: operations["delete_alert_rule_v1_alerts_rules__rule_id__delete"];
+        options?: never;
+        head?: never;
+        /** Update Alert Rule */
+        patch: operations["update_alert_rule_v1_alerts_rules__rule_id__patch"];
+        trace?: never;
+    };
+    "/v1/alerts/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Send Test Notification
+         * @description Send a test notification on one channel; failures are reported in the body (``ok: false``).
+         */
+        post: operations["send_test_notification_v1_alerts_test_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/disclosures/{disclosure_id}": {
         parameters: {
             query?: never;
@@ -582,6 +713,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/llm/governor/pause": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Llm Governor Pause
+         * @description Pause all Claude calls for ``minutes`` (default: until resumed).
+         */
+        post: operations["llm_governor_pause_v1_llm_governor_pause_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/llm/governor/resume": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Llm Governor Resume */
+        post: operations["llm_governor_resume_v1_llm_governor_resume_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/llm/pause": {
         parameters: {
             query?: never;
@@ -616,6 +784,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/llm/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Llm Status */
+        get: operations["llm_status_v1_llm_status_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/portfolio": {
         parameters: {
             query?: never;
@@ -644,6 +829,40 @@ export interface paths {
         get: operations["get_portfolio_overview_v1_portfolio_overview_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/portfolio/pending/{pending_id}/apply": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Apply Pending */
+        post: operations["apply_pending_v1_portfolio_pending__pending_id__apply_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/portfolio/pending/{pending_id}/dismiss": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Dismiss Pending */
+        post: operations["dismiss_pending_v1_portfolio_pending__pending_id__dismiss_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -698,7 +917,32 @@ export interface paths {
         /** Get Transactions */
         get: operations["get_transactions_v1_portfolio_transactions_get"];
         put?: never;
-        post?: never;
+        /**
+         * Post Transaction
+         * @description Record a manual transaction, or with ``dry_run`` only compute the position change (nothing is
+         *     written: the insert runs in a transaction that is rolled back).
+         */
+        post: operations["post_transaction_v1_portfolio_transactions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/portfolio/transactions/undo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Undo Transaction
+         * @description Append the reversing entry of ``txn_id`` (default: the most recently entered live transaction).
+         */
+        post: operations["undo_transaction_v1_portfolio_transactions_undo_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -769,6 +1013,160 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/theses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Theses */
+        get: operations["list_theses_v1_theses_get"];
+        put?: never;
+        /**
+         * New Thesis
+         * @description Create ``<TICKER>-<date>.md`` from the fixed template (like ``papi thesis new``).
+         */
+        post: operations["new_thesis_v1_theses_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/theses/upload": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Upload Thesis
+         * @description Store the papers in upload order and read them in the background (``papi thesis import``).
+         *
+         *     ``run`` also starts the strategy analyst once the text is read (costs money); off by default.
+         */
+        post: operations["upload_thesis_v1_theses_upload_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/theses/{name}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Thesis */
+        get: operations["get_thesis_v1_theses__name__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/theses/{name}/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Check Thesis
+         * @description Deterministic check of the saved file, or of ``content`` (an unsaved draft).
+         */
+        post: operations["check_thesis_v1_theses__name__check_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/theses/{name}/files/{file_name}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Download Thesis File */
+        get: operations["download_thesis_file_v1_theses__name__files__file_name__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/theses/{name}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Start Thesis Review
+         * @description Start a strategy-analyst run on the thesis (costs up to the agent's budget).
+         */
+        post: operations["start_thesis_review_v1_theses__name__review_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/theses/{name}/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Thesis Reviews */
+        get: operations["list_thesis_reviews_v1_theses__name__reviews_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/theses/{name}/text": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Save Thesis
+         * @description Save the edited Markdown as is; the response carries the parse check of the saved text.
+         */
+        put: operations["save_thesis_v1_theses__name__text_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/today": {
         parameters: {
             query?: never;
@@ -807,10 +1205,66 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/watchlist": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Watch
+         * @description Add a ticker, ``XU030`` / ``endeks:XU030`` or ``sektor:<kod>`` to a watchlist (created if missing).
+         */
+        post: operations["watch_v1_watchlist_post"];
+        /** Unwatch */
+        delete: operations["unwatch_v1_watchlist_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AgentDefOut */
+        AgentDefOut: {
+            /** Builtin Tools */
+            builtin_tools: string[];
+            /** Description */
+            description: string;
+            /** Max Budget Usd */
+            max_budget_usd: number;
+            /** Max Turns */
+            max_turns: number;
+            /** Model */
+            model: string;
+            /** Name */
+            name: string;
+            /** Priority */
+            priority: string;
+            /**
+             * Ref Kind
+             * @enum {string}
+             */
+            ref_kind: "disclosure" | "thesis" | "other";
+            /** Skills */
+            skills: components["schemas"]["AgentSkillOut"][];
+            /** Timeout S */
+            timeout_s: number;
+            /** Tools */
+            tools: string[];
+            /** Version */
+            version: string;
+        };
+        /** AgentListOut */
+        AgentListOut: {
+            /** Agents */
+            agents: components["schemas"]["AgentDefOut"][];
+        };
         /** AgentRunBrief */
         AgentRunBrief: {
             /** Agent */
@@ -831,6 +1285,182 @@ export interface components {
             subject: string | null;
             /** Turns */
             turns: number | null;
+        };
+        /** AgentRunDetail */
+        AgentRunDetail: {
+            /** Active */
+            active: boolean;
+            /** Agent */
+            agent: string;
+            /** Agent Version */
+            agent_version: string | null;
+            /** Calls */
+            calls: components["schemas"]["RunCall"][];
+            /** Cost Usd */
+            cost_usd: number | null;
+            /** Elapsed S */
+            elapsed_s: number | null;
+            /** Error */
+            error: string | null;
+            /** Finished At */
+            finished_at: string | null;
+            /** Gate */
+            gate: string | null;
+            /** Max Budget Usd */
+            max_budget_usd: number | null;
+            /** Max Turns */
+            max_turns: number | null;
+            /** Output */
+            output: {
+                [key: string]: unknown;
+            } | null;
+            /** Resumed */
+            resumed: boolean;
+            /** Run Id */
+            run_id: string;
+            /** Started At */
+            started_at: string | null;
+            /** Status */
+            status: string;
+            /** Subject */
+            subject: string | null;
+            /** Text */
+            text: string | null;
+            /** Turns */
+            turns: number | null;
+            usage: components["schemas"]["RunUsage"];
+            /** Verdict */
+            verdict: string | null;
+        };
+        /** AgentRunListOut */
+        AgentRunListOut: {
+            /** Items */
+            items: components["schemas"]["AgentRunRow"][];
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            /** Total */
+            total: number;
+        };
+        /** AgentRunRow */
+        AgentRunRow: {
+            /** Active */
+            active: boolean;
+            /** Agent */
+            agent: string;
+            /** Cost Usd */
+            cost_usd: number | null;
+            /** Elapsed S */
+            elapsed_s: number | null;
+            /** Error */
+            error: string | null;
+            /** Finished At */
+            finished_at: string | null;
+            /** Max Budget Usd */
+            max_budget_usd: number | null;
+            /** Run Id */
+            run_id: string;
+            /** Started At */
+            started_at: string | null;
+            /** Status */
+            status: string;
+            /** Subject */
+            subject: string | null;
+            /** Turns */
+            turns: number | null;
+            /** Verdict */
+            verdict: string | null;
+        };
+        /** AgentSkillOut */
+        AgentSkillOut: {
+            /** Description */
+            description: string;
+            /** Name */
+            name: string;
+            /** Tools */
+            tools: string[];
+        };
+        /** AlertRuleIn */
+        AlertRuleIn: {
+            /** Channels */
+            channels?: ("telegram" | "macos")[];
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+            /** Filter */
+            filter: string;
+            /** Name */
+            name: string;
+            quiet_hours?: components["schemas"]["QuietHours"] | null;
+        };
+        /** AlertRuleOut */
+        AlertRuleOut: {
+            /** Channels */
+            channels: ("telegram" | "macos")[];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Enabled */
+            enabled: boolean;
+            /** Filter */
+            filter: string;
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            quiet_hours: components["schemas"]["QuietHours"] | null;
+            /** Updated At */
+            updated_at: string | null;
+        };
+        /**
+         * AlertRulePatch
+         * @description Partial update: only the fields present in the body change (``quiet_hours: null`` clears them).
+         */
+        AlertRulePatch: {
+            /** Channels */
+            channels?: ("telegram" | "macos")[] | null;
+            /** Enabled */
+            enabled?: boolean | null;
+            /** Filter */
+            filter?: string | null;
+            /** Name */
+            name?: string | null;
+            quiet_hours?: components["schemas"]["QuietHours"] | null;
+        };
+        /** AlertRulesOut */
+        AlertRulesOut: {
+            /** Fields */
+            fields: string[];
+            /** Rules */
+            rules: components["schemas"]["AlertRuleOut"][];
+            /** Telegram Ready */
+            telegram_ready: boolean;
+        };
+        /** AlertTestIn */
+        AlertTestIn: {
+            /**
+             * Channel
+             * @default telegram
+             * @enum {string}
+             */
+            channel: "telegram" | "macos";
+        };
+        /** AlertTestOut */
+        AlertTestOut: {
+            /**
+             * Channel
+             * @enum {string}
+             */
+            channel: "telegram" | "macos";
+            /** Detail */
+            detail: string | null;
+            /** Ok */
+            ok: boolean;
         };
         /** AllocationOut */
         AllocationOut: {
@@ -893,6 +1523,13 @@ export interface components {
             /** Window Hours */
             window_hours: number;
         };
+        /** BarOut */
+        BarOut: {
+            /** Resets At */
+            resets_at: string | null;
+            /** Utilization */
+            utilization: number | null;
+        };
         /** BenchmarkPoint */
         BenchmarkPoint: {
             /**
@@ -952,6 +1589,33 @@ export interface components {
         Body_thesis_save_legacy_theses__name__save_post: {
             /** Content */
             content: string;
+        };
+        /** Body_upload_thesis_v1_theses_upload_post */
+        Body_upload_thesis_v1_theses_upload_post: {
+            /**
+             * Direction
+             * @default long
+             */
+            direction: string;
+            /** Files */
+            files: string[];
+            /**
+             * Horizon
+             * @default
+             */
+            horizon: string;
+            /**
+             * Run
+             * @default false
+             */
+            run: boolean;
+            /** Ticker */
+            ticker: string;
+        };
+        /** CheckThesisIn */
+        CheckThesisIn: {
+            /** Content */
+            content?: string | null;
         };
         /** CitationOut */
         CitationOut: {
@@ -1261,6 +1925,16 @@ export interface components {
                 [key: string]: number;
             };
         };
+        /** FocusOut */
+        FocusOut: {
+            /** Max Priority */
+            max_priority: string;
+            /**
+             * Until
+             * Format: date-time
+             */
+            until: string;
+        };
         /** ForMeImpact */
         ForMeImpact: {
             /** Distribution */
@@ -1506,6 +2180,60 @@ export interface components {
             /** Prev Close */
             prev_close: number | null;
         };
+        /** LlmPauseIn */
+        LlmPauseIn: {
+            /** Minutes */
+            minutes?: number | null;
+            /**
+             * Reason
+             * @default manual
+             */
+            reason: string;
+        };
+        /** LlmQueue */
+        LlmQueue: {
+            /** Deferred */
+            deferred: {
+                [key: string]: number;
+            };
+            /** Deferred Total */
+            deferred_total: number;
+        };
+        /**
+         * LlmStatusOut
+         * @description Governor state (04 §6). Usage and caps are in cost-equivalent units (``total_cost_usd`` estimates).
+         */
+        LlmStatusOut: {
+            /** By Task */
+            by_task: components["schemas"]["TaskUsage"][];
+            /** Calibration Mode */
+            calibration_mode: boolean;
+            /** Cap 5H */
+            cap_5h: number;
+            /** Cap Chat 5H */
+            cap_chat_5h: number;
+            /** Cap Week */
+            cap_week: number;
+            /** Concurrency */
+            concurrency: number;
+            focus: components["schemas"]["FocusOut"] | null;
+            /** Night Window Active */
+            night_window_active: boolean;
+            /** Pause Reason */
+            pause_reason: string | null;
+            /** Paused */
+            paused: boolean;
+            /** Paused Until */
+            paused_until: string | null;
+            queue: components["schemas"]["LlmQueue"];
+            subscription_bars: components["schemas"]["SubscriptionBarsOut"] | null;
+            /** Used 5H */
+            used_5h: number;
+            /** Used Chat 5H */
+            used_chat_5h: number;
+            /** Used Week */
+            used_week: number;
+        };
         /** MarketQuote */
         MarketQuote: {
             /** As Of */
@@ -1522,6 +2250,13 @@ export interface components {
             last: number | null;
             /** Prev */
             prev: number | null;
+        };
+        /** NewThesisIn */
+        NewThesisIn: {
+            /** Date */
+            date?: string | null;
+            /** Ticker */
+            ticker: string;
         };
         /** PendingActionOut */
         PendingActionOut: {
@@ -1548,6 +2283,23 @@ export interface components {
             status: string;
             /** Ticker */
             ticker: string | null;
+        };
+        /** PendingApplyIn */
+        PendingApplyIn: {
+            /** Quantity Override */
+            quantity_override?: number | null;
+        };
+        /** PendingApplyOut */
+        PendingApplyOut: {
+            /** Pending Id */
+            pending_id: string;
+            /** Txn Id */
+            txn_id: string;
+        };
+        /** PendingDismissOut */
+        PendingDismissOut: {
+            /** Pending Id */
+            pending_id: string;
         };
         /** PendingSummary */
         PendingSummary: {
@@ -1671,6 +2423,19 @@ export interface components {
             /** Weight */
             weight: number | null;
         };
+        /** PositionSnap */
+        PositionSnap: {
+            /** Avg Cost */
+            avg_cost: number | null;
+            /** Cost Total */
+            cost_total: number;
+            /** Market Value */
+            market_value: number | null;
+            /** Quantity */
+            quantity: number;
+            /** Weight */
+            weight: number | null;
+        };
         /**
          * PriceBarOut
          * @description Daily bar; ``open/high/low/volume`` are null where the source only provides a close (e.g. funds).
@@ -1717,6 +2482,13 @@ export interface components {
              */
             to: string;
         };
+        /** QuietHours */
+        QuietHours: {
+            /** End */
+            end: string;
+            /** Start */
+            start: string;
+        };
         /** RevisionLink */
         RevisionLink: {
             /** Current */
@@ -1737,6 +2509,58 @@ export interface components {
             source_ref: string | null;
             /** Title */
             title: string | null;
+        };
+        /** RuleDeletedOut */
+        RuleDeletedOut: {
+            /** Id */
+            id: string;
+        };
+        /** RuleValidateIn */
+        RuleValidateIn: {
+            /** Filter */
+            filter: string;
+        };
+        /** RuleValidateOut */
+        RuleValidateOut: {
+            /** Error */
+            error: string | null;
+            /** Ok */
+            ok: boolean;
+        };
+        /** RunCall */
+        RunCall: {
+            /** Args */
+            args: {
+                [key: string]: unknown;
+            };
+            /** At */
+            at: string | null;
+            /** Blocking */
+            blocking: string | null;
+            /** Ms */
+            ms: number | null;
+            /** Ok */
+            ok: boolean;
+            /** Result Excerpt */
+            result_excerpt: string;
+            /** Tool */
+            tool: string;
+        };
+        /** RunUsage */
+        RunUsage: {
+            /** Cache Creation Input Tokens */
+            cache_creation_input_tokens: number;
+            /** Cache Read Input Tokens */
+            cache_read_input_tokens: number;
+            /** Input Tokens */
+            input_tokens: number;
+            /** Output Tokens */
+            output_tokens: number;
+        };
+        /** SaveThesisIn */
+        SaveThesisIn: {
+            /** Content */
+            content: string;
         };
         /** SearchOut */
         SearchOut: {
@@ -1788,6 +2612,24 @@ export interface components {
             /** Text */
             text: string | null;
         };
+        /** StartRunIn */
+        StartRunIn: {
+            /** Agent */
+            agent: string;
+            /** Ref */
+            ref: string;
+        };
+        /** StartRunOut */
+        StartRunOut: {
+            /** Agent */
+            agent: string;
+            /** Max Budget Usd */
+            max_budget_usd: number;
+            /** Ref */
+            ref: string;
+            /** Run Id */
+            run_id: string;
+        };
         /** StatusOut */
         StatusOut: {
             governor: components["schemas"]["GovernorStatus"];
@@ -1815,6 +2657,18 @@ export interface components {
             telegram: components["schemas"]["TelegramStatus"];
             /** Version */
             version: string;
+        };
+        /** SubscriptionBarsOut */
+        SubscriptionBarsOut: {
+            five_hour: components["schemas"]["BarOut"] | null;
+            /**
+             * Observed At
+             * Format: date-time
+             */
+            observed_at: string;
+            seven_day: components["schemas"]["BarOut"] | null;
+            /** Status */
+            status: string | null;
         };
         /** SummariesOut */
         SummariesOut: {
@@ -1845,12 +2699,141 @@ export interface components {
             /** Id */
             id: string;
         };
+        /** TaskUsage */
+        TaskUsage: {
+            /** Avg Cost */
+            avg_cost: number;
+            /** Calls */
+            calls: number;
+            /** Cost */
+            cost: number;
+            /** Failures */
+            failures: number;
+            /** Task */
+            task: string;
+        };
         /** TelegramStatus */
         TelegramStatus: {
             /** Enabled */
             enabled: boolean;
             /** Ready */
             ready: boolean;
+        };
+        /**
+         * ThesisCheckOut
+         * @description Deterministic check: ``errors`` stop a review, ``gaps`` are reported but allowed.
+         */
+        ThesisCheckOut: {
+            /** Errors */
+            errors: components["schemas"]["ThesisIssue"][];
+            /** Gaps */
+            gaps: string[];
+            /** Kill Signals */
+            kill_signals: number;
+            /** Ok */
+            ok: boolean;
+            /** Sections Filled */
+            sections_filled: number;
+            /** Sections Total */
+            sections_total: number;
+            /** Triggers */
+            triggers: number;
+        };
+        /** ThesisDetail */
+        ThesisDetail: {
+            /** Active */
+            active: boolean;
+            check: components["schemas"]["ThesisCheckOut"] | null;
+            /** Date */
+            date: string | null;
+            /** Direction */
+            direction: string | null;
+            /** Error Count */
+            error_count: number | null;
+            /** Files */
+            files: number;
+            /** Files Done */
+            files_done: number | null;
+            /** Gap Count */
+            gap_count: number | null;
+            /** Horizon */
+            horizon: string | null;
+            last_review: components["schemas"]["ThesisReviewRow"] | null;
+            /** Name */
+            name: string;
+            /** Outline */
+            outline: components["schemas"]["ThesisOutlineItem"][];
+            /** Pages */
+            pages: components["schemas"]["ThesisPage"][];
+            /** Pages Done */
+            pages_done: number | null;
+            /** Reviews */
+            reviews: number;
+            /** Run Id */
+            run_id: string | null;
+            /** Source Files */
+            source_files: components["schemas"]["ThesisFile"][];
+            /** Status */
+            status: string;
+            /** Status Error */
+            status_error: string | null;
+            /** Text */
+            text: string | null;
+            /** Ticker */
+            ticker: string | null;
+            /** Warnings */
+            warnings: string[];
+        };
+        /** ThesisFile */
+        ThesisFile: {
+            /** Name */
+            name: string;
+            /** Size */
+            size: number;
+            /** Url */
+            url: string;
+        };
+        /** ThesisIssue */
+        ThesisIssue: {
+            /** Line */
+            line: number | null;
+            /** Message */
+            message: string;
+        };
+        /** ThesisListOut */
+        ThesisListOut: {
+            /** Accept */
+            accept: string[];
+            /** Items */
+            items: components["schemas"]["ThesisRow"][];
+        };
+        /** ThesisOutlineItem */
+        ThesisOutlineItem: {
+            /** Empty */
+            empty: boolean;
+            /** Items */
+            items: number | null;
+            /** Key */
+            key: string | null;
+            /** Line */
+            line: number;
+            /** Required */
+            required: boolean;
+            /** Title */
+            title: string;
+        };
+        /** ThesisPage */
+        ThesisPage: {
+            /** File */
+            file: string;
+            /** Method */
+            method: string;
+            /** Number */
+            number: number;
+            /** Text */
+            text: string;
+            /** Uncertain */
+            uncertain: string[];
         };
         /** ThesisRef */
         ThesisRef: {
@@ -1868,6 +2851,47 @@ export interface components {
             name: string;
             /** Runs */
             runs: number;
+        };
+        /** ThesisReviewRow */
+        ThesisReviewRow: {
+            /** Confidence */
+            confidence: number | null;
+            /** Cost Usd */
+            cost_usd: number | null;
+            /** Run Id */
+            run_id: string;
+            /** Started At */
+            started_at: string | null;
+            /** Status */
+            status: string;
+            /** Verdict */
+            verdict: string | null;
+        };
+        /** ThesisRow */
+        ThesisRow: {
+            /** Active */
+            active: boolean;
+            /** Date */
+            date: string | null;
+            /** Direction */
+            direction: string | null;
+            /** Error Count */
+            error_count: number | null;
+            /** Files */
+            files: number;
+            /** Gap Count */
+            gap_count: number | null;
+            /** Horizon */
+            horizon: string | null;
+            last_review: components["schemas"]["ThesisReviewRow"] | null;
+            /** Name */
+            name: string;
+            /** Reviews */
+            reviews: number;
+            /** Status */
+            status: string;
+            /** Ticker */
+            ticker: string | null;
         };
         /** TodayOut */
         TodayOut: {
@@ -1903,6 +2927,37 @@ export interface components {
             positions: number;
             /** Value */
             value: number | null;
+        };
+        /**
+         * TxnIn
+         * @description A manual ledger entry. ``dry_run`` previews the resulting position without writing anything.
+         */
+        TxnIn: {
+            /**
+             * Dry Run
+             * @default false
+             */
+            dry_run: boolean;
+            /**
+             * Fees
+             * @default 0
+             */
+            fees: number;
+            /** Note */
+            note?: string | null;
+            /** Price */
+            price?: number | null;
+            /** Quantity */
+            quantity: number;
+            /** Ticker */
+            ticker?: string | null;
+            /** Trade Date */
+            trade_date?: string | null;
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "buy" | "sell" | "dividend_cash" | "bonus_shares" | "rights_subscription" | "rights_sale" | "split" | "fee" | "tax" | "transfer_in" | "transfer_out" | "opening_balance" | "reconcile_adjustment";
         };
         /** TxnMarker */
         TxnMarker: {
@@ -1957,6 +3012,69 @@ export interface components {
             /** Type */
             type: string;
         };
+        /** TxnResultOut */
+        TxnResultOut: {
+            after: components["schemas"]["PositionSnap"] | null;
+            before: components["schemas"]["PositionSnap"] | null;
+            /** Committed */
+            committed: boolean;
+            /** Fees */
+            fees: number;
+            /** Gross */
+            gross: number | null;
+            /** Instrument Id */
+            instrument_id: string | null;
+            /** Name */
+            name: string | null;
+            /** Price */
+            price: number | null;
+            /** Quantity */
+            quantity: number;
+            /** Ticker */
+            ticker: string | null;
+            /**
+             * Trade Date
+             * Format: date
+             */
+            trade_date: string;
+            /** Txn Id */
+            txn_id: string | null;
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "buy" | "sell" | "dividend_cash" | "bonus_shares" | "rights_subscription" | "rights_sale" | "split" | "fee" | "tax" | "transfer_in" | "transfer_out" | "opening_balance" | "reconcile_adjustment";
+            /** Warnings */
+            warnings: string[];
+        };
+        /** UndoIn */
+        UndoIn: {
+            /** Reason */
+            reason?: string | null;
+            /** Txn Id */
+            txn_id?: string | null;
+        };
+        /** UndoOut */
+        UndoOut: {
+            /** Reversal Id */
+            reversal_id: string;
+            undone: components["schemas"]["TxnOut"];
+        };
+        /** UnwatchOut */
+        UnwatchOut: {
+            /** Ref */
+            ref: string;
+            /** Removed */
+            removed: boolean;
+            watchlist: components["schemas"]["WatchlistSummary"] | null;
+        };
+        /** UploadThesisOut */
+        UploadThesisOut: {
+            /** Files */
+            files: string[];
+            /** Name */
+            name: string;
+        };
         /** ValidationError */
         ValidationError: {
             /** Context */
@@ -1970,6 +3088,16 @@ export interface components {
             /** Error Type */
             type: string;
         };
+        /** WatchIn */
+        WatchIn: {
+            /** Ref */
+            ref: string;
+            /**
+             * Watchlist
+             * @default Ana
+             */
+            watchlist: string;
+        };
         /** WatchMember */
         WatchMember: {
             /** Badge */
@@ -1980,6 +3108,14 @@ export interface components {
             name: string | null;
             /** Ticker */
             ticker: string;
+        };
+        /** WatchOut */
+        WatchOut: {
+            /** Changed */
+            changed: boolean;
+            /** Ref */
+            ref: string;
+            watchlist: components["schemas"]["WatchlistSummary"];
         };
         /** WatchlistOut */
         WatchlistOut: {
@@ -1993,6 +3129,19 @@ export interface components {
             name: string;
             /** Sectors */
             sectors: string[];
+        };
+        /** WatchlistSummary */
+        WatchlistSummary: {
+            /** Id */
+            id: string;
+            /** Indices */
+            indices: string[];
+            /** Name */
+            name: string;
+            /** Sectors */
+            sectors: string[];
+            /** Tickers */
+            tickers: string[];
         };
     };
     responses: never;
@@ -2656,6 +3805,393 @@ export interface operations {
             };
         };
     };
+    list_agent_runs_v1_agent_runs_get: {
+        parameters: {
+            query?: {
+                agent?: string | null;
+                /** @description Exact run subject (KAP no, thesis name). */
+                ref?: string | null;
+                /** @description A run status, or `active` for runs in progress. */
+                status?: string | null;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgentRunListOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    start_agent_run_v1_agent_runs_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartRunIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StartRunOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_agent_run_v1_agent_runs__run_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgentRunDetail"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_agent_defs_v1_agents_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgentListOut"];
+                };
+            };
+        };
+    };
+    get_alert_rules_v1_alerts_rules_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertRulesOut"];
+                };
+            };
+        };
+    };
+    create_alert_rule_v1_alerts_rules_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AlertRuleIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertRuleOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    validate_alert_rule_v1_alerts_rules_validate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RuleValidateIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RuleValidateOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_alert_rule_v1_alerts_rules__rule_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                rule_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RuleDeletedOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    update_alert_rule_v1_alerts_rules__rule_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                rule_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AlertRulePatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertRuleOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    send_test_notification_v1_alerts_test_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["AlertTestIn"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertTestOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_disclosure_v1_disclosures__disclosure_id__get: {
         parameters: {
             query?: never;
@@ -3027,6 +4563,59 @@ export interface operations {
             };
         };
     };
+    llm_governor_pause_v1_llm_governor_pause_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["LlmPauseIn"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LlmStatusOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    llm_governor_resume_v1_llm_governor_resume_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LlmStatusOut"];
+                };
+            };
+        };
+    };
     llm_pause_v1_llm_pause_post: {
         parameters: {
             query?: never;
@@ -3067,6 +4656,26 @@ export interface operations {
             };
         };
     };
+    llm_status_v1_llm_status_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LlmStatusOut"];
+                };
+            };
+        };
+    };
     get_portfolio_v1_portfolio_get: {
         parameters: {
             query?: never;
@@ -3103,6 +4712,108 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PortfolioOverviewOut"];
+                };
+            };
+        };
+    };
+    apply_pending_v1_portfolio_pending__pending_id__apply_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pending_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PendingApplyIn"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PendingApplyOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    dismiss_pending_v1_portfolio_pending__pending_id__dismiss_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pending_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PendingDismissOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
                 };
             };
         };
@@ -3185,6 +4896,108 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    post_transaction_v1_portfolio_transactions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TxnIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TxnResultOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    undo_transaction_v1_portfolio_transactions_undo_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UndoIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UndoOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
                 };
             };
         };
@@ -3273,6 +5086,395 @@ export interface operations {
             };
         };
     };
+    list_theses_v1_theses_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThesisListOut"];
+                };
+            };
+        };
+    };
+    new_thesis_v1_theses_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NewThesisIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThesisDetail"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    upload_thesis_v1_theses_upload_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_upload_thesis_v1_theses_upload_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadThesisOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_thesis_v1_theses__name__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThesisDetail"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    check_thesis_v1_theses__name__check_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["CheckThesisIn"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThesisCheckOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    download_thesis_file_v1_theses__name__files__file_name__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+                file_name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    start_thesis_review_v1_theses__name__review_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StartRunOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    list_thesis_reviews_v1_theses__name__reviews_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThesisReviewRow"][];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    save_thesis_v1_theses__name__text_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveThesisIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThesisDetail"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     get_today_v1_today_get: {
         parameters: {
             query?: {
@@ -3320,6 +5522,107 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+        };
+    };
+    watch_v1_watchlist_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WatchIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WatchOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    unwatch_v1_watchlist_delete: {
+        parameters: {
+            query: {
+                ref: string;
+                watchlist?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UnwatchOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
                 };
             };
         };

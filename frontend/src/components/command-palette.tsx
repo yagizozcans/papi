@@ -1,11 +1,8 @@
-import { useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from '@tanstack/react-router'
-import { CirclePause, CirclePlay, FileText, Keyboard, Languages, Moon } from 'lucide-react'
+import { useNavigate, useRouterState } from '@tanstack/react-router'
+import { CirclePause, CirclePlay, Eye, EyeOff, FileText, Keyboard, Languages, Moon, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { api } from '@/api/client'
-import { STATUS_KEY } from '@/api/status'
 import {
   CommandDialog,
   CommandEmpty,
@@ -16,7 +13,11 @@ import {
   CommandShortcut,
 } from '@/components/ui/command'
 import { toggleLanguage } from '@/i18n'
+import { PAUSE_OPTIONS, usePauseLlm, useResumeLlm } from '@/features/llm/api'
+import { TradeDialog } from '@/features/portfolio/trade-dialog'
 import { useSearch } from '@/features/search/api'
+import { errorText } from '@/features/shared/states'
+import { useUnwatch, useWatch } from '@/features/watchlist/api'
 import { NAV } from '@/lib/nav'
 import { toggleTheme } from '@/lib/theme'
 
@@ -29,7 +30,14 @@ interface Props {
 export function CommandPalette({ open, onOpenChange, onShortcuts }: Props) {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
+  const [tradeOpen, setTradeOpen] = useState(false)
+  const pause = usePauseLlm()
+  const resume = useResumeLlm()
+  const watch = useWatch()
+  const unwatch = useUnwatch()
+  // On an instrument page the trade / watch commands act on that ticker.
+  const pathname = useRouterState({ select: (st) => st.location.pathname })
+  const pageTicker = /^\/i\/([^/]+)/.exec(pathname)?.[1]?.toUpperCase()
 
   const [query, setQuery] = useState('')
   const search = useSearch(query, open)
@@ -40,20 +48,14 @@ export function CommandPalette({ open, onOpenChange, onShortcuts }: Props) {
     fn()
   }
 
-  const setLlm = (action: 'pause' | 'resume') => async () => {
-    try {
-      const { response } =
-        action === 'pause' ? await api.POST('/v1/llm/pause') : await api.POST('/v1/llm/resume')
-      if (!response.ok) throw new Error(`HTTP ${response.status}`)
-      toast.success(t(action === 'pause' ? 'palette.pauseOk' : 'palette.resumeOk'))
-    } catch (e) {
-      toast.error(`${t('palette.actionFailed')}: ${e instanceof Error ? e.message : String(e)}`)
-    } finally {
-      await queryClient.invalidateQueries({ queryKey: STATUS_KEY })
-    }
-  }
+  const fail = (e: unknown) => toast.error(`${t('palette.actionFailed')}: ${errorText(e) ?? ''}`)
+  const doPause = (minutes: number | null) => pause.mutate({ minutes }, { onSuccess: () => toast.success(t('palette.pauseOk')), onError: fail })
+  const doResume = () => resume.mutate(undefined, { onSuccess: () => toast.success(t('palette.resumeOk')), onError: fail })
+  const doWatch = (ticker: string) => watch.mutate({ ref: ticker }, { onSuccess: () => toast.success(t('watchlist.watched', { ticker })), onError: fail })
+  const doUnwatch = (ticker: string) => unwatch.mutate({ ref: ticker }, { onSuccess: () => toast.success(t('watchlist.unwatched', { ticker })), onError: fail })
 
   return (
+    <>
     <CommandDialog
       open={open}
       onOpenChange={(o) => {
@@ -83,11 +85,33 @@ export function CommandPalette({ open, onOpenChange, onShortcuts }: Props) {
             <Languages />
             {t('palette.toggleLanguage')}
           </CommandItem>
-          <CommandItem onSelect={run(() => void setLlm('pause')())}>
+          <CommandItem onSelect={run(() => setTradeOpen(true))} value="trade add islem ekle">
+            <Plus />
+            {t('portfolio.trade.palette')}
+          </CommandItem>
+          {pageTicker && (
+            <>
+              <CommandItem onSelect={run(() => doWatch(pageTicker))} value={`watch ${pageTicker} izle`}>
+                <Eye />
+                {t('watchlist.palette.watch', { ticker: pageTicker })}
+              </CommandItem>
+              <CommandItem onSelect={run(() => doUnwatch(pageTicker))} value={`unwatch ${pageTicker} izlemeyi birak`}>
+                <EyeOff />
+                {t('watchlist.palette.unwatch', { ticker: pageTicker })}
+              </CommandItem>
+            </>
+          )}
+          <CommandItem onSelect={run(() => doPause(null))}>
             <CirclePause />
             {t('palette.pauseLlm')}
           </CommandItem>
-          <CommandItem onSelect={run(() => void setLlm('resume')())}>
+          {PAUSE_OPTIONS.filter((o) => o.minutes !== null).map((o) => (
+            <CommandItem key={o.key} onSelect={run(() => doPause(o.minutes))} value={`pause llm ${o.key}`}>
+              <CirclePause />
+              {t('llm.palette.pauseFor', { duration: t(`llm.duration.${o.key}`) })}
+            </CommandItem>
+          ))}
+          <CommandItem onSelect={run(doResume)}>
             <CirclePlay />
             {t('palette.resumeLlm')}
           </CommandItem>
@@ -142,5 +166,7 @@ export function CommandPalette({ open, onOpenChange, onShortcuts }: Props) {
         )}
       </CommandList>
     </CommandDialog>
+      <TradeDialog open={tradeOpen} onOpenChange={setTradeOpen} defaultTicker={pageTicker} />
+    </>
   )
 }

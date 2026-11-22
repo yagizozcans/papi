@@ -12,6 +12,7 @@ import re
 import subprocess
 import sys
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import Annotated, Any
 
 from fastapi import APIRouter, File, Form, Request, UploadFile
@@ -112,6 +113,37 @@ def theses_page(request: Request) -> HTMLResponse:
     )
 
 
+def spawn_import(
+    name: str, stored: list[Path], code: str, direction: str, horizon: str, analyse: bool
+) -> None:
+    """Write the ``starting`` status and start ``papi thesis import`` detached (shared with the API)."""
+    importer.write_status(name, status="starting", ticker=code, files=[p.name for p in stored])
+    log = (doc.sources_dir(name) / "import.log").open("wb")
+    subprocess.Popen(
+        [
+            sys.executable,
+            "-c",
+            "from papi.cli import main; main()",
+            "thesis",
+            "import",
+            *map(str, stored),
+            "--name",
+            name,
+            "--ticker",
+            code,
+            "--direction",
+            direction,
+            "--horizon",
+            horizon.strip()[:60],
+            "--run" if analyse else "--no-run",
+        ],
+        stdout=log,
+        stderr=subprocess.STDOUT,
+        stdin=subprocess.DEVNULL,
+        start_new_session=True,
+    )
+
+
 @router.post("/theses/upload")
 async def theses_upload(
     files: Annotated[list[UploadFile], File()],
@@ -147,31 +179,7 @@ async def theses_upload(
                     return _error(f"{f.filename}: {MAX_FILE_BYTES // (1024 * 1024)} MB sınırını aşıyor")
                 out.write(chunk)
         stored.append(dest)
-    importer.write_status(name, status="starting", ticker=code, files=[p.name for p in stored])
-    log = (doc.sources_dir(name) / "import.log").open("wb")
-    subprocess.Popen(
-        [
-            sys.executable,
-            "-c",
-            "from papi.cli import main; main()",
-            "thesis",
-            "import",
-            *map(str, stored),
-            "--name",
-            name,
-            "--ticker",
-            code,
-            "--direction",
-            direction,
-            "--horizon",
-            horizon.strip()[:60],
-            "--run" if run else "--no-run",
-        ],
-        stdout=log,
-        stderr=subprocess.STDOUT,
-        stdin=subprocess.DEVNULL,
-        start_new_session=True,
-    )
+    spawn_import(name, stored, code, direction, horizon, bool(run))
     return RedirectResponse(f"{LEGACY}/theses/{name}", status_code=303)
 
 

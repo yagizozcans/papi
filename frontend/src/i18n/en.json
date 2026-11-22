@@ -1,5 +1,8 @@
 {
-  "app": { "name": "papi", "tagline": "KAP and portfolio terminal" },
+  "app": {
+    "name": "papi",
+    "tagline": "KAP and portfolio terminal"
+  },
   "nav": {
     "today": "Today",
     "feed": "Feed",
@@ -17,7 +20,33 @@
     "overview": "Overview",
     "theses": "Theses",
     "agents": "Agents",
-    "kb": "Knowledge base"
+    "kb": "Knowledge base",
+    "title": "Research",
+    "intro": "Write and review theses, run agents, follow past runs.",
+    "cards": {
+      "theses": {
+        "title": "Theses",
+        "desc": "Write investment theses, upload papers, run the template check and have the strategy analyst review them.",
+        "count": "{{count}} theses",
+        "last": "Last review",
+        "none": "No theses yet",
+        "open": "Go to theses"
+      },
+      "agents": {
+        "title": "Agents",
+        "desc": "KAP analyst and strategy analyst: catalogue, run history, live tool calls and cost.",
+        "count": "{{count}} runs",
+        "active": "{{count}} running",
+        "none": "No runs yet",
+        "open": "Go to agents"
+      },
+      "kb": {
+        "title": "Knowledge base",
+        "desc": "Regulation and obligation records: search, review, approve, publish.",
+        "soon": "Coming soon (P3)",
+        "open": "Knowledge base"
+      }
+    }
   },
   "topbar": {
     "search": "Search or run a command",
@@ -168,7 +197,9 @@
     "goTo": "Go to page",
     "then": "then"
   },
-  "toast": { "close": "Close" },
+  "toast": {
+    "close": "Close"
+  },
   "kit": {
     "time": {
       "now": "just now",
@@ -330,7 +361,14 @@
       "empty": "No transactions",
       "types": {
         "buy": "Buy",
-        "sell": "Sell"
+        "sell": "Sell",
+        "opening_balance": "Opening balance",
+        "dividend_cash": "Dividend",
+        "fee": "Fee",
+        "tax": "Tax",
+        "bonus_shares": "Bonus shares",
+        "rights_subscription": "Rights issue",
+        "split": "Split"
       }
     },
     "pending": {
@@ -338,11 +376,54 @@
       "empty": "Nothing pending",
       "apply": "Apply",
       "dismiss": "Dismiss",
-      "p2": "Coming in P2"
+      "p2": "Coming in P2",
+      "applied": "Applied",
+      "dismissed": "Dismissed",
+      "applyTitle": "Apply {{ticker}} {{kind}}?",
+      "dismissTitle": "Dismiss {{ticker}} {{kind}}?",
+      "dismissBody": "The proposal is not written to the ledger.",
+      "quantity": "Quantity",
+      "quantityHint": "Proposed quantity; change it if your broker shows a different number."
     },
     "watchlists": {
       "title": "Watchlists",
       "empty": "No watchlists"
+    },
+    "common": {
+      "cancel": "Cancel"
+    },
+    "trade": {
+      "add": "Add trade",
+      "palette": "Add trade",
+      "title": "Add trade",
+      "description": "A preview is shown first; nothing is written to the ledger until you confirm.",
+      "type": "Type",
+      "ticker": "Stock / fund code",
+      "quantity": "Quantity",
+      "price": "Price",
+      "date": "Date",
+      "fees": "Commission",
+      "note": "Note",
+      "preview": "Preview",
+      "back": "Edit",
+      "confirm": "Confirm and save",
+      "before": "Before",
+      "after": "After",
+      "recorded": "{{type}} {{ticker}} recorded",
+      "err": {
+        "ticker": "Code is required",
+        "quantity": "Quantity must be a number above zero (e.g. 100)",
+        "price": "Price is required (e.g. 285.40)",
+        "fees": "Commission must be a number",
+        "date": "Pick a valid date"
+      }
+    },
+    "undo": {
+      "button": "Undo",
+      "title": "Undo the last transaction?",
+      "body": "The ledger is not deleted; a reversing entry is appended.",
+      "confirm": "Undo",
+      "done": "Transaction undone"
     }
   },
   "instrument": {
@@ -569,6 +650,469 @@
         "wrong_type": "Wrong type",
         "not_material": "Not material"
       }
+    }
+  },
+  "agents": {
+    "title": "Agents",
+    "catalogue": "Catalogue",
+    "runs": "Runs",
+    "run": "Run agent",
+    "model": "Model",
+    "budget": "Budget",
+    "budgetValue": "up to {{usd}} USD",
+    "turns": "Turns",
+    "turnsValue": "max {{n}}",
+    "timeout": "Time limit",
+    "skills": "Skills",
+    "tools": "Tools",
+    "builtin": "Claude tools",
+    "version": "version",
+    "noTools": "no tools",
+    "refKind": {
+      "disclosure": "KAP disclosure",
+      "thesis": "Thesis",
+      "other": "Subject"
+    },
+    "filters": {
+      "agent": "Agent",
+      "status": "Status",
+      "ref": "Subject",
+      "allAgents": "All agents",
+      "allStatuses": "All statuses",
+      "refPlaceholder": "Subject (disclosure no / thesis name)",
+      "clear": "Clear"
+    },
+    "status": {
+      "starting": "starting",
+      "running": "running",
+      "resuming": "restarted",
+      "ok": "done",
+      "incomplete": "incomplete read",
+      "failed": "failed",
+      "deferred": "deferred",
+      "stale": "stalled",
+      "active": "in progress",
+      "unknown": "unknown"
+    },
+    "cols": {
+      "started": "Started",
+      "agent": "Agent",
+      "subject": "Subject",
+      "status": "Status",
+      "turns": "Turns",
+      "cost": "USD",
+      "duration": "Duration"
+    },
+    "empty": "No runs match this filter.",
+    "emptyAll": "No agent runs yet.",
+    "page": "{{from}}–{{to}} of {{total}}",
+    "prev": "Previous",
+    "next": "Next",
+    "dialog": {
+      "title": "Run agent",
+      "desc": "The run starts in the background; the next page shows the tool calls live.",
+      "agent": "Agent",
+      "ref": "Subject",
+      "refDisclosure": "KAP disclosure no (e.g. 1691891)",
+      "refThesis": "Thesis name (e.g. THYAO-2026-11-06)",
+      "refOther": "Subject",
+      "budget": "Up to {{usd}} USD · max {{turns}} turns · model {{model}}",
+      "note": "Cost is governed by the Claude usage manager (limits, priority).",
+      "start": "Start",
+      "starting": "Starting…",
+      "cancel": "Cancel",
+      "invalidRef": "Letters, digits and dashes only (max 40 characters)"
+    },
+    "runPage": {
+      "back": "Agents",
+      "notFound": "Agent run not found",
+      "started": "Started",
+      "duration": "Duration",
+      "version": "Version"
+    },
+    "meter": {
+      "cost": "Cost",
+      "turns": "Turns",
+      "calls": "Tool calls",
+      "tokens": "Tokens",
+      "cacheRead": "cache read",
+      "cacheWrite": "cache write",
+      "input": "input",
+      "output": "output"
+    },
+    "notice": {
+      "resuming": "The agent answered before reading the whole text; it was restarted in the same session to read the rest.",
+      "incomplete": "Reading did not finish:",
+      "failed": "The run did not complete.",
+      "stale": "Files have not changed for a long time; the process may have died."
+    },
+    "timeline": {
+      "title": "Tool calls",
+      "empty": "No tool calls.",
+      "starting": "No tool calls yet; the agent is starting…",
+      "waiting": "The agent is choosing its next step…",
+      "args": "Arguments",
+      "result": "Result",
+      "blocking": "unread text",
+      "failed": "error"
+    },
+    "output": {
+      "result": "Result",
+      "answer": "Answer",
+      "events": "events",
+      "materiality": "materiality",
+      "direction": "direction",
+      "confidence": "confidence",
+      "summary": "Summary",
+      "takeaways": "Takeaways",
+      "positives": "Positives",
+      "negatives": "Negatives",
+      "noPositives": "No clear positive point.",
+      "noNegatives": "No clear negative point.",
+      "rationale": "Materiality rationale",
+      "watchNext": "Watch next",
+      "claims": "Claims ({{count}})",
+      "claimKind": "Kind",
+      "claimText": "Claim",
+      "claimValue": "Value",
+      "claimSource": "Source",
+      "raw": "Raw output (JSON)",
+      "directions": {
+        "positive": "positive",
+        "negative": "negative",
+        "mixed": "mixed",
+        "unclear": "unclear"
+      }
+    }
+  },
+  "theses": {
+    "title": "Theses",
+    "new": "New thesis",
+    "upload": "Upload paper",
+    "empty": "No theses yet. Write one from the template or upload a paper.",
+    "cols": {
+      "name": "Thesis",
+      "ticker": "Ticker",
+      "direction": "Direction",
+      "date": "Date",
+      "status": "Status",
+      "check": "Check",
+      "review": "Last review",
+      "runs": "Reviews"
+    },
+    "status": {
+      "starting": "starting",
+      "extracting": "reading pages",
+      "analysing": "agent running",
+      "ready": "ready",
+      "done": "done",
+      "needs_fix": "needs fixing",
+      "failed": "failed",
+      "manual": "hand-written",
+      "stale": "stalled"
+    },
+    "check": {
+      "errors": "{{count}} errors",
+      "gaps": "{{count}} gaps",
+      "ok": "complete",
+      "none": "—"
+    },
+    "verdict": {
+      "supported": "supported",
+      "mixed": "mixed",
+      "weak": "weak",
+      "refuted": "refuted"
+    },
+    "newDialog": {
+      "title": "New thesis",
+      "desc": "Starts from the empty template; you fill in the sections.",
+      "ticker": "BIST ticker",
+      "tickerPlaceholder": "THYAO",
+      "create": "Create",
+      "cancel": "Cancel",
+      "invalid": "Invalid BIST ticker (3-6 letters/digits)"
+    },
+    "uploadPanel": {
+      "title": "Upload paper",
+      "drop": "Drop files here or choose",
+      "hint": "PDF, photo (JPG, PNG, HEIC), Word (DOCX) or text. Several files become one thesis in order. PDF text is read directly; scanned pages and photos are read with Claude (about 0.10 USD per page).",
+      "files": "Files (read in this order)",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "remove": "Remove",
+      "ticker": "BIST ticker",
+      "direction": "Direction",
+      "horizon": "Horizon",
+      "horizonPlaceholder": "e.g. 6-12 months",
+      "run": "Run the strategy analyst once read",
+      "runCost": "up to {{usd}} USD extra",
+      "submit": "Upload",
+      "uploading": "Uploading…",
+      "unsupported": "{{name}}: unsupported type",
+      "needTicker": "Enter a valid BIST ticker",
+      "needFiles": "Choose at least one file"
+    },
+    "page": {
+      "back": "Theses",
+      "notFound": "Thesis not found",
+      "files": "Source files",
+      "pages": "Pages read ({{count}})",
+      "page": "Page {{n}}",
+      "uncertain": "Uncertain",
+      "method": {
+        "text_layer": "PDF text",
+        "ocr": "read from image",
+        "docx": "Word",
+        "text": "text"
+      },
+      "progress": "{{done}}/{{total}} files · {{pages}} pages read",
+      "extractingHint": "Reading pages; photos and scanned pages take a few seconds to half a minute.",
+      "analysing": "Agent running",
+      "watchLive": "watch live",
+      "stale": "No progress for a long time; the process may have died.",
+      "waiting": "Reading the text; you can edit it here once it is done."
+    },
+    "editor": {
+      "title": "Thesis text",
+      "hint": "Fix the text here. `## Heading` lines split the sections; text inside `<!-- -->` is not analysed.",
+      "save": "Save",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "dirty": "unsaved changes",
+      "check": "Check",
+      "checking": "Checking…",
+      "outline": "Sections",
+      "empty": "empty",
+      "unknown": "unknown heading",
+      "items": "{{count}} items",
+      "errors": "Errors (the agent cannot read this text)",
+      "gaps": "Gaps (the agent still runs and assesses these too)",
+      "noGaps": "No gaps.",
+      "line": "line {{n}}",
+      "summary": "{{filled}}/{{total}} sections · {{triggers}} triggers · {{kills}} kill signals",
+      "ariaLabel": "Thesis text"
+    },
+    "reviewPanel": {
+      "title": "Review",
+      "run": "Review",
+      "running": "Review in progress",
+      "confirmTitle": "Run the strategy analyst",
+      "confirmDesc": "The analyst tests the thesis against real data. The run proceeds in the background.",
+      "confirmBudget": "Up to {{usd}} USD · max {{turns}} turns",
+      "confirm": "Run",
+      "cancel": "Cancel",
+      "needSave": "Save first",
+      "needFix": "Fix the errors first",
+      "history": "History",
+      "empty": "This thesis has not been reviewed yet.",
+      "latest": "Latest review",
+      "open": "open run",
+      "live": "watch live",
+      "cost": "{{usd}} USD"
+    },
+    "review": {
+      "title": "Thesis assessment",
+      "verdictLabel": "state",
+      "confidence": "confidence",
+      "asOf": "data as of",
+      "edge": "edge",
+      "scenarios": "Scenarios",
+      "scenario": {
+        "bull": "Bull",
+        "base": "Base",
+        "bear": "Bear"
+      },
+      "probability": "Probability",
+      "whatHappens": "What happens",
+      "signpost": "Signpost",
+      "triggers": "Triggers",
+      "noTriggers": "No triggers.",
+      "event": "Event",
+      "window": "Window",
+      "yours": "Yours",
+      "analyst": "Analyst",
+      "state": "State",
+      "basis": "Basis",
+      "addedByAnalyst": "added by analyst",
+      "effect": {
+        "supports": "supports thesis",
+        "hurts": "hurts thesis",
+        "mixed": "mixed effect"
+      },
+      "claims": "Claims and data",
+      "thesisMarker": "Thesis",
+      "claim": "Claim",
+      "result": "Result",
+      "evidence": "Evidence",
+      "priceAssumes": "What does the price assume?",
+      "thesisSectionConsensus": "is the thesis's Consensus section the market view",
+      "variantDiffers": "is the variant view really different",
+      "yes": "yes",
+      "no": "no",
+      "unclear": "unclear",
+      "partly": "partly",
+      "edgeTitle": "Edge",
+      "statedInThesis": "stated in thesis",
+      "accessible": "open to an individual investor",
+      "counterparty": "Counterparty",
+      "plausible": {
+        "yes": "plausible",
+        "partly": "partly plausible",
+        "no": "not plausible"
+      },
+      "killSignals": "Kill signals",
+      "noKill": "No signals.",
+      "signal": "Signal",
+      "metric": "Metric",
+      "threshold": "Threshold",
+      "now": "Now",
+      "preMortem": "Pre-mortem",
+      "likelihood": {
+        "high": "high",
+        "medium": "medium",
+        "low": "low"
+      },
+      "structure": "Thesis structure",
+      "dataGaps": "Could not be checked",
+      "raw": "Raw output (JSON)",
+      "edgeCategory": {
+        "behavioral": "behavioral",
+        "analytical": "analytical",
+        "informational": "informational",
+        "technical_structural": "technical / structural",
+        "none": "none"
+      },
+      "claimVerdict": {
+        "supported": "supported",
+        "contradicted": "contradicted",
+        "mixed": "mixed",
+        "unverified": "unverified",
+        "not_testable": "not testable"
+      },
+      "sections": {
+        "fikir": "Idea",
+        "konsensus": "Consensus",
+        "farkli_gorus": "Variant view",
+        "edge": "Edge",
+        "karsi_taraf": "Counterparty",
+        "tetikleyiciler": "Triggers",
+        "asagi_senaryo": "Downside scenario",
+        "curutucu_sinyaller": "Kill signals",
+        "pre_mortem": "Pre-mortem",
+        "dipnot": "Footnote"
+      },
+      "states": {
+        "ok": "ok",
+        "weak": "weak",
+        "missing": "missing",
+        "mislabeled": "wrong section",
+        "pending": "pending",
+        "happened": "happened",
+        "failed": "did not happen",
+        "clear": "clear",
+        "watch": "watch",
+        "triggered": "triggered",
+        "unknown": "unknown"
+      }
+    }
+  },
+  "watchlist": {
+    "watch": "Watch",
+    "unwatch": "Unwatch",
+    "watched": "{{ticker}} added to the watchlist",
+    "unwatched": "{{ticker}} removed from the watchlist",
+    "already": "{{ticker}} is already on the list",
+    "failed": "Action failed",
+    "add": "Add",
+    "placeholder": "THYAO, XU030, sektor:bankacilik",
+    "remove": "Remove {{name}} from watchlist",
+    "freeFormHint": "Enter adds it as typed (e.g. endeks:XU030, sektor:<code>)",
+    "palette": {
+      "watch": "Watch: {{ticker}}",
+      "unwatch": "Unwatch: {{ticker}}"
+    }
+  },
+  "llm": {
+    "title": "LLM governor",
+    "pause": "Pause",
+    "resume": "Resume",
+    "pausedToast": "LLM paused",
+    "resumedToast": "LLM resumed",
+    "failed": "Action failed",
+    "duration": {
+      "1h": "1 hour",
+      "3h": "3 hours",
+      "until": "Until resumed"
+    },
+    "paused": "Paused",
+    "active": "Active",
+    "until": "until {{time}}",
+    "untilResumed": "until resumed",
+    "calibration": "Calibration mode",
+    "focus": "Focus: up to {{priority}} · {{time}}",
+    "night": "Night window",
+    "use5h": "5 h (pipeline)",
+    "useChat": "5 h (chat)",
+    "useWeek": "7 days",
+    "sub5h": "Claude 5 h bar",
+    "subWeek": "Claude weekly bar",
+    "resets": "resets {{time}}",
+    "concurrency": "Concurrency: {{n}}",
+    "queue": "Deferred jobs: {{n}}",
+    "byTask": "Last 7 days by task",
+    "task": "Task",
+    "calls": "Calls",
+    "cost": "Cost",
+    "failures": "Failures",
+    "palette": {
+      "pauseFor": "Pause LLM: {{duration}}"
+    }
+  },
+  "alerts": {
+    "title": "Alerts",
+    "new": "New rule",
+    "newTitle": "New alert rule",
+    "editTitle": "Edit rule",
+    "editorHint": "Filter language: FIELD = \"value\", AND / OR / NOT, IN (...), ~ (contains).",
+    "on": "On",
+    "name": "Name",
+    "filter": "Filter",
+    "fields": "Fields",
+    "channels": "Channels",
+    "quiet": "Quiet hours",
+    "global": "global",
+    "customQuiet": "Rule-specific quiet hours",
+    "globalQuiet": "Uses the global quiet-hours setting",
+    "quietStart": "Start",
+    "quietEnd": "End",
+    "enabled": "Rule enabled",
+    "validate": "Validate filter",
+    "filterOk": "Filter is valid",
+    "save": "Save",
+    "channel": {
+      "telegram": "Telegram",
+      "macos": "macOS"
+    },
+    "empty": "No alert rules",
+    "edit": "Edit rule {{name}}",
+    "delete": "Delete rule {{name}}",
+    "toggle": "Toggle rule {{name}}",
+    "deleteTitle": "Delete \"{{name}}\"?",
+    "deleteBody": "The rule is deleted; notifications already sent are kept.",
+    "deleteConfirm": "Delete",
+    "deleted": "Rule deleted",
+    "created": "\"{{name}}\" added",
+    "updated": "\"{{name}}\" updated",
+    "test": "Test notification",
+    "testOk": "{{channel}} test notification sent",
+    "testFailed": "Test notification failed",
+    "failed": "Action failed",
+    "telegramNotReady": "Telegram is not ready (papi telegram setup).",
+    "err": {
+      "name": "Name is required",
+      "filter": "Filter is required",
+      "channels": "Pick at least one channel",
+      "time": "Enter a time as HH:MM"
     }
   }
 }

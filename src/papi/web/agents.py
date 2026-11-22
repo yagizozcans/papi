@@ -101,17 +101,10 @@ def agents_page(request: Request) -> HTMLResponse:
     )
 
 
-@router.post("/agents/run")
-def agents_start(agent: Annotated[str, Form()], ref: Annotated[str, Form()]) -> Response:
-    ref = ref.strip()
-    try:
-        load_agent(agent)
-    except (AgentError, ValueError) as exc:
-        return HTMLResponse(f'<div class="notice error">{exc}</div>', status_code=400)
-    if not REF.match(ref):
-        return HTMLResponse(
-            '<div class="notice error">Geçersiz konu (bildirim no / tez adı)</div>', status_code=400
-        )
+def spawn_run(agent: str, ref: str) -> str:
+    """Write the ``starting`` record and start ``papi agent run`` detached; returns the run id.
+
+    The caller validated ``agent`` and ``ref``. Also used by the typed API (``api_research``)."""
     run_id = uuid7()
     runs.write_meta(agent, run_id, subject=ref, started_at=runs.now_iso(), status="starting")
     log = runs.base_path(agent, run_id).with_suffix(".log").open("wb")
@@ -133,6 +126,21 @@ def agents_start(agent: Annotated[str, Form()], ref: Annotated[str, Form()]) -> 
         stdin=subprocess.DEVNULL,
         start_new_session=True,
     )
+    return run_id
+
+
+@router.post("/agents/run")
+def agents_start(agent: Annotated[str, Form()], ref: Annotated[str, Form()]) -> Response:
+    ref = ref.strip()
+    try:
+        load_agent(agent)
+    except (AgentError, ValueError) as exc:
+        return HTMLResponse(f'<div class="notice error">{exc}</div>', status_code=400)
+    if not REF.match(ref):
+        return HTMLResponse(
+            '<div class="notice error">Geçersiz konu (bildirim no / tez adı)</div>', status_code=400
+        )
+    run_id = spawn_run(agent, ref)
     return RedirectResponse(f"{LEGACY}/agents/runs/{run_id}", status_code=303)
 
 

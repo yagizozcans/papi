@@ -1,5 +1,8 @@
 {
-  "app": { "name": "papi", "tagline": "KAP ve portföy terminali" },
+  "app": {
+    "name": "papi",
+    "tagline": "KAP ve portföy terminali"
+  },
   "nav": {
     "today": "Bugün",
     "feed": "Akış",
@@ -17,7 +20,33 @@
     "overview": "Genel",
     "theses": "Tezler",
     "agents": "Ajanlar",
-    "kb": "Bilgi tabanı"
+    "kb": "Bilgi tabanı",
+    "title": "Araştırma",
+    "intro": "Tezlerini yaz ve incelet, ajanları çalıştır, geçmiş çalışmaları izle.",
+    "cards": {
+      "theses": {
+        "title": "Tezler",
+        "desc": "Yatırım tezlerini yaz, kağıt yükle, şablon kontrolünden geçir, strateji analistine incelet.",
+        "count": "{{count}} tez",
+        "last": "Son inceleme",
+        "none": "Henüz tez yok",
+        "open": "Tezlere git"
+      },
+      "agents": {
+        "title": "Ajanlar",
+        "desc": "KAP analisti ve strateji analisti: katalog, çalışma geçmişi, canlı araç çağrıları ve maliyet.",
+        "count": "{{count}} çalışma",
+        "active": "{{count}} çalışıyor",
+        "none": "Henüz çalışma yok",
+        "open": "Ajanlara git"
+      },
+      "kb": {
+        "title": "Bilgi tabanı",
+        "desc": "Mevzuat ve yükümlülük kayıtları: arama, inceleme, onay, yayın.",
+        "soon": "Yakında (P3)",
+        "open": "Bilgi tabanı"
+      }
+    }
   },
   "topbar": {
     "search": "Ara veya komut çalıştır",
@@ -168,7 +197,9 @@
     "goTo": "Sayfaya git",
     "then": "sonra"
   },
-  "toast": { "close": "Kapat" },
+  "toast": {
+    "close": "Kapat"
+  },
   "kit": {
     "time": {
       "now": "şimdi",
@@ -330,7 +361,14 @@
       "empty": "İşlem yok",
       "types": {
         "buy": "Alım",
-        "sell": "Satım"
+        "sell": "Satım",
+        "opening_balance": "Açılış",
+        "dividend_cash": "Temettü",
+        "fee": "Masraf",
+        "tax": "Vergi",
+        "bonus_shares": "Bedelsiz",
+        "rights_subscription": "Bedelli",
+        "split": "Bölünme"
       }
     },
     "pending": {
@@ -338,11 +376,54 @@
       "empty": "Bekleyen işlem yok",
       "apply": "Uygula",
       "dismiss": "Yoksay",
-      "p2": "P2 aşamasında gelecek"
+      "p2": "P2 aşamasında gelecek",
+      "applied": "Uygulandı",
+      "dismissed": "Yoksayıldı",
+      "applyTitle": "{{ticker}} {{kind}} uygulansın mı?",
+      "dismissTitle": "{{ticker}} {{kind}} yoksayılsın mı?",
+      "dismissBody": "Öneri deftere yazılmaz.",
+      "quantity": "Adet",
+      "quantityHint": "Önerilen adet; aracı kurumunuzdaki rakam farklıysa değiştirin."
     },
     "watchlists": {
       "title": "İzleme listeleri",
       "empty": "İzleme listesi yok"
+    },
+    "common": {
+      "cancel": "Vazgeç"
+    },
+    "trade": {
+      "add": "İşlem ekle",
+      "palette": "İşlem ekle",
+      "title": "İşlem ekle",
+      "description": "Önce önizleme gösterilir; onaylayana kadar deftere yazılmaz.",
+      "type": "Tür",
+      "ticker": "Hisse / fon kodu",
+      "quantity": "Adet",
+      "price": "Fiyat",
+      "date": "Tarih",
+      "fees": "Komisyon",
+      "note": "Not",
+      "preview": "Önizle",
+      "back": "Düzenle",
+      "confirm": "Onayla ve kaydet",
+      "before": "Önce",
+      "after": "Sonra",
+      "recorded": "{{type}} {{ticker}} kaydedildi",
+      "err": {
+        "ticker": "Kod gerekli",
+        "quantity": "Adet sıfırdan büyük bir sayı olmalı (örn. 100)",
+        "price": "Fiyat gerekli (örn. 285,40)",
+        "fees": "Komisyon sayı olmalı",
+        "date": "Geçerli bir tarih seçin"
+      }
+    },
+    "undo": {
+      "button": "Geri al",
+      "title": "Son işlem geri alınsın mı?",
+      "body": "Defter silinmez; ters bir kayıt eklenir.",
+      "confirm": "Geri al",
+      "done": "İşlem geri alındı"
     }
   },
   "instrument": {
@@ -569,6 +650,469 @@
         "wrong_type": "Yanlış tür",
         "not_material": "Önemsiz"
       }
+    }
+  },
+  "agents": {
+    "title": "Ajanlar",
+    "catalogue": "Katalog",
+    "runs": "Çalışmalar",
+    "run": "Ajan çalıştır",
+    "model": "Model",
+    "budget": "Bütçe",
+    "budgetValue": "en fazla {{usd}} USD",
+    "turns": "Tur",
+    "turnsValue": "en çok {{n}}",
+    "timeout": "Süre sınırı",
+    "skills": "Beceriler",
+    "tools": "Araçlar",
+    "builtin": "Claude araçları",
+    "version": "sürüm",
+    "noTools": "araç yok",
+    "refKind": {
+      "disclosure": "KAP bildirimi",
+      "thesis": "Tez",
+      "other": "Konu"
+    },
+    "filters": {
+      "agent": "Ajan",
+      "status": "Durum",
+      "ref": "Konu",
+      "allAgents": "Tüm ajanlar",
+      "allStatuses": "Tüm durumlar",
+      "refPlaceholder": "Konu (bildirim no / tez adı)",
+      "clear": "Temizle"
+    },
+    "status": {
+      "starting": "başlıyor",
+      "running": "çalışıyor",
+      "resuming": "yeniden başlatıldı",
+      "ok": "tamamlandı",
+      "incomplete": "okuma eksik",
+      "failed": "hata",
+      "deferred": "ertelendi",
+      "stale": "yarım kaldı",
+      "active": "çalışanlar",
+      "unknown": "bilinmiyor"
+    },
+    "cols": {
+      "started": "Başlangıç",
+      "agent": "Ajan",
+      "subject": "Konu",
+      "status": "Durum",
+      "turns": "Tur",
+      "cost": "USD",
+      "duration": "Süre"
+    },
+    "empty": "Bu filtreyle çalışma yok.",
+    "emptyAll": "Henüz ajan çalışması yok.",
+    "page": "{{from}}–{{to}} / {{total}}",
+    "prev": "Önceki",
+    "next": "Sonraki",
+    "dialog": {
+      "title": "Ajan çalıştır",
+      "desc": "Çalışma arka planda başlar; sonraki sayfada araç çağrılarını canlı izlersin.",
+      "agent": "Ajan",
+      "ref": "Konu",
+      "refDisclosure": "KAP bildirim no (ör. 1691891)",
+      "refThesis": "Tez adı (ör. THYAO-2026-11-06)",
+      "refOther": "Konu",
+      "budget": "En fazla {{usd}} USD · en çok {{turns}} tur · model {{model}}",
+      "note": "Maliyet Claude kullanım yöneticisine (limit, öncelik) tabidir.",
+      "start": "Başlat",
+      "starting": "Başlatılıyor…",
+      "cancel": "Vazgeç",
+      "invalidRef": "Yalnız harf, rakam ve tire (en çok 40 karakter)"
+    },
+    "runPage": {
+      "back": "Ajanlar",
+      "notFound": "Ajan çalışması bulunamadı",
+      "started": "Başlangıç",
+      "duration": "Süre",
+      "version": "Sürüm"
+    },
+    "meter": {
+      "cost": "Maliyet",
+      "turns": "Tur",
+      "calls": "Araç çağrısı",
+      "tokens": "Token",
+      "cacheRead": "cache okuma",
+      "cacheWrite": "cache yazma",
+      "input": "girdi",
+      "output": "çıktı"
+    },
+    "notice": {
+      "resuming": "Ajan metnin tamamını okumadan yanıtladı; kalan kısmı okuması için aynı oturumda yeniden başlatıldı.",
+      "incomplete": "Okuma tamamlanmadı:",
+      "failed": "Çalışma tamamlanamadı.",
+      "stale": "Dosyalar uzun süredir güncellenmedi; süreç ölmüş olabilir."
+    },
+    "timeline": {
+      "title": "Araç çağrıları",
+      "empty": "Araç çağrısı yok.",
+      "starting": "Henüz araç çağrısı yok; ajan başlıyor…",
+      "waiting": "Ajan bir sonraki adımı seçiyor…",
+      "args": "Argümanlar",
+      "result": "Sonuç",
+      "blocking": "okuma eksik",
+      "failed": "hata"
+    },
+    "output": {
+      "result": "Sonuç",
+      "answer": "Yanıt",
+      "events": "olaylar",
+      "materiality": "önem",
+      "direction": "yön",
+      "confidence": "güven",
+      "summary": "Özet",
+      "takeaways": "Çıkarım",
+      "positives": "Pozitifler",
+      "negatives": "Negatifler",
+      "noPositives": "Belirgin olumlu nokta yok.",
+      "noNegatives": "Belirgin olumsuz nokta yok.",
+      "rationale": "Önem gerekçesi",
+      "watchNext": "İzlenecekler",
+      "claims": "İddialar ({{count}})",
+      "claimKind": "Tür",
+      "claimText": "İddia",
+      "claimValue": "Değer",
+      "claimSource": "Kaynak",
+      "raw": "Ham çıktı (JSON)",
+      "directions": {
+        "positive": "pozitif",
+        "negative": "negatif",
+        "mixed": "karışık",
+        "unclear": "belirsiz"
+      }
+    }
+  },
+  "theses": {
+    "title": "Tezler",
+    "new": "Yeni tez",
+    "upload": "Kağıt yükle",
+    "empty": "Henüz tez yok. Şablondan yaz ya da bir kağıt yükle.",
+    "cols": {
+      "name": "Tez",
+      "ticker": "Kod",
+      "direction": "Yön",
+      "date": "Tarih",
+      "status": "Durum",
+      "check": "Kontrol",
+      "review": "Son inceleme",
+      "runs": "İnceleme"
+    },
+    "status": {
+      "starting": "başlıyor",
+      "extracting": "sayfalar okunuyor",
+      "analysing": "ajan çalışıyor",
+      "ready": "hazır",
+      "done": "tamamlandı",
+      "needs_fix": "düzeltme gerekli",
+      "failed": "hata",
+      "manual": "elle yazıldı",
+      "stale": "yarım kaldı"
+    },
+    "check": {
+      "errors": "{{count}} hata",
+      "gaps": "{{count}} eksik",
+      "ok": "tam",
+      "none": "—"
+    },
+    "verdict": {
+      "supported": "destekleniyor",
+      "mixed": "karışık",
+      "weak": "zayıf",
+      "refuted": "çürüdü"
+    },
+    "newDialog": {
+      "title": "Yeni tez",
+      "desc": "Boş şablondan başlar; bölümleri sen doldurursun.",
+      "ticker": "BIST kodu",
+      "tickerPlaceholder": "THYAO",
+      "create": "Oluştur",
+      "cancel": "Vazgeç",
+      "invalid": "Geçersiz BIST kodu (3-6 harf/rakam)"
+    },
+    "uploadPanel": {
+      "title": "Kağıt yükle",
+      "drop": "Dosyaları buraya sürükle ya da seç",
+      "hint": "PDF, fotoğraf (JPG, PNG, HEIC), Word (DOCX) veya metin. Birden çok dosya sırasıyla tek tez olur. PDF metni doğrudan okunur; taranmış sayfalar ve fotoğraflar Claude ile okunur (sayfa başı yaklaşık 0,10 USD).",
+      "files": "Dosyalar (sırayla okunur)",
+      "moveUp": "Yukarı taşı",
+      "moveDown": "Aşağı taşı",
+      "remove": "Kaldır",
+      "ticker": "BIST kodu",
+      "direction": "Yön",
+      "horizon": "Vade",
+      "horizonPlaceholder": "ör. 6-12 ay",
+      "run": "Okununca strateji analistini çalıştır",
+      "runCost": "en fazla {{usd}} USD ek maliyet",
+      "submit": "Yükle",
+      "uploading": "Yükleniyor…",
+      "unsupported": "{{name}}: desteklenmeyen tür",
+      "needTicker": "Geçerli bir BIST kodu yaz",
+      "needFiles": "En az bir dosya seç"
+    },
+    "page": {
+      "back": "Tezler",
+      "notFound": "Tez bulunamadı",
+      "files": "Kaynak dosyalar",
+      "pages": "Okunan sayfalar ({{count}})",
+      "page": "Sayfa {{n}}",
+      "uncertain": "Emin olunamayan",
+      "method": {
+        "text_layer": "PDF metni",
+        "ocr": "görüntüden okundu",
+        "docx": "Word",
+        "text": "metin"
+      },
+      "progress": "{{done}}/{{total}} dosya · {{pages}} sayfa okundu",
+      "extractingHint": "Sayfalar okunuyor; fotoğraf ve taranmış sayfalar birkaç saniye ile yarım dakika sürer.",
+      "analysing": "Ajan çalışıyor",
+      "watchLive": "canlı izle",
+      "stale": "İşlem uzun süredir ilerlemiyor; süreç ölmüş olabilir.",
+      "waiting": "Metin okunuyor; bitince burada düzenlenebilir."
+    },
+    "editor": {
+      "title": "Tez metni",
+      "hint": "Okunan metni burada düzelt. `## Başlık` satırları bölümleri ayırır; `<!-- -->` içi analize girmez.",
+      "save": "Kaydet",
+      "saving": "Kaydediliyor…",
+      "saved": "Kaydedildi",
+      "dirty": "kaydedilmemiş değişiklik",
+      "check": "Kontrol et",
+      "checking": "Kontrol ediliyor…",
+      "outline": "Bölümler",
+      "empty": "boş",
+      "unknown": "bilinmeyen başlık",
+      "items": "{{count}} madde",
+      "errors": "Hatalar (ajan bu metni okuyamaz)",
+      "gaps": "Eksikler (ajan yine çalışır, bunları da değerlendirir)",
+      "noGaps": "Eksik yok.",
+      "line": "satır {{n}}",
+      "summary": "{{filled}}/{{total}} bölüm · {{triggers}} tetikleyici · {{kills}} çürütücü sinyal",
+      "ariaLabel": "Tez metni"
+    },
+    "reviewPanel": {
+      "title": "İnceleme",
+      "run": "İncele",
+      "running": "İnceleme sürüyor",
+      "confirmTitle": "Strateji analistini çalıştır",
+      "confirmDesc": "Analist tezi gerçek verilerle sınar. Çalışma arka planda yürür.",
+      "confirmBudget": "En fazla {{usd}} USD · en çok {{turns}} tur",
+      "confirm": "Çalıştır",
+      "cancel": "Vazgeç",
+      "needSave": "Önce kaydet",
+      "needFix": "Önce hataları düzelt",
+      "history": "Geçmiş",
+      "empty": "Bu tez henüz incelenmedi.",
+      "latest": "Son inceleme",
+      "open": "çalışmayı aç",
+      "live": "canlı izle",
+      "cost": "{{usd}} USD"
+    },
+    "review": {
+      "title": "Tez değerlendirmesi",
+      "verdictLabel": "durum",
+      "confidence": "güven",
+      "asOf": "veri tarihi",
+      "edge": "edge",
+      "scenarios": "Senaryolar",
+      "scenario": {
+        "bull": "İyimser",
+        "base": "Temel",
+        "bear": "Kötümser"
+      },
+      "probability": "Olasılık",
+      "whatHappens": "Ne olur",
+      "signpost": "İşaret",
+      "triggers": "Tetikleyiciler",
+      "noTriggers": "Tetikleyici yok.",
+      "event": "Olay",
+      "window": "Zaman",
+      "yours": "Senin",
+      "analyst": "Analist",
+      "state": "Durum",
+      "basis": "Gerekçe",
+      "addedByAnalyst": "analist ekledi",
+      "effect": {
+        "supports": "teze yarar",
+        "hurts": "teze zarar",
+        "mixed": "karışık etki"
+      },
+      "claims": "İddialar ve veri",
+      "thesisMarker": "Tez",
+      "claim": "İddia",
+      "result": "Sonuç",
+      "evidence": "Kanıt",
+      "priceAssumes": "Fiyat neyi varsayıyor?",
+      "thesisSectionConsensus": "tezdeki Konsensüs bölümü piyasanın görüşü mü",
+      "variantDiffers": "farklı görüş gerçekten farklı mı",
+      "yes": "evet",
+      "no": "hayır",
+      "unclear": "belirsiz",
+      "partly": "kısmen",
+      "edgeTitle": "Edge",
+      "statedInThesis": "tezde yazılı",
+      "accessible": "bireysel yatırımcıya açık",
+      "counterparty": "Karşı taraf",
+      "plausible": {
+        "yes": "makul",
+        "partly": "kısmen makul",
+        "no": "makul değil"
+      },
+      "killSignals": "Tezi çürütecek sinyaller",
+      "noKill": "Sinyal yok.",
+      "signal": "Sinyal",
+      "metric": "Ölçüt",
+      "threshold": "Eşik",
+      "now": "Şimdi",
+      "preMortem": "Pre-mortem",
+      "likelihood": {
+        "high": "yüksek",
+        "medium": "orta",
+        "low": "düşük"
+      },
+      "structure": "Tezin yapısı",
+      "dataGaps": "Kontrol edilemeyenler",
+      "raw": "Ham çıktı (JSON)",
+      "edgeCategory": {
+        "behavioral": "davranışsal",
+        "analytical": "analitik",
+        "informational": "bilgi",
+        "technical_structural": "teknik / yapısal",
+        "none": "yok"
+      },
+      "claimVerdict": {
+        "supported": "destekleniyor",
+        "contradicted": "çelişiyor",
+        "mixed": "karışık",
+        "unverified": "doğrulanamadı",
+        "not_testable": "test edilemez"
+      },
+      "sections": {
+        "fikir": "Fikir",
+        "konsensus": "Konsensüs",
+        "farkli_gorus": "Farklı Görüş",
+        "edge": "Edge",
+        "karsi_taraf": "Karşı Taraf",
+        "tetikleyiciler": "Tetikleyiciler",
+        "asagi_senaryo": "Aşağı Yönlü Senaryo",
+        "curutucu_sinyaller": "Tezi Çürütecek Sinyaller",
+        "pre_mortem": "Pre-mortem",
+        "dipnot": "Dipnot"
+      },
+      "states": {
+        "ok": "tamam",
+        "weak": "zayıf",
+        "missing": "eksik",
+        "mislabeled": "yanlış bölümde",
+        "pending": "bekliyor",
+        "happened": "gerçekleşti",
+        "failed": "gerçekleşmedi",
+        "clear": "temiz",
+        "watch": "izle",
+        "triggered": "tetiklendi",
+        "unknown": "bilinmiyor"
+      }
+    }
+  },
+  "watchlist": {
+    "watch": "İzle",
+    "unwatch": "İzlemeyi bırak",
+    "watched": "{{ticker}} izleme listesine eklendi",
+    "unwatched": "{{ticker}} izlemeden çıkarıldı",
+    "already": "{{ticker}} zaten listede",
+    "failed": "İşlem başarısız",
+    "add": "Ekle",
+    "placeholder": "THYAO, XU030, sektor:bankacilik",
+    "remove": "{{name}} izlemeden çıkar",
+    "freeFormHint": "Enter ile olduğu gibi eklenir (örn. endeks:XU030, sektor:<kod>)",
+    "palette": {
+      "watch": "İzle: {{ticker}}",
+      "unwatch": "İzlemeyi bırak: {{ticker}}"
+    }
+  },
+  "llm": {
+    "title": "LLM yöneticisi",
+    "pause": "Duraklat",
+    "resume": "Sürdür",
+    "pausedToast": "LLM duraklatıldı",
+    "resumedToast": "LLM sürdürüldü",
+    "failed": "İşlem başarısız",
+    "duration": {
+      "1h": "1 saat",
+      "3h": "3 saat",
+      "until": "Sürdürülene kadar"
+    },
+    "paused": "Duraklatıldı",
+    "active": "Aktif",
+    "until": "bitiş {{time}}",
+    "untilResumed": "sürdürülene kadar",
+    "calibration": "Kalibrasyon modu",
+    "focus": "Odak: en fazla {{priority}} · {{time}}",
+    "night": "Gece penceresi",
+    "use5h": "5 saat (boru hattı)",
+    "useChat": "5 saat (sohbet)",
+    "useWeek": "7 gün",
+    "sub5h": "Claude 5 saat çubuğu",
+    "subWeek": "Claude haftalık çubuk",
+    "resets": "sıfırlanma {{time}}",
+    "concurrency": "Eşzamanlılık: {{n}}",
+    "queue": "Ertelenen iş: {{n}}",
+    "byTask": "Son 7 gün, göreve göre",
+    "task": "Görev",
+    "calls": "Çağrı",
+    "cost": "Maliyet",
+    "failures": "Hata",
+    "palette": {
+      "pauseFor": "LLM'i duraklat: {{duration}}"
+    }
+  },
+  "alerts": {
+    "title": "Uyarılar",
+    "new": "Yeni kural",
+    "newTitle": "Yeni uyarı kuralı",
+    "editTitle": "Kuralı düzenle",
+    "editorHint": "Filtre dili: ALAN = \"değer\", AND / OR / NOT, IN (…), ~ (içerir).",
+    "on": "Açık",
+    "name": "Ad",
+    "filter": "Filtre",
+    "fields": "Alanlar",
+    "channels": "Kanallar",
+    "quiet": "Sessiz saat",
+    "global": "genel",
+    "customQuiet": "Kurala özel sessiz saat",
+    "globalQuiet": "Genel sessiz saat ayarı kullanılır",
+    "quietStart": "Başlangıç",
+    "quietEnd": "Bitiş",
+    "enabled": "Kural açık",
+    "validate": "Filtreyi doğrula",
+    "filterOk": "Filtre geçerli",
+    "save": "Kaydet",
+    "channel": {
+      "telegram": "Telegram",
+      "macos": "macOS"
+    },
+    "empty": "Uyarı kuralı yok",
+    "edit": "{{name}} kuralını düzenle",
+    "delete": "{{name}} kuralını sil",
+    "toggle": "{{name}} kuralını aç/kapat",
+    "deleteTitle": "\"{{name}}\" silinsin mi?",
+    "deleteBody": "Kural silinir; gönderilmiş bildirimler kalır.",
+    "deleteConfirm": "Sil",
+    "deleted": "Kural silindi",
+    "created": "\"{{name}}\" eklendi",
+    "updated": "\"{{name}}\" güncellendi",
+    "test": "Test bildirimi",
+    "testOk": "{{channel}} test bildirimi gönderildi",
+    "testFailed": "Test bildirimi gönderilemedi",
+    "failed": "İşlem başarısız",
+    "telegramNotReady": "Telegram hazır değil (papi telegram setup).",
+    "err": {
+      "name": "Ad gerekli",
+      "filter": "Filtre gerekli",
+      "channels": "En az bir kanal seçin",
+      "time": "SS:DD biçiminde saat girin"
     }
   }
 }

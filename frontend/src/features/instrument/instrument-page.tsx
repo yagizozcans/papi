@@ -1,11 +1,13 @@
-import { ExternalLink } from 'lucide-react'
-import { type ReactNode, useMemo } from 'react'
+import { Link } from '@tanstack/react-router'
+import { ExternalLink, Plus } from 'lucide-react'
+import { type ReactNode, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type ChartEvent, type ChartTransaction, PriceChart } from '@/components/kit/price-chart'
 import { Delta } from '@/components/kit/delta'
 import { type Priority, PriorityBadge } from '@/components/kit/priority-badge'
 import { RelativeTime } from '@/components/kit/relative-time'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { EmptyState } from '@/components/ui/empty-state'
 import { ErrorState } from '@/components/ui/error-state'
 import { Panel } from '@/components/ui/panel'
@@ -19,6 +21,8 @@ import { errorText, PanelError, SkeletonLines } from '../shared/states'
 import { useDocumentTitle } from '../shared/use-document-title'
 import { AgentRunRow } from '../today/today-page'
 import { formatQty } from '../portfolio/portfolio-page'
+import { TradeDialog } from '../portfolio/trade-dialog'
+import { WatchToggle } from '../watchlist/watch-toggle'
 import { type InstrumentOut, useInstrument, usePrices } from './api'
 
 const DASH = '–'
@@ -55,6 +59,7 @@ export function InstrumentPage({ ticker: raw }: { ticker: string }) {
 
 function Header({ d, ticker }: { d?: InstrumentOut; ticker: string }) {
   const { t } = useTranslation()
+  const [tradeOpen, setTradeOpen] = useState(false)
   const lc = d?.last_close
   const kapUrl = d?.disclosures.find((x) => x.kap_url)?.kap_url
   return (
@@ -72,6 +77,14 @@ function Header({ d, ticker }: { d?: InstrumentOut; ticker: string }) {
           <Badge variant="outline">{t(`portfolio.kind.${d.kind}`, { defaultValue: d.kind })}</Badge>
           {d.badge === 'HOLDING' && <Badge variant="brand">{t('instrument.holding')}</Badge>}
           {d.badge === 'WATCH' && <Badge variant="default">{t('instrument.watch')}</Badge>}
+          {d.kind !== 'index' && (
+            <Button size="sm" variant="outline" onClick={() => setTradeOpen(true)} data-testid="add-trade">
+              <Plus />
+              {t('portfolio.trade.add')}
+            </Button>
+          )}
+          <WatchToggle ticker={ticker} watched={d.watch} lists={d.watchlists} />
+          <TradeDialog open={tradeOpen} onOpenChange={setTradeOpen} defaultTicker={ticker} />
         </>
       )}
       <div className="ml-auto flex items-baseline gap-3">
@@ -271,9 +284,13 @@ function Theses({ d }: { d: InstrumentOut }) {
     <Panel>
       <ul>
         {d.theses.map((th) => (
-          <li key={th.name} className="flex items-center gap-3 border-b border-border px-3 py-2 last:border-b-0">
+          <li key={th.name} className="relative flex items-center gap-3 border-b border-border px-3 py-2 last:border-b-0 hover:bg-accent/50">
             <div className="min-w-0 flex-1">
-              <div className="truncate font-medium">{th.name}</div>
+              <div className="truncate font-medium">
+                <Link to="/research/theses/$name" params={{ name: th.name }} className="after:absolute after:inset-0">
+                  {th.name}
+                </Link>
+              </div>
               <div className="text-xs text-muted-foreground">
                 {[th.direction, th.horizon, th.date].filter(Boolean).join(' · ')}
               </div>
@@ -292,7 +309,7 @@ function Agents({ d }: { d: InstrumentOut }) {
   if (d.agent_runs.length === 0) return <Panel><EmptyState title={t('instrument.agents.empty')} /></Panel>
   return (
     <Panel>
-      <ul>{d.agent_runs.map((r) => <AgentRunRow key={r.run_id} run={r} />)}</ul>
+      <ul>{d.agent_runs.map((r) => <AgentRunRow key={r.run_id} run={r} linked />)}</ul>
     </Panel>
   )
 }

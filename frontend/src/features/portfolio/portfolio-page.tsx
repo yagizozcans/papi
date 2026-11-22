@@ -1,27 +1,31 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useNavigate } from '@tanstack/react-router'
-import { TriangleAlert } from 'lucide-react'
-import { type ReactNode, useMemo, useState } from 'react'
+import { Plus, TriangleAlert, Undo2 } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DataTable } from '@/components/kit/data-table'
 import { Delta } from '@/components/kit/delta'
 import { Stat } from '@/components/kit/stat'
 import { TickerChip } from '@/components/kit/ticker-chip'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { EmptyState } from '@/components/ui/empty-state'
 import { ErrorState } from '@/components/ui/error-state'
 import { Panel } from '@/components/ui/panel'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Tooltip } from '@/components/ui/tooltip'
 import { useIsDesktop } from '@/hooks/use-media-query'
 import { formatMoney, formatNum, formatPercent } from '@/lib/format'
 import { cn } from '@/lib/utils'
+import { toast } from 'sonner'
+import { ConfirmDialog } from '../shared/confirm-dialog'
 import { errorText, PanelError, SkeletonLines } from '../shared/states'
+import { WatchlistPanel } from '../watchlist/watchlist-panel'
 import { useDocumentTitle } from '../shared/use-document-title'
 import { type AllocationSlice, type Overview, type PerfRange, type Position, type Txn, useOverview, usePerformance } from './api'
+import { useUndoTrade } from './actions'
+import { PendingRow } from './pending'
 import { PerformanceChart } from './performance-chart'
+import { TradeDialog } from './trade-dialog'
 
 const DASH = '–'
 const mark = (b: Position['badge']) => (b === 'HOLDING' ? 'holding' : b === 'WATCH' ? 'watch' : null)
@@ -37,6 +41,13 @@ export function PortfolioPage() {
   const overview = useOverview()
   const [range, setRange] = useState<PerfRange>('3m')
   const perf = usePerformance(range)
+  const [tradeOpen, setTradeOpen] = useState(false)
+  const addTrade = (
+    <Button size="sm" variant="outline" onClick={() => setTradeOpen(true)} data-testid="add-trade">
+      <Plus />
+      {t('portfolio.trade.add')}
+    </Button>
+  )
 
   if (overview.isError && !overview.data) {
     return (
@@ -82,12 +93,12 @@ export function PortfolioPage() {
         </Panel>
       </div>
 
-      <Panel title={t('portfolio.holdings.title')} actions={o && <span className="num text-xs text-muted-foreground">{o.positions.length}</span>}>
+      <Panel title={t('portfolio.holdings.title')} actions={<>{o && <span className="num mr-1 text-xs text-muted-foreground">{o.positions.length}</span>}{addTrade}</>}>
         <Holdings o={o} loading={overview.isPending} />
       </Panel>
 
       <div className="grid gap-3 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-        <Panel title={t('portfolio.txns.title')}>
+        <Panel title={t('portfolio.txns.title')} actions={addTrade}>
           <Transactions rows={o?.transactions} loading={overview.isPending} />
         </Panel>
         <div className="flex flex-col gap-3">
@@ -95,10 +106,11 @@ export function PortfolioPage() {
             {!o ? <SkeletonLines rows={2} /> : <Pending actions={o.pending_actions} />}
           </Panel>
           <Panel title={t('portfolio.watchlists.title')}>
-            {!o ? <SkeletonLines rows={2} /> : <Watchlists lists={o.watchlists} />}
+            {!o ? <SkeletonLines rows={2} /> : <WatchlistPanel lists={o.watchlists} />}
           </Panel>
         </div>
       </div>
+      <TradeDialog open={tradeOpen} onOpenChange={setTradeOpen} />
     </div>
   )
 }
@@ -144,17 +156,16 @@ function Holdings({ o, loading }: { o?: Overview; loading: boolean }) {
 
   const columns = useMemo<ColumnDef<Position>[]>(
     () => [
-      { id: 'ticker', header: t('portfolio.holdings.ticker'), accessorFn: (r) => r.ticker, size: 100, cell: (c) => <TickerChip ticker={c.row.original.ticker} mark={mark(c.row.original.badge)} /> },
-      { id: 'name', header: t('portfolio.holdings.name'), accessorFn: (r) => r.name ?? '', size: 180, meta: { grow: true }, cell: (c) => <span className="text-muted-foreground">{c.row.original.name ?? DASH}</span> },
-      { id: 'kind', header: t('portfolio.holdings.kind'), accessorFn: (r) => r.kind, size: 80, cell: (c) => <Badge variant="outline">{t(`portfolio.kind.${c.row.original.kind}`, { defaultValue: c.row.original.kind })}</Badge> },
-      { id: 'qty', header: t('portfolio.holdings.qty'), accessorFn: (r) => r.quantity, size: 90, meta: { numeric: true }, cell: (c) => formatQty(c.row.original.quantity) },
-      { id: 'avg', header: t('portfolio.holdings.avgCost'), accessorFn: (r) => r.avg_cost, size: 120, meta: { numeric: true }, cell: (c) => formatNum(c.row.original.avg_cost) },
-      { id: 'last', header: t('portfolio.holdings.last'), accessorFn: (r) => r.last_close, size: 100, meta: { numeric: true }, cell: (c) => formatNum(c.row.original.last_close) },
+      { id: 'ticker', header: t('portfolio.holdings.ticker'), accessorFn: (r) => r.ticker, size: 96, cell: (c) => <TickerChip ticker={c.row.original.ticker} mark={mark(c.row.original.badge)} /> },
+      { id: 'name', header: t('portfolio.holdings.name'), accessorFn: (r) => r.name ?? '', size: 120, meta: { grow: true }, cell: (c) => <span className="text-muted-foreground" title={c.row.original.name ?? undefined}>{c.row.original.name ?? DASH}</span> },
+      { id: 'qty', header: t('portfolio.holdings.qty'), accessorFn: (r) => r.quantity, size: 80, meta: { numeric: true }, cell: (c) => formatQty(c.row.original.quantity) },
+      { id: 'avg', header: t('portfolio.holdings.avgCost'), accessorFn: (r) => r.avg_cost, size: 100, meta: { numeric: true }, cell: (c) => formatNum(c.row.original.avg_cost) },
+      { id: 'last', header: t('portfolio.holdings.last'), accessorFn: (r) => r.last_close, size: 90, meta: { numeric: true }, cell: (c) => formatNum(c.row.original.last_close) },
       { id: 'value', header: t('portfolio.holdings.value'), accessorFn: (r) => r.market_value, size: 120, meta: { numeric: true }, cell: (c) => formatMoney(c.row.original.market_value) },
-      { id: 'weight', header: t('portfolio.holdings.weight'), accessorFn: (r) => r.weight, size: 140, meta: { numeric: true }, cell: (c) => <WeightBar weight={c.row.original.weight} /> },
-      { id: 'pnl', header: t('portfolio.holdings.pnl'), accessorFn: (r) => r.pnl, size: 120, meta: { numeric: true }, cell: (c) => <Delta value={c.row.original.pnl} arrow={false} /> },
-      { id: 'pnlPct', header: t('portfolio.holdings.pnlPct'), accessorFn: (r) => r.pnl_pct, size: 110, meta: { numeric: true }, cell: (c) => <Delta value={c.row.original.pnl_pct} percent /> },
-      { id: 'day', header: t('portfolio.holdings.day'), accessorFn: (r) => r.day_change_pct, size: 100, meta: { numeric: true }, cell: (c) => <Delta value={c.row.original.day_change_pct} percent /> },
+      { id: 'weight', header: t('portfolio.holdings.weight'), accessorFn: (r) => r.weight, size: 132, meta: { numeric: true }, cell: (c) => <WeightBar weight={c.row.original.weight} /> },
+      { id: 'pnl', header: t('portfolio.holdings.pnl'), accessorFn: (r) => r.pnl, size: 110, meta: { numeric: true }, cell: (c) => <Delta value={c.row.original.pnl} arrow={false} /> },
+      { id: 'pnlPct', header: t('portfolio.holdings.pnlPct'), accessorFn: (r) => r.pnl_pct, size: 96, meta: { numeric: true }, cell: (c) => <Delta value={c.row.original.pnl_pct} percent /> },
+      { id: 'day', header: t('portfolio.holdings.day'), accessorFn: (r) => r.day_change_pct, size: 88, meta: { numeric: true }, cell: (c) => <Delta value={c.row.original.day_change_pct} percent /> },
     ],
     [t],
   )
@@ -236,24 +247,40 @@ function Bars({ slices, kind }: { slices: AllocationSlice[]; kind: boolean }) {
   )
 }
 
+/** The ledger is newest-first: the first live (not reversed, not a reversal) row is the one "undo last" targets. */
+export function lastUndoable(rows?: Txn[]): Txn | undefined {
+  return rows?.find((r) => !r.reversed && !r.reverses_id)
+}
+
 function Transactions({ rows, loading }: { rows?: Txn[]; loading: boolean }) {
   const { t } = useTranslation()
   const desktop = useIsDesktop()
+  const [undoing, setUndoing] = useState<Txn | null>(null)
+  const undo = useUndoTrade()
+  const last = lastUndoable(rows)
+  const undoButton = (x: Txn) =>
+    x.id === last?.id ? (
+      <Button size="sm" variant="ghost" onClick={() => { undo.reset(); setUndoing(x) }} data-testid="undo-last">
+        <Undo2 />
+        {t('portfolio.undo.button')}
+      </Button>
+    ) : null
   const typeLabel = (x: Txn) => t(`portfolio.txns.types.${x.type}`, { defaultValue: x.type })
   const isBuy = (x: Txn) => x.type.toLowerCase().startsWith('buy')
   const isSell = (x: Txn) => x.type.toLowerCase().startsWith('sell')
   const columns = useMemo<ColumnDef<Txn>[]>(
     () => [
       { id: 'date', header: t('portfolio.txns.date'), accessorFn: (r) => r.trade_date, size: 110, meta: { cellClassName: 'num' }, cell: (c) => c.row.original.trade_date },
-      { id: 'type', header: t('portfolio.txns.type'), accessorFn: (r) => r.type, size: 140, cell: (c) => <span className={cn(isBuy(c.row.original) && 'text-up', isSell(c.row.original) && 'text-down', c.row.original.reversed && 'line-through opacity-60')}>{typeLabel(c.row.original)}</span> },
-      { id: 'ticker', header: t('portfolio.txns.ticker'), accessorFn: (r) => r.ticker ?? '', size: 100, cell: (c) => (c.row.original.ticker ? <TickerChip ticker={c.row.original.ticker} /> : DASH) },
-      { id: 'qty', header: t('portfolio.holdings.qty'), accessorFn: (r) => r.quantity, size: 90, meta: { numeric: true }, cell: (c) => formatQty(c.row.original.quantity) },
-      { id: 'price', header: t('portfolio.txns.price'), accessorFn: (r) => r.price, size: 100, meta: { numeric: true }, cell: (c) => formatNum(c.row.original.price) },
-      { id: 'fees', header: t('portfolio.txns.fees'), accessorFn: (r) => r.fees + r.tax, size: 80, meta: { numeric: true }, cell: (c) => formatNum(c.row.original.fees + c.row.original.tax) },
-      { id: 'source', header: t('portfolio.txns.source'), accessorFn: (r) => r.source, size: 90, meta: { grow: true }, cell: (c) => <span className="text-muted-foreground">{c.row.original.source}</span> },
+      { id: 'type', header: t('portfolio.txns.type'), accessorFn: (r) => r.type, size: 100, cell: (c) => <span className={cn(isBuy(c.row.original) && 'text-up', isSell(c.row.original) && 'text-down', c.row.original.reversed && 'line-through opacity-60')}>{typeLabel(c.row.original)}</span> },
+      { id: 'ticker', header: t('portfolio.txns.ticker'), accessorFn: (r) => r.ticker ?? '', size: 90, cell: (c) => (c.row.original.ticker ? <TickerChip ticker={c.row.original.ticker} /> : DASH) },
+      { id: 'qty', header: t('portfolio.holdings.qty'), accessorFn: (r) => r.quantity, size: 70, meta: { numeric: true }, cell: (c) => formatQty(c.row.original.quantity) },
+      { id: 'price', header: t('portfolio.txns.price'), accessorFn: (r) => r.price, size: 90, meta: { numeric: true }, cell: (c) => formatNum(c.row.original.price) },
+      { id: 'fees', header: t('portfolio.txns.fees'), accessorFn: (r) => r.fees + r.tax, size: 70, meta: { numeric: true }, cell: (c) => formatNum(c.row.original.fees + c.row.original.tax) },
+      { id: 'source', header: t('portfolio.txns.source'), accessorFn: (r) => r.source, size: 60, meta: { grow: true }, cell: (c) => <span className="text-muted-foreground">{c.row.original.source}</span> },
+      { id: 'actions', header: '', enableSorting: false, size: 120, cell: (c) => undoButton(c.row.original) },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [t],
+    [t, last?.id],
   )
   const n = rows?.length ?? 0
   const height = desktop ? (Math.min(Math.max(n, 2), 10) + 1) * 32 + 2 : Math.min(Math.max(n, 2), 5) * 76 + 2
@@ -277,23 +304,36 @@ function Transactions({ rows, loading }: { rows?: Txn[]; loading: boolean }) {
             <div className="num text-sm text-muted-foreground">
               {formatQty(r.quantity)} × {formatNum(r.price)}
             </div>
+            {undoButton(r)}
           </div>
         )}
       />
+      <ConfirmDialog
+        open={undoing !== null}
+        onOpenChange={(o) => !o && setUndoing(null)}
+        title={t('portfolio.undo.title')}
+        description={t('portfolio.undo.body')}
+        confirmLabel={t('portfolio.undo.confirm')}
+        destructive
+        pending={undo.isPending}
+        error={undo.isError ? errorText(undo.error) : null}
+        onConfirm={() =>
+          undoing &&
+          undo.mutate(undoing.id, {
+            onSuccess: () => {
+              toast.success(t('portfolio.undo.done'))
+              setUndoing(null)
+            },
+          })
+        }
+      >
+        {undoing && (
+          <div className="num rounded-md border border-border p-2 text-sm" data-testid="undo-target">
+            <span className="font-medium">{typeLabel(undoing)}</span> <span className="font-mono">{undoing.ticker}</span> · {formatQty(undoing.quantity)} × {formatNum(undoing.price)} · {undoing.trade_date}
+          </div>
+        )}
+      </ConfirmDialog>
     </div>
-  )
-}
-
-function P2Button({ children }: { children: ReactNode }) {
-  const { t } = useTranslation()
-  return (
-    <Tooltip content={t('portfolio.pending.p2')}>
-      <span tabIndex={0} className="inline-flex">
-        <Button size="sm" variant="outline" disabled>
-          {children}
-        </Button>
-      </span>
-    </Tooltip>
   )
 }
 
@@ -303,47 +343,8 @@ function Pending({ actions }: { actions: Overview['pending_actions'] }) {
   return (
     <ul>
       {actions.map((a) => (
-        <li key={a.id} className="flex flex-col gap-1.5 border-b border-border px-3 py-2 last:border-b-0" data-testid="pending-action">
-          <div className="flex items-center gap-2">
-            {a.ticker && <TickerChip ticker={a.ticker} />}
-            <span className="text-sm">{a.kind}</span>
-            {a.ex_date && <span className="num ml-auto text-xs text-muted-foreground">{a.ex_date}</span>}
-          </div>
-          <div className="flex gap-2">
-            <P2Button>{t('portfolio.pending.apply')}</P2Button>
-            <P2Button>{t('portfolio.pending.dismiss')}</P2Button>
-          </div>
-        </li>
-      ))}
-    </ul>
-  )
-}
-
-function Watchlists({ lists }: { lists: Overview['watchlists'] }) {
-  const { t } = useTranslation()
-  if (lists.length === 0) return <EmptyState title={t('portfolio.watchlists.empty')} className="py-6" />
-  return (
-    <ul>
-      {lists.map((w) => (
-        <li key={w.id} className="flex flex-col gap-1.5 border-b border-border px-3 py-2 last:border-b-0" data-testid="watchlist">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">{w.name}</span>
-            <span className="num text-xs text-muted-foreground">{w.members.length}</span>
-          </div>
-          {w.members.length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {w.members.map((m) => (
-                <TickerChip key={m.instrument_id} ticker={m.ticker} mark={mark(m.badge)} />
-              ))}
-            </div>
-          )}
-          {(w.sectors.length > 0 || w.indices.length > 0) && (
-            <div className="flex flex-wrap gap-1">
-              {[...w.indices, ...w.sectors].map((x) => (
-                <Badge key={x} variant="outline">{x}</Badge>
-              ))}
-            </div>
-          )}
+        <li key={a.id} className="border-b border-border px-3 py-2 last:border-b-0">
+          <PendingRow action={a} />
         </li>
       ))}
     </ul>

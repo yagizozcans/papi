@@ -5,10 +5,11 @@ import { type Status, useStatus } from '@/api/status'
 import { ageSeconds, formatDuration, lagTone, type Tone, toneClass } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
-function Item({ label, tone = 'muted', testId, children }: { label: string; tone?: Tone; testId?: string; children: ReactNode }) {
+function Item({ label, tone = 'muted', testId, hash, children }: { label: string; tone?: Tone; testId?: string; hash?: string; children: ReactNode }) {
   return (
     <Link
       to="/system"
+      hash={hash}
       className="flex h-full items-center gap-1.5 px-2.5 hover:bg-accent"
       title={label}
     >
@@ -83,7 +84,7 @@ export function StatusBar() {
             {failed} {t('status.failed')}
           </span>
         </Link>
-        <Item label={t('status.llm')} tone={s.governor.paused ? 'warn' : 'ok'} testId="status-llm">
+        <Item label={t('status.llm')} tone={s.governor.paused ? 'warn' : 'ok'} testId="status-llm" hash="llm">
           {s.governor.paused
             ? `${t('status.llmPaused')}${s.governor.reason ? `: ${s.governor.reason}` : ''}`
             : t('status.llmActive')}

@@ -7,9 +7,9 @@ import { Button } from '@/components/ui/button'
 import { EmptyState } from '@/components/ui/empty-state'
 import { ErrorState } from '@/components/ui/error-state'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Tooltip } from '@/components/ui/tooltip'
 import { formatDateTime, formatDuration, lagTone, toneClass } from '@/lib/format'
 import { cn } from '@/lib/utils'
+import { RunAgentDialog } from '../agents/run-dialog'
 import { type EventDetail, useEventDetail } from './api'
 import { Documents } from './documents'
 import { Markers, Materiality, Prio, Stage, Tickers } from './item-bits'
@@ -44,6 +44,7 @@ function ReaderBody({ detail }: { detail: EventDetail }) {
   const headline = headlineOf(item)
   const [docTab, setDocTab] = useState(detail.documents[0]?.id ?? '')
   const [highlight, setHighlight] = useState<string | null>(null)
+  const [runOpen, setRunOpen] = useState(false)
 
   const cite = (anchor: string) => {
     const doc = detail.documents.find((d) => d.spans.some((s) => s.anchor === anchor)) ?? detail.documents.find((d) => d.html.includes(`id="${anchor}"`))
@@ -66,13 +67,10 @@ function ReaderBody({ detail }: { detail: EventDetail }) {
           <Stage stage={item.stage} />
           <Markers item={item} />
           <span className="ml-auto flex items-center gap-2">
-            <Tooltip content={t('feed.reader.runAgentSoon')}>
-              <span tabIndex={0} className="inline-flex">
-                <Button variant="outline" size="sm" disabled aria-label={t('feed.reader.runAgent')}>
-                  <Bot /> {t('feed.reader.runAgent')}
-                </Button>
-              </span>
-            </Tooltip>
+            <Button variant="outline" size="sm" disabled={!item.source_ref} onClick={() => setRunOpen(true)} data-testid="run-agent">
+              <Bot /> {t('feed.reader.runAgent')}
+            </Button>
+            {item.source_ref && <RunAgentDialog open={runOpen} onOpenChange={setRunOpen} agent="kap-analyst" lockAgent refValue={item.source_ref} />}
             {item.kap_url && (
               <Button asChild variant="outline" size="sm">
                 <a href={item.kap_url} target="_blank" rel="noopener noreferrer">

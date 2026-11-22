@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { PagePlaceholder } from '@/components/page-placeholder'
+import { SystemPage } from '@/features/system/system-page'
 
 export const Route = createFileRoute('/system')({
   staticData: { titleKey: 'nav.system' },
-  component: () => <PagePlaceholder page="system" />,
+  component: SystemPage,
 })

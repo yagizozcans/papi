@@ -19,9 +19,11 @@ import { Route as SystemRouteImport } from './routes/system'
 import { Route as FeedEventIdRouteImport } from './routes/feed.$eventId'
 import { Route as ITickerRouteImport } from './routes/i.$ticker'
 import { Route as ResearchIndexRouteImport } from './routes/research.index'
-import { Route as ResearchAgentsRouteImport } from './routes/research.agents'
 import { Route as ResearchKbRouteImport } from './routes/research.kb'
-import { Route as ResearchThesesRouteImport } from './routes/research.theses'
+import { Route as ResearchAgentsIndexRouteImport } from './routes/research.agents.index'
+import { Route as ResearchThesesIndexRouteImport } from './routes/research.theses.index'
+import { Route as ResearchThesesNameRouteImport } from './routes/research.theses.$name'
+import { Route as ResearchAgentsRunsRunIdRouteImport } from './routes/research.agents.runs.$runId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -73,19 +75,29 @@ const ResearchIndexRoute = ResearchIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ResearchRoute,
 } as any)
-const ResearchAgentsRoute = ResearchAgentsRouteImport.update({
-  id: '/agents',
-  path: '/agents',
-  getParentRoute: () => ResearchRoute,
-} as any)
 const ResearchKbRoute = ResearchKbRouteImport.update({
   id: '/kb',
   path: '/kb',
   getParentRoute: () => ResearchRoute,
 } as any)
-const ResearchThesesRoute = ResearchThesesRouteImport.update({
-  id: '/theses',
-  path: '/theses',
+const ResearchAgentsIndexRoute = ResearchAgentsIndexRouteImport.update({
+  id: '/agents/',
+  path: '/agents/',
+  getParentRoute: () => ResearchRoute,
+} as any)
+const ResearchThesesIndexRoute = ResearchThesesIndexRouteImport.update({
+  id: '/theses/',
+  path: '/theses/',
+  getParentRoute: () => ResearchRoute,
+} as any)
+const ResearchThesesNameRoute = ResearchThesesNameRouteImport.update({
+  id: '/theses/$name',
+  path: '/theses/$name',
+  getParentRoute: () => ResearchRoute,
+} as any)
+const ResearchAgentsRunsRunIdRoute = ResearchAgentsRunsRunIdRouteImport.update({
+  id: '/agents/runs/$runId',
+  path: '/agents/runs/$runId',
   getParentRoute: () => ResearchRoute,
 } as any)
 
@@ -99,10 +111,12 @@ export interface FileRoutesByFullPath {
   '/system': typeof SystemRoute
   '/feed/$eventId': typeof FeedEventIdRoute
   '/i/$ticker': typeof ITickerRoute
-  '/research/agents': typeof ResearchAgentsRoute
   '/research/kb': typeof ResearchKbRoute
-  '/research/theses': typeof ResearchThesesRoute
   '/research/': typeof ResearchIndexRoute
+  '/research/theses/$name': typeof ResearchThesesNameRoute
+  '/research/agents/': typeof ResearchAgentsIndexRoute
+  '/research/theses/': typeof ResearchThesesIndexRoute
+  '/research/agents/runs/$runId': typeof ResearchAgentsRunsRunIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -113,10 +127,12 @@ export interface FileRoutesByTo {
   '/system': typeof SystemRoute
   '/feed/$eventId': typeof FeedEventIdRoute
   '/i/$ticker': typeof ITickerRoute
-  '/research/agents': typeof ResearchAgentsRoute
   '/research/kb': typeof ResearchKbRoute
-  '/research/theses': typeof ResearchThesesRoute
   '/research': typeof ResearchIndexRoute
+  '/research/theses/$name': typeof ResearchThesesNameRoute
+  '/research/agents': typeof ResearchAgentsIndexRoute
+  '/research/theses': typeof ResearchThesesIndexRoute
+  '/research/agents/runs/$runId': typeof ResearchAgentsRunsRunIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -129,10 +145,12 @@ export interface FileRoutesById {
   '/system': typeof SystemRoute
   '/feed/$eventId': typeof FeedEventIdRoute
   '/i/$ticker': typeof ITickerRoute
-  '/research/agents': typeof ResearchAgentsRoute
   '/research/kb': typeof ResearchKbRoute
-  '/research/theses': typeof ResearchThesesRoute
   '/research/': typeof ResearchIndexRoute
+  '/research/theses/$name': typeof ResearchThesesNameRoute
+  '/research/agents/': typeof ResearchAgentsIndexRoute
+  '/research/theses/': typeof ResearchThesesIndexRoute
+  '/research/agents/runs/$runId': typeof ResearchAgentsRunsRunIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -146,10 +164,12 @@ export interface FileRouteTypes {
     | '/system'
     | '/feed/$eventId'
     | '/i/$ticker'
-    | '/research/agents'
     | '/research/kb'
-    | '/research/theses'
     | '/research/'
+    | '/research/theses/$name'
+    | '/research/agents/'
+    | '/research/theses/'
+    | '/research/agents/runs/$runId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -160,10 +180,12 @@ export interface FileRouteTypes {
     | '/system'
     | '/feed/$eventId'
     | '/i/$ticker'
-    | '/research/agents'
     | '/research/kb'
-    | '/research/theses'
     | '/research'
+    | '/research/theses/$name'
+    | '/research/agents'
+    | '/research/theses'
+    | '/research/agents/runs/$runId'
   id:
     | '__root__'
     | '/'
@@ -175,10 +197,12 @@ export interface FileRouteTypes {
     | '/system'
     | '/feed/$eventId'
     | '/i/$ticker'
-    | '/research/agents'
     | '/research/kb'
-    | '/research/theses'
     | '/research/'
+    | '/research/theses/$name'
+    | '/research/agents/'
+    | '/research/theses/'
+    | '/research/agents/runs/$runId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -264,13 +288,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResearchIndexRouteImport
       parentRoute: typeof ResearchRoute
     }
-    '/research/agents': {
-      id: '/research/agents'
-      path: '/agents'
-      fullPath: '/research/agents'
-      preLoaderRoute: typeof ResearchAgentsRouteImport
-      parentRoute: typeof ResearchRoute
-    }
     '/research/kb': {
       id: '/research/kb'
       path: '/kb'
@@ -278,11 +295,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResearchKbRouteImport
       parentRoute: typeof ResearchRoute
     }
-    '/research/theses': {
-      id: '/research/theses'
+    '/research/agents/': {
+      id: '/research/agents/'
+      path: '/agents'
+      fullPath: '/research/agents/'
+      preLoaderRoute: typeof ResearchAgentsIndexRouteImport
+      parentRoute: typeof ResearchRoute
+    }
+    '/research/theses/': {
+      id: '/research/theses/'
       path: '/theses'
-      fullPath: '/research/theses'
-      preLoaderRoute: typeof ResearchThesesRouteImport
+      fullPath: '/research/theses/'
+      preLoaderRoute: typeof ResearchThesesIndexRouteImport
+      parentRoute: typeof ResearchRoute
+    }
+    '/research/theses/$name': {
+      id: '/research/theses/$name'
+      path: '/theses/$name'
+      fullPath: '/research/theses/$name'
+      preLoaderRoute: typeof ResearchThesesNameRouteImport
+      parentRoute: typeof ResearchRoute
+    }
+    '/research/agents/runs/$runId': {
+      id: '/research/agents/runs/$runId'
+      path: '/agents/runs/$runId'
+      fullPath: '/research/agents/runs/$runId'
+      preLoaderRoute: typeof ResearchAgentsRunsRunIdRouteImport
       parentRoute: typeof ResearchRoute
     }
   }
@@ -299,17 +337,21 @@ const FeedRouteChildren: FeedRouteChildren = {
 const FeedRouteWithChildren = FeedRoute._addFileChildren(FeedRouteChildren)
 
 interface ResearchRouteChildren {
-  ResearchAgentsRoute: typeof ResearchAgentsRoute
   ResearchKbRoute: typeof ResearchKbRoute
-  ResearchThesesRoute: typeof ResearchThesesRoute
   ResearchIndexRoute: typeof ResearchIndexRoute
+  ResearchThesesNameRoute: typeof ResearchThesesNameRoute
+  ResearchAgentsIndexRoute: typeof ResearchAgentsIndexRoute
+  ResearchThesesIndexRoute: typeof ResearchThesesIndexRoute
+  ResearchAgentsRunsRunIdRoute: typeof ResearchAgentsRunsRunIdRoute
 }
 
 const ResearchRouteChildren: ResearchRouteChildren = {
-  ResearchAgentsRoute: ResearchAgentsRoute,
   ResearchKbRoute: ResearchKbRoute,
-  ResearchThesesRoute: ResearchThesesRoute,
   ResearchIndexRoute: ResearchIndexRoute,
+  ResearchThesesNameRoute: ResearchThesesNameRoute,
+  ResearchAgentsIndexRoute: ResearchAgentsIndexRoute,
+  ResearchThesesIndexRoute: ResearchThesesIndexRoute,
+  ResearchAgentsRunsRunIdRoute: ResearchAgentsRunsRunIdRoute,
 }
 
 const ResearchRouteWithChildren = ResearchRoute._addFileChildren(

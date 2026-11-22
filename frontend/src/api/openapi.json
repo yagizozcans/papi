@@ -1,6 +1,104 @@
 {
   "components": {
     "schemas": {
+      "AgentDefOut": {
+        "properties": {
+          "builtin_tools": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Builtin Tools",
+            "type": "array"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "max_budget_usd": {
+            "title": "Max Budget Usd",
+            "type": "number"
+          },
+          "max_turns": {
+            "title": "Max Turns",
+            "type": "integer"
+          },
+          "model": {
+            "title": "Model",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "priority": {
+            "title": "Priority",
+            "type": "string"
+          },
+          "ref_kind": {
+            "enum": [
+              "disclosure",
+              "thesis",
+              "other"
+            ],
+            "title": "Ref Kind",
+            "type": "string"
+          },
+          "skills": {
+            "items": {
+              "$ref": "#/components/schemas/AgentSkillOut"
+            },
+            "title": "Skills",
+            "type": "array"
+          },
+          "timeout_s": {
+            "title": "Timeout S",
+            "type": "number"
+          },
+          "tools": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Tools",
+            "type": "array"
+          },
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "version",
+          "model",
+          "max_turns",
+          "max_budget_usd",
+          "timeout_s",
+          "priority",
+          "skills",
+          "tools",
+          "builtin_tools",
+          "ref_kind"
+        ],
+        "title": "AgentDefOut",
+        "type": "object"
+      },
+      "AgentListOut": {
+        "properties": {
+          "agents": {
+            "items": {
+              "$ref": "#/components/schemas/AgentDefOut"
+            },
+            "title": "Agents",
+            "type": "array"
+          }
+        },
+        "required": [
+          "agents"
+        ],
+        "title": "AgentListOut",
+        "type": "object"
+      },
       "AgentRunBrief": {
         "properties": {
           "agent": {
@@ -96,6 +194,687 @@
           "error"
         ],
         "title": "AgentRunBrief",
+        "type": "object"
+      },
+      "AgentRunDetail": {
+        "properties": {
+          "active": {
+            "title": "Active",
+            "type": "boolean"
+          },
+          "agent": {
+            "title": "Agent",
+            "type": "string"
+          },
+          "agent_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Agent Version"
+          },
+          "calls": {
+            "items": {
+              "$ref": "#/components/schemas/RunCall"
+            },
+            "title": "Calls",
+            "type": "array"
+          },
+          "cost_usd": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cost Usd"
+          },
+          "elapsed_s": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elapsed S"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "gate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gate"
+          },
+          "max_budget_usd": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Budget Usd"
+          },
+          "max_turns": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Turns"
+          },
+          "output": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Output"
+          },
+          "resumed": {
+            "title": "Resumed",
+            "type": "boolean"
+          },
+          "run_id": {
+            "title": "Run Id",
+            "type": "string"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "subject": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subject"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "turns": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Turns"
+          },
+          "usage": {
+            "$ref": "#/components/schemas/RunUsage"
+          },
+          "verdict": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verdict"
+          }
+        },
+        "required": [
+          "run_id",
+          "agent",
+          "subject",
+          "status",
+          "active",
+          "started_at",
+          "finished_at",
+          "elapsed_s",
+          "cost_usd",
+          "max_budget_usd",
+          "turns",
+          "error",
+          "verdict",
+          "agent_version",
+          "max_turns",
+          "gate",
+          "resumed",
+          "usage",
+          "calls",
+          "output",
+          "text"
+        ],
+        "title": "AgentRunDetail",
+        "type": "object"
+      },
+      "AgentRunListOut": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AgentRunRow"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "AgentRunListOut",
+        "type": "object"
+      },
+      "AgentRunRow": {
+        "properties": {
+          "active": {
+            "title": "Active",
+            "type": "boolean"
+          },
+          "agent": {
+            "title": "Agent",
+            "type": "string"
+          },
+          "cost_usd": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cost Usd"
+          },
+          "elapsed_s": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elapsed S"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "max_budget_usd": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Budget Usd"
+          },
+          "run_id": {
+            "title": "Run Id",
+            "type": "string"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "subject": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subject"
+          },
+          "turns": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Turns"
+          },
+          "verdict": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verdict"
+          }
+        },
+        "required": [
+          "run_id",
+          "agent",
+          "subject",
+          "status",
+          "active",
+          "started_at",
+          "finished_at",
+          "elapsed_s",
+          "cost_usd",
+          "max_budget_usd",
+          "turns",
+          "error",
+          "verdict"
+        ],
+        "title": "AgentRunRow",
+        "type": "object"
+      },
+      "AgentSkillOut": {
+        "properties": {
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "tools": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Tools",
+            "type": "array"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "tools"
+        ],
+        "title": "AgentSkillOut",
+        "type": "object"
+      },
+      "AlertRuleIn": {
+        "properties": {
+          "channels": {
+            "items": {
+              "enum": [
+                "telegram",
+                "macos"
+              ],
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Channels",
+            "type": "array"
+          },
+          "enabled": {
+            "default": true,
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "filter": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Filter",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "quiet_hours": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/QuietHours"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "filter"
+        ],
+        "title": "AlertRuleIn",
+        "type": "object"
+      },
+      "AlertRuleOut": {
+        "properties": {
+          "channels": {
+            "items": {
+              "enum": [
+                "telegram",
+                "macos"
+              ],
+              "type": "string"
+            },
+            "title": "Channels",
+            "type": "array"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "filter": {
+            "title": "Filter",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "quiet_hours": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/QuietHours"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "filter",
+          "channels",
+          "quiet_hours",
+          "enabled",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "AlertRuleOut",
+        "type": "object"
+      },
+      "AlertRulePatch": {
+        "description": "Partial update: only the fields present in the body change (``quiet_hours: null`` clears them).",
+        "properties": {
+          "channels": {
+            "anyOf": [
+              {
+                "items": {
+                  "enum": [
+                    "telegram",
+                    "macos"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Channels"
+          },
+          "enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enabled"
+          },
+          "filter": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filter"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "quiet_hours": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/QuietHours"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "AlertRulePatch",
+        "type": "object"
+      },
+      "AlertRulesOut": {
+        "properties": {
+          "fields": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Fields",
+            "type": "array"
+          },
+          "rules": {
+            "items": {
+              "$ref": "#/components/schemas/AlertRuleOut"
+            },
+            "title": "Rules",
+            "type": "array"
+          },
+          "telegram_ready": {
+            "title": "Telegram Ready",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "rules",
+          "fields",
+          "telegram_ready"
+        ],
+        "title": "AlertRulesOut",
+        "type": "object"
+      },
+      "AlertTestIn": {
+        "properties": {
+          "channel": {
+            "default": "telegram",
+            "enum": [
+              "telegram",
+              "macos"
+            ],
+            "title": "Channel",
+            "type": "string"
+          }
+        },
+        "title": "AlertTestIn",
+        "type": "object"
+      },
+      "AlertTestOut": {
+        "properties": {
+          "channel": {
+            "enum": [
+              "telegram",
+              "macos"
+            ],
+            "title": "Channel",
+            "type": "string"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "ok": {
+            "title": "Ok",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ok",
+          "channel",
+          "detail"
+        ],
+        "title": "AlertTestOut",
         "type": "object"
       },
       "AllocationOut": {
@@ -282,6 +1061,39 @@
         "title": "AttentionOut",
         "type": "object"
       },
+      "BarOut": {
+        "properties": {
+          "resets_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resets At"
+          },
+          "utilization": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Utilization"
+          }
+        },
+        "required": [
+          "utilization",
+          "resets_at"
+        ],
+        "title": "BarOut",
+        "type": "object"
+      },
       "BenchmarkPoint": {
         "properties": {
           "date": {
@@ -430,6 +1242,61 @@
           "content"
         ],
         "title": "Body_thesis_save_legacy_theses__name__save_post",
+        "type": "object"
+      },
+      "Body_upload_thesis_v1_theses_upload_post": {
+        "properties": {
+          "direction": {
+            "default": "long",
+            "title": "Direction",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "contentMediaType": "application/octet-stream",
+              "type": "string"
+            },
+            "title": "Files",
+            "type": "array"
+          },
+          "horizon": {
+            "default": "",
+            "title": "Horizon",
+            "type": "string"
+          },
+          "run": {
+            "default": false,
+            "title": "Run",
+            "type": "boolean"
+          },
+          "ticker": {
+            "title": "Ticker",
+            "type": "string"
+          }
+        },
+        "required": [
+          "files",
+          "ticker"
+        ],
+        "title": "Body_upload_thesis_v1_theses_upload_post",
+        "type": "object"
+      },
+      "CheckThesisIn": {
+        "properties": {
+          "content": {
+            "anyOf": [
+              {
+                "maxLength": 200000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content"
+          }
+        },
+        "title": "CheckThesisIn",
         "type": "object"
       },
       "CitationOut": {
@@ -1581,6 +2448,25 @@
         "title": "FeedbackOut",
         "type": "object"
       },
+      "FocusOut": {
+        "properties": {
+          "max_priority": {
+            "title": "Max Priority",
+            "type": "string"
+          },
+          "until": {
+            "format": "date-time",
+            "title": "Until",
+            "type": "string"
+          }
+        },
+        "required": [
+          "max_priority",
+          "until"
+        ],
+        "title": "FocusOut",
+        "type": "object"
+      },
       "ForMeImpact": {
         "properties": {
           "distribution": {
@@ -2462,6 +3348,170 @@
         "title": "LastClose",
         "type": "object"
       },
+      "LlmPauseIn": {
+        "properties": {
+          "minutes": {
+            "anyOf": [
+              {
+                "maximum": 20160.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minutes"
+          },
+          "reason": {
+            "default": "manual",
+            "maxLength": 60,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "title": "LlmPauseIn",
+        "type": "object"
+      },
+      "LlmQueue": {
+        "properties": {
+          "deferred": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Deferred",
+            "type": "object"
+          },
+          "deferred_total": {
+            "title": "Deferred Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "deferred",
+          "deferred_total"
+        ],
+        "title": "LlmQueue",
+        "type": "object"
+      },
+      "LlmStatusOut": {
+        "description": "Governor state (04 §6). Usage and caps are in cost-equivalent units (``total_cost_usd`` estimates).",
+        "properties": {
+          "by_task": {
+            "items": {
+              "$ref": "#/components/schemas/TaskUsage"
+            },
+            "title": "By Task",
+            "type": "array"
+          },
+          "calibration_mode": {
+            "title": "Calibration Mode",
+            "type": "boolean"
+          },
+          "cap_5h": {
+            "title": "Cap 5H",
+            "type": "number"
+          },
+          "cap_chat_5h": {
+            "title": "Cap Chat 5H",
+            "type": "number"
+          },
+          "cap_week": {
+            "title": "Cap Week",
+            "type": "number"
+          },
+          "concurrency": {
+            "title": "Concurrency",
+            "type": "integer"
+          },
+          "focus": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FocusOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "night_window_active": {
+            "title": "Night Window Active",
+            "type": "boolean"
+          },
+          "pause_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pause Reason"
+          },
+          "paused": {
+            "title": "Paused",
+            "type": "boolean"
+          },
+          "paused_until": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Paused Until"
+          },
+          "queue": {
+            "$ref": "#/components/schemas/LlmQueue"
+          },
+          "subscription_bars": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SubscriptionBarsOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "used_5h": {
+            "title": "Used 5H",
+            "type": "number"
+          },
+          "used_chat_5h": {
+            "title": "Used Chat 5H",
+            "type": "number"
+          },
+          "used_week": {
+            "title": "Used Week",
+            "type": "number"
+          }
+        },
+        "required": [
+          "paused",
+          "paused_until",
+          "pause_reason",
+          "used_5h",
+          "cap_5h",
+          "used_chat_5h",
+          "cap_chat_5h",
+          "used_week",
+          "cap_week",
+          "calibration_mode",
+          "focus",
+          "night_window_active",
+          "concurrency",
+          "subscription_bars",
+          "by_task",
+          "queue"
+        ],
+        "title": "LlmStatusOut",
+        "type": "object"
+      },
       "MarketQuote": {
         "properties": {
           "as_of": {
@@ -2539,6 +3589,33 @@
           "as_of"
         ],
         "title": "MarketQuote",
+        "type": "object"
+      },
+      "NewThesisIn": {
+        "properties": {
+          "date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "ticker": {
+            "maxLength": 10,
+            "minLength": 1,
+            "title": "Ticker",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticker"
+        ],
+        "title": "NewThesisIn",
         "type": "object"
       },
       "PendingActionOut": {
@@ -2623,6 +3700,54 @@
           "created_at"
         ],
         "title": "PendingActionOut",
+        "type": "object"
+      },
+      "PendingApplyIn": {
+        "properties": {
+          "quantity_override": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantity Override"
+          }
+        },
+        "title": "PendingApplyIn",
+        "type": "object"
+      },
+      "PendingApplyOut": {
+        "properties": {
+          "pending_id": {
+            "title": "Pending Id",
+            "type": "string"
+          },
+          "txn_id": {
+            "title": "Txn Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "pending_id",
+          "txn_id"
+        ],
+        "title": "PendingApplyOut",
+        "type": "object"
+      },
+      "PendingDismissOut": {
+        "properties": {
+          "pending_id": {
+            "title": "Pending Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "pending_id"
+        ],
+        "title": "PendingDismissOut",
         "type": "object"
       },
       "PendingSummary": {
@@ -3104,6 +4229,60 @@
         "title": "PositionOut",
         "type": "object"
       },
+      "PositionSnap": {
+        "properties": {
+          "avg_cost": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avg Cost"
+          },
+          "cost_total": {
+            "title": "Cost Total",
+            "type": "number"
+          },
+          "market_value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Market Value"
+          },
+          "quantity": {
+            "title": "Quantity",
+            "type": "number"
+          },
+          "weight": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight"
+          }
+        },
+        "required": [
+          "quantity",
+          "avg_cost",
+          "cost_total",
+          "market_value",
+          "weight"
+        ],
+        "title": "PositionSnap",
+        "type": "object"
+      },
       "PriceBarOut": {
         "description": "Daily bar; ``open/high/low/volume`` are null where the source only provides a close (e.g. funds).",
         "properties": {
@@ -3238,6 +4417,26 @@
         "title": "PricesOut",
         "type": "object"
       },
+      "QuietHours": {
+        "properties": {
+          "end": {
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+            "title": "End",
+            "type": "string"
+          },
+          "start": {
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+            "title": "Start",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start",
+          "end"
+        ],
+        "title": "QuietHours",
+        "type": "object"
+      },
       "RevisionLink": {
         "properties": {
           "current": {
@@ -3332,6 +4531,165 @@
           "current"
         ],
         "title": "RevisionLink",
+        "type": "object"
+      },
+      "RuleDeletedOut": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "RuleDeletedOut",
+        "type": "object"
+      },
+      "RuleValidateIn": {
+        "properties": {
+          "filter": {
+            "title": "Filter",
+            "type": "string"
+          }
+        },
+        "required": [
+          "filter"
+        ],
+        "title": "RuleValidateIn",
+        "type": "object"
+      },
+      "RuleValidateOut": {
+        "properties": {
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "ok": {
+            "title": "Ok",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ok",
+          "error"
+        ],
+        "title": "RuleValidateOut",
+        "type": "object"
+      },
+      "RunCall": {
+        "properties": {
+          "args": {
+            "additionalProperties": true,
+            "title": "Args",
+            "type": "object"
+          },
+          "at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "At"
+          },
+          "blocking": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Blocking"
+          },
+          "ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ms"
+          },
+          "ok": {
+            "title": "Ok",
+            "type": "boolean"
+          },
+          "result_excerpt": {
+            "title": "Result Excerpt",
+            "type": "string"
+          },
+          "tool": {
+            "title": "Tool",
+            "type": "string"
+          }
+        },
+        "required": [
+          "at",
+          "tool",
+          "args",
+          "ms",
+          "ok",
+          "blocking",
+          "result_excerpt"
+        ],
+        "title": "RunCall",
+        "type": "object"
+      },
+      "RunUsage": {
+        "properties": {
+          "cache_creation_input_tokens": {
+            "title": "Cache Creation Input Tokens",
+            "type": "integer"
+          },
+          "cache_read_input_tokens": {
+            "title": "Cache Read Input Tokens",
+            "type": "integer"
+          },
+          "input_tokens": {
+            "title": "Input Tokens",
+            "type": "integer"
+          },
+          "output_tokens": {
+            "title": "Output Tokens",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "input_tokens",
+          "output_tokens",
+          "cache_read_input_tokens",
+          "cache_creation_input_tokens"
+        ],
+        "title": "RunUsage",
+        "type": "object"
+      },
+      "SaveThesisIn": {
+        "properties": {
+          "content": {
+            "maxLength": 200000,
+            "title": "Content",
+            "type": "string"
+          }
+        },
+        "required": [
+          "content"
+        ],
+        "title": "SaveThesisIn",
         "type": "object"
       },
       "SearchOut": {
@@ -3551,6 +4909,56 @@
         "title": "SpanOut",
         "type": "object"
       },
+      "StartRunIn": {
+        "properties": {
+          "agent": {
+            "maxLength": 60,
+            "minLength": 1,
+            "title": "Agent",
+            "type": "string"
+          },
+          "ref": {
+            "maxLength": 40,
+            "minLength": 1,
+            "title": "Ref",
+            "type": "string"
+          }
+        },
+        "required": [
+          "agent",
+          "ref"
+        ],
+        "title": "StartRunIn",
+        "type": "object"
+      },
+      "StartRunOut": {
+        "properties": {
+          "agent": {
+            "title": "Agent",
+            "type": "string"
+          },
+          "max_budget_usd": {
+            "title": "Max Budget Usd",
+            "type": "number"
+          },
+          "ref": {
+            "title": "Ref",
+            "type": "string"
+          },
+          "run_id": {
+            "title": "Run Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "run_id",
+          "agent",
+          "ref",
+          "max_budget_usd"
+        ],
+        "title": "StartRunOut",
+        "type": "object"
+      },
       "StatusOut": {
         "properties": {
           "governor": {
@@ -3639,6 +5047,54 @@
           "server_time"
         ],
         "title": "StatusOut",
+        "type": "object"
+      },
+      "SubscriptionBarsOut": {
+        "properties": {
+          "five_hour": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BarOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "observed_at": {
+            "format": "date-time",
+            "title": "Observed At",
+            "type": "string"
+          },
+          "seven_day": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BarOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          }
+        },
+        "required": [
+          "observed_at",
+          "status",
+          "five_hour",
+          "seven_day"
+        ],
+        "title": "SubscriptionBarsOut",
         "type": "object"
       },
       "SummariesOut": {
@@ -3733,6 +5189,39 @@
         "title": "SupersededEvent",
         "type": "object"
       },
+      "TaskUsage": {
+        "properties": {
+          "avg_cost": {
+            "title": "Avg Cost",
+            "type": "number"
+          },
+          "calls": {
+            "title": "Calls",
+            "type": "integer"
+          },
+          "cost": {
+            "title": "Cost",
+            "type": "number"
+          },
+          "failures": {
+            "title": "Failures",
+            "type": "integer"
+          },
+          "task": {
+            "title": "Task",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task",
+          "calls",
+          "cost",
+          "avg_cost",
+          "failures"
+        ],
+        "title": "TaskUsage",
+        "type": "object"
+      },
       "TelegramStatus": {
         "properties": {
           "enabled": {
@@ -3749,6 +5238,436 @@
           "ready"
         ],
         "title": "TelegramStatus",
+        "type": "object"
+      },
+      "ThesisCheckOut": {
+        "description": "Deterministic check: ``errors`` stop a review, ``gaps`` are reported but allowed.",
+        "properties": {
+          "errors": {
+            "items": {
+              "$ref": "#/components/schemas/ThesisIssue"
+            },
+            "title": "Errors",
+            "type": "array"
+          },
+          "gaps": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Gaps",
+            "type": "array"
+          },
+          "kill_signals": {
+            "title": "Kill Signals",
+            "type": "integer"
+          },
+          "ok": {
+            "title": "Ok",
+            "type": "boolean"
+          },
+          "sections_filled": {
+            "title": "Sections Filled",
+            "type": "integer"
+          },
+          "sections_total": {
+            "title": "Sections Total",
+            "type": "integer"
+          },
+          "triggers": {
+            "title": "Triggers",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "ok",
+          "errors",
+          "gaps",
+          "sections_filled",
+          "sections_total",
+          "triggers",
+          "kill_signals"
+        ],
+        "title": "ThesisCheckOut",
+        "type": "object"
+      },
+      "ThesisDetail": {
+        "properties": {
+          "active": {
+            "title": "Active",
+            "type": "boolean"
+          },
+          "check": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ThesisCheckOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "direction": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Direction"
+          },
+          "error_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Count"
+          },
+          "files": {
+            "title": "Files",
+            "type": "integer"
+          },
+          "files_done": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Files Done"
+          },
+          "gap_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gap Count"
+          },
+          "horizon": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Horizon"
+          },
+          "last_review": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ThesisReviewRow"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "outline": {
+            "items": {
+              "$ref": "#/components/schemas/ThesisOutlineItem"
+            },
+            "title": "Outline",
+            "type": "array"
+          },
+          "pages": {
+            "items": {
+              "$ref": "#/components/schemas/ThesisPage"
+            },
+            "title": "Pages",
+            "type": "array"
+          },
+          "pages_done": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pages Done"
+          },
+          "reviews": {
+            "title": "Reviews",
+            "type": "integer"
+          },
+          "run_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run Id"
+          },
+          "source_files": {
+            "items": {
+              "$ref": "#/components/schemas/ThesisFile"
+            },
+            "title": "Source Files",
+            "type": "array"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "status_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status Error"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "ticker": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ticker"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Warnings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "name",
+          "ticker",
+          "date",
+          "direction",
+          "horizon",
+          "status",
+          "active",
+          "error_count",
+          "gap_count",
+          "reviews",
+          "last_review",
+          "files",
+          "text",
+          "check",
+          "outline",
+          "warnings",
+          "status_error",
+          "files_done",
+          "pages_done",
+          "run_id",
+          "source_files",
+          "pages"
+        ],
+        "title": "ThesisDetail",
+        "type": "object"
+      },
+      "ThesisFile": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "size": {
+            "title": "Size",
+            "type": "integer"
+          },
+          "url": {
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "size",
+          "url"
+        ],
+        "title": "ThesisFile",
+        "type": "object"
+      },
+      "ThesisIssue": {
+        "properties": {
+          "line": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Line"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "line"
+        ],
+        "title": "ThesisIssue",
+        "type": "object"
+      },
+      "ThesisListOut": {
+        "properties": {
+          "accept": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Accept",
+            "type": "array"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ThesisRow"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items",
+          "accept"
+        ],
+        "title": "ThesisListOut",
+        "type": "object"
+      },
+      "ThesisOutlineItem": {
+        "properties": {
+          "empty": {
+            "title": "Empty",
+            "type": "boolean"
+          },
+          "items": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Items"
+          },
+          "key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Key"
+          },
+          "line": {
+            "title": "Line",
+            "type": "integer"
+          },
+          "required": {
+            "title": "Required",
+            "type": "boolean"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "line",
+          "title",
+          "key",
+          "required",
+          "items",
+          "empty"
+        ],
+        "title": "ThesisOutlineItem",
+        "type": "object"
+      },
+      "ThesisPage": {
+        "properties": {
+          "file": {
+            "title": "File",
+            "type": "string"
+          },
+          "method": {
+            "title": "Method",
+            "type": "string"
+          },
+          "number": {
+            "title": "Number",
+            "type": "integer"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "uncertain": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Uncertain",
+            "type": "array"
+          }
+        },
+        "required": [
+          "file",
+          "number",
+          "method",
+          "text",
+          "uncertain"
+        ],
+        "title": "ThesisPage",
         "type": "object"
       },
       "ThesisRef": {
@@ -3828,6 +5747,190 @@
           "last_verdict"
         ],
         "title": "ThesisRef",
+        "type": "object"
+      },
+      "ThesisReviewRow": {
+        "properties": {
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence"
+          },
+          "cost_usd": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cost Usd"
+          },
+          "run_id": {
+            "title": "Run Id",
+            "type": "string"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "verdict": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verdict"
+          }
+        },
+        "required": [
+          "run_id",
+          "status",
+          "verdict",
+          "confidence",
+          "started_at",
+          "cost_usd"
+        ],
+        "title": "ThesisReviewRow",
+        "type": "object"
+      },
+      "ThesisRow": {
+        "properties": {
+          "active": {
+            "title": "Active",
+            "type": "boolean"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "direction": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Direction"
+          },
+          "error_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Count"
+          },
+          "files": {
+            "title": "Files",
+            "type": "integer"
+          },
+          "gap_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gap Count"
+          },
+          "horizon": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Horizon"
+          },
+          "last_review": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ThesisReviewRow"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "reviews": {
+            "title": "Reviews",
+            "type": "integer"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "ticker": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ticker"
+          }
+        },
+        "required": [
+          "name",
+          "ticker",
+          "date",
+          "direction",
+          "horizon",
+          "status",
+          "active",
+          "error_count",
+          "gap_count",
+          "reviews",
+          "last_review",
+          "files"
+        ],
+        "title": "ThesisRow",
         "type": "object"
       },
       "TodayOut": {
@@ -3974,6 +6077,97 @@
           "positions"
         ],
         "title": "TodayPortfolio",
+        "type": "object"
+      },
+      "TxnIn": {
+        "description": "A manual ledger entry. ``dry_run`` previews the resulting position without writing anything.",
+        "properties": {
+          "dry_run": {
+            "default": false,
+            "title": "Dry Run",
+            "type": "boolean"
+          },
+          "fees": {
+            "default": 0.0,
+            "title": "Fees",
+            "type": "number"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price"
+          },
+          "quantity": {
+            "title": "Quantity",
+            "type": "number"
+          },
+          "ticker": {
+            "anyOf": [
+              {
+                "maxLength": 40,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ticker"
+          },
+          "trade_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trade Date"
+          },
+          "type": {
+            "enum": [
+              "buy",
+              "sell",
+              "dividend_cash",
+              "bonus_shares",
+              "rights_subscription",
+              "rights_sale",
+              "split",
+              "fee",
+              "tax",
+              "transfer_in",
+              "transfer_out",
+              "opening_balance",
+              "reconcile_adjustment"
+            ],
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "quantity"
+        ],
+        "title": "TxnIn",
         "type": "object"
       },
       "TxnMarker": {
@@ -4135,6 +6329,253 @@
         "title": "TxnOut",
         "type": "object"
       },
+      "TxnResultOut": {
+        "properties": {
+          "after": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PositionSnap"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "before": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PositionSnap"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "committed": {
+            "title": "Committed",
+            "type": "boolean"
+          },
+          "fees": {
+            "title": "Fees",
+            "type": "number"
+          },
+          "gross": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gross"
+          },
+          "instrument_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Instrument Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price"
+          },
+          "quantity": {
+            "title": "Quantity",
+            "type": "number"
+          },
+          "ticker": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ticker"
+          },
+          "trade_date": {
+            "format": "date",
+            "title": "Trade Date",
+            "type": "string"
+          },
+          "txn_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Txn Id"
+          },
+          "type": {
+            "enum": [
+              "buy",
+              "sell",
+              "dividend_cash",
+              "bonus_shares",
+              "rights_subscription",
+              "rights_sale",
+              "split",
+              "fee",
+              "tax",
+              "transfer_in",
+              "transfer_out",
+              "opening_balance",
+              "reconcile_adjustment"
+            ],
+            "title": "Type",
+            "type": "string"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Warnings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "committed",
+          "txn_id",
+          "type",
+          "ticker",
+          "instrument_id",
+          "name",
+          "quantity",
+          "price",
+          "fees",
+          "trade_date",
+          "gross",
+          "warnings",
+          "before",
+          "after"
+        ],
+        "title": "TxnResultOut",
+        "type": "object"
+      },
+      "UndoIn": {
+        "properties": {
+          "reason": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "txn_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Txn Id"
+          }
+        },
+        "title": "UndoIn",
+        "type": "object"
+      },
+      "UndoOut": {
+        "properties": {
+          "reversal_id": {
+            "title": "Reversal Id",
+            "type": "string"
+          },
+          "undone": {
+            "$ref": "#/components/schemas/TxnOut"
+          }
+        },
+        "required": [
+          "undone",
+          "reversal_id"
+        ],
+        "title": "UndoOut",
+        "type": "object"
+      },
+      "UnwatchOut": {
+        "properties": {
+          "ref": {
+            "title": "Ref",
+            "type": "string"
+          },
+          "removed": {
+            "title": "Removed",
+            "type": "boolean"
+          },
+          "watchlist": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WatchlistSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "ref",
+          "removed",
+          "watchlist"
+        ],
+        "title": "UnwatchOut",
+        "type": "object"
+      },
+      "UploadThesisOut": {
+        "properties": {
+          "files": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Files",
+            "type": "array"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "files"
+        ],
+        "title": "UploadThesisOut",
+        "type": "object"
+      },
       "ValidationError": {
         "properties": {
           "ctx": {
@@ -4173,6 +6614,28 @@
           "type"
         ],
         "title": "ValidationError",
+        "type": "object"
+      },
+      "WatchIn": {
+        "properties": {
+          "ref": {
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Ref",
+            "type": "string"
+          },
+          "watchlist": {
+            "default": "Ana",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Watchlist",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ref"
+        ],
+        "title": "WatchIn",
         "type": "object"
       },
       "WatchMember": {
@@ -4221,6 +6684,28 @@
         "title": "WatchMember",
         "type": "object"
       },
+      "WatchOut": {
+        "properties": {
+          "changed": {
+            "title": "Changed",
+            "type": "boolean"
+          },
+          "ref": {
+            "title": "Ref",
+            "type": "string"
+          },
+          "watchlist": {
+            "$ref": "#/components/schemas/WatchlistSummary"
+          }
+        },
+        "required": [
+          "ref",
+          "changed",
+          "watchlist"
+        ],
+        "title": "WatchOut",
+        "type": "object"
+      },
       "WatchlistOut": {
         "properties": {
           "id": {
@@ -4261,6 +6746,48 @@
           "indices"
         ],
         "title": "WatchlistOut",
+        "type": "object"
+      },
+      "WatchlistSummary": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "indices": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Indices",
+            "type": "array"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "sectors": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Sectors",
+            "type": "array"
+          },
+          "tickers": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Tickers",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "tickers",
+          "sectors",
+          "indices"
+        ],
+        "title": "WatchlistSummary",
         "type": "object"
       }
     }
@@ -5047,6 +7574,520 @@
         "summary": "Raw Download"
       }
     },
+    "/v1/agent-runs": {
+      "get": {
+        "operationId": "list_agent_runs_v1_agent_runs_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "agent",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Agent"
+            }
+          },
+          {
+            "description": "Exact run subject (KAP no, thesis name).",
+            "in": "query",
+            "name": "ref",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Exact run subject (KAP no, thesis name).",
+              "title": "Ref"
+            }
+          },
+          {
+            "description": "A run status, or `active` for runs in progress.",
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "A run status, or `active` for runs in progress.",
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentRunListOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Agent Runs"
+      },
+      "post": {
+        "description": "Start a run in the background (the CLI process); poll ``GET /agent-runs/{id}`` for progress.",
+        "operationId": "start_agent_run_v1_agent_runs_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartRunIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartRunOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Start Agent Run"
+      }
+    },
+    "/v1/agent-runs/{run_id}": {
+      "get": {
+        "operationId": "get_agent_run_v1_agent_runs__run_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "title": "Run Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentRunDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Agent Run"
+      }
+    },
+    "/v1/agents": {
+      "get": {
+        "operationId": "list_agent_defs_v1_agents_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentListOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Agent Defs"
+      }
+    },
+    "/v1/alerts/rules": {
+      "get": {
+        "operationId": "get_alert_rules_v1_alerts_rules_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertRulesOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Alert Rules"
+      },
+      "post": {
+        "operationId": "create_alert_rule_v1_alerts_rules_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlertRuleIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertRuleOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "summary": "Create Alert Rule"
+      }
+    },
+    "/v1/alerts/rules/validate": {
+      "post": {
+        "operationId": "validate_alert_rule_v1_alerts_rules_validate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RuleValidateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RuleValidateOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Validate Alert Rule"
+      }
+    },
+    "/v1/alerts/rules/{rule_id}": {
+      "delete": {
+        "description": "Delete a rule; notifications it already sent stay (their ``alert_rule_id`` is cleared).",
+        "operationId": "delete_alert_rule_v1_alerts_rules__rule_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "rule_id",
+            "required": true,
+            "schema": {
+              "title": "Rule Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RuleDeletedOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "summary": "Delete Alert Rule"
+      },
+      "patch": {
+        "operationId": "update_alert_rule_v1_alerts_rules__rule_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "rule_id",
+            "required": true,
+            "schema": {
+              "title": "Rule Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlertRulePatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertRuleOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "summary": "Update Alert Rule"
+      }
+    },
+    "/v1/alerts/test": {
+      "post": {
+        "description": "Send a test notification on one channel; failures are reported in the body (``ok: false``).",
+        "operationId": "send_test_notification_v1_alerts_test_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/AlertTestIn"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertTestOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Send Test Notification"
+      }
+    },
     "/v1/disclosures/{disclosure_id}": {
       "get": {
         "operationId": "get_disclosure_v1_disclosures__disclosure_id__get",
@@ -5779,6 +8820,70 @@
         "summary": "Get Issuer"
       }
     },
+    "/v1/llm/governor/pause": {
+      "post": {
+        "description": "Pause all Claude calls for ``minutes`` (default: until resumed).",
+        "operationId": "llm_governor_pause_v1_llm_governor_pause_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/LlmPauseIn"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LlmStatusOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Llm Governor Pause"
+      }
+    },
+    "/v1/llm/governor/resume": {
+      "post": {
+        "operationId": "llm_governor_resume_v1_llm_governor_resume_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LlmStatusOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Llm Governor Resume"
+      }
+    },
     "/v1/llm/pause": {
       "post": {
         "operationId": "llm_pause_v1_llm_pause_post",
@@ -5809,6 +8914,24 @@
           }
         },
         "summary": "Llm Resume"
+      }
+    },
+    "/v1/llm/status": {
+      "get": {
+        "operationId": "llm_status_v1_llm_status_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LlmStatusOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Llm Status"
       }
     },
     "/v1/portfolio": {
@@ -5843,6 +8966,141 @@
           }
         },
         "summary": "Get Portfolio Overview"
+      }
+    },
+    "/v1/portfolio/pending/{pending_id}/apply": {
+      "post": {
+        "operationId": "apply_pending_v1_portfolio_pending__pending_id__apply_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pending_id",
+            "required": true,
+            "schema": {
+              "title": "Pending Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/PendingApplyIn"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PendingApplyOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "summary": "Apply Pending"
+      }
+    },
+    "/v1/portfolio/pending/{pending_id}/dismiss": {
+      "post": {
+        "operationId": "dismiss_pending_v1_portfolio_pending__pending_id__dismiss_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pending_id",
+            "required": true,
+            "schema": {
+              "title": "Pending Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PendingDismissOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "summary": "Dismiss Pending"
       }
     },
     "/v1/portfolio/performance": {
@@ -5948,6 +9206,122 @@
           }
         },
         "summary": "Get Transactions"
+      },
+      "post": {
+        "description": "Record a manual transaction, or with ``dry_run`` only compute the position change (nothing is\nwritten: the insert runs in a transaction that is rolled back).",
+        "operationId": "post_transaction_v1_portfolio_transactions_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TxnIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TxnResultOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "summary": "Post Transaction"
+      }
+    },
+    "/v1/portfolio/transactions/undo": {
+      "post": {
+        "description": "Append the reversing entry of ``txn_id`` (default: the most recently entered live transaction).",
+        "operationId": "undo_transaction_v1_portfolio_transactions_undo_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UndoIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UndoOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "summary": "Undo Transaction"
       }
     },
     "/v1/search": {
@@ -6080,6 +9454,495 @@
         "summary": "Api Stream"
       }
     },
+    "/v1/theses": {
+      "get": {
+        "operationId": "list_theses_v1_theses_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThesisListOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Theses"
+      },
+      "post": {
+        "description": "Create ``<TICKER>-<date>.md`` from the fixed template (like ``papi thesis new``).",
+        "operationId": "new_thesis_v1_theses_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewThesisIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThesisDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "New Thesis"
+      }
+    },
+    "/v1/theses/upload": {
+      "post": {
+        "description": "Store the papers in upload order and read them in the background (``papi thesis import``).\n\n``run`` also starts the strategy analyst once the text is read (costs money); off by default.",
+        "operationId": "upload_thesis_v1_theses_upload_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_thesis_v1_theses_upload_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadThesisOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Upload Thesis"
+      }
+    },
+    "/v1/theses/{name}": {
+      "get": {
+        "operationId": "get_thesis_v1_theses__name__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThesisDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Thesis"
+      }
+    },
+    "/v1/theses/{name}/check": {
+      "post": {
+        "description": "Deterministic check of the saved file, or of ``content`` (an unsaved draft).",
+        "operationId": "check_thesis_v1_theses__name__check_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/CheckThesisIn"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThesisCheckOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Check Thesis"
+      }
+    },
+    "/v1/theses/{name}/files/{file_name}": {
+      "get": {
+        "operationId": "download_thesis_file_v1_theses__name__files__file_name__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "file_name",
+            "required": true,
+            "schema": {
+              "title": "File Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Download Thesis File"
+      }
+    },
+    "/v1/theses/{name}/review": {
+      "post": {
+        "description": "Start a strategy-analyst run on the thesis (costs up to the agent's budget).",
+        "operationId": "start_thesis_review_v1_theses__name__review_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartRunOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "summary": "Start Thesis Review"
+      }
+    },
+    "/v1/theses/{name}/reviews": {
+      "get": {
+        "operationId": "list_thesis_reviews_v1_theses__name__reviews_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ThesisReviewRow"
+                  },
+                  "title": "Response List Thesis Reviews V1 Theses  Name  Reviews Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Thesis Reviews"
+      }
+    },
+    "/v1/theses/{name}/text": {
+      "put": {
+        "description": "Save the edited Markdown as is; the response carries the parse check of the saved text.",
+        "operationId": "save_thesis_v1_theses__name__text_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveThesisIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThesisDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "summary": "Save Thesis"
+      }
+    },
     "/v1/today": {
       "get": {
         "description": "The Today page in one call. papi stores no read/ack state, so ``attention`` returns every P1/P2\nevent on holdings/watchlist of the last 48 h and the client tracks what the user has seen.",
@@ -6137,6 +10000,136 @@
           }
         },
         "summary": "Get Usage"
+      }
+    },
+    "/v1/watchlist": {
+      "delete": {
+        "operationId": "unwatch_v1_watchlist_delete",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "ref",
+            "required": true,
+            "schema": {
+              "maxLength": 80,
+              "minLength": 1,
+              "title": "Ref",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "watchlist",
+            "required": false,
+            "schema": {
+              "default": "Ana",
+              "maxLength": 80,
+              "minLength": 1,
+              "title": "Watchlist",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnwatchOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "summary": "Unwatch"
+      },
+      "post": {
+        "description": "Add a ticker, ``XU030`` / ``endeks:XU030`` or ``sektor:<kod>`` to a watchlist (created if missing).",
+        "operationId": "watch_v1_watchlist_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WatchIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WatchOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "summary": "Watch"
       }
     }
   }

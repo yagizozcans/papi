@@ -22,6 +22,7 @@ import { toPriority } from '../shared/priority'
 import { errorText, SkeletonLines } from '../shared/states'
 import { useDocumentTitle } from '../shared/use-document-title'
 import { type TodayOut, useMonthPerformance, useToday } from './api'
+import { PendingRow } from '../portfolio/pending'
 import { useSeenAttention } from './seen'
 
 const DASH = '–'
@@ -192,11 +193,7 @@ function AttentionPanel({ data, loading }: { data?: TodayOut; loading: boolean }
           {!!pending?.count && (
             <AttentionGroup label={t('today.attention.pending', { count: pending.count })} to="/portfolio">
               {pending.items.map((a) => (
-                <div key={a.id} className="flex flex-wrap items-center gap-2 text-sm">
-                  {a.ticker && <TickerChip ticker={a.ticker} />}
-                  <span>{a.kind}</span>
-                  {a.ex_date && <span className="num text-muted-foreground">{a.ex_date}</span>}
-                </div>
+                <PendingRow key={a.id} action={a} />
               ))}
             </AttentionGroup>
           )}
@@ -310,10 +307,14 @@ const RUN_VARIANT: Record<string, 'up' | 'down' | 'brand' | 'outline'> = {
   running: 'brand',
 }
 
-export function AgentRunRow({ run }: { run: AgentRunBrief }) {
+/** `linked` makes the whole row a link to the live run page (Research > Agents). */
+export function AgentRunRow({ run, linked }: { run: AgentRunBrief; linked?: boolean }) {
   const { t } = useTranslation()
   return (
-    <li className="flex items-center gap-2 border-b border-border px-3 py-2 last:border-b-0" data-testid="agent-run">
+    <li className={cn('flex items-center gap-2 border-b border-border px-3 py-2 last:border-b-0', linked && 'relative hover:bg-accent/50')} data-testid="agent-run">
+      {linked && (
+        <Link to="/research/agents/runs/$runId" params={{ runId: run.run_id }} className="absolute inset-0" aria-label={`${run.agent} ${run.subject ?? ''}`} />
+      )}
       <Cpu className="size-3.5 shrink-0 text-muted-foreground" />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
