@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as KitchenRouteImport } from './routes/[_]kitchen'
 import { Route as FeedRouteImport } from './routes/feed'
 import { Route as LabRouteImport } from './routes/lab'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
@@ -24,6 +25,11 @@ import { Route as ResearchThesesRouteImport } from './routes/research.theses'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KitchenRoute = KitchenRouteImport.update({
+  id: '/_kitchen',
+  path: '/_kitchen',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FeedRoute = FeedRouteImport.update({
@@ -79,6 +85,7 @@ const ResearchThesesRoute = ResearchThesesRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/_kitchen': typeof KitchenRoute
   '/feed': typeof FeedRoute
   '/lab': typeof LabRoute
   '/portfolio': typeof PortfolioRoute
@@ -92,6 +99,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/_kitchen': typeof KitchenRoute
   '/feed': typeof FeedRoute
   '/lab': typeof LabRoute
   '/portfolio': typeof PortfolioRoute
@@ -105,6 +113,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_kitchen': typeof KitchenRoute
   '/feed': typeof FeedRoute
   '/lab': typeof LabRoute
   '/portfolio': typeof PortfolioRoute
@@ -120,6 +129,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/_kitchen'
     | '/feed'
     | '/lab'
     | '/portfolio'
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/_kitchen'
     | '/feed'
     | '/lab'
     | '/portfolio'
@@ -145,6 +156,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/_kitchen'
     | '/feed'
     | '/lab'
     | '/portfolio'
@@ -159,6 +171,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  KitchenRoute: typeof KitchenRoute
   FeedRoute: typeof FeedRoute
   LabRoute: typeof LabRoute
   PortfolioRoute: typeof PortfolioRoute
@@ -174,6 +187,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_kitchen': {
+      id: '/_kitchen'
+      path: '/_kitchen'
+      fullPath: '/_kitchen'
+      preLoaderRoute: typeof KitchenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/feed': {
@@ -269,6 +289,7 @@ const ResearchRouteWithChildren = ResearchRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  KitchenRoute: KitchenRoute,
   FeedRoute: FeedRoute,
   LabRoute: LabRoute,
   PortfolioRoute: PortfolioRoute,

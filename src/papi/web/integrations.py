@@ -58,6 +58,13 @@ def pending_actions(conn: Connection, status: str = "expected") -> list[dict] | 
     return list(mod.pending_actions(conn, status=status))
 
 
+def watchlists(conn: Connection) -> list[dict] | None:
+    mod = _optional("papi.portfolio.service")
+    if mod is None:
+        return None
+    return list(mod.watchlists(conn))
+
+
 def apply_pending_action(conn: Connection, pending_action_id: str, quantity_override: Decimal | None) -> str:
     mod = _required("papi.portfolio.service")
     return mod.apply_pending_action(conn, pending_action_id, quantity_override=quantity_override)

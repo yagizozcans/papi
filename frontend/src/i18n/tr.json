@@ -167,5 +167,75 @@
     "goTo": "Sayfaya git",
     "then": "sonra"
   },
-  "toast": { "close": "Kapat" }
+  "toast": { "close": "Kapat" },
+  "kit": {
+    "time": {
+      "now": "şimdi",
+      "s": "{{n}} sn önce",
+      "m": "{{n}} dk önce",
+      "h": "{{n}} sa önce",
+      "d": "{{n}} gün önce"
+    },
+    "holding": "Portföyde",
+    "watch": "İzleme listesinde",
+    "common": {
+      "empty": "Veri yok",
+      "error": "Yüklenemedi",
+      "retry": "Yeniden dene",
+      "loading": "Yükleniyor"
+    },
+    "table": {
+      "columns": "Sütunlar",
+      "sortedAsc": "artan",
+      "sortedDesc": "azalan"
+    },
+    "chart": {
+      "label": "Fiyat grafiği",
+      "line": "Çizgi",
+      "candles": "Mum",
+      "volume": "Hacim",
+      "open": "A",
+      "high": "Y",
+      "low": "D",
+      "close": "K",
+      "buy": "Alım",
+      "sell": "Satım",
+      "noData": "Fiyat verisi yok",
+      "range": {
+        "1m": "1A",
+        "3m": "3A",
+        "6m": "6A",
+        "1y": "1Y",
+        "ytd": "YBİ",
+        "all": "Tümü"
+      }
+    },
+    "split": {
+      "back": "Geri",
+      "resize": "Panel genişliğini ayarla",
+      "selectItem": "Ayrıntı için bir öğe seç"
+    },
+    "filter": {
+      "label": "Filtreler",
+      "scope": "Kapsam",
+      "priority": "Öncelik",
+      "range": "Tarih",
+      "ticker": "Kod",
+      "family": "Aile",
+      "all": "Tümü",
+      "clear": "Temizle",
+      "tickerPlaceholder": "Hisse kodu",
+      "ranges": {
+        "all": "Tüm zamanlar",
+        "today": "Bugün",
+        "7d": "Son 7 gün",
+        "30d": "Son 30 gün",
+        "90d": "Son 90 gün"
+      }
+    },
+    "live": {
+      "newItems_one": "{{count}} yeni bildirim",
+      "newItems_other": "{{count}} yeni bildirim"
+    }
+  }
 }

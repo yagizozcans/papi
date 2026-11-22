@@ -456,6 +456,98 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/events/{event_id}/detail": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Event Detail */
+        get: operations["get_event_detail_v1_events__event_id__detail_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/events/{event_id}/feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Post Event Feedback */
+        post: operations["post_event_feedback_v1_events__event_id__feedback_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/feed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Feed
+         * @description Disclosure tape. Page back with ``before=<next_cursor>``; poll new items with
+         *     ``after=<newest published_key>`` (inclusive, so the client de-duplicates by ``id``).
+         */
+        get: operations["get_feed_v1_feed_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/instruments/{ticker}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Instrument */
+        get: operations["get_instrument_v1_instruments__ticker__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/instruments/{ticker}/prices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Instrument Prices
+         * @description Daily bars (default: the last 365 days) with disclosure and transaction markers for the chart.
+         */
+        get: operations["get_instrument_prices_v1_instruments__ticker__prices_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/issuers": {
         parameters: {
             query?: never;
@@ -541,6 +633,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/portfolio/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Portfolio Overview */
+        get: operations["get_portfolio_overview_v1_portfolio_overview_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/portfolio/performance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Portfolio Performance
+         * @description Daily portfolio value reconstructed from the transaction ledger x daily closes (last known close is
+         *     carried over days without a bar). ``return_index`` is a price-return index (flows excluded).
+         */
+        get: operations["get_portfolio_performance_v1_portfolio_performance_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/portfolio/positions": {
         parameters: {
             query?: never;
@@ -567,6 +697,27 @@ export interface paths {
         };
         /** Get Transactions */
         get: operations["get_transactions_v1_portfolio_transactions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Search
+         * @description Command-palette search: instruments/issuers (holdings first, then watchlist, then by match
+         *     quality) and disclosures (full text, best first).
+         */
+        get: operations["search_v1_search_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -618,6 +769,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/today": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Today
+         * @description The Today page in one call. papi stores no read/ack state, so ``attention`` returns every P1/P2
+         *     event on holdings/watchlist of the last 48 h and the client tracks what the user has seen.
+         */
+        get: operations["get_today_v1_today_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/usage": {
         parameters: {
             query?: never;
@@ -639,6 +811,98 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AgentRunBrief */
+        AgentRunBrief: {
+            /** Agent */
+            agent: string;
+            /** Cost Usd */
+            cost_usd: number | null;
+            /** Error */
+            error: string | null;
+            /** Finished At */
+            finished_at: string | null;
+            /** Run Id */
+            run_id: string;
+            /** Started At */
+            started_at: string | null;
+            /** Status */
+            status: string;
+            /** Subject */
+            subject: string | null;
+            /** Turns */
+            turns: number | null;
+        };
+        /** AllocationOut */
+        AllocationOut: {
+            /** By Instrument */
+            by_instrument: components["schemas"]["AllocationSlice"][];
+            /** By Kind */
+            by_kind: components["schemas"]["AllocationSlice"][];
+            /** By Sector */
+            by_sector: components["schemas"]["AllocationSlice"][];
+        };
+        /** AllocationSlice */
+        AllocationSlice: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Value */
+            value: number;
+            /** Weight */
+            weight: number;
+        };
+        /** AnalysisOut */
+        AnalysisOut: {
+            /** Agent */
+            agent: string;
+            /** Backend */
+            backend: string;
+            /** Claims */
+            claims: components["schemas"]["ClaimOut"][];
+            /** Confidence */
+            confidence: number | null;
+            /** Cost Usd Est */
+            cost_usd_est: number | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Id */
+            id: string;
+            /** Latency Ms */
+            latency_ms: number | null;
+            /** Model Ids */
+            model_ids: string[];
+            /** Output */
+            output: unknown;
+            /** Prompt Version */
+            prompt_version: string | null;
+            /** Review State */
+            review_state: string;
+        };
+        /**
+         * AttentionOut
+         * @description Recent P1/P2 events on holdings/watchlist. papi keeps no read/ack state, so the client tracks
+         *     seen-ness (by ``id`` / ``published_key``).
+         */
+        AttentionOut: {
+            /** Items */
+            items: components["schemas"]["FeedItem"][];
+            /** Window Hours */
+            window_hours: number;
+        };
+        /** BenchmarkPoint */
+        BenchmarkPoint: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Value */
+            value: number;
+        };
         /** Body_agents_start_agents_run_post */
         Body_agents_start_agents_run_post: {
             /** Agent */
@@ -689,6 +953,386 @@ export interface components {
             /** Content */
             content: string;
         };
+        /** CitationOut */
+        CitationOut: {
+            /** Anchor */
+            anchor: string | null;
+            /** Quote */
+            quote: string | null;
+            /** Target Id */
+            target_id: string;
+            /** Target Type */
+            target_type: string;
+        };
+        /** ClaimOut */
+        ClaimOut: {
+            /** Check Status */
+            check_status: string | null;
+            /** Citations */
+            citations: components["schemas"]["CitationOut"][];
+            /** Id */
+            id: string;
+            /** Kind */
+            kind: string;
+            /** Text En */
+            text_en: string | null;
+            /** Text Tr */
+            text_tr: string | null;
+            /** Unit */
+            unit: string | null;
+            /** Value */
+            value: string | null;
+            /** Verify Status */
+            verify_status: string | null;
+        };
+        /** DisclosureHit */
+        DisclosureHit: {
+            /** Disclosure Id */
+            disclosure_id: string;
+            /** Event Id */
+            event_id: string | null;
+            /** Headline */
+            headline: string;
+            /** Kap Url */
+            kap_url: string | null;
+            /** Priority */
+            priority: string | null;
+            /** Published At */
+            published_at: string | null;
+            /** Snippet */
+            snippet: string;
+            /** Source Ref */
+            source_ref: string | null;
+            /** Tickers */
+            tickers: string[];
+        };
+        /** DisclosureMarker */
+        DisclosureMarker: {
+            /** Code Label */
+            code_label: string;
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Event Id */
+            event_id: string;
+            /** Headline */
+            headline: string;
+            /** Materiality */
+            materiality: number | null;
+            /** Priority */
+            priority: string | null;
+        };
+        /** DisclosureRef */
+        DisclosureRef: {
+            /** First Seen At */
+            first_seen_at: string | null;
+            /** Id */
+            id: string;
+            /** Is Late */
+            is_late: boolean;
+            /** Kap Url */
+            kap_url: string | null;
+            /** Published At */
+            published_at: string | null;
+            /** Revision Kind */
+            revision_kind: string | null;
+            /** Source Ref */
+            source_ref: string | null;
+            /** Subject */
+            subject: string | null;
+            /** Title */
+            title: string | null;
+        };
+        /** DocumentOut */
+        DocumentOut: {
+            /** Byte Size */
+            byte_size: number | null;
+            /** Download Url */
+            download_url: string | null;
+            /** Filename */
+            filename: string | null;
+            /** Html */
+            html: string;
+            /** Id */
+            id: string;
+            /** Index */
+            index: number;
+            /** Kind */
+            kind: string;
+            /** Mime */
+            mime: string | null;
+            /** Raw Sha256 */
+            raw_sha256: string | null;
+            /** Raw Url */
+            raw_url: string | null;
+            /** Spans */
+            spans: components["schemas"]["SpanOut"][];
+            /** Template Id */
+            template_id: string | null;
+            /** Text Length */
+            text_length: number;
+            /** Unplaced Span Ids */
+            unplaced_span_ids: string[];
+        };
+        /**
+         * ErrorOut
+         * @description Body of every 4xx/404 of this API (FastAPI's ``HTTPException`` shape).
+         */
+        ErrorOut: {
+            /** Detail */
+            detail: string;
+        };
+        /** EventDetailOut */
+        EventDetailOut: {
+            /** Analyses */
+            analyses: components["schemas"]["AnalysisOut"][];
+            /** Disclosures */
+            disclosures: components["schemas"]["DisclosureRef"][];
+            /** Documents */
+            documents: components["schemas"]["DocumentOut"][];
+            event: components["schemas"]["EventMeta"];
+            /** Feedback Counts */
+            feedback_counts: {
+                [key: string]: number;
+            };
+            for_me: components["schemas"]["ForMeOut"];
+            /** Forecasts */
+            forecasts: components["schemas"]["ForecastOut"][];
+            item: components["schemas"]["FeedItem"];
+            /** Key Facts */
+            key_facts: components["schemas"]["KeyFact"][];
+            /** Revision Chain */
+            revision_chain: components["schemas"]["RevisionLink"][];
+            summaries: components["schemas"]["SummariesOut"];
+            /** Superseded */
+            superseded: components["schemas"]["SupersededEvent"][];
+        };
+        /** EventMeta */
+        EventMeta: {
+            /** Code */
+            code: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Id */
+            id: string;
+            /** Payload */
+            payload: {
+                [key: string]: unknown;
+            } | null;
+            /** Payload Schema */
+            payload_schema: string | null;
+            /** Payload Source */
+            payload_source: string | null;
+            /** Rules */
+            rules: {
+                [key: string]: unknown;
+            } | null;
+            /** Status */
+            status: string;
+            /** Superseded By */
+            superseded_by: string | null;
+            /** Taxonomy Version */
+            taxonomy_version: string | null;
+        };
+        /** FamilyOut */
+        FamilyOut: {
+            /** Code */
+            code: string;
+            /** Label */
+            label: string;
+        };
+        /** FeedFacets */
+        FeedFacets: {
+            /** Families */
+            families: components["schemas"]["FamilyOut"][];
+        };
+        /**
+         * FeedItem
+         * @description One classified disclosure (event) as shown in the tape; the raw ``payload`` is only in the detail.
+         */
+        FeedItem: {
+            /**
+             * Announced At
+             * Format: date-time
+             */
+            announced_at: string;
+            /** Catchup */
+            catchup: boolean;
+            /** Code */
+            code: string;
+            /** Code Label */
+            code_label: string;
+            /** Disclosure Id */
+            disclosure_id: string | null;
+            /** Family */
+            family: string;
+            /** First Seen At */
+            first_seen_at: string | null;
+            /** Headline */
+            headline: string;
+            /** Headline En */
+            headline_en: string | null;
+            /** Holding */
+            holding: boolean;
+            /** Id */
+            id: string;
+            /** Is Late */
+            is_late: boolean;
+            /** Issuers */
+            issuers: components["schemas"]["IssuerRef"][];
+            /** Kap Url */
+            kap_url: string | null;
+            /** Latency S */
+            latency_s: number | null;
+            /** Materiality */
+            materiality: number | null;
+            /** Materiality Band */
+            materiality_band: string | null;
+            /** Priority */
+            priority: string | null;
+            /** Published At */
+            published_at: string | null;
+            /** Published Key */
+            published_key: string;
+            /** Revision Kind */
+            revision_kind: string | null;
+            /** Revision Label */
+            revision_label: string | null;
+            /** Source Ref */
+            source_ref: string | null;
+            /**
+             * Stage
+             * @enum {string}
+             */
+            stage: "rules" | "analysed";
+            /** Status */
+            status: string;
+            /** Tickers */
+            tickers: components["schemas"]["FeedTicker"][];
+            /** Watch */
+            watch: boolean;
+        };
+        /** FeedOut */
+        FeedOut: {
+            facets: components["schemas"]["FeedFacets"];
+            /** Items */
+            items: components["schemas"]["FeedItem"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /** FeedTicker */
+        FeedTicker: {
+            /** Badge */
+            badge: ("HOLDING" | "WATCH") | null;
+            /** Instrument Id */
+            instrument_id: string | null;
+            /** Ticker */
+            ticker: string;
+        };
+        /** FeedbackIn */
+        FeedbackIn: {
+            /** Comment */
+            comment?: string | null;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "wrong_fact" | "wrong_type" | "not_material" | "helpful";
+            /** Target Id */
+            target_id?: string | null;
+            /**
+             * Target Type
+             * @default event
+             * @enum {string}
+             */
+            target_type: "event" | "analysis" | "claim" | "disclosure" | "forecast";
+        };
+        /** FeedbackOut */
+        FeedbackOut: {
+            /** Event Id */
+            event_id: string;
+            /** Feedback Counts */
+            feedback_counts: {
+                [key: string]: number;
+            };
+        };
+        /** ForMeImpact */
+        ForMeImpact: {
+            /** Distribution */
+            distribution: unknown;
+            /** Forecast Id */
+            forecast_id: string;
+            /** Horizon */
+            horizon: string;
+            /** Instrument Id */
+            instrument_id: string;
+            /** Model */
+            model: string;
+            /** Position Impact */
+            position_impact: unknown;
+            /** Target */
+            target: string;
+            /** Ticker */
+            ticker: string;
+        };
+        /** ForMeOut */
+        ForMeOut: {
+            /** Holding */
+            holding: boolean;
+            /** Impacts */
+            impacts: components["schemas"]["ForMeImpact"][];
+            /** Positions */
+            positions: components["schemas"]["ForMePosition"][];
+            /** Reason */
+            reason: string | null;
+        };
+        /** ForMePosition */
+        ForMePosition: {
+            /** Avg Cost */
+            avg_cost: number | null;
+            /** Last Close */
+            last_close: number | null;
+            /** Last Close Date */
+            last_close_date: string | null;
+            /** Market Value */
+            market_value: number | null;
+            /** Quantity */
+            quantity: number;
+            /** Ticker */
+            ticker: string;
+            /** Weight */
+            weight: number | null;
+        };
+        /** ForecastOut */
+        ForecastOut: {
+            /** Distribution */
+            distribution: unknown;
+            /** Horizon */
+            horizon: string;
+            /** Id */
+            id: string;
+            /** Model */
+            model: string;
+            outcome: components["schemas"]["ForecastOutcome"] | null;
+            /** Scenarios */
+            scenarios: unknown;
+            /** Target */
+            target: string;
+            /** Ticker */
+            ticker: string;
+        };
+        /** ForecastOutcome */
+        ForecastOutcome: {
+            /** Realised Value */
+            realised_value: number | null;
+            /** Scores */
+            scores: unknown;
+        };
         /** GovernorStatus */
         GovernorStatus: {
             /** Paused */
@@ -703,6 +1347,112 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** IdentifierOut */
+        IdentifierOut: {
+            /** Entity Type */
+            entity_type: string;
+            /** Scheme */
+            scheme: string;
+            /** Valid From */
+            valid_from: string | null;
+            /** Valid To */
+            valid_to: string | null;
+            /** Value */
+            value: string;
+        };
+        /** InstrumentHit */
+        InstrumentHit: {
+            /** Badge */
+            badge: ("HOLDING" | "WATCH") | null;
+            /** Instrument Id */
+            instrument_id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "stock" | "fund" | "index" | "other";
+            /** Name */
+            name: string | null;
+            /** Score */
+            score: number;
+            /** Ticker */
+            ticker: string;
+        };
+        /** InstrumentInfo */
+        InstrumentInfo: {
+            /** Currency */
+            currency: string;
+            /** Id */
+            id: string;
+            /** Status */
+            status: string;
+            /** Type */
+            type: string;
+        };
+        /** InstrumentOut */
+        InstrumentOut: {
+            /** Agent Runs */
+            agent_runs: components["schemas"]["AgentRunBrief"][];
+            /** Badge */
+            badge: ("HOLDING" | "WATCH") | null;
+            /** Disclosures */
+            disclosures: components["schemas"]["FeedItem"][];
+            /** Identifiers */
+            identifiers: components["schemas"]["IdentifierOut"][];
+            /** Indices */
+            indices: string[];
+            instrument: components["schemas"]["InstrumentInfo"];
+            issuer: components["schemas"]["IssuerInfo"] | null;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "stock" | "fund" | "index" | "other";
+            last_close: components["schemas"]["LastClose"] | null;
+            /** Name */
+            name: string | null;
+            position: components["schemas"]["PositionOut"] | null;
+            share_capital: components["schemas"]["ShareCapitalOut"];
+            /** Theses */
+            theses: components["schemas"]["ThesisRef"][];
+            /** Ticker */
+            ticker: string;
+            /** Watch */
+            watch: boolean;
+            /** Watchlists */
+            watchlists: string[];
+        };
+        /** IssuerInfo */
+        IssuerInfo: {
+            /** Id */
+            id: string;
+            /** Kind */
+            kind: string | null;
+            /** Legal Name */
+            legal_name: string;
+            /** Sector Code */
+            sector_code: string | null;
+            /** Short Name */
+            short_name: string | null;
+            /** Status */
+            status: string;
+        };
+        /** IssuerRef */
+        IssuerRef: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+        };
+        /** JobsSummary */
+        JobsSummary: {
+            /** Analyses Waiting */
+            analyses_waiting: number;
+            /** Dead Total */
+            dead_total: number;
+            /** Lanes */
+            lanes: components["schemas"]["LaneJobs"][];
+        };
         /** KapStatus */
         KapStatus: {
             /** Lag Seconds */
@@ -711,6 +1461,332 @@ export interface components {
             last_poll_at: string | null;
             /** Last Poll Ok At */
             last_poll_ok_at: string | null;
+        };
+        /** KeyFact */
+        KeyFact: {
+            /** Anchors */
+            anchors: string[];
+            /** Path */
+            path: string;
+            /** Provenance */
+            provenance: string | null;
+            /** Value */
+            value: unknown;
+        };
+        /** LaneJobs */
+        LaneJobs: {
+            /** Dead */
+            dead: number;
+            /** Lane */
+            lane: string;
+            /** Last Error */
+            last_error: string | null;
+            /** Last Error At */
+            last_error_at: string | null;
+            /** Last Error Kind */
+            last_error_kind: string | null;
+            /** Queued */
+            queued: number;
+            /** Running */
+            running: number;
+        };
+        /** LastClose */
+        LastClose: {
+            /** Close */
+            close: number;
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Day Change */
+            day_change: number | null;
+            /** Day Change Pct */
+            day_change_pct: number | null;
+            /** Prev Close */
+            prev_close: number | null;
+        };
+        /** MarketQuote */
+        MarketQuote: {
+            /** As Of */
+            as_of: string | null;
+            /** Change */
+            change: number | null;
+            /** Change Pct */
+            change_pct: number | null;
+            /** Code */
+            code: string;
+            /** Label */
+            label: string;
+            /** Last */
+            last: number | null;
+            /** Prev */
+            prev: number | null;
+        };
+        /** PendingActionOut */
+        PendingActionOut: {
+            /** Corporate Action Id */
+            corporate_action_id: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Ex Date */
+            ex_date: string | null;
+            /** Id */
+            id: string;
+            /** Instrument Id */
+            instrument_id: string;
+            /** Kind */
+            kind: string;
+            /** Proposal */
+            proposal: {
+                [key: string]: unknown;
+            } | null;
+            /** Status */
+            status: string;
+            /** Ticker */
+            ticker: string | null;
+        };
+        /** PendingSummary */
+        PendingSummary: {
+            /** Count */
+            count: number;
+            /** Items */
+            items: components["schemas"]["PendingActionOut"][];
+        };
+        /** PerformanceOut */
+        PerformanceOut: {
+            /** Benchmark */
+            benchmark: components["schemas"]["BenchmarkPoint"][];
+            /** End */
+            end: string | null;
+            /**
+             * Method
+             * @constant
+             */
+            method: "transactions_x_closes";
+            /** Points */
+            points: components["schemas"]["PerformancePoint"][];
+            /**
+             * Range
+             * @enum {string}
+             */
+            range: "1m" | "3m" | "6m" | "1y" | "ytd" | "max";
+            /** Start */
+            start: string | null;
+            /** Unpriced */
+            unpriced: string[];
+        };
+        /** PerformancePoint */
+        PerformancePoint: {
+            /** Cost */
+            cost: number;
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Pnl */
+            pnl: number;
+            /** Return Index */
+            return_index: number;
+            /** Value */
+            value: number;
+        };
+        /** PortfolioOverviewOut */
+        PortfolioOverviewOut: {
+            allocation: components["schemas"]["AllocationOut"];
+            /** Available */
+            available: boolean;
+            /** Pending Actions */
+            pending_actions: components["schemas"]["PendingActionOut"][];
+            /** Positions */
+            positions: components["schemas"]["PositionOut"][];
+            totals: components["schemas"]["PortfolioTotals"];
+            /** Transactions */
+            transactions: components["schemas"]["TxnOut"][];
+            /** Watchlists */
+            watchlists: components["schemas"]["WatchlistOut"][];
+        };
+        /** PortfolioTotals */
+        PortfolioTotals: {
+            /** Cost */
+            cost: number | null;
+            /** Day Change */
+            day_change: number | null;
+            /** Day Change Pct */
+            day_change_pct: number | null;
+            /** Pnl */
+            pnl: number | null;
+            /** Pnl Pct */
+            pnl_pct: number | null;
+            /** Positions */
+            positions: number;
+            /** Unvalued */
+            unvalued: string[];
+            /** Value */
+            value: number | null;
+        };
+        /** PositionOut */
+        PositionOut: {
+            /** Avg Cost */
+            avg_cost: number | null;
+            /** Badge */
+            badge: ("HOLDING" | "WATCH") | null;
+            /** Cost Total */
+            cost_total: number;
+            /** Day Change */
+            day_change: number | null;
+            /** Day Change Pct */
+            day_change_pct: number | null;
+            /** Instrument Id */
+            instrument_id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "stock" | "fund" | "index" | "other";
+            /** Last Close */
+            last_close: number | null;
+            /** Last Close Date */
+            last_close_date: string | null;
+            /** Market Value */
+            market_value: number | null;
+            /** Name */
+            name: string | null;
+            /** Pnl */
+            pnl: number | null;
+            /** Pnl Pct */
+            pnl_pct: number | null;
+            /** Prev Close */
+            prev_close: number | null;
+            /** Prev Close Date */
+            prev_close_date: string | null;
+            /** Quantity */
+            quantity: number;
+            /** Ticker */
+            ticker: string;
+            /** Weight */
+            weight: number | null;
+        };
+        /**
+         * PriceBarOut
+         * @description Daily bar; ``open/high/low/volume`` are null where the source only provides a close (e.g. funds).
+         */
+        PriceBarOut: {
+            /** Close */
+            close: number | null;
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** High */
+            high: number | null;
+            /** Low */
+            low: number | null;
+            /** Open */
+            open: number | null;
+            /** Source */
+            source: string;
+            /** Volume */
+            volume: number | null;
+        };
+        /** PricesOut */
+        PricesOut: {
+            /** Bars */
+            bars: components["schemas"]["PriceBarOut"][];
+            /**
+             * From
+             * Format: date
+             */
+            from: string;
+            /** Markers Disclosures */
+            markers_disclosures: components["schemas"]["DisclosureMarker"][];
+            /** Markers Txns */
+            markers_txns: components["schemas"]["TxnMarker"][];
+            /** Primary Source */
+            primary_source: string;
+            /** Ticker */
+            ticker: string;
+            /**
+             * To
+             * Format: date
+             */
+            to: string;
+        };
+        /** RevisionLink */
+        RevisionLink: {
+            /** Current */
+            current: boolean;
+            /** Event Id */
+            event_id: string | null;
+            /** Id */
+            id: string;
+            /** Kap Url */
+            kap_url: string | null;
+            /** Published At */
+            published_at: string | null;
+            /** Revision Kind */
+            revision_kind: string | null;
+            /** Revision Label */
+            revision_label: string;
+            /** Source Ref */
+            source_ref: string | null;
+            /** Title */
+            title: string | null;
+        };
+        /** SearchOut */
+        SearchOut: {
+            /** Disclosures */
+            disclosures: components["schemas"]["DisclosureHit"][];
+            /** Instruments */
+            instruments: components["schemas"]["InstrumentHit"][];
+            /** Q */
+            q: string;
+        };
+        /**
+         * ShareCapitalOut
+         * @description From KAP ``sermaye`` pages; every field is null until ``papi kap capital`` has fetched the issuer.
+         */
+        ShareCapitalOut: {
+            /** Free Float Pct */
+            free_float_pct: number | null;
+            /** Free Float Shares */
+            free_float_shares: number | null;
+            /** Market Cap */
+            market_cap: number | null;
+            /** Paid In Capital */
+            paid_in_capital: number | null;
+            /** Paid In Capital As Of */
+            paid_in_capital_as_of: string | null;
+            /** Registered Capital Ceiling */
+            registered_capital_ceiling: number | null;
+            /** Shares As Of */
+            shares_as_of: string | null;
+            /** Shares Outstanding */
+            shares_outstanding: number | null;
+        };
+        /** SpanOut */
+        SpanOut: {
+            /** Anchor */
+            anchor: string;
+            /** Char End */
+            char_end: number | null;
+            /** Char Start */
+            char_start: number | null;
+            /** Field Path */
+            field_path: string | null;
+            /** Id */
+            id: string;
+            /** Ordinal */
+            ordinal: number;
+            /** Page */
+            page: number | null;
+            /** Text */
+            text: string | null;
         };
         /** StatusOut */
         StatusOut: {
@@ -740,12 +1816,146 @@ export interface components {
             /** Version */
             version: string;
         };
+        /** SummariesOut */
+        SummariesOut: {
+            en: components["schemas"]["SummaryOut"] | null;
+            tr: components["schemas"]["SummaryOut"] | null;
+        };
+        /** SummaryOut */
+        SummaryOut: {
+            /** Body */
+            body: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Headline */
+            headline: string | null;
+        };
+        /** SupersededEvent */
+        SupersededEvent: {
+            /** Code */
+            code: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Id */
+            id: string;
+        };
         /** TelegramStatus */
         TelegramStatus: {
             /** Enabled */
             enabled: boolean;
             /** Ready */
             ready: boolean;
+        };
+        /** ThesisRef */
+        ThesisRef: {
+            /** Date */
+            date: string | null;
+            /** Direction */
+            direction: string | null;
+            /** Horizon */
+            horizon: string | null;
+            /** Last Run Status */
+            last_run_status: string | null;
+            /** Last Verdict */
+            last_verdict: string | null;
+            /** Name */
+            name: string;
+            /** Runs */
+            runs: number;
+        };
+        /** TodayOut */
+        TodayOut: {
+            /** Agent Runs */
+            agent_runs: components["schemas"]["AgentRunBrief"][];
+            attention: components["schemas"]["AttentionOut"];
+            /** Feed */
+            feed: components["schemas"]["FeedItem"][];
+            /**
+             * Generated At
+             * Format: date-time
+             */
+            generated_at: string;
+            jobs: components["schemas"]["JobsSummary"];
+            pending_actions: components["schemas"]["PendingSummary"];
+            portfolio: components["schemas"]["TodayPortfolio"];
+            usdtry: components["schemas"]["MarketQuote"] | null;
+            xu100: components["schemas"]["MarketQuote"] | null;
+        };
+        /** TodayPortfolio */
+        TodayPortfolio: {
+            /** Available */
+            available: boolean;
+            /** Cost */
+            cost: number | null;
+            /** Day Change */
+            day_change: number | null;
+            /** Day Change Pct */
+            day_change_pct: number | null;
+            /** Pnl */
+            pnl: number | null;
+            /** Positions */
+            positions: number;
+            /** Value */
+            value: number | null;
+        };
+        /** TxnMarker */
+        TxnMarker: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Price */
+            price: number | null;
+            /** Quantity */
+            quantity: number;
+            /**
+             * Side
+             * @enum {string}
+             */
+            side: "buy" | "sell";
+            /** Type */
+            type: string;
+        };
+        /** TxnOut */
+        TxnOut: {
+            /** Currency */
+            currency: string;
+            /** Fees */
+            fees: number;
+            /** Id */
+            id: string;
+            /** Instrument Id */
+            instrument_id: string | null;
+            /** Note */
+            note: string | null;
+            /** Price */
+            price: number | null;
+            /** Quantity */
+            quantity: number;
+            /** Reversed */
+            reversed: boolean;
+            /** Reverses Id */
+            reverses_id: string | null;
+            /** Source */
+            source: string;
+            /** Tax */
+            tax: number;
+            /** Ticker */
+            ticker: string | null;
+            /**
+             * Trade Date
+             * Format: date
+             */
+            trade_date: string;
+            /** Type */
+            type: string;
         };
         /** ValidationError */
         ValidationError: {
@@ -759,6 +1969,30 @@ export interface components {
             msg: string;
             /** Error Type */
             type: string;
+        };
+        /** WatchMember */
+        WatchMember: {
+            /** Badge */
+            badge: ("HOLDING" | "WATCH") | null;
+            /** Instrument Id */
+            instrument_id: string;
+            /** Name */
+            name: string | null;
+            /** Ticker */
+            ticker: string;
+        };
+        /** WatchlistOut */
+        WatchlistOut: {
+            /** Id */
+            id: string;
+            /** Indices */
+            indices: string[];
+            /** Members */
+            members: components["schemas"]["WatchMember"][];
+            /** Name */
+            name: string;
+            /** Sectors */
+            sectors: string[];
         };
     };
     responses: never;
@@ -1504,6 +2738,233 @@ export interface operations {
             };
         };
     };
+    get_event_detail_v1_events__event_id__detail_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventDetailOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    post_event_feedback_v1_events__event_id__feedback_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FeedbackIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeedbackOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_feed_v1_feed_get: {
+        parameters: {
+            query?: {
+                scope?: "mine" | "holdings" | "watchlist" | "all";
+                priority?: ("P1" | "P2" | "P3" | "P4") | null;
+                band?: ("low" | "medium" | "high" | "critical") | null;
+                from?: string | null;
+                to?: string | null;
+                range?: ("today" | "yesterday" | "7d") | null;
+                ticker?: string | null;
+                family?: string | null;
+                code?: string | null;
+                sort?: "time_desc" | "time_asc" | "materiality";
+                /** @description full-text search over disclosure text */
+                q?: string | null;
+                hide_routine?: boolean;
+                materiality_gte?: number | null;
+                limit?: number;
+                /** @description ``next_cursor`` of the previous page */
+                before?: string | null;
+                /** @description ``published_key``: only items published at/after it (live polling) */
+                after?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeedOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_instrument_v1_instruments__ticker__get: {
+        parameters: {
+            query?: {
+                disclosure_limit?: number;
+            };
+            header?: never;
+            path: {
+                ticker: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InstrumentOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_instrument_prices_v1_instruments__ticker__prices_get: {
+        parameters: {
+            query?: {
+                from?: string | null;
+                to?: string | null;
+            };
+            header?: never;
+            path: {
+                ticker: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PricesOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     find_issuer_v1_issuers_get: {
         parameters: {
             query: {
@@ -1626,6 +3087,57 @@ export interface operations {
             };
         };
     };
+    get_portfolio_overview_v1_portfolio_overview_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioOverviewOut"];
+                };
+            };
+        };
+    };
+    get_portfolio_performance_v1_portfolio_performance_get: {
+        parameters: {
+            query?: {
+                range?: "1m" | "3m" | "6m" | "1y" | "ytd" | "max";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PerformanceOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_positions_v1_portfolio_positions_get: {
         parameters: {
             query?: never;
@@ -1677,6 +3189,39 @@ export interface operations {
             };
         };
     };
+    search_v1_search_get: {
+        parameters: {
+            query: {
+                q: string;
+                limit?: number;
+                disclosure_limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SearchOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_status_v1_status_get: {
         parameters: {
             query?: never;
@@ -1715,6 +3260,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_today_v1_today_get: {
+        parameters: {
+            query?: {
+                feed_limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TodayOut"];
                 };
             };
             /** @description Validation Error */

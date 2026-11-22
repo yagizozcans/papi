@@ -167,5 +167,75 @@
     "goTo": "Go to page",
     "then": "then"
   },
-  "toast": { "close": "Close" }
+  "toast": { "close": "Close" },
+  "kit": {
+    "time": {
+      "now": "just now",
+      "s": "{{n}}s ago",
+      "m": "{{n}}m ago",
+      "h": "{{n}}h ago",
+      "d": "{{n}}d ago"
+    },
+    "holding": "In portfolio",
+    "watch": "On watchlist",
+    "common": {
+      "empty": "No data",
+      "error": "Failed to load",
+      "retry": "Retry",
+      "loading": "Loading"
+    },
+    "table": {
+      "columns": "Columns",
+      "sortedAsc": "ascending",
+      "sortedDesc": "descending"
+    },
+    "chart": {
+      "label": "Price chart",
+      "line": "Line",
+      "candles": "Candles",
+      "volume": "Volume",
+      "open": "O",
+      "high": "H",
+      "low": "L",
+      "close": "C",
+      "buy": "Buy",
+      "sell": "Sell",
+      "noData": "No price data",
+      "range": {
+        "1m": "1M",
+        "3m": "3M",
+        "6m": "6M",
+        "1y": "1Y",
+        "ytd": "YTD",
+        "all": "All"
+      }
+    },
+    "split": {
+      "back": "Back",
+      "resize": "Resize panel",
+      "selectItem": "Select an item to see details"
+    },
+    "filter": {
+      "label": "Filters",
+      "scope": "Scope",
+      "priority": "Priority",
+      "range": "Date",
+      "ticker": "Ticker",
+      "family": "Family",
+      "all": "All",
+      "clear": "Clear",
+      "tickerPlaceholder": "Ticker",
+      "ranges": {
+        "all": "All time",
+        "today": "Today",
+        "7d": "Last 7 days",
+        "30d": "Last 30 days",
+        "90d": "Last 90 days"
+      }
+    },
+    "live": {
+      "newItems_one": "{{count}} new item",
+      "newItems_other": "{{count}} new items"
+    }
+  }
 }
