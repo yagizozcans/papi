@@ -48,7 +48,7 @@ def test_query_token_sets_cookie(world: dict[str, Any]) -> None:
 def test_loopback_needs_no_token_but_guards_host_and_origin(world: dict[str, Any]) -> None:
     with TestClient(create_app(host="127.0.0.1", token="ignored")) as c:
         assert c.get("/").status_code == 200
-        assert c.get("/", headers={"Host": "127.0.0.1:8765"}).status_code == 200
+        assert c.get("/", headers={"Host": "127.0.0.1:38417"}).status_code == 200
         assert c.get("/", headers={"Host": "evil.example"}).status_code == 400  # DNS rebinding
         r = c.post(
             f"/events/{world['e_div']}/feedback",

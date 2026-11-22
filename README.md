@@ -1,7 +1,28 @@
 # papi
 
+[![CI](https://github.com/yagizozcans/papi/actions/workflows/ci.yml/badge.svg)](https://github.com/yagizozcans/papi/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 Personal, local BIST/KAP disclosure-intelligence tool. Spec: [PRD.md](PRD.md) and [docs/prd/](docs/prd/).
 One Python process, one SQLite file, one directory of raw files, all under `$PAPI_HOME` (default `~/.papi`).
+
+**What it does.** papi polls [KAP](https://www.kap.org.tr) (Public Disclosure Platform of Borsa İstanbul) for
+new company disclosures, parses and triages them (P1/P2/P3 by your holdings and watchlist), sends alerts
+(dashboard, Telegram, macOS notifications), tracks your BIST stock and TEFAS fund portfolio, and lets Claude
+agents read a disclosure or test an investment thesis against real data. The UI and most docs are in Turkish.
+
+**Requirements.** macOS (launchd, Keychain), Python 3.12 + [uv](https://docs.astral.sh/uv/). LLM features
+are optional and need the [Claude Code](https://claude.com/claude-code) CLI logged in with your own
+subscription; everything else (capture, triage, alerts, portfolio, dashboard) runs without it.
+
+> **Disclaimer.** papi is a personal tool, not investment advice (yatırım tavsiyesi değildir), and is not
+> affiliated with KAP, MKK, Borsa İstanbul, TEFAS, İş Yatırım or Yahoo. It fetches public data from those
+> sites for your own use; you are responsible for complying with their terms of use. Keep the default polite
+> request rates (KAP ~1 request/s) and do not redistribute the data you collect.
+
+**Known issues.** Two analysis paths coexist (the older `analyst/` pipeline and the newer `agents/` runner);
+Yahoo prices before a bonus issue can be unadjusted (e.g. CCOLA before 2024-08), which shows up as
+cross-check mismatches; KAP publish-to-seen p95 latency is ~3 min against a 60 s target.
 
 ## Quickstart (owner setup on macOS)
 
@@ -45,10 +66,13 @@ papi portfolio watch SDTTR               # watchlist (also XU030 / endeks:XU030 
 papi portfolio list                      # positions, cost, last close, weight
 papi prices sync --tickers MEKAG,FROTO,CEMAS,XU100   # first price history (default: last 30 days)
 papi kap capital --tickers MEKAG,FROTO,CEMAS         # share capital of held/watched companies
+papi prices add-fund TI1                 # TEFAS fund (e.g. money-market) as an instrument + 30 days of prices
+papi portfolio add AÇILIŞ TI1 100 @ 1500,00 2026-10-30   # then record it like a stock
 ```
 
 Use opening balances (`opening_balance`) for what you already hold. Holdings make their disclosures
-P1 and watchlist names P2: they are fetched, alerted and analysed first.
+P1 and watchlist names P2: they are fetched, alerted and analysed first. TEFAS funds are priced daily from
+TEFAS (unit price as close, no cross-check); KAP disclosures are not tracked for them.
 
 **4. Telegram bot** (alerts, trade recording, commands)
 
@@ -92,7 +116,7 @@ papi run service install --uv    # or: launchd LaunchAgent com.papi.run (starts 
 papi run service status          # launchd state; `papi run service logs` / `uninstall`
 ```
 
-Dashboard: <http://127.0.0.1:8765> (feed `/`, `/portfolio`, `/company/<TICKER>`, `/events/<id>`,
+Dashboard: <http://127.0.0.1:38417> (feed `/`, `/portfolio`, `/company/<TICKER>`, `/events/<id>`,
 `/ops`, `/ops/usage`). Details of the process, lanes, backups and launchd:
 [src/papi/run/README.md](src/papi/run/README.md).
 
@@ -110,7 +134,24 @@ watchlist first; new live disclosures always go ahead of the backlog). Expect ab
 - `/durdur 3s` pauses Claude analysis (e.g. for 3 hours; no argument = until `/devam`) · `/kullanim` usage
 - A daily digest arrives every morning and a weekly review on Sunday evening. `/yardim` lists everything.
 
-**8. Backups and restore**
+**8. Investment theses (strategy analyst)**
+
+Upload a paper on the dashboard's **Tezler** page (`/theses`): PDF, photos (JPG/PNG/HEIC), DOCX or TXT,
+several files form one thesis in upload order. PDF text layers are read directly; scanned pages and
+photos are transcribed page by page by Claude (opus, ~$0.10/page). Lines that are section names
+(Fikir, Konsensüs, … — misspellings and "→ Fikir:" are fine) split the text into the template; the
+page then shows every page's text, the words the transcriber was unsure of, an editor for the thesis
+text and the `strategy-analyst` result, which tests the thesis against real data (prices in TRY/USD,
+Brent/FX, financial statements, the company's KAP disclosures, news). Same from the terminal:
+
+```bash
+papi thesis import foto.jpg notlar.pdf --ticker THYAO --horizon "6-12 ay"   # extract, build, run the agent
+papi thesis new THYAO                    # or write ~/.papi/theses/THYAO-<date>.md from the template
+papi thesis check THYAO-2026-11-06       # deterministic format check: errors stop, gaps are listed
+papi agent run strategy-analyst THYAO-2026-11-06   # ≤ $1.50 per run
+```
+
+**9. Backups and restore**
 
 `papi run` writes `~/.papi/backups/papi-YYYYMMDD.db` every night after 03:00 (14 daily + 8 weekly
 kept). `raw/` is write-once and covered by Time Machine.
@@ -121,7 +162,7 @@ papi run backups                 # list backups
 papi run restore --from 20261028 # stop papi run first; the current DB is saved as backups/pre-restore-<UTC>.db
 ```
 
-**9. Troubleshooting**
+**10. Troubleshooting**
 
 ```bash
 papi run status                  # running? last scheduler tick, lanes, queue/dead jobs, last KAP poll, Claude governor, Telegram, last backup
@@ -160,6 +201,8 @@ src/papi/
   telegram/       bot transport, trade recording                                 (08 §4)
   web/            FastAPI dashboard + /v1 API                                    (07, 08 §1)
   run/            long-running process (workers, scheduler, catch-up)            (09)
+  agents/         agent base: skills, tools, MCP server, runner; agents/ at repo root holds definitions (13)
+  thesis/         investment thesis template, parser and checks                  (13)
   evals/          evaluation harness                                             (11)
 tests/            pytest; tests/<slice>/ per slice; conftest.py fixtures
 ```

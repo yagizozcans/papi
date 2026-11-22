@@ -77,13 +77,13 @@ def test_init_is_idempotent(papi_home):
     assert not second.changed
     assert second.seeded == {"jurisdiction": 0, "market": 0, "venue": 0, "source": 0, "portfolio": 0}
     with core_db.connect() as conn:
-        assert conn.execute(select(func.count()).select_from(source)).scalar() == 4
+        assert conn.execute(select(func.count()).select_from(source)).scalar() == 5
         assert conn.execute(select(func.count()).select_from(portfolio)).scalar() == 1
         assert conn.execute(select(jurisdiction.c.code)).scalars().all() == ["TR"]
         assert conn.execute(select(market.c.code)).scalars().all() == ["BIST_EQ"]
         assert conn.execute(select(venue.c.mic)).scalars().all() == ["XIST"]
         codes = set(conn.execute(select(source.c.code)).scalars())
-    assert codes == {"kap", "legal_corpus", "isyatirim_prices", "yahoo_prices"}
+    assert codes == {"kap", "legal_corpus", "isyatirim_prices", "yahoo_prices", "tefas_prices"}
 
 
 def test_seed_twice_in_db_fixture(db, settings):

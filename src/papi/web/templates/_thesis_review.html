@@ -1,0 +1,110 @@
+{# strategy-analyst output (agents/strategy-analyst/output.schema.json) #}
+{% set o = r.output %}
+{% set V = {'supported': 'destekleniyor', 'mixed': 'karışık', 'weak': 'zayıf', 'refuted': 'çürüdü',
+            'contradicted': 'çelişiyor', 'unverified': 'doğrulanamadı', 'not_testable': 'test edilemez'} %}
+{% set VC = {'supported': 'pos', 'contradicted': 'neg', 'refuted': 'neg', 'weak': 'neg'} %}
+{% set SEC = {'fikir': 'Fikir', 'konsensus': 'Konsensüs', 'farkli_gorus': 'Farklı Görüş', 'edge': 'Edge',
+              'karsi_taraf': 'Karşı Taraf', 'tetikleyiciler': 'Tetikleyiciler', 'asagi_senaryo': 'Aşağı Yönlü Senaryo',
+              'curutucu_sinyaller': 'Tezi Çürütecek Sinyaller', 'pre_mortem': 'Pre-mortem', 'dipnot': 'Dipnot'} %}
+{% set ST = {'ok': 'tamam', 'weak': 'zayıf', 'missing': 'eksik', 'mislabeled': 'yanlış bölümde',
+             'pending': 'bekliyor', 'happened': 'gerçekleşti', 'failed': 'gerçekleşmedi',
+             'clear': 'temiz', 'watch': 'izle', 'triggered': 'tetiklendi', 'unknown': 'bilinmiyor'} %}
+{% set EDGE = {'behavioral': 'davranışsal', 'analytical': 'analitik', 'informational': 'bilgi',
+               'technical_structural': 'teknik / yapısal', 'none': 'yok'} %}
+{% macro ev(items) %}{% for e in items %}<div class="hint">{{ e.text_tr }} — {% if e.ref.startswith('http') %}<a href="{{ e.ref }}" target="_blank" rel="noopener">{{ e.ref | truncate(70) }}</a>{% else %}<span class="code-raw">{{ e.ref }}</span>{% endif %}{% if e.as_of %} · {{ e.as_of }}{% endif %}</div>{% endfor %}{% endmacro %}
+<section class="card">
+  <h2>Tez değerlendirmesi</h2>
+  <p><b>{{ o.headline_tr }}</b></p>
+  <div class="meta">
+    <span>durum: <b class="{{ VC.get(o.verdict, '') }}">{{ V.get(o.verdict, o.verdict) }}</b></span>
+    <span>güven {{ o.confidence | num(2) }}</span>
+    <span>veri tarihi {{ o.as_of }}</span>
+    <span>edge: {{ EDGE.get(o.edge.category, o.edge.category) }}</span>
+  </div>
+  <p>{{ o.summary_tr }}</p>
+</section>
+
+<section class="card">
+  <h2>Senaryolar</h2>
+  <table class="tbl"><thead><tr><th>Senaryo</th><th class="r">Olasılık</th><th>Ne olur</th><th>İşaret</th></tr></thead><tbody>
+  {% for s in o.scenarios %}<tr>
+    <td><b>{{ {'bull': 'İyimser', 'base': 'Temel', 'bear': 'Kötümser'}[s.name] }}</b></td>
+    <td class="r">%{{ (s.probability * 100) | round | int }}</td>
+    <td>{{ s.description_tr }}{% if s.drivers_tr %}<ul>{% for d in s.drivers_tr %}<li>{{ d }}</li>{% endfor %}</ul>{% endif %}</td>
+    <td>{{ s.signpost_tr }}</td>
+  </tr>{% endfor %}
+  </tbody></table>
+</section>
+
+<section class="card">
+  <h2>Tetikleyiciler</h2>
+  {% if o.triggers %}
+  <table class="tbl"><thead><tr><th>Olay</th><th>Zaman</th><th class="r">Senin</th><th class="r">Analist</th><th>Durum</th><th>Gerekçe</th></tr></thead><tbody>
+  {% for t in o.triggers %}<tr>
+    <td>{{ t.event_tr }}{% if t.source == 'agent' %} <span class="hint">(analist ekledi)</span>{% endif %}</td>
+    <td>{{ t.window }}</td>
+    <td class="r">{{ '%' ~ ((t.user_probability * 100) | round | int) if t.user_probability is not none else '—' }}</td>
+    <td class="r"><b>%{{ (t.probability * 100) | round | int }}</b></td>
+    <td>{{ ST.get(t.status, t.status) }}<div class="{{ 'pos' if t.effect == 'supports' else ('neg' if t.effect == 'hurts' else 'hint') }}">{{ {'supports': 'teze yarar', 'hurts': 'teze zarar', 'mixed': 'karışık etki'}[t.effect] }}</div></td>
+    <td>{{ t.basis_tr }}{{ ev(t.evidence) }}</td>
+  </tr>{% endfor %}
+  </tbody></table>
+  {% else %}<p class="reason">Tetikleyici yok.</p>{% endif %}
+</section>
+
+<section class="card">
+  <h2>İddialar ve veri</h2>
+  <table class="tbl"><thead><tr><th>Tez</th><th>İddia</th><th>Sonuç</th><th>Kanıt</th></tr></thead><tbody>
+  {% for c in o.claims %}<tr>
+    <td class="code-raw">{% for m in c.thesis_markers %}T{{ m }} {% endfor %}</td>
+    <td>{{ c.claim_tr }}</td>
+    <td class="{{ VC.get(c.verdict, '') }}"><b>{{ V.get(c.verdict, c.verdict) }}</b></td>
+    <td>{{ c.note_tr }}{{ ev(c.evidence) }}</td>
+  </tr>{% endfor %}
+  </tbody></table>
+</section>
+
+<section class="card">
+  <h2>Fiyat neyi varsayıyor?</h2>
+  <p>{{ o.consensus.implied_by_price_tr }}</p>
+  {{ ev(o.consensus.evidence) }}
+  <div class="meta">
+    <span>tezdeki Konsensüs bölümü piyasanın görüşü mü: {{ 'evet' if o.consensus.thesis_section_is_consensus else 'hayır' }}</span>
+    <span>farklı görüş gerçekten farklı mı: {{ {'yes': 'evet', 'no': 'hayır', 'unclear': 'belirsiz'}[o.consensus.variant_differs] }}</span>
+  </div>
+  {% if o.consensus.note_tr %}<p>{{ o.consensus.note_tr }}</p>{% endif %}
+  <h3>Edge</h3>
+  <p><b>{{ EDGE.get(o.edge.category, o.edge.category) }}</b> · tezde yazılı: {{ 'evet' if o.edge.stated_in_thesis else 'hayır' }} · bireysel yatırımcıya açık: {{ {'yes': 'evet', 'partly': 'kısmen', 'no': 'hayır'}[o.edge.accessible_to_individual] }}</p>
+  <p>{{ o.edge.rationale_tr }}</p>
+  <h3>Karşı taraf</h3>
+  <p>{{ o.counterparty.who_tr }} — <b>{{ {'yes': 'makul', 'partly': 'kısmen makul', 'no': 'makul değil'}[o.counterparty.plausible] }}</b></p>
+  <p>{{ o.counterparty.rationale_tr }}</p>{{ ev(o.counterparty.evidence) }}
+</section>
+
+<section class="card">
+  <h2>Tezi çürütecek sinyaller</h2>
+  {% if o.kill_signals %}
+  <table class="tbl"><thead><tr><th>Sinyal</th><th>Ölçüt</th><th>Eşik</th><th>Şimdi</th><th>Durum</th></tr></thead><tbody>
+  {% for k in o.kill_signals %}<tr>
+    <td>{{ k.signal_tr }}{% if k.source == 'agent' %} <span class="hint">(analist ekledi)</span>{% endif %}</td>
+    <td>{{ k.metric }}</td><td>{{ k.threshold }}</td>
+    <td>{{ k.current_value or '—' }}{% if k.current_as_of %} <span class="hint">{{ k.current_as_of }}</span>{% endif %}{% if k.evidence_ref %}<div class="code-raw">{{ k.evidence_ref | truncate(80) }}</div>{% endif %}</td>
+    <td class="{{ 'neg' if k.status == 'triggered' else ('pos' if k.status == 'clear' else '') }}"><b>{{ ST.get(k.status, k.status) }}</b></td>
+  </tr>{% endfor %}
+  </tbody></table>
+  {% else %}<p class="reason">Sinyal yok.</p>{% endif %}
+  {% if o.pre_mortem %}<h3>Pre-mortem</h3><ul>{% for p in o.pre_mortem %}<li>{{ p.reason_tr }} <span class="hint">({{ {'high': 'yüksek', 'medium': 'orta', 'low': 'düşük'}[p.likelihood] }})</span></li>{% endfor %}</ul>{% endif %}
+</section>
+
+<section class="card">
+  <h2>Tezin yapısı</h2>
+  <table class="tbl"><tbody>
+  {% for s in o.structure %}<tr>
+    <th>{{ SEC.get(s.section, s.section) }}</th>
+    <td class="{{ 'pos' if s.status == 'ok' else ('neg' if s.status in ('missing', 'mislabeled') else '') }}">{{ ST.get(s.status, s.status) }}</td>
+    <td>{{ s.note_tr }}</td>
+  </tr>{% endfor %}
+  </tbody></table>
+  {% if o.data_gaps %}<h3>Kontrol edilemeyenler</h3><ul>{% for g in o.data_gaps %}<li>{{ g }}</li>{% endfor %}</ul>{% endif %}
+  <details><summary>Ham çıktı (JSON)</summary><pre class="code-raw">{{ o | tojson(indent=2) }}</pre></details>
+</section>

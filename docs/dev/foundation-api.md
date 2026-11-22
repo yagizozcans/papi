@@ -207,7 +207,7 @@ The integrator still needs to commit everything (it is all untracked) and run th
   - backlog_enabled false, night_window `01:00-07:00`, backlog_max_week_fraction 0.5
   - focus: list of [[llm.focus]] windows {days, start, end, max_priority}
   - include_position true
-- **web**: host 127.0.0.1, port 8765, token.
+- **web**: host 127.0.0.1, port 38417, token.
 - **alerts**: quiet_hours_enabled, quiet_start 23:00, quiet_end 07:30, holdings_override_quiet, catchup_batch_threshold 5, macos_notifications, digest_time 08:00, weekly_review `sun 18:00`.
 - **portfolio**: default_name `Ana`, base_currency TRY, account_label `İşCep`, lot_size 1, recently_sold_days 30.
 - **triage**: p3_materiality_threshold 60, always_tell_codes [`market.measure`].

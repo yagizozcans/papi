@@ -38,7 +38,7 @@ from papi.core.schema import (
     watchlist,
 )
 from papi.core.timeutil import ist_date, now_utc
-from papi.sources.prices import isyatirim, yahoo
+from papi.sources.prices import isyatirim, tefas, yahoo
 from papi.sources.prices.base import FETCHER_VERSION, Fetched, Throttle, default_throttle, make_client
 
 log = get_logger("prices")
@@ -66,6 +66,7 @@ class Target:
     instrument_id: str
     ticker: str
     is_index: bool
+    is_fund: bool = False  # TEFAS fund: priced only by ``tefas``, never cross-checked
 
 
 @dataclass
@@ -149,9 +150,8 @@ def instrument_for_ticker(conn: Connection, ticker: str, at: date | None = None)
     return row.entity_id if row else None
 
 
-def ensure_index_instrument(conn: Connection, ticker: str = MARKET_INDEX) -> str:
-    """Instrument id of index ``ticker`` (type ``index``, no issuer), created if missing (C2)."""
-    code = ticker.upper()
+def _ensure_issuerless_instrument(conn: Connection, code: str, type_: str, extra: dict[str, Any]) -> str:
+    """Instrument id for TICKER ``code``; created (no issuer, TRY) with ``type_``/``extra`` if missing."""
     existing = instrument_for_ticker(conn, code)
     if existing is not None:
         return existing
@@ -161,10 +161,10 @@ def ensure_index_instrument(conn: Connection, ticker: str = MARKET_INDEX) -> str
         instrument.insert().values(
             id=iid,
             issuer_id=None,
-            type="index",
+            type=type_,
             currency="TRY",
             status="active",
-            extra={"name": INDEX_NAMES.get(code, code), "created_by": "prices"},
+            extra={**extra, "created_by": "prices"},
             created_at=now,
         )
     )
@@ -180,6 +180,25 @@ def ensure_index_instrument(conn: Connection, ticker: str = MARKET_INDEX) -> str
         )
     )
     return iid
+
+
+def ensure_index_instrument(conn: Connection, ticker: str = MARKET_INDEX) -> str:
+    """Instrument id of index ``ticker`` (type ``index``, no issuer), created if missing (C2)."""
+    code = ticker.upper()
+    return _ensure_issuerless_instrument(conn, code, "index", {"name": INDEX_NAMES.get(code, code)})
+
+
+def ensure_fund_instrument(conn: Connection, code: str, name: str) -> str:
+    """Instrument id of TEFAS fund ``code`` (type ``fund``, no issuer), created if missing.
+    Raises ``ValueError`` when ``code`` already belongs to a non-fund instrument."""
+    code = code.upper()
+    existing = instrument_for_ticker(conn, code)
+    if existing is not None:
+        kind = conn.execute(select(instrument.c.type).where(instrument.c.id == existing)).scalar_one()
+        if kind != "fund":
+            raise ValueError(f"{code} zaten bir {kind} enstrümanı.")
+        return existing
+    return _ensure_issuerless_instrument(conn, code, "fund", {"name": name, "tefas_code": code})
 
 
 def resolve_tickers(
@@ -216,7 +235,7 @@ def resolve_targets(conn: Connection, instrument_ids: Sequence[str]) -> tuple[li
         if ticker is None:
             unresolved.append(iid)
             continue
-        targets.append(Target(iid, ticker, types[iid] == "index"))
+        targets.append(Target(iid, ticker, types[iid] == "index", types[iid] == "fund"))
     return targets, unresolved
 
 
@@ -232,16 +251,21 @@ def collect(
     client: httpx.Client | None = None,
     throttle: Throttle | None = None,
 ) -> list[Fetched]:
-    """Network phase: every target from every source, strictly sequential and throttled."""
+    """Network phase: every target from every source, strictly sequential and throttled.
+    Funds go to TEFAS only; the configured (BIST) sources get equities and indices."""
     own_client = client is None
     client = client or make_client()
     throttle = throttle or default_throttle()
     out: list[Fetched] = []
+    market = [t for t in targets if not t.is_fund]
     try:
         for code in codes:
             fetcher = FETCHERS[code]
-            for t in targets:
+            for t in market:
                 out.extend(fetcher(client, throttle, t.ticker, is_index=t.is_index, start=start, end=end))
+        for t in targets:
+            if t.is_fund:
+                out.extend(tefas.fetch(client, throttle, t.ticker, is_index=False, start=start, end=end))
     finally:
         if own_client:
             client.close()
@@ -299,6 +323,8 @@ def store(
     """Write phase: raw objects, fetch log, bars, cross-check, metrics, ops alert. Caller commits."""
     s = settings or get_settings()
     codes = source_codes(s)
+    if any(t.is_fund for t in targets):
+        codes = [*codes, tefas.SOURCE_CODE]
     by_ticker = {t.ticker: t for t in targets}
     source_ids = {code: rawstore.source_id_for(conn, code) for code in codes}
     rows: dict[str, int] = {code: 0 for code in codes}
@@ -340,7 +366,7 @@ def store(
         metrics.record("prices.sync.rows", n, conn=conn, source=code)
     if errors:
         metrics.record("prices.sync.errors", len(errors), conn=conn)
-    report = cross_check(conn, [t.instrument_id for t in targets], start, end, settings=s)
+    report = cross_check(conn, [t.instrument_id for t in targets if not t.is_fund], start, end, settings=s)
     metrics.record("prices.cross_check.mismatch", len(report.mismatches), conn=conn)
     stale_missing = _stale_missing(report)
     metrics.record("prices.cross_check.missing", len(stale_missing), conn=conn)

@@ -209,8 +209,8 @@ source = Table(
     "source",
     metadata,
     _id(),
-    # kap | legal_corpus | isyatirim_prices | yahoo_prices | spk_bulletin | bist_notices | resmi_gazete |
-    # tcmb | tuik
+    # kap | legal_corpus | isyatirim_prices | yahoo_prices | tefas_prices | spk_bulletin | bist_notices |
+    # resmi_gazete | tcmb | tuik
     Column("code", String(32), nullable=False, unique=True),
     _fk("jurisdiction_id", "jurisdiction.id"),
     Column("access_mode", String(16), nullable=False),  # public_web | licensed_api | file_drop

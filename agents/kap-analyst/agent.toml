@@ -1,0 +1,10 @@
+name = "kap-analyst"
+description = "Turns one KAP disclosure into a verified, cited analysis (event codes, payload, claims, summaries)."
+model = "sonnet"
+max_turns = 14
+max_budget_usd = 0.60
+timeout_s = 600
+priority = "P2"
+task = "kap-analyst"
+prompt = "Analyse KAP disclosure {ref}."
+skills = ["kap-disclosure-analysis"]

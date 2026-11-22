@@ -1,7 +1,8 @@
 """Claude Code CLI backend (04 §5): ``claude -p`` as a sandboxed pure function.
 
 Every call runs in the empty ``$PAPI_HOME/claude-sandbox`` directory with ``ANTHROPIC_API_KEY``
-removed from the environment (so the subscription is billed, never the API), no built-in tools,
+removed from the environment (so the subscription is billed, never the API), no built-in tools
+(except read-only ones an agent binds explicitly, e.g. ``WebSearch``),
 no MCP servers except an explicitly passed config, project-only setting sources, no session
 persistence and a hard turn cap. The prompt goes in on stdin; the system prompt via a temp file.
 """
@@ -48,6 +49,10 @@ class LlmBackend(Protocol):
         timeout_s: float | None = None,
         mcp_config: dict | None = None,
         allowed_tools: list[str] | None = None,
+        builtin_tools: list[str] | None = None,
+        max_budget_usd: float | None = None,
+        persist_session: bool = False,
+        resume_session: str | None = None,
     ) -> LlmResult: ...
 
 
@@ -98,6 +103,10 @@ def build_argv(
     schema: dict | None,
     mcp_config: dict | None = None,
     allowed_tools: list[str] | None = None,
+    builtin_tools: list[str] | None = None,
+    max_budget_usd: float | None = None,
+    persist_session: bool = False,
+    resume_session: str | None = None,
 ) -> list[str]:
     """argv as 04 §5.1 plus ``--verbose`` (the prompt itself is sent on stdin).
 
@@ -112,7 +121,7 @@ def build_argv(
         "--system-prompt-file",
         str(system_prompt_file),
         "--tools",
-        "",
+        ",".join(builtin_tools or []),
         "--strict-mcp-config",
         "--mcp-config",
         json.dumps(mcp_config if mcp_config is not None else EMPTY_MCP_CONFIG, ensure_ascii=False),
@@ -122,7 +131,7 @@ def build_argv(
     argv += [
         "--setting-sources",
         "project",
-        "--no-session-persistence",
+        *([] if persist_session or resume_session else ["--no-session-persistence"]),
         "--max-turns",
         str(max_turns),
         "--output-format",
@@ -131,6 +140,10 @@ def build_argv(
     ]
     if schema is not None:
         argv += ["--json-schema", json.dumps(schema, ensure_ascii=False)]
+    if max_budget_usd is not None:
+        argv += ["--max-budget-usd", f"{max_budget_usd:g}"]
+    if resume_session:
+        argv += ["--resume", resume_session]
     return argv
 
 
@@ -405,6 +418,10 @@ class ClaudeCodeCliBackend:
         timeout_s: float | None = None,
         mcp_config: dict | None = None,
         allowed_tools: list[str] | None = None,
+        builtin_tools: list[str] | None = None,
+        max_budget_usd: float | None = None,
+        persist_session: bool = False,
+        resume_session: str | None = None,
     ) -> LlmResult:
         s = self.settings
         timeout = float(timeout_s if timeout_s is not None else s.llm.timeout_s)
@@ -423,6 +440,10 @@ class ClaudeCodeCliBackend:
                 schema=schema,
                 mcp_config=mcp_config,
                 allowed_tools=allowed_tools,
+                builtin_tools=builtin_tools,
+                max_budget_usd=max_budget_usd,
+                persist_session=persist_session,
+                resume_session=resume_session,
             )
             try:
                 code, out, err, timed_out = run_with_timeout(

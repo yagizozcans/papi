@@ -28,7 +28,7 @@ def test_defaults(settings, papi_home):
     assert "contact:" in settings.kap.resolved_user_agent
     assert settings.llm.backend == "claude_code_cli" and settings.llm.concurrency == 1
     assert settings.llm.models.chat == "sonnet"
-    assert settings.web.host == "127.0.0.1" and settings.web.port == 8765
+    assert settings.web.host == "127.0.0.1" and settings.web.port == 38417
     assert settings.pack_dir.name == "tr"
 
 

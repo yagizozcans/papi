@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Tezler{% endblock %}
+{% block main %}
+<section class="card">
+  <h2>Tez yükle</h2>
+  <form method="post" action="/theses/upload" enctype="multipart/form-data" class="filters">
+    <input type="file" name="files" multiple required accept="{{ accept }}" aria-label="Dosyalar">
+    <input name="ticker" placeholder="BIST kodu (ör. THYAO)" aria-label="BIST kodu" required pattern="[A-Za-z0-9]{3,6}" size="14">
+    <select name="direction" aria-label="Yön"><option value="long">long</option><option value="short">short</option><option value="izle">izle</option></select>
+    <input name="horizon" placeholder="Vade (ör. 6-12 ay)" aria-label="Vade" size="16" maxlength="60">
+    <label><input type="checkbox" name="run" value="1" checked> okununca ajanı çalıştır</label>
+    <button type="submit">Yükle</button>
+  </form>
+  <p class="hint">PDF, fotoğraf (JPG, PNG, HEIC), Word (DOCX) ya da metin. Birden çok dosya seçersen sırasıyla tek tez olur.
+  PDF'in metni doğrudan okunur; taranmış sayfalar ve fotoğraflar Claude ile sayfa sayfa okunur (sayfa başı yaklaşık 0,10 USD).
+  Bölüm başlıkları (Fikir, Konsensüs, Farklı Görüş, Edge, Karşı Taraf, Tetikleyiciler, Aşağı Yönlü Senaryo, Tezi Çürütecek Sinyaller, Pre-mortem, Dipnot) metni bölümlere ayırır.
+  Okunan metni ajandan önce kontrol etmek istersen kutuyu kaldır.</p>
+</section>
+
+<section class="card">
+  <h2>Tezler</h2>
+  {% if rows %}
+  <table class="tbl"><thead><tr><th>Tez</th><th>Durum</th><th>Kontrol</th><th>Son analiz</th></tr></thead><tbody>
+  {% for r in rows %}<tr>
+    <td><a href="/theses/{{ r.name }}">{{ r.name }}</a></td>
+    <td><span class="run-status run-{{ r.st.status }}">{{ r.st.status_tr }}</span></td>
+    <td>{% if r.check is none %}—{% elif r.check.errors %}<span class="neg">{{ r.check.errors | length }} hata</span>{% elif r.check.gaps %}{{ r.check.gaps | length }} eksik{% else %}<span class="pos">tam</span>{% endif %}</td>
+    <td>{% if r.last %}<a href="/agents/runs/{{ r.last.run_id }}">{{ r.last.label }}</a>{% else %}—{% endif %}</td>
+  </tr>{% endfor %}
+  </tbody></table>
+  {% else %}<p class="reason">Henüz tez yok.</p>{% endif %}
+</section>
+{% endblock %}

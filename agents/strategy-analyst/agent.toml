@@ -1,0 +1,10 @@
+name = "strategy-analyst"
+description = "Tests one user-written investment thesis against real data: claim verdicts, what the price assumes, edge, trigger probabilities, scenarios, kill signals."
+model = "sonnet"
+max_turns = 40
+max_budget_usd = 1.50
+timeout_s = 1200
+priority = "P2"
+task = "strategy"
+prompt = "Review investment thesis {ref}."
+skills = ["thesis-review"]

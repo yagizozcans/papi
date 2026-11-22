@@ -2,7 +2,7 @@
 
 Idempotent: every step checks before writing; a second run changes nothing.
 Seeds: jurisdiction ``TR``; market ``BIST_EQ``; venue ``XIST``; sources ``kap``, ``legal_corpus``,
-``isyatirim_prices``, ``yahoo_prices``; the default portfolio (``portfolio.default_name``).
+``isyatirim_prices``, ``yahoo_prices``, ``tefas_prices``; the default portfolio (``portfolio.default_name``).
 """
 
 from __future__ import annotations
@@ -44,6 +44,12 @@ SOURCES: tuple[dict[str, Any], ...] = (
         "access_mode": "public_web",
         "rate_limit": "daily EOD batch",
         "terms_note": "Cross-check source; personal use.",
+    },
+    {
+        "code": "tefas_prices",
+        "access_mode": "public_web",
+        "rate_limit": "daily EOD batch",
+        "terms_note": "TEFAS fund unit prices for held funds; personal use.",
     },
 )
 

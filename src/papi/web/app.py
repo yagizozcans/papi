@@ -124,7 +124,7 @@ def create_app(
             "(PAPI_WEB_TOKEN, keyring papi/web_token ya da web.token)."
         )
 
-    from papi.web import api, pages, stream
+    from papi.web import agents, api, pages, stream, theses
 
     app = FastAPI(
         title="papi",
@@ -141,4 +141,6 @@ def create_app(
     app.include_router(stream.router)
     app.include_router(api.router)
     app.include_router(pages.router)
+    app.include_router(agents.router)
+    app.include_router(theses.router)
     return app

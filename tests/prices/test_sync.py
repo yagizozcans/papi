@@ -11,7 +11,7 @@ from sqlalchemy import Connection, func, select
 from papi.core import metrics
 from papi.core.config import reset_settings
 from papi.core.schema import identifier, instrument, price_bar, raw_object, source
-from papi.sources.prices import isyatirim, last_close, service, sync_prices, sync_prices_isolated
+from papi.sources.prices import isyatirim, last_close, service, sync_prices, sync_prices_isolated, tefas
 from papi.sources.prices.base import Throttle
 from tests.prices.conftest import add_bar, add_instrument, fixture_bytes
 
@@ -236,3 +236,32 @@ def test_alert_failure_keeps_data(db: Connection, monkeypatch: pytest.MonkeyPatc
     res = service.store(db, [service.Target(thy, "THYAO", False)], [], date(2026, 10, 20), date(2026, 10, 20))
     assert res["cross_check"]["counts"]["mismatch"] == 1
     assert metrics.series(db, "prices.alert_failed")[0]["value"] == 1
+
+
+@respx.mock
+def test_fund_priced_from_tefas_only_and_not_cross_checked(db: Connection, alerts: list) -> None:
+    _mock_sources()
+    tefas_route = respx.post(tefas.PRICE_URL).mock(
+        return_value=httpx.Response(200, content=fixture_bytes("tefas_ti1_2026-10.json"))
+    )
+    thy = add_instrument(db, "THYAO")
+    ti1 = service.ensure_fund_instrument(db, "TI1", "İŞ PORTFÖY PARA PİYASASI (TL) FONU")
+    with httpx.Client() as client:
+        res = sync_prices(db, [thy, ti1], START, END, client=client, throttle=Throttle(0))
+    assert tefas_route.call_count == 1
+    assert json.loads(tefas_route.calls[0].request.content)["fonKodu"] == "TI1"
+    # BIST sources were asked for THYAO only
+    asked = [str(c.request.url) for c in respx.calls if c.request.method == "GET"]
+    assert asked and not any("TI1" in u for u in asked)
+    assert res["rows"] == {"isyatirim_prices": 11, "yahoo_prices": 10, "tefas_prices": 11}
+    assert res["errors"] == []
+    assert res["cross_check"]["counts"] == {"ok": 10, "mismatch": 0, "single_source": 1}
+    assert set(_statuses(db, ti1).values()) == {None}
+    assert alerts == []
+    assert last_close(db, ti1) == (date(2026, 10, 27), 1779.66176)
+
+
+def test_ensure_fund_refuses_existing_equity_code(db: Connection) -> None:
+    add_instrument(db, "THYAO")
+    with pytest.raises(ValueError):
+        service.ensure_fund_instrument(db, "THYAO", "x")

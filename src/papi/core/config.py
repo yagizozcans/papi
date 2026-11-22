@@ -168,7 +168,7 @@ class LlmConfig(_Section):
 
 class WebConfig(_Section):
     host: str = Field("127.0.0.1", description="Bind address (loopback only)")
-    port: int = Field(8765, description="Dashboard/API port")
+    port: int = Field(38417, description="Dashboard/API port")
     token: str | None = Field(None, description="Optional bearer token (prefer keyring 'papi'/'web_token')")
 
 

@@ -111,22 +111,28 @@ def http_get(
     params: dict[str, Any],
     parse: Callable[[bytes], list[Bar]],
     attempts: int = MAX_ATTEMPTS,
+    json_body: dict[str, Any] | None = None,
 ) -> Fetched:
-    """GET ``url`` (throttled) and parse a 200 body; errors are captured, never raised.
+    """GET ``url`` (POST with a JSON body when ``json_body`` is given; throttled) and parse a 200 body;
+    errors are captured, never raised.
 
     Timeouts, transport errors, 429 and 5xx are retried (``attempts`` in total, ``RETRY_BACKOFF_S``
     apart); the returned record describes the last attempt.
     """
-    f = _get_once(
-        client, throttle, source_code=source_code, ticker=ticker, url=url, params=params, parse=parse
-    )
+    kw: dict[str, Any] = {
+        "source_code": source_code,
+        "ticker": ticker,
+        "url": url,
+        "params": params,
+        "parse": parse,
+        "json_body": json_body,
+    }
+    f = _get_once(client, throttle, **kw)
     for n in range(2, attempts + 1):
         if not _transient(f):
             break
         throttle.backoff(RETRY_BACKOFF_S)
-        f = _get_once(
-            client, throttle, source_code=source_code, ticker=ticker, url=url, params=params, parse=parse
-        )
+        f = _get_once(client, throttle, **kw)
         f.request_meta["attempt"] = n
     return f
 
@@ -140,18 +146,23 @@ def _get_once(
     url: str,
     params: dict[str, Any],
     parse: Callable[[bytes], list[Bar]],
+    json_body: dict[str, Any] | None,
 ) -> Fetched:
     throttle.wait()
-    req = httpx.Request("GET", url, params=params)
+    method = "GET" if json_body is None else "POST"
+    req = httpx.Request(method, url, params=params)
+    meta: dict[str, Any] = {"params": {k: str(v) for k, v in params.items()}, "ticker": ticker}
+    if json_body is not None:
+        meta["json"] = json_body
     f = Fetched(
         source_code=source_code,
         ticker=ticker,
         url=str(req.url),
         started_at=now_utc(),
-        request_meta={"params": {k: str(v) for k, v in params.items()}, "ticker": ticker},
+        request_meta=meta,
     )
     try:
-        resp = client.get(url, params=params)
+        resp = client.request(method, url, params=params, json=json_body)
     except httpx.TimeoutException as exc:
         f.outcome, f.error = "timeout", f"{type(exc).__name__}: {exc}"
         return f

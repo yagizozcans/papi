@@ -1,0 +1,703 @@
+{
+  "title": "papi strategy-analyst output v1",
+  "description": "Review of one user-written investment thesis against real data. Unknown values are null; every number has evidence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "thesis_ref",
+    "ticker",
+    "as_of",
+    "headline_tr",
+    "summary_tr",
+    "verdict",
+    "confidence",
+    "structure",
+    "claims",
+    "consensus",
+    "edge",
+    "counterparty",
+    "triggers",
+    "scenarios",
+    "kill_signals",
+    "pre_mortem",
+    "data_gaps"
+  ],
+  "properties": {
+    "thesis_ref": {
+      "type": "string",
+      "maxLength": 80,
+      "minLength": 1
+    },
+    "ticker": {
+      "type": "string",
+      "maxLength": 8,
+      "minLength": 1
+    },
+    "as_of": {
+      "type": "string",
+      "maxLength": 10,
+      "minLength": 1,
+      "description": "Newest market data date used, YYYY-MM-DD."
+    },
+    "headline_tr": {
+      "type": "string",
+      "maxLength": 200,
+      "minLength": 1,
+      "description": "One plain sentence: where the thesis stands against the data."
+    },
+    "summary_tr": {
+      "type": "string",
+      "maxLength": 2000,
+      "minLength": 1,
+      "description": "3-7 plain Turkish sentences: what holds, what the data contradicts, what the price assumes, what decides it next."
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "supported",
+        "mixed",
+        "weak",
+        "refuted"
+      ],
+      "description": "Overall state of the thesis against the data (not a trade recommendation)."
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "structure": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "section",
+          "status",
+          "note_tr"
+        ],
+        "properties": {
+          "section": {
+            "type": "string",
+            "enum": [
+              "fikir",
+              "konsensus",
+              "farkli_gorus",
+              "edge",
+              "karsi_taraf",
+              "tetikleyiciler",
+              "asagi_senaryo",
+              "curutucu_sinyaller",
+              "pre_mortem",
+              "dipnot"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "weak",
+              "missing",
+              "mislabeled"
+            ]
+          },
+          "note_tr": {
+            "type": "string",
+            "maxLength": 400
+          }
+        }
+      },
+      "maxItems": 10,
+      "minItems": 10,
+      "description": "One entry per template section, in template order."
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "thesis_markers",
+          "claim_tr",
+          "kind",
+          "verdict",
+          "evidence",
+          "note_tr"
+        ],
+        "properties": {
+          "thesis_markers": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "maxItems": 20,
+            "description": "Thesis markers [T<n>] this item refers to."
+          },
+          "claim_tr": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "fact",
+              "forecast",
+              "causal",
+              "opinion"
+            ]
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "supported",
+              "contradicted",
+              "mixed",
+              "unverified",
+              "not_testable"
+            ]
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "source",
+                "ref",
+                "as_of",
+                "text_tr"
+              ],
+              "properties": {
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "market_history",
+                    "company_financials",
+                    "kap",
+                    "web",
+                    "portfolio",
+                    "thesis"
+                  ]
+                },
+                "ref": {
+                  "type": "string",
+                  "maxLength": 300,
+                  "minLength": 1,
+                  "description": "Where it comes from: tool call + period (e.g. 'company_financials(THYAO, USD) 2026 9 ay'), 'KAP <no> S<n>', or the URL."
+                },
+                "as_of": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "maxLength": 10,
+                  "description": "Date of the data or publication, YYYY-MM-DD."
+                },
+                "text_tr": {
+                  "type": "string",
+                  "maxLength": 400,
+                  "minLength": 1,
+                  "description": "The fact in plain Turkish, numbers as in the source."
+                }
+              }
+            },
+            "maxItems": 4
+          },
+          "note_tr": {
+            "type": "string",
+            "maxLength": 500
+          }
+        }
+      },
+      "maxItems": 14
+    },
+    "consensus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "implied_by_price_tr",
+        "evidence",
+        "thesis_section_is_consensus",
+        "variant_differs",
+        "note_tr"
+      ],
+      "properties": {
+        "implied_by_price_tr": {
+          "type": "string",
+          "maxLength": 900,
+          "minLength": 1,
+          "description": "What the current price assumes (valuation, drawdown, analyst expectations)."
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "source",
+              "ref",
+              "as_of",
+              "text_tr"
+            ],
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "market_history",
+                  "company_financials",
+                  "kap",
+                  "web",
+                  "portfolio",
+                  "thesis"
+                ]
+              },
+              "ref": {
+                "type": "string",
+                "maxLength": 300,
+                "minLength": 1,
+                "description": "Where it comes from: tool call + period (e.g. 'company_financials(THYAO, USD) 2026 9 ay'), 'KAP <no> S<n>', or the URL."
+              },
+              "as_of": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 10,
+                "description": "Date of the data or publication, YYYY-MM-DD."
+              },
+              "text_tr": {
+                "type": "string",
+                "maxLength": 400,
+                "minLength": 1,
+                "description": "The fact in plain Turkish, numbers as in the source."
+              }
+            }
+          },
+          "maxItems": 5
+        },
+        "thesis_section_is_consensus": {
+          "type": "boolean",
+          "description": "False when the thesis's Konsensüs section states the user's own forecast instead of the market's view."
+        },
+        "variant_differs": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "unclear"
+          ]
+        },
+        "note_tr": {
+          "type": "string",
+          "maxLength": 600
+        }
+      }
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "category",
+        "stated_in_thesis",
+        "accessible_to_individual",
+        "rationale_tr"
+      ],
+      "properties": {
+        "category": {
+          "type": "string",
+          "enum": [
+            "behavioral",
+            "analytical",
+            "informational",
+            "technical_structural",
+            "none"
+          ]
+        },
+        "stated_in_thesis": {
+          "type": "boolean"
+        },
+        "accessible_to_individual": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "partly",
+            "no"
+          ]
+        },
+        "rationale_tr": {
+          "type": "string",
+          "maxLength": 700,
+          "minLength": 1
+        }
+      }
+    },
+    "counterparty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "who_tr",
+        "plausible",
+        "evidence",
+        "rationale_tr"
+      ],
+      "properties": {
+        "who_tr": {
+          "type": "string",
+          "maxLength": 400,
+          "minLength": 1
+        },
+        "plausible": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "partly",
+            "no"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "source",
+              "ref",
+              "as_of",
+              "text_tr"
+            ],
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "market_history",
+                  "company_financials",
+                  "kap",
+                  "web",
+                  "portfolio",
+                  "thesis"
+                ]
+              },
+              "ref": {
+                "type": "string",
+                "maxLength": 300,
+                "minLength": 1,
+                "description": "Where it comes from: tool call + period (e.g. 'company_financials(THYAO, USD) 2026 9 ay'), 'KAP <no> S<n>', or the URL."
+              },
+              "as_of": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 10,
+                "description": "Date of the data or publication, YYYY-MM-DD."
+              },
+              "text_tr": {
+                "type": "string",
+                "maxLength": 400,
+                "minLength": 1,
+                "description": "The fact in plain Turkish, numbers as in the source."
+              }
+            }
+          },
+          "maxItems": 3
+        },
+        "rationale_tr": {
+          "type": "string",
+          "maxLength": 600
+        }
+      }
+    },
+    "triggers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "event_tr",
+          "window",
+          "source",
+          "thesis_markers",
+          "user_probability",
+          "probability",
+          "basis_tr",
+          "effect",
+          "status",
+          "evidence"
+        ],
+        "properties": {
+          "event_tr": {
+            "type": "string",
+            "maxLength": 220,
+            "minLength": 1
+          },
+          "window": {
+            "type": "string",
+            "maxLength": 60,
+            "minLength": 1,
+            "description": "Date or period, e.g. '2026-11-10' or '2027 1. yarı'."
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "thesis",
+              "agent"
+            ]
+          },
+          "thesis_markers": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "maxItems": 20,
+            "description": "Thesis markers [T<n>] this item refers to."
+          },
+          "user_probability": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 1
+          },
+          "probability": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "basis_tr": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "description": "Base rate first, then the dated evidence that moves it."
+          },
+          "effect": {
+            "type": "string",
+            "enum": [
+              "supports",
+              "hurts",
+              "mixed"
+            ],
+            "description": "Effect on the thesis if it happens."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "happened",
+              "failed"
+            ]
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "source",
+                "ref",
+                "as_of",
+                "text_tr"
+              ],
+              "properties": {
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "market_history",
+                    "company_financials",
+                    "kap",
+                    "web",
+                    "portfolio",
+                    "thesis"
+                  ]
+                },
+                "ref": {
+                  "type": "string",
+                  "maxLength": 300,
+                  "minLength": 1,
+                  "description": "Where it comes from: tool call + period (e.g. 'company_financials(THYAO, USD) 2026 9 ay'), 'KAP <no> S<n>', or the URL."
+                },
+                "as_of": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "maxLength": 10,
+                  "description": "Date of the data or publication, YYYY-MM-DD."
+                },
+                "text_tr": {
+                  "type": "string",
+                  "maxLength": 400,
+                  "minLength": 1,
+                  "description": "The fact in plain Turkish, numbers as in the source."
+                }
+              }
+            },
+            "maxItems": 3
+          }
+        }
+      },
+      "maxItems": 8
+    },
+    "scenarios": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "probability",
+          "description_tr",
+          "drivers_tr",
+          "signpost_tr"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "bull",
+              "base",
+              "bear"
+            ]
+          },
+          "probability": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "description_tr": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          },
+          "drivers_tr": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 160
+            },
+            "maxItems": 4
+          },
+          "signpost_tr": {
+            "type": "string",
+            "maxLength": 220,
+            "minLength": 1,
+            "description": "One observable sign that this scenario is unfolding."
+          }
+        }
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "description": "Exactly bull, base, bear; probabilities sum to 1."
+    },
+    "kill_signals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "signal_tr",
+          "source",
+          "metric",
+          "threshold",
+          "current_value",
+          "current_as_of",
+          "status",
+          "evidence_ref"
+        ],
+        "properties": {
+          "signal_tr": {
+            "type": "string",
+            "maxLength": 220,
+            "minLength": 1
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "thesis",
+              "agent"
+            ]
+          },
+          "metric": {
+            "type": "string",
+            "maxLength": 140,
+            "minLength": 1
+          },
+          "threshold": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1
+          },
+          "current_value": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 100
+          },
+          "current_as_of": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 10
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "clear",
+              "watch",
+              "triggered",
+              "unknown"
+            ]
+          },
+          "evidence_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 300
+          }
+        }
+      },
+      "maxItems": 8
+    },
+    "pre_mortem": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "reason_tr",
+          "likelihood"
+        ],
+        "properties": {
+          "reason_tr": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1
+          },
+          "likelihood": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
+          }
+        }
+      },
+      "maxItems": 5
+    },
+    "data_gaps": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300
+      },
+      "maxItems": 10
+    }
+  }
+}

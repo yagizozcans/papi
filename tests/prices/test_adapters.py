@@ -6,7 +6,7 @@ import httpx
 import pytest
 import respx
 
-from papi.sources.prices import isyatirim, yahoo
+from papi.sources.prices import isyatirim, tefas, yahoo
 from papi.sources.prices.base import Throttle
 from tests.prices.conftest import fixture_bytes
 
@@ -36,6 +36,19 @@ def test_isyatirim_equity_unknown_ticker_is_empty() -> None:
 def test_isyatirim_equity_error_response_raises() -> None:
     with pytest.raises(ValueError):
         isyatirim.parse_equity(b'{"ok": false, "errorDescription": "x", "value": null}')
+
+
+@pytest.mark.parametrize(
+    ("days_back", "months"), [(0, 1), (28, 1), (29, 3), (84, 3), (85, 6), (400, 36), (4000, 60)]
+)
+def test_tefas_period_reaches_back_to_start(days_back: int, months: int) -> None:
+    today = date(2026, 11, 1)
+    assert tefas.period_months(date.fromordinal(today.toordinal() - days_back), today) == months
+
+
+def test_tefas_error_envelope_raises() -> None:
+    with pytest.raises(ValueError):
+        tefas.parse(b'{"errorCode": "E1", "errorMessage": "Sistem Hat\\u0131s\\u0131!!", "resultList": null}')
 
 
 def test_isyatirim_index_dates_are_istanbul_sessions() -> None:

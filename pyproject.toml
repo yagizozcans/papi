@@ -3,6 +3,7 @@ name = "papi"
 version = "0.1.0"
 description = "Personal, local BIST/KAP disclosure-intelligence tool"
 readme = "README.md"
+license = "MIT"
 requires-python = ">=3.12"
 dependencies = [
     "sqlalchemy>=2.0",
@@ -26,6 +27,7 @@ dependencies = [
     "openpyxl>=3.1",
     "xlrd>=2",
     "tzdata>=2024.1",
+    "mcp>=2.3.0",
 ]
 
 [project.scripts]
@@ -38,6 +40,15 @@ dev = [
     "respx>=0.21",
     "ruff>=0.5",
     "time-machine>=2.14",
+]
+learn = [
+    "jupyterlab>=4.6.5",
+    "matplotlib>=3.11.2",
+    "numpy>=2.5.4",
+    "pandas>=3.1.0",
+    "scikit-learn>=1.9.1",
+    "scipy>=1.18.1",
+    "xgboost>=3.4.1",
 ]
 
 [build-system]
@@ -53,6 +64,7 @@ packages = ["src/papi"]
 "alembic" = "papi/_resources/alembic"
 "packs" = "papi/_resources/packs"
 "contracts" = "papi/_resources/contracts"
+"agents" = "papi/_resources/agents"
 
 [tool.ruff]
 line-length = 110

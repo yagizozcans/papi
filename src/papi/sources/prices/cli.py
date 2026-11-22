@@ -1,4 +1,4 @@
-"""``papi prices`` — günlük fiyat verisi (İş Yatırım + Yahoo) senkronizasyonu ve kontrolü."""
+"""``papi prices`` — günlük fiyat verisi (İş Yatırım + Yahoo; fonlar TEFAS) senkronizasyonu ve kontrolü."""
 
 from __future__ import annotations
 
@@ -11,7 +11,8 @@ from rich.table import Table
 
 from papi.core import db
 from papi.core.timeutil import ist_date
-from papi.sources.prices import service
+from papi.sources.prices import service, tefas
+from papi.sources.prices.base import default_throttle, make_client
 
 app = typer.Typer(
     help="Günlük fiyat verisi: senkronizasyon, görüntüleme, çapraz kontrol.", no_args_is_help=True
@@ -89,6 +90,37 @@ def sync_cmd(
         raise typer.Exit(2)
 
 
+@app.command("add-fund")
+def add_fund_cmd(
+    code: str = typer.Argument(..., help="TEFAS fon kodu, ör. TI1"),
+    days: int = typer.Option(30, "--days", help="İlk fiyat geçmişi: kaç takvim günü geriye"),
+) -> None:
+    """TEFAS fonunu enstrüman olarak ekle (portföyde kullanmak için) ve fiyat geçmişini çek."""
+    code = code.strip().upper()
+    with make_client() as client:
+        try:
+            title = tefas.fund_title(client, default_throttle(), code)
+        except RuntimeError as exc:
+            console.print(f"HATA: {exc}")
+            raise typer.Exit(2) from exc
+    if title is None:
+        console.print(f"TEFAS'ta son bir ayda fiyatı olan {code} kodlu fon yok.")
+        raise typer.Exit(1)
+    with db.transaction() as conn:
+        try:
+            iid = service.ensure_fund_instrument(conn, code, title)
+        except ValueError as exc:
+            console.print(f"HATA: {exc}")
+            raise typer.Exit(1) from exc
+    end = ist_date()
+    result = service.sync_prices_isolated([iid], end - timedelta(days=days), end)
+    console.print(f"{code} — {title}: {sum(result['rows'].values())} fiyat satırı")
+    for e in result["errors"]:
+        console.print(f"  HATA {e['ticker']} ({e['source']}): {e['outcome']} — {e['error']}")
+    if result["errors"]:
+        raise typer.Exit(2)
+
+
 @app.command("show")
 def show_cmd(
     ticker: str = typer.Argument(..., help="Sembol, ör. THYAO"),
@@ -104,6 +136,7 @@ def show_cmd(
         data = service.bars(conn, iid, end - timedelta(days=days), end)
         last = service.last_close(conn, iid)
     codes = service.source_codes()
+    codes += sorted({c for by_src in data.values() for c in by_src} - set(codes))
     t = Table(
         "Tarih",
         *[f"{c} kapanış" for c in codes],

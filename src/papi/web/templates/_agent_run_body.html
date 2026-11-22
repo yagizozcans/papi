@@ -1,0 +1,73 @@
+<div id="agent-run"{% if r.active %} hx-get="/fragments/agents/runs/{{ r.run_id }}" hx-trigger="every 2s" hx-swap="outerHTML"{% endif %}>
+<section class="card">
+  <h1>{{ r.agent }} · {% if r.subject and r.subject.isdigit() %}<a href="https://www.kap.org.tr/tr/Bildirim/{{ r.subject }}" target="_blank" rel="noopener">{{ r.subject }}</a>{% elif r.agent == 'strategy-analyst' and r.subject %}<a href="/theses/{{ r.subject }}">{{ r.subject }}</a>{% else %}{{ r.subject }}{% endif %}</h1>
+  <div class="meta">
+    <span class="run-status run-{{ r.status }}">{{ r.status_tr }}</span>
+    <span>başlangıç {{ r.started | ist('%d.%m %H:%M:%S') if r.started else '—' }}</span>
+    <span>{{ r.elapsed_s | latency if r.elapsed_s is not none else '—' }}</span>
+    <span>{{ r.calls | length }} araç çağrısı</span>
+    {% if r.turns is not none %}<span>{{ r.turns }} tur</span>{% endif %}
+    {% if r.cost_usd is not none %}<span>{{ r.cost_usd | num(4) }} / {{ r.max_budget_usd | num(2) }} USD</span>{% endif %}
+    {% if r.usage %}<span>cache okuma {{ r.usage.get('cache_read_input_tokens', 0) | num(0) }} · yazma {{ r.usage.get('cache_creation_input_tokens', 0) | num(0) }} token</span>{% endif %}
+    <span class="code-raw">v{{ r.agent_version }}</span>
+  </div>
+  {% if r.status == 'resuming' %}<p class="notice warn">Ajan metnin tamamını okumadan yanıtladı; kalan kısmı okuması için aynı oturumda yeniden başlatıldı. {{ r.gate }}</p>{% endif %}
+  {% if r.status == 'incomplete' %}<p class="notice error">Okuma tamamlanmadı: {{ r.gate }}</p>{% endif %}
+  {% if r.status == 'failed' or r.status == 'deferred' %}<p class="notice error">{{ r.error or 'Çalışma tamamlanamadı.' }}</p>{% endif %}
+  {% if r.status == 'stale' %}<p class="notice warn">Dosyalar uzun süredir güncellenmedi; süreç ölmüş olabilir.</p>{% endif %}
+</section>
+
+<section class="card">
+  <h2>Araç çağrıları</h2>
+  {% if r.calls %}
+  <table class="tbl"><thead><tr><th>Saat</th><th>Araç</th><th>Argümanlar</th><th class="r">ms</th><th>Sonuç</th></tr></thead><tbody>
+  {% for c in r.calls %}<tr>
+    <td>{{ c.at | ist('%H:%M:%S') if c.at else '' }}</td>
+    <td><b>{{ c.tool }}</b></td>
+    <td class="code-raw">{{ c.args | tojson }}</td>
+    <td class="r">{{ c.ms }}</td>
+    <td class="{{ 'err' if not c.ok }}"><span class="code-raw">{{ c.excerpt }}</span>{% if c.blocking %}<br><small class="err">okuma eksik: {{ c.blocking }}</small>{% endif %}</td>
+  </tr>{% endfor %}
+  </tbody></table>
+  {% if r.active %}<p class="hint">Ajan bir sonraki adımı seçiyor…</p>{% endif %}
+  {% else %}<p class="reason">{% if r.active %}Henüz araç çağrısı yok; ajan başlıyor…{% else %}Araç çağrısı yok.{% endif %}</p>{% endif %}
+</section>
+
+{% if r.output and r.agent == 'strategy-analyst' %}
+{% include "_thesis_review.html" %}
+{% elif r.output %}
+{% set o = r.output %}
+<section class="card">
+  <h2>Sonuç</h2>
+  <p><b>{{ o.headline_tr }}</b></p>
+  <div class="meta">
+    <span>olaylar: {{ o.event_codes | join(', ') }}</span>
+    <span>önem {{ o.materiality }}</span>
+    <span>yön: {{ o.fundamental_direction }}</span>
+    <span>güven {{ o.confidence | num(2) }}</span>
+  </div>
+  <h3>Özet</h3><p>{{ o.summary_tr }}</p><p class="hint">{{ o.summary_en }}</p>
+  <h3>Çıkarım</h3>
+  <div class="pn">
+    <div class="pn-col pn-pos"><h4>Pozitifler</h4>
+      {% if o.positives %}<ul>{% for p in o.positives %}<li>{{ p.text_tr }} <span class="code-raw">{% for s in p.span_ordinals %}S{{ s }} {% endfor %}</span></li>{% endfor %}</ul>
+      {% else %}<p class="reason">Belirgin olumlu nokta yok.</p>{% endif %}</div>
+    <div class="pn-col pn-neg"><h4>Negatifler</h4>
+      {% if o.negatives %}<ul>{% for p in o.negatives %}<li>{{ p.text_tr }} <span class="code-raw">{% for s in p.span_ordinals %}S{{ s }} {% endfor %}</span></li>{% endfor %}</ul>
+      {% else %}<p class="reason">Belirgin olumsuz nokta yok.</p>{% endif %}</div>
+  </div>
+  <h3>Önem gerekçesi</h3><p>{{ o.materiality_rationale }}</p>
+  {% if o.watch_next %}<h3>İzlenecekler</h3><ul>{% for w in o.watch_next %}<li>{{ w }}</li>{% endfor %}</ul>{% endif %}
+  <h3>İddialar ({{ o.claims | length }})</h3>
+  <table class="tbl"><thead><tr><th>Tür</th><th>İddia</th><th>Değer</th><th>Kaynak</th></tr></thead><tbody>
+  {% for c in o.claims %}<tr>
+    <td>{{ c.kind }}</td><td>{{ c.text_tr }}</td><td>{{ c.value or '' }} {{ c.unit or '' }}</td>
+    <td class="code-raw">{% for s in c.span_ordinals %}S{{ s }} {% endfor %}{% for k in c.citation_ids %}{{ k }} {% endfor %}</td>
+  </tr>{% endfor %}
+  </tbody></table>
+  <details><summary>Ham çıktı (JSON)</summary><pre class="code-raw">{{ o | tojson(indent=2) }}</pre></details>
+</section>
+{% elif r.text %}
+<section class="card"><h2>Yanıt</h2><pre class="code-raw">{{ r.text }}</pre></section>
+{% endif %}
+</div>
