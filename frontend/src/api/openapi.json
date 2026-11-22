@@ -1,0 +1,1512 @@
+{
+  "components": {
+    "schemas": {
+      "Body_agents_start_agents_run_post": {
+        "properties": {
+          "agent": {
+            "title": "Agent",
+            "type": "string"
+          },
+          "ref": {
+            "title": "Ref",
+            "type": "string"
+          }
+        },
+        "required": [
+          "agent",
+          "ref"
+        ],
+        "title": "Body_agents_start_agents_run_post",
+        "type": "object"
+      },
+      "Body_event_feedback_events__event_id__feedback_post": {
+        "properties": {
+          "comment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comment"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "target_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Id"
+          },
+          "target_type": {
+            "default": "event",
+            "title": "Target Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind"
+        ],
+        "title": "Body_event_feedback_events__event_id__feedback_post",
+        "type": "object"
+      },
+      "Body_pending_apply_portfolio_pending__pending_id__apply_post": {
+        "properties": {
+          "quantity_override": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantity Override"
+          }
+        },
+        "title": "Body_pending_apply_portfolio_pending__pending_id__apply_post",
+        "type": "object"
+      },
+      "Body_theses_upload_theses_upload_post": {
+        "properties": {
+          "direction": {
+            "default": "long",
+            "title": "Direction",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "contentMediaType": "application/octet-stream",
+              "type": "string"
+            },
+            "title": "Files",
+            "type": "array"
+          },
+          "horizon": {
+            "default": "",
+            "title": "Horizon",
+            "type": "string"
+          },
+          "run": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run"
+          },
+          "ticker": {
+            "title": "Ticker",
+            "type": "string"
+          }
+        },
+        "required": [
+          "files",
+          "ticker"
+        ],
+        "title": "Body_theses_upload_theses_upload_post",
+        "type": "object"
+      },
+      "Body_thesis_save_theses__name__save_post": {
+        "properties": {
+          "content": {
+            "title": "Content",
+            "type": "string"
+          }
+        },
+        "required": [
+          "content"
+        ],
+        "title": "Body_thesis_save_theses__name__save_post",
+        "type": "object"
+      },
+      "GovernorStatus": {
+        "properties": {
+          "paused": {
+            "title": "Paused",
+            "type": "boolean"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "until": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Until"
+          }
+        },
+        "required": [
+          "paused",
+          "until",
+          "reason"
+        ],
+        "title": "GovernorStatus",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "KapStatus": {
+        "properties": {
+          "lag_seconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lag Seconds"
+          },
+          "last_poll_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Poll At"
+          },
+          "last_poll_ok_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Poll Ok At"
+          }
+        },
+        "required": [
+          "last_poll_at",
+          "last_poll_ok_at",
+          "lag_seconds"
+        ],
+        "title": "KapStatus",
+        "type": "object"
+      },
+      "StatusOut": {
+        "properties": {
+          "governor": {
+            "$ref": "#/components/schemas/GovernorStatus"
+          },
+          "heartbeat_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Heartbeat At"
+          },
+          "heartbeat_stale": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Heartbeat Stale"
+          },
+          "jobs": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Jobs",
+            "type": "object"
+          },
+          "kap": {
+            "$ref": "#/components/schemas/KapStatus"
+          },
+          "lanes": {
+            "additionalProperties": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "type": "object"
+            },
+            "title": "Lanes",
+            "type": "object"
+          },
+          "last_backup_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Backup At"
+          },
+          "running": {
+            "title": "Running",
+            "type": "boolean"
+          },
+          "server_time": {
+            "title": "Server Time",
+            "type": "string"
+          },
+          "telegram": {
+            "$ref": "#/components/schemas/TelegramStatus"
+          },
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "version",
+          "running",
+          "heartbeat_at",
+          "heartbeat_stale",
+          "kap",
+          "jobs",
+          "lanes",
+          "governor",
+          "telegram",
+          "last_backup_at",
+          "server_time"
+        ],
+        "title": "StatusOut",
+        "type": "object"
+      },
+      "TelegramStatus": {
+        "properties": {
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "ready": {
+            "title": "Ready",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "enabled",
+          "ready"
+        ],
+        "title": "TelegramStatus",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "papi",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "feed_page__get",
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Feed Page"
+      }
+    },
+    "/agents": {
+      "get": {
+        "operationId": "agents_page_agents_get",
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Agents Page"
+      }
+    },
+    "/agents/run": {
+      "post": {
+        "operationId": "agents_start_agents_run_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_agents_start_agents_run_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Agents Start"
+      }
+    },
+    "/agents/runs/{run_id}": {
+      "get": {
+        "operationId": "run_page_agents_runs__run_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "title": "Run Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Run Page"
+      }
+    },
+    "/company/{ticker}": {
+      "get": {
+        "operationId": "company_page_company__ticker__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ticker",
+            "required": true,
+            "schema": {
+              "title": "Ticker",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Company Page"
+      }
+    },
+    "/events/{event_id}": {
+      "get": {
+        "operationId": "event_page_events__event_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "title": "Event Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Event Page"
+      }
+    },
+    "/events/{event_id}/feedback": {
+      "post": {
+        "operationId": "event_feedback_events__event_id__feedback_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "title": "Event Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_event_feedback_events__event_id__feedback_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Event Feedback"
+      }
+    },
+    "/fragments/agents/runs/{run_id}": {
+      "get": {
+        "operationId": "run_fragment_fragments_agents_runs__run_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "title": "Run Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Run Fragment"
+      }
+    },
+    "/fragments/events/{event_id}": {
+      "get": {
+        "operationId": "feed_item_fragment_fragments_events__event_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "title": "Event Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Feed Item Fragment"
+      }
+    },
+    "/fragments/theses/{name}": {
+      "get": {
+        "operationId": "thesis_fragment_fragments_theses__name__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Thesis Fragment"
+      }
+    },
+    "/ops": {
+      "get": {
+        "operationId": "ops_page_ops_get",
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Ops Page"
+      }
+    },
+    "/ops/usage": {
+      "get": {
+        "operationId": "usage_page_ops_usage_get",
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Usage Page"
+      }
+    },
+    "/ops/usage/{action}": {
+      "post": {
+        "operationId": "usage_action_ops_usage__action__post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "action",
+            "required": true,
+            "schema": {
+              "title": "Action",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Usage Action"
+      }
+    },
+    "/portfolio": {
+      "get": {
+        "operationId": "portfolio_page_portfolio_get",
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Portfolio Page"
+      }
+    },
+    "/portfolio/pending/{pending_id}/apply": {
+      "post": {
+        "operationId": "pending_apply_portfolio_pending__pending_id__apply_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pending_id",
+            "required": true,
+            "schema": {
+              "title": "Pending Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_pending_apply_portfolio_pending__pending_id__apply_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Pending Apply"
+      }
+    },
+    "/portfolio/pending/{pending_id}/dismiss": {
+      "post": {
+        "operationId": "pending_dismiss_portfolio_pending__pending_id__dismiss_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pending_id",
+            "required": true,
+            "schema": {
+              "title": "Pending Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Pending Dismiss"
+      }
+    },
+    "/raw/{sha}": {
+      "get": {
+        "description": "Stored source bytes (attachments, original HTML/PDF) from the raw store.",
+        "operationId": "raw_download_raw__sha__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sha",
+            "required": true,
+            "schema": {
+              "title": "Sha",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Raw Download"
+      }
+    },
+    "/stream/poll": {
+      "get": {
+        "description": "Dashboard short poll: ``?after=<cursor>`` plus the feed's filter/sort parameters.",
+        "operationId": "stream_poll_stream_poll_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Stream Poll"
+      }
+    },
+    "/theses": {
+      "get": {
+        "operationId": "theses_page_theses_get",
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Theses Page"
+      }
+    },
+    "/theses/upload": {
+      "post": {
+        "operationId": "theses_upload_theses_upload_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_theses_upload_theses_upload_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Theses Upload"
+      }
+    },
+    "/theses/{name}": {
+      "get": {
+        "operationId": "thesis_page_theses__name__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Thesis Page"
+      }
+    },
+    "/theses/{name}/files/{file_name}": {
+      "get": {
+        "operationId": "thesis_file_theses__name__files__file_name__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "file_name",
+            "required": true,
+            "schema": {
+              "title": "File Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Thesis File"
+      }
+    },
+    "/theses/{name}/save": {
+      "post": {
+        "operationId": "thesis_save_theses__name__save_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_thesis_save_theses__name__save_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Thesis Save"
+      }
+    },
+    "/v1/disclosures/{disclosure_id}": {
+      "get": {
+        "operationId": "get_disclosure_v1_disclosures__disclosure_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "disclosure_id",
+            "required": true,
+            "schema": {
+              "title": "Disclosure Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Disclosure"
+      }
+    },
+    "/v1/events": {
+      "get": {
+        "description": "Events with payloads. Query: code, ticker, family, scope (holdings|watchlist|mine|all, default all),\nmateriality_gte, priority, from, to (Istanbul dates), as_of (ISO time), limit.",
+        "operationId": "list_events_v1_events_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Events"
+      }
+    },
+    "/v1/events/{event_id}": {
+      "get": {
+        "operationId": "get_event_v1_events__event_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "title": "Event Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Event"
+      }
+    },
+    "/v1/issuers": {
+      "get": {
+        "operationId": "find_issuer_v1_issuers_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "ticker",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "title": "Ticker",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Find Issuer"
+      }
+    },
+    "/v1/issuers/{issuer_id}": {
+      "get": {
+        "operationId": "get_issuer_v1_issuers__issuer_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "issuer_id",
+            "required": true,
+            "schema": {
+              "title": "Issuer Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Issuer"
+      }
+    },
+    "/v1/llm/pause": {
+      "post": {
+        "operationId": "llm_pause_v1_llm_pause_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Llm Pause"
+      }
+    },
+    "/v1/llm/resume": {
+      "post": {
+        "operationId": "llm_resume_v1_llm_resume_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Llm Resume"
+      }
+    },
+    "/v1/portfolio": {
+      "get": {
+        "operationId": "get_portfolio_v1_portfolio_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Portfolio"
+      }
+    },
+    "/v1/portfolio/positions": {
+      "get": {
+        "operationId": "get_positions_v1_portfolio_positions_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Positions"
+      }
+    },
+    "/v1/portfolio/transactions": {
+      "get": {
+        "operationId": "get_transactions_v1_portfolio_transactions_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 200,
+              "maximum": 5000,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Transactions"
+      }
+    },
+    "/v1/status": {
+      "get": {
+        "description": "Cheap service status (no launchctl, no network): lock, heartbeat, KAP poll lag, jobs, governor.",
+        "operationId": "get_status_v1_status_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Status"
+      }
+    },
+    "/v1/stream": {
+      "get": {
+        "description": "SSE: event.classified, analysis.completed, forecast.created, disclosure.revised (08 §1).\n\nResume point: the ``Last-Event-ID`` header wins over ``?after=``. A comment ping every 15 s detects\nhalf-open connections.",
+        "operationId": "api_stream_v1_stream_get",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "last-event-id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Last-Event-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Api Stream"
+      }
+    },
+    "/v1/usage": {
+      "get": {
+        "operationId": "get_usage_v1_usage_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Usage"
+      }
+    }
+  }
+}

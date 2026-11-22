@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="tr" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark light" />
+    <title>papi</title>
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <script>
+      try {
+        var t = localStorage.getItem('papi-theme')
+        document.documentElement.classList.toggle('dark', t !== 'light')
+      } catch (e) {
+        document.documentElement.classList.add('dark')
+      }
+      try {
+        var l = localStorage.getItem('papi-lang')
+        if (l === 'en') document.documentElement.lang = 'en'
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

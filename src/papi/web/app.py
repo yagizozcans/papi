@@ -11,6 +11,7 @@ Security model (08 §1, 09):
 from __future__ import annotations
 
 import ipaddress
+import mimetypes
 import secrets
 from pathlib import Path
 from urllib.parse import parse_qsl, urlencode, urlsplit
@@ -18,7 +19,14 @@ from urllib.parse import parse_qsl, urlencode, urlsplit
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from starlette.requests import Request
-from starlette.responses import JSONResponse, PlainTextResponse, RedirectResponse
+from starlette.responses import (
+    FileResponse,
+    HTMLResponse,
+    JSONResponse,
+    PlainTextResponse,
+    RedirectResponse,
+    Response,
+)
 from starlette.types import ASGIApp, Receive, Scope, Send
 
 from papi import __version__
@@ -100,9 +108,56 @@ class GuardMiddleware:
         await self.app(scope, receive, send)
 
 
+UI_MISSING_HTML = """<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><title>papi UI</title>
+<style>body{font:16px/1.5 system-ui,sans-serif;max-width:40rem;margin:4rem auto;padding:0 1rem}
+code{background:#eee;padding:.1rem .3rem;border-radius:3px}</style></head><body>
+<h1>Arayüz derlenmemiş / UI not built</h1>
+<p>Yeni arayüz henüz derlenmedi. Derlemek için:</p>
+<p>The new UI has not been built yet. To build it:</p>
+<p><code>cd frontend &amp;&amp; npm ci &amp;&amp; npm run build</code></p>
+<p><a href="/">Eski pano / Old dashboard</a></p>
+</body></html>"""
+
+
+def _ui_routes(app: FastAPI, ui_dir: Path) -> None:
+    def index_response() -> Response:
+        index = ui_dir / "index.html"
+        if not index.is_file():
+            return HTMLResponse(UI_MISSING_HTML, status_code=503, headers={"Cache-Control": "no-store"})
+        return FileResponse(index, media_type="text/html", headers={"Cache-Control": "no-cache"})
+
+    @app.get("/app", include_in_schema=False)
+    def ui_root_redirect() -> Response:
+        return RedirectResponse("/app/", status_code=307)
+
+    @app.get("/app/", include_in_schema=False)
+    def ui_root() -> Response:
+        return index_response()
+
+    @app.get("/app/{path:path}", include_in_schema=False)
+    def ui_file(path: str) -> Response:
+        if not ui_dir.is_dir():
+            return index_response()
+        root = ui_dir.resolve()
+        try:
+            target = (root / path).resolve()
+            target.relative_to(root)
+        except (ValueError, OSError):
+            return index_response()
+        if path.startswith("assets/") and not target.is_file():
+            return PlainTextResponse("Not found", status_code=404)
+        if not path or not target.is_file() or target.name == "index.html":
+            return index_response()
+        ctype = mimetypes.guess_type(target.name)[0] or "application/octet-stream"
+        cache = "public, max-age=31536000, immutable" if path.startswith("assets/") else "no-cache"
+        return FileResponse(target, media_type=ctype, headers={"Cache-Control": cache})
+
+
 def create_app(
     *,
     host: str | None = None,
+    ui_dir: Path | None = None,
     token: str | None = None,
     stream_poll_seconds: float = 1.0,
     stream_max_seconds: float = 60.0,
@@ -143,4 +198,5 @@ def create_app(
     app.include_router(pages.router)
     app.include_router(agents.router)
     app.include_router(theses.router)
+    _ui_routes(app, ui_dir if ui_dir is not None else WEB_DIR / "ui")
     return app

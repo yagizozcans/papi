@@ -7,3 +7,5 @@ __pycache__/
 .papi-dev/
 .DS_Store
 graphify-out/
+src/papi/web/ui/
+node_modules/

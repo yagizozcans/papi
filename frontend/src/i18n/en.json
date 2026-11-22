@@ -1,0 +1,171 @@
+{
+  "app": { "name": "papi", "tagline": "KAP and portfolio terminal" },
+  "nav": {
+    "today": "Today",
+    "feed": "Feed",
+    "portfolio": "Portfolio",
+    "research": "Research",
+    "lab": "Lab",
+    "system": "System",
+    "instrument": "Instrument",
+    "more": "More",
+    "soon": "soon",
+    "main": "Main navigation"
+  },
+  "research": {
+    "overview": "Overview",
+    "theses": "Theses",
+    "agents": "Agents",
+    "kb": "Knowledge base"
+  },
+  "topbar": {
+    "search": "Search or run a command",
+    "theme": "Toggle theme",
+    "language": "Switch language",
+    "shortcuts": "Shortcuts"
+  },
+  "placeholder": {
+    "badge": "Coming in P1",
+    "comingTitle": "This page arrives in phase P1",
+    "comingBody": "The shell is ready for now: navigation, status bar, command palette and shortcuts all work.",
+    "willShow": "What will live here"
+  },
+  "pages": {
+    "today": {
+      "desc": "The day at a glance: what changed and what needs you.",
+      "items": [
+        "Market strip: XU100, USDTRY and the portfolio's day P/L",
+        "Needs attention: unread P1 disclosures, pending corporate actions, alerts, failed jobs",
+        "Live disclosure tape",
+        "Running agent runs"
+      ]
+    },
+    "feed": {
+      "desc": "Terminal-style tape and reader for KAP disclosures.",
+      "items": [
+        "Filters: scope, priority, date, ticker, event code",
+        "Split view: list on the left, reader on the right (j/k to move)",
+        "Reader: original text, attachments, parsed fields, triage reasoning, analysis and citations",
+        "Run agent and feedback"
+      ]
+    },
+    "portfolio": {
+      "desc": "Your holdings, transactions and watchlists.",
+      "items": [
+        "Holdings table: weights, P/L, day change",
+        "Allocation and a performance chart with KAP event markers",
+        "Transaction ledger: add and undo, CSV import preview, İşCep reconcile",
+        "Pending corporate actions and watchlists"
+      ]
+    },
+    "research": {
+      "desc": "Theses, agents and the knowledge base.",
+      "items": [
+        "Theses: upload, edit, check, review results",
+        "Agents: run, run history, live tool calls and cost",
+        "Knowledge base: search, obligation review, approve and publish"
+      ]
+    },
+    "theses": {
+      "desc": "Upload investment theses and check them against KAP disclosures.",
+      "items": [
+        "Thesis upload and editing",
+        "Thesis checks and review results"
+      ]
+    },
+    "agents": {
+      "desc": "Run agents and follow their runs.",
+      "items": [
+        "Agent list, tool and skill catalogue",
+        "Run history: live tool calls and cost"
+      ]
+    },
+    "kb": {
+      "desc": "Search the knowledge base and review obligations.",
+      "items": [
+        "Search and document viewer",
+        "Obligation review, approval and publishing"
+      ]
+    },
+    "lab": {
+      "desc": "Reserved for simulation and risk tools.",
+      "items": [
+        "Simulation and event study",
+        "Monte Carlo / VaR and backtests"
+      ]
+    },
+    "system": {
+      "desc": "Health, LLM, data sources, alerts and backups.",
+      "items": [
+        "Health: lanes, jobs, gaps, latency",
+        "LLM usage and governor: pause / resume, calibration",
+        "Data sources: company sync, backfill, price sync",
+        "Alerts and Telegram, settings, backups and restore"
+      ]
+    },
+    "instrument": {
+      "desc": "Company page: chart, disclosures, capital, positions.",
+      "items": [
+        "Price chart with disclosure markers",
+        "Disclosures, share capital, positions, theses and agent runs",
+        "Reserved tabs: Financials, Event impact, Risk"
+      ]
+    }
+  },
+  "status": {
+    "label": "Status",
+    "loading": "Loading status",
+    "down": "Server unreachable",
+    "lag": "KAP lag",
+    "jobs": "Jobs",
+    "queued": "queued",
+    "running": "running",
+    "failed": "failed",
+    "llm": "LLM",
+    "llmActive": "active",
+    "llmPaused": "paused",
+    "telegram": "Telegram",
+    "on": "on",
+    "off": "off",
+    "backup": "Backup",
+    "never": "none",
+    "heartbeat": "Server",
+    "heartbeatOk": "alive",
+    "heartbeatStale": "not responding",
+    "ago": "{{value}} ago",
+    "unknown": "unknown"
+  },
+  "auth": {
+    "title": "Access token required",
+    "body": "papi only opens this address with a token. Open the URL once with ?token=…; the token is then stored as a cookie.",
+    "example": "http://<host>:38417/app/?token=…",
+    "hint": "You can find the token in the terminal where you started papi."
+  },
+  "palette": {
+    "title": "Command palette",
+    "description": "Go to a page or run a command.",
+    "placeholder": "Type a command or page…",
+    "empty": "No results.",
+    "navigate": "Pages",
+    "actions": "Commands",
+    "toggleTheme": "Toggle theme (dark / light)",
+    "toggleLanguage": "Switch language (TR / EN)",
+    "pauseLlm": "Pause LLM",
+    "resumeLlm": "Resume LLM",
+    "tickers": "Companies / Tickers",
+    "tickersSoon": "Company and ticker search arrives in P1",
+    "pauseOk": "LLM paused",
+    "resumeOk": "LLM resumed",
+    "actionFailed": "Action failed",
+    "shortcuts": "Show shortcuts"
+  },
+  "shortcuts": {
+    "title": "Keyboard shortcuts",
+    "description": "Shortcuts are disabled while typing in a field.",
+    "palette": "Open the command palette",
+    "help": "Open this dialog",
+    "goTo": "Go to page",
+    "then": "then"
+  },
+  "toast": { "close": "Close" }
+}

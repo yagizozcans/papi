@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 import typer
 
 from papi.core.config import get_settings
@@ -33,3 +36,20 @@ def serve(
     note = "" if is_loopback(bind) else " (bearer token zorunlu)"
     typer.echo(f"papi pano: http://{bind}:{bind_port}/{note}")
     uvicorn.run(application, host=bind, port=bind_port, log_level=log_level, proxy_headers=False)
+
+
+@app.command("openapi")
+def openapi(
+    out: Path | None = typer.Option(None, "--out", help="Dosyaya yaz (varsayılan stdout)."),
+) -> None:
+    """Print the /v1 OpenAPI schema as stable JSON (no server, no network)."""
+    from papi.web.app import create_app
+
+    text = (
+        json.dumps(create_app(host="127.0.0.1").openapi(), indent=2, sort_keys=True, ensure_ascii=False)
+        + "\n"
+    )
+    if out is None:
+        typer.echo(text, nl=False)
+    else:
+        out.write_text(text, encoding="utf-8")

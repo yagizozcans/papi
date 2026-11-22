@@ -1,0 +1,171 @@
+{
+  "app": { "name": "papi", "tagline": "KAP ve portföy terminali" },
+  "nav": {
+    "today": "Bugün",
+    "feed": "Akış",
+    "portfolio": "Portföy",
+    "research": "Araştırma",
+    "lab": "Lab",
+    "system": "Sistem",
+    "instrument": "Enstrüman",
+    "more": "Daha fazla",
+    "soon": "yakında",
+    "main": "Ana gezinme"
+  },
+  "research": {
+    "overview": "Genel",
+    "theses": "Tezler",
+    "agents": "Ajanlar",
+    "kb": "Bilgi tabanı"
+  },
+  "topbar": {
+    "search": "Ara veya komut çalıştır",
+    "theme": "Temayı değiştir",
+    "language": "Dili değiştir",
+    "shortcuts": "Kısayollar"
+  },
+  "placeholder": {
+    "badge": "P1'de geliyor",
+    "comingTitle": "Bu sayfa P1 aşamasında gelecek",
+    "comingBody": "Şimdilik iskelet hazır: gezinme, durum çubuğu, komut paleti ve kısayollar çalışıyor.",
+    "willShow": "Burada olacaklar"
+  },
+  "pages": {
+    "today": {
+      "desc": "Günün özeti: ne değişti, neye bakmalısın.",
+      "items": [
+        "Piyasa şeridi: XU100, USDTRY ve portföyün günlük K/Z'si",
+        "Dikkat gerektirenler: okunmamış P1 bildirimler, bekleyen sermaye işlemleri, uyarılar, başarısız işler",
+        "Canlı bildirim akışı",
+        "Çalışan ajan koşuları"
+      ]
+    },
+    "feed": {
+      "desc": "KAP bildirimleri için terminal tarzı akış ve okuyucu.",
+      "items": [
+        "Filtreler: kapsam, öncelik, tarih, hisse kodu, olay kodu",
+        "Bölünmüş görünüm: solda liste, sağda okuyucu (j/k ile gezinme)",
+        "Okuyucu: özgün metin, ekler, ayrıştırılmış alanlar, triyaj gerekçesi, analiz ve atıflar",
+        "Ajan çalıştırma ve geri bildirim"
+      ]
+    },
+    "portfolio": {
+      "desc": "Pozisyonların, işlemlerin ve izleme listelerin.",
+      "items": [
+        "Pozisyon tablosu: ağırlık, K/Z, günlük değişim",
+        "Dağılım ve KAP olay işaretli performans grafiği",
+        "İşlem defteri: ekle ve geri al, CSV içe aktarma önizlemesi, İşCep mutabakatı",
+        "Bekleyen sermaye işlemleri ve izleme listeleri"
+      ]
+    },
+    "research": {
+      "desc": "Tezler, ajanlar ve bilgi tabanı.",
+      "items": [
+        "Tezler: yükle, düzenle, kontrol et, inceleme sonuçları",
+        "Ajanlar: çalıştır, koşu geçmişi, canlı araç çağrıları ve maliyet",
+        "Bilgi tabanı: arama, yükümlülük incelemesi, onay ve yayın"
+      ]
+    },
+    "theses": {
+      "desc": "Yatırım tezlerini yükle ve KAP bildirimlerine karşı kontrol et.",
+      "items": [
+        "Tez yükleme ve düzenleme",
+        "Tez kontrolü ve inceleme sonuçları"
+      ]
+    },
+    "agents": {
+      "desc": "Ajanları çalıştır ve koşuları izle.",
+      "items": [
+        "Ajan listesi, araç ve beceri kataloğu",
+        "Koşu geçmişi: canlı araç çağrıları ve maliyet"
+      ]
+    },
+    "kb": {
+      "desc": "Bilgi tabanında ara, yükümlülükleri incele.",
+      "items": [
+        "Arama ve belge görüntüleme",
+        "Yükümlülük incelemesi, onay ve yayınlama"
+      ]
+    },
+    "lab": {
+      "desc": "Simülasyon ve risk araçları için ayrılmış alan.",
+      "items": [
+        "Simülasyon ve olay etkisi çalışması",
+        "Monte Carlo / VaR ve geriye dönük testler"
+      ]
+    },
+    "system": {
+      "desc": "Sağlık, LLM, veri kaynakları, uyarılar ve yedekler.",
+      "items": [
+        "Sağlık: şeritler, işler, boşluklar, gecikme",
+        "LLM kullanımı ve yönetici: duraklat / sürdür, kalibrasyon",
+        "Veri kaynakları: şirket senkronu, geriye dönük çekme, fiyat senkronu",
+        "Uyarılar ve Telegram, ayarlar, yedekler ve geri yükleme"
+      ]
+    },
+    "instrument": {
+      "desc": "Şirket sayfası: grafik, bildirimler, sermaye, pozisyonlar.",
+      "items": [
+        "Bildirim işaretli fiyat grafiği",
+        "Bildirimler, sermaye, pozisyonlar, tezler ve ajan koşuları",
+        "Ayrılmış sekmeler: Finansallar, Olay etkisi, Risk"
+      ]
+    }
+  },
+  "status": {
+    "label": "Durum",
+    "loading": "Durum yükleniyor",
+    "down": "Sunucuya ulaşılamıyor",
+    "lag": "KAP gecikmesi",
+    "jobs": "İşler",
+    "queued": "kuyrukta",
+    "running": "çalışıyor",
+    "failed": "başarısız",
+    "llm": "LLM",
+    "llmActive": "aktif",
+    "llmPaused": "duraklatıldı",
+    "telegram": "Telegram",
+    "on": "açık",
+    "off": "kapalı",
+    "backup": "Yedek",
+    "never": "yok",
+    "heartbeat": "Sunucu",
+    "heartbeatOk": "canlı",
+    "heartbeatStale": "yanıt vermiyor",
+    "ago": "{{value}} önce",
+    "unknown": "bilinmiyor"
+  },
+  "auth": {
+    "title": "Erişim jetonu gerekli",
+    "body": "papi bu adresi yalnızca jetonla açıyor. Adresi bir kez ?token=… ile aç; jeton çerez olarak saklanır.",
+    "example": "http://<adres>:38417/app/?token=…",
+    "hint": "Jetonu papi'yi başlattığın terminalde bulabilirsin."
+  },
+  "palette": {
+    "title": "Komut paleti",
+    "description": "Sayfalara git veya bir komut çalıştır.",
+    "placeholder": "Bir komut veya sayfa yaz…",
+    "empty": "Sonuç yok.",
+    "navigate": "Sayfalar",
+    "actions": "Komutlar",
+    "toggleTheme": "Temayı değiştir (koyu / açık)",
+    "toggleLanguage": "Dili değiştir (TR / EN)",
+    "pauseLlm": "LLM'i duraklat",
+    "resumeLlm": "LLM'i sürdür",
+    "tickers": "Şirketler / Hisse kodları",
+    "tickersSoon": "Şirket ve hisse kodu araması P1'de geliyor",
+    "pauseOk": "LLM duraklatıldı",
+    "resumeOk": "LLM sürdürüldü",
+    "actionFailed": "İşlem başarısız",
+    "shortcuts": "Kısayolları göster"
+  },
+  "shortcuts": {
+    "title": "Klavye kısayolları",
+    "description": "Bir alana yazarken kısayollar devre dışıdır.",
+    "palette": "Komut paletini aç",
+    "help": "Bu pencereyi aç",
+    "goTo": "Sayfaya git",
+    "then": "sonra"
+  },
+  "toast": { "close": "Kapat" }
+}
