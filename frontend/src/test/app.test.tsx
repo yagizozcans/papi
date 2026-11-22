@@ -1,6 +1,30 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
+vi.mock('lightweight-charts', () => {
+  const series = () => ({ setData: vi.fn(), applyOptions: vi.fn(), priceScale: () => ({ applyOptions: vi.fn() }) })
+  const timeScale = { setVisibleRange: vi.fn(), fitContent: vi.fn() }
+  const chart = {
+    addSeries: vi.fn(() => series()),
+    removeSeries: vi.fn(),
+    applyOptions: vi.fn(),
+    remove: vi.fn(),
+    timeScale: vi.fn(() => timeScale),
+    subscribeCrosshairMove: vi.fn(),
+    unsubscribeCrosshairMove: vi.fn(),
+  }
+  return {
+    createChart: vi.fn(() => chart),
+    createSeriesMarkers: vi.fn(() => ({ detach: vi.fn(), setMarkers: vi.fn() })),
+    LineSeries: 'Line',
+    CandlestickSeries: 'Candlestick',
+    HistogramSeries: 'Histogram',
+    ColorType: { Solid: 'solid' },
+    CrosshairMode: { Normal: 0 },
+    LineStyle: { Dashed: 2 },
+  }
+})
 import { applyTheme, getTheme } from '@/lib/theme'
 import { baseStatus, mockStatus, renderApp } from './helpers'
 
