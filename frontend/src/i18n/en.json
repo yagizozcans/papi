@@ -237,5 +237,337 @@
       "newItems_one": "{{count}} new item",
       "newItems_other": "{{count}} new items"
     }
+  },
+  "today": {
+    "portfolioValue": "Portfolio value",
+    "dayPnl": "Day P/L",
+    "positions_one": "{{count}} position",
+    "positions_other": "{{count}} positions",
+    "attention": {
+      "title": "Needs attention",
+      "markAll": "Mark all seen",
+      "markSeen": "Mark seen",
+      "clear": "Nothing needs your attention",
+      "events": "Disclosures needing attention",
+      "open": "Open",
+      "pending_one": "{{count}} pending corporate action",
+      "pending_other": "{{count}} pending corporate actions",
+      "deadJobs_one": "{{count}} failed job",
+      "deadJobs_other": "{{count}} failed jobs",
+      "analysesWaiting_one": "{{count}} analysis waiting",
+      "analysesWaiting_other": "{{count}} analyses waiting"
+    },
+    "tape": {
+      "title": "Latest disclosures",
+      "all": "All",
+      "empty": "No disclosures yet."
+    },
+    "runs": {
+      "title": "Agent runs",
+      "empty": "No agent runs yet.",
+      "cost": "${{value}}"
+    }
+  },
+  "portfolio": {
+    "unavailable": "Portfolio module is not installed",
+    "unpriced": "Tickers without a price, excluded from totals:",
+    "kind": {
+      "stock": "Stock",
+      "fund": "Fund",
+      "index": "Index",
+      "other": "Other"
+    },
+    "totals": {
+      "value": "Value",
+      "cost": "Cost",
+      "pnl": "Unrealised P/L",
+      "day": "Day change"
+    },
+    "performance": {
+      "title": "Performance",
+      "range": "Range",
+      "portfolio": "Portfolio",
+      "noData": "No performance data",
+      "ranges": {
+        "1m": "1M",
+        "3m": "3M",
+        "6m": "6M",
+        "1y": "1Y",
+        "ytd": "YTD",
+        "max": "Max"
+      }
+    },
+    "allocation": {
+      "title": "Allocation",
+      "by_instrument": "Instrument",
+      "by_kind": "Kind",
+      "by_sector": "Sector"
+    },
+    "holdings": {
+      "title": "Holdings",
+      "ticker": "Ticker",
+      "name": "Name",
+      "kind": "Kind",
+      "qty": "Qty",
+      "avgCost": "Avg cost",
+      "last": "Last",
+      "value": "Value",
+      "weight": "Weight",
+      "pnl": "P/L",
+      "pnlPct": "P/L %",
+      "day": "Day %",
+      "empty": "No open positions"
+    },
+    "txns": {
+      "title": "Recent transactions",
+      "date": "Date",
+      "type": "Type",
+      "ticker": "Ticker",
+      "price": "Price",
+      "fees": "Fees",
+      "source": "Source",
+      "empty": "No transactions",
+      "types": {
+        "buy": "Buy",
+        "sell": "Sell"
+      }
+    },
+    "pending": {
+      "title": "Pending corporate actions",
+      "empty": "Nothing pending",
+      "apply": "Apply",
+      "dismiss": "Dismiss",
+      "p2": "Coming in P2"
+    },
+    "watchlists": {
+      "title": "Watchlists",
+      "empty": "No watchlists"
+    }
+  },
+  "instrument": {
+    "notFound": "{{ticker}} not found",
+    "notFoundHint": "No instrument is registered under this ticker. Try ⌘K search.",
+    "holding": "HOLDING",
+    "watch": "WATCH",
+    "noPrice": "No price",
+    "tabs": {
+      "disclosures": "Disclosures",
+      "position": "Position",
+      "company": "Company",
+      "theses": "Theses",
+      "agents": "Agents",
+      "financials": "Financials",
+      "impact": "Event impact",
+      "risk": "Risk"
+    },
+    "soon": "Coming soon",
+    "soonHint": {
+      "financials": "Financial statements and ratios.",
+      "impact": "Price impact of disclosures (M3).",
+      "risk": "Risk and sensitivity analysis (M4)."
+    },
+    "disclosures": {
+      "empty": "No disclosures for this instrument"
+    },
+    "position": {
+      "title": "Position",
+      "none": "You hold no position in this instrument",
+      "watching": "It is on your watchlist.",
+      "txnsOnChart": "Buys and sells are marked with arrows on the chart."
+    },
+    "company": {
+      "issuer": "Issuer",
+      "legalName": "Legal name",
+      "sector": "Sector",
+      "type": "Type / currency",
+      "capital": "Share capital",
+      "paidIn": "Paid-in capital",
+      "ceiling": "Registered capital ceiling",
+      "shares": "Shares outstanding",
+      "freeFloat": "Free float",
+      "marketCap": "Market cap",
+      "noCapital": "Share capital not fetched yet (papi kap capital).",
+      "membership": "Membership",
+      "indices": "Indices",
+      "watchlists": "Watchlists"
+    },
+    "theses": {
+      "empty": "No theses for this instrument",
+      "runs_one": "{{count}} run",
+      "runs_other": "{{count}} runs"
+    },
+    "agents": {
+      "empty": "No agent runs for this instrument"
+    }
+  },
+  "search": {
+    "holding": "holding",
+    "watch": "watch",
+    "disclosures": "Disclosures",
+    "searching": "Searching…"
+  },
+  "feed": {
+    "title": "Feed",
+    "list": "Disclosure feed",
+    "yes": "yes",
+    "no": "no",
+    "loadMore": "Load more",
+    "loadingMore": "Loading…",
+    "endOfList": "End of list",
+    "hideRoutine": "Hide routine",
+    "scope": {
+      "label": "Scope",
+      "mine": "Mine + watchlist",
+      "holdings": "Portfolio",
+      "watchlist": "Watchlist",
+      "all": "All KAP"
+    },
+    "search": {
+      "label": "Search disclosures",
+      "placeholder": "Search text…"
+    },
+    "ranges": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "7d": "Last 7 days"
+    },
+    "band": {
+      "label": "Materiality",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "critical": "Critical"
+    },
+    "sort": {
+      "label": "Sort",
+      "time_desc": "Newest first",
+      "time_asc": "Oldest first",
+      "materiality": "Materiality"
+    },
+    "stage": {
+      "analysed": "analysed",
+      "rules": "rules"
+    },
+    "stageTitle": {
+      "analysed": "Claude analysis available",
+      "rules": "Rule-based classification (no analysis)"
+    },
+    "markers": {
+      "revision": "Revision",
+      "catchup": "Seen late",
+      "catchupTitle": "papi saw this disclosure late ({{latency}})",
+      "late": "Late filing",
+      "lateTitle": "KAP: disclosure was not filed on time",
+      "provisional": "provisional",
+      "provisionalTitle": "Provisional classification"
+    },
+    "row": {
+      "openKap": "Open on KAP",
+      "materiality": "Materiality {{value}}/100 ({{band}})",
+      "burst": "{{count}} disclosures"
+    },
+    "empty": {
+      "title": "No disclosures yet",
+      "desc": "Nothing to show in this scope.",
+      "showAll": "Show all KAP",
+      "filteredTitle": "No results for these filters",
+      "filteredDesc": "Try loosening or clearing the filters.",
+      "clear": "Clear filters"
+    },
+    "reader": {
+      "region": "Disclosure reader",
+      "empty": "Select a disclosure from the list to read it (j / k to move)",
+      "notFound": "Disclosure not found",
+      "notFoundDesc": "No event has this id; the link may be wrong or the event was removed.",
+      "backToFeed": "Back to feed",
+      "published": "Published",
+      "firstSeen": "papi saw",
+      "latency": "Latency",
+      "latencyTitle": "KAP publication → papi seeing it",
+      "openKap": "Open on KAP",
+      "runAgent": "Run agent",
+      "runAgentSoon": "P2",
+      "supersededBy": "This event was replaced by a newer version:",
+      "currentEvent": "current event"
+    },
+    "sections": {
+      "forMe": "For you",
+      "summary": "Summary",
+      "facts": "Key facts",
+      "analysis": "Analysis",
+      "forecasts": "Scenarios",
+      "documents": "Documents",
+      "payload": "Parsed fields",
+      "triage": "Triage reasoning",
+      "history": "History",
+      "feedback": "Feedback"
+    },
+    "forMe": {
+      "holding": "In your portfolio",
+      "ticker": "Ticker",
+      "quantity": "Qty",
+      "avgCost": "Avg cost",
+      "lastClose": "Last close",
+      "value": "Value",
+      "weight": "Weight",
+      "none": "This disclosure does not seem related to your portfolio."
+    },
+    "summary": {
+      "interpretation": "interpretation",
+      "noAnalysis": "No Claude analysis yet (rule-based classification).",
+      "none": "No summary."
+    },
+    "facts": {
+      "none": "No structured data.",
+      "unmapped": "source not mapped"
+    },
+    "analysis": {
+      "confidence": "confidence {{value}}",
+      "showSource": "Show source",
+      "unverified": "unverified",
+      "output": "Raw output",
+      "kind": {
+        "fact": "fact",
+        "calc": "calc",
+        "interp": "interpretation"
+      }
+    },
+    "forecast": {
+      "ticker": "Ticker",
+      "horizon": "Horizon",
+      "target": "Target",
+      "distribution": "Distribution",
+      "model": "model",
+      "realised": "Realised"
+    },
+    "documents": {
+      "none": "The document text has not been fetched yet.",
+      "readOnKap": "Read on KAP",
+      "empty": "This document has no text.",
+      "download": "Download",
+      "source": "Original source",
+      "kind": {
+        "disclosure_body": "Disclosure text",
+        "attachment": "Attachment",
+        "kap_pdf": "KAP PDF"
+      }
+    },
+    "history": {
+      "revisions": "Revision history",
+      "superseded": "Earlier classifications",
+      "disclosures": "Disclosures",
+      "event": "event"
+    },
+    "feedback": {
+      "note": "Note (optional)",
+      "thanks": "Feedback saved",
+      "error": "Could not send feedback",
+      "kinds": {
+        "helpful": "Helpful",
+        "wrong_fact": "Wrong fact",
+        "wrong_type": "Wrong type",
+        "not_material": "Not material"
+      }
+    }
   }
 }

@@ -237,5 +237,337 @@
       "newItems_one": "{{count}} yeni bildirim",
       "newItems_other": "{{count}} yeni bildirim"
     }
+  },
+  "today": {
+    "portfolioValue": "Portföy değeri",
+    "dayPnl": "Günlük K/Z",
+    "positions_one": "{{count}} pozisyon",
+    "positions_other": "{{count}} pozisyon",
+    "attention": {
+      "title": "Dikkat",
+      "markAll": "Hepsini okundu yap",
+      "markSeen": "Okundu yap",
+      "clear": "Dikkat gerektiren bir şey yok",
+      "events": "Dikkat gerektiren bildirimler",
+      "open": "Aç",
+      "pending_one": "{{count}} bekleyen sermaye işlemi",
+      "pending_other": "{{count}} bekleyen sermaye işlemi",
+      "deadJobs_one": "{{count}} başarısız iş",
+      "deadJobs_other": "{{count}} başarısız iş",
+      "analysesWaiting_one": "{{count}} analiz bekliyor",
+      "analysesWaiting_other": "{{count}} analiz bekliyor"
+    },
+    "tape": {
+      "title": "Son bildirimler",
+      "all": "Tümü",
+      "empty": "Henüz bildirim yok."
+    },
+    "runs": {
+      "title": "Ajan koşuları",
+      "empty": "Henüz ajan koşusu yok.",
+      "cost": "${{value}}"
+    }
+  },
+  "portfolio": {
+    "unavailable": "Portföy modülü kurulu değil",
+    "unpriced": "Fiyatı olmayan, hesaba katılmayan kodlar:",
+    "kind": {
+      "stock": "Hisse",
+      "fund": "Fon",
+      "index": "Endeks",
+      "other": "Diğer"
+    },
+    "totals": {
+      "value": "Değer",
+      "cost": "Maliyet",
+      "pnl": "Gerçekleşmemiş K/Z",
+      "day": "Günlük değişim"
+    },
+    "performance": {
+      "title": "Performans",
+      "range": "Dönem",
+      "portfolio": "Portföy",
+      "noData": "Performans verisi yok",
+      "ranges": {
+        "1m": "1A",
+        "3m": "3A",
+        "6m": "6A",
+        "1y": "1Y",
+        "ytd": "YBİ",
+        "max": "Tümü"
+      }
+    },
+    "allocation": {
+      "title": "Dağılım",
+      "by_instrument": "Enstrüman",
+      "by_kind": "Tür",
+      "by_sector": "Sektör"
+    },
+    "holdings": {
+      "title": "Pozisyonlar",
+      "ticker": "Kod",
+      "name": "Ad",
+      "kind": "Tür",
+      "qty": "Adet",
+      "avgCost": "Ort. maliyet",
+      "last": "Son",
+      "value": "Değer",
+      "weight": "Ağırlık",
+      "pnl": "K/Z",
+      "pnlPct": "K/Z %",
+      "day": "Gün %",
+      "empty": "Açık pozisyon yok"
+    },
+    "txns": {
+      "title": "Son işlemler",
+      "date": "Tarih",
+      "type": "Tür",
+      "ticker": "Kod",
+      "price": "Fiyat",
+      "fees": "Masraf",
+      "source": "Kaynak",
+      "empty": "İşlem yok",
+      "types": {
+        "buy": "Alım",
+        "sell": "Satım"
+      }
+    },
+    "pending": {
+      "title": "Bekleyen sermaye işlemleri",
+      "empty": "Bekleyen işlem yok",
+      "apply": "Uygula",
+      "dismiss": "Yoksay",
+      "p2": "P2 aşamasında gelecek"
+    },
+    "watchlists": {
+      "title": "İzleme listeleri",
+      "empty": "İzleme listesi yok"
+    }
+  },
+  "instrument": {
+    "notFound": "{{ticker}} bulunamadı",
+    "notFoundHint": "Bu kodla kayıtlı bir enstrüman yok. ⌘K ile aramayı dene.",
+    "holding": "PORTFÖYDE",
+    "watch": "İZLEMEDE",
+    "noPrice": "Fiyat yok",
+    "tabs": {
+      "disclosures": "Bildirimler",
+      "position": "Pozisyon",
+      "company": "Şirket",
+      "theses": "Tezler",
+      "agents": "Ajanlar",
+      "financials": "Finansallar",
+      "impact": "Olay etkisi",
+      "risk": "Risk"
+    },
+    "soon": "Yakında",
+    "soonHint": {
+      "financials": "Finansal tablolar ve oranlar.",
+      "impact": "Bildirimlerin fiyata etkisi (M3).",
+      "risk": "Risk ve duyarlılık analizi (M4)."
+    },
+    "disclosures": {
+      "empty": "Bu enstrüman için bildirim yok"
+    },
+    "position": {
+      "title": "Pozisyon",
+      "none": "Bu enstrümanda pozisyonun yok",
+      "watching": "İzleme listesindesin.",
+      "txnsOnChart": "Alım ve satımlar grafikte oklarla işaretli."
+    },
+    "company": {
+      "issuer": "Şirket",
+      "legalName": "Unvan",
+      "sector": "Sektör",
+      "type": "Tür / para birimi",
+      "capital": "Sermaye",
+      "paidIn": "Ödenmiş sermaye",
+      "ceiling": "Kayıtlı sermaye tavanı",
+      "shares": "Pay adedi",
+      "freeFloat": "Halka açıklık",
+      "marketCap": "Piyasa değeri",
+      "noCapital": "Sermaye bilgisi henüz çekilmedi (papi kap capital).",
+      "membership": "Üyelikler",
+      "indices": "Endeksler",
+      "watchlists": "İzleme listeleri"
+    },
+    "theses": {
+      "empty": "Bu enstrüman için tez yok",
+      "runs_one": "{{count}} koşu",
+      "runs_other": "{{count}} koşu"
+    },
+    "agents": {
+      "empty": "Bu enstrüman için ajan koşusu yok"
+    }
+  },
+  "search": {
+    "holding": "portföyde",
+    "watch": "izlemede",
+    "disclosures": "Bildirimler",
+    "searching": "Aranıyor…"
+  },
+  "feed": {
+    "title": "Akış",
+    "list": "Bildirim akışı",
+    "yes": "evet",
+    "no": "hayır",
+    "loadMore": "Daha fazla yükle",
+    "loadingMore": "Yükleniyor…",
+    "endOfList": "Listenin sonu",
+    "hideRoutine": "Rutini gizle",
+    "scope": {
+      "label": "Kapsam",
+      "mine": "Portföyüm + izleme",
+      "holdings": "Portföy",
+      "watchlist": "İzleme",
+      "all": "Tüm KAP"
+    },
+    "search": {
+      "label": "Bildirimlerde ara",
+      "placeholder": "Metinde ara…"
+    },
+    "ranges": {
+      "today": "Bugün",
+      "yesterday": "Dün",
+      "7d": "Son 7 gün"
+    },
+    "band": {
+      "label": "Önemlilik",
+      "low": "Düşük",
+      "medium": "Orta",
+      "high": "Yüksek",
+      "critical": "Kritik"
+    },
+    "sort": {
+      "label": "Sıralama",
+      "time_desc": "Yeniden eskiye",
+      "time_asc": "Eskiden yeniye",
+      "materiality": "Önemlilik"
+    },
+    "stage": {
+      "analysed": "analiz",
+      "rules": "kural"
+    },
+    "stageTitle": {
+      "analysed": "Claude analizi var",
+      "rules": "Kural tabanlı sınıflandırma (analiz yok)"
+    },
+    "markers": {
+      "revision": "Revizyon",
+      "catchup": "Geç görüldü",
+      "catchupTitle": "papi bu bildirimi geç gördü ({{latency}})",
+      "late": "Geç bildirim",
+      "lateTitle": "KAP: süresinde yapılmamış bildirim",
+      "provisional": "geçici",
+      "provisionalTitle": "Geçici sınıflandırma"
+    },
+    "row": {
+      "openKap": "KAP'ta aç",
+      "materiality": "Önemlilik {{value}}/100 ({{band}})",
+      "burst": "{{count}} bildirim"
+    },
+    "empty": {
+      "title": "Henüz bildirim yok",
+      "desc": "Bu kapsamda gösterilecek bildirim yok.",
+      "showAll": "Tüm KAP'ı göster",
+      "filteredTitle": "Bu filtrelerle sonuç yok",
+      "filteredDesc": "Filtreleri gevşetmeyi veya temizlemeyi deneyin.",
+      "clear": "Filtreleri temizle"
+    },
+    "reader": {
+      "region": "Bildirim okuyucu",
+      "empty": "Okumak için listeden bir bildirim seçin (j / k ile gezinin)",
+      "notFound": "Bildirim bulunamadı",
+      "notFoundDesc": "Bu kimlikle bir olay yok; silinmiş veya yanlış bir bağlantı olabilir.",
+      "backToFeed": "Akışa dön",
+      "published": "Yayın",
+      "firstSeen": "papi gördü",
+      "latency": "Gecikme",
+      "latencyTitle": "KAP yayını → papi görmesi",
+      "openKap": "KAP'ta aç",
+      "runAgent": "Ajan çalıştır",
+      "runAgentSoon": "P2",
+      "supersededBy": "Bu olay yeni bir sürümle değiştirildi:",
+      "currentEvent": "güncel olay"
+    },
+    "sections": {
+      "forMe": "Senin için",
+      "summary": "Özet",
+      "facts": "Temel bilgiler",
+      "analysis": "Analiz",
+      "forecasts": "Senaryolar",
+      "documents": "Belgeler",
+      "payload": "Ayrıştırılmış alanlar",
+      "triage": "Sınıflandırma gerekçesi",
+      "history": "Geçmiş",
+      "feedback": "Geri bildirim"
+    },
+    "forMe": {
+      "holding": "Portföyünde",
+      "ticker": "Hisse",
+      "quantity": "Adet",
+      "avgCost": "Ort. maliyet",
+      "lastClose": "Son kapanış",
+      "value": "Değer",
+      "weight": "Ağırlık",
+      "none": "Bu bildirim portföyünle ilişkili görünmüyor."
+    },
+    "summary": {
+      "interpretation": "yorum",
+      "noAnalysis": "Claude analizi henüz yok (kural tabanlı sınıflandırma).",
+      "none": "Özet yok."
+    },
+    "facts": {
+      "none": "Yapılandırılmış veri yok.",
+      "unmapped": "kaynak eşlenmedi"
+    },
+    "analysis": {
+      "confidence": "güven {{value}}",
+      "showSource": "Kaynağı göster",
+      "unverified": "doğrulanamadı",
+      "output": "Ham çıktı",
+      "kind": {
+        "fact": "bilgi",
+        "calc": "hesap",
+        "interp": "yorum"
+      }
+    },
+    "forecast": {
+      "ticker": "Hisse",
+      "horizon": "Ufuk",
+      "target": "Hedef",
+      "distribution": "Dağılım",
+      "model": "model",
+      "realised": "Gerçekleşen"
+    },
+    "documents": {
+      "none": "Belge metni henüz alınmadı.",
+      "readOnKap": "KAP'ta oku",
+      "empty": "Bu belgenin metni yok.",
+      "download": "İndir",
+      "source": "Özgün kaynak",
+      "kind": {
+        "disclosure_body": "Bildirim metni",
+        "attachment": "Ek",
+        "kap_pdf": "KAP PDF"
+      }
+    },
+    "history": {
+      "revisions": "Revizyon geçmişi",
+      "superseded": "Önceki sınıflandırmalar",
+      "disclosures": "Bildirimler",
+      "event": "olay"
+    },
+    "feedback": {
+      "note": "Not (isteğe bağlı)",
+      "thanks": "Geri bildirim kaydedildi",
+      "error": "Geri bildirim gönderilemedi",
+      "kinds": {
+        "helpful": "Faydalı",
+        "wrong_fact": "Yanlış bilgi",
+        "wrong_type": "Yanlış tür",
+        "not_material": "Önemsiz"
+      }
+    }
   }
 }

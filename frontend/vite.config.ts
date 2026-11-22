@@ -4,7 +4,7 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
 
-const PAPI = 'http://127.0.0.1:38417'
+const PAPI = process.env.PAPI_API ?? 'http://127.0.0.1:38417'
 
 export default defineConfig({
   base: '/app/',

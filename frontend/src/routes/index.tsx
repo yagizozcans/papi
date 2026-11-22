@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { PagePlaceholder } from '@/components/page-placeholder'
+import { TodayPage } from '@/features/today/today-page'
 
 export const Route = createFileRoute('/')({
   staticData: { titleKey: 'nav.today' },
-  component: () => <PagePlaceholder page="today" />,
+  component: TodayPage,
 })

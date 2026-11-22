@@ -1,7 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { PagePlaceholder } from '@/components/page-placeholder'
+import { InstrumentPage } from '@/features/instrument/instrument-page'
 
 export const Route = createFileRoute('/i/$ticker')({
   staticData: { titleKey: 'nav.instrument' },
-  component: () => <PagePlaceholder page="instrument" />,
+  component: function InstrumentRoute() {
+    const { ticker } = Route.useParams()
+    return <InstrumentPage ticker={ticker} />
+  },
 })

@@ -16,6 +16,7 @@ import { Route as LabRouteImport } from './routes/lab'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as ResearchRouteImport } from './routes/research'
 import { Route as SystemRouteImport } from './routes/system'
+import { Route as FeedEventIdRouteImport } from './routes/feed.$eventId'
 import { Route as ITickerRouteImport } from './routes/i.$ticker'
 import { Route as ResearchIndexRouteImport } from './routes/research.index'
 import { Route as ResearchAgentsRouteImport } from './routes/research.agents'
@@ -57,6 +58,11 @@ const SystemRoute = SystemRouteImport.update({
   path: '/system',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeedEventIdRoute = FeedEventIdRouteImport.update({
+  id: '/$eventId',
+  path: '/$eventId',
+  getParentRoute: () => FeedRoute,
+} as any)
 const ITickerRoute = ITickerRouteImport.update({
   id: '/i/$ticker',
   path: '/i/$ticker',
@@ -86,11 +92,12 @@ const ResearchThesesRoute = ResearchThesesRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/_kitchen': typeof KitchenRoute
-  '/feed': typeof FeedRoute
+  '/feed': typeof FeedRouteWithChildren
   '/lab': typeof LabRoute
   '/portfolio': typeof PortfolioRoute
   '/research': typeof ResearchRouteWithChildren
   '/system': typeof SystemRoute
+  '/feed/$eventId': typeof FeedEventIdRoute
   '/i/$ticker': typeof ITickerRoute
   '/research/agents': typeof ResearchAgentsRoute
   '/research/kb': typeof ResearchKbRoute
@@ -100,10 +107,11 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/_kitchen': typeof KitchenRoute
-  '/feed': typeof FeedRoute
+  '/feed': typeof FeedRouteWithChildren
   '/lab': typeof LabRoute
   '/portfolio': typeof PortfolioRoute
   '/system': typeof SystemRoute
+  '/feed/$eventId': typeof FeedEventIdRoute
   '/i/$ticker': typeof ITickerRoute
   '/research/agents': typeof ResearchAgentsRoute
   '/research/kb': typeof ResearchKbRoute
@@ -114,11 +122,12 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_kitchen': typeof KitchenRoute
-  '/feed': typeof FeedRoute
+  '/feed': typeof FeedRouteWithChildren
   '/lab': typeof LabRoute
   '/portfolio': typeof PortfolioRoute
   '/research': typeof ResearchRouteWithChildren
   '/system': typeof SystemRoute
+  '/feed/$eventId': typeof FeedEventIdRoute
   '/i/$ticker': typeof ITickerRoute
   '/research/agents': typeof ResearchAgentsRoute
   '/research/kb': typeof ResearchKbRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/portfolio'
     | '/research'
     | '/system'
+    | '/feed/$eventId'
     | '/i/$ticker'
     | '/research/agents'
     | '/research/kb'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/lab'
     | '/portfolio'
     | '/system'
+    | '/feed/$eventId'
     | '/i/$ticker'
     | '/research/agents'
     | '/research/kb'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/portfolio'
     | '/research'
     | '/system'
+    | '/feed/$eventId'
     | '/i/$ticker'
     | '/research/agents'
     | '/research/kb'
@@ -172,7 +184,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   KitchenRoute: typeof KitchenRoute
-  FeedRoute: typeof FeedRoute
+  FeedRoute: typeof FeedRouteWithChildren
   LabRoute: typeof LabRoute
   PortfolioRoute: typeof PortfolioRoute
   ResearchRoute: typeof ResearchRouteWithChildren
@@ -231,6 +243,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SystemRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/feed/$eventId': {
+      id: '/feed/$eventId'
+      path: '/$eventId'
+      fullPath: '/feed/$eventId'
+      preLoaderRoute: typeof FeedEventIdRouteImport
+      parentRoute: typeof FeedRoute
+    }
     '/i/$ticker': {
       id: '/i/$ticker'
       path: '/i/$ticker'
@@ -269,6 +288,16 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface FeedRouteChildren {
+  FeedEventIdRoute: typeof FeedEventIdRoute
+}
+
+const FeedRouteChildren: FeedRouteChildren = {
+  FeedEventIdRoute: FeedEventIdRoute,
+}
+
+const FeedRouteWithChildren = FeedRoute._addFileChildren(FeedRouteChildren)
+
 interface ResearchRouteChildren {
   ResearchAgentsRoute: typeof ResearchAgentsRoute
   ResearchKbRoute: typeof ResearchKbRoute
@@ -290,7 +319,7 @@ const ResearchRouteWithChildren = ResearchRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   KitchenRoute: KitchenRoute,
-  FeedRoute: FeedRoute,
+  FeedRoute: FeedRouteWithChildren,
   LabRoute: LabRoute,
   PortfolioRoute: PortfolioRoute,
   ResearchRoute: ResearchRouteWithChildren,

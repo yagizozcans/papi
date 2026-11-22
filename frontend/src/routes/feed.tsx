@@ -1,7 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { PagePlaceholder } from '@/components/page-placeholder'
+import { FeedPage } from '@/features/feed/feed-page'
+import { validateFeedSearch } from '@/features/feed/search'
 
 export const Route = createFileRoute('/feed')({
   staticData: { titleKey: 'nav.feed' },
-  component: () => <PagePlaceholder page="feed" />,
+  validateSearch: validateFeedSearch,
+  component: FeedPage,
 })

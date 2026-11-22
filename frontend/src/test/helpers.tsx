@@ -29,6 +29,11 @@ export function mockStatus(status: Status | number = baseStatus) {
       if (typeof status === 'number') return new Response('{}', { status })
       return Response.json(status)
     }
+    // Data endpoints of the pages are not under test here: answer like a missing resource.
+    if (/\/v1\/(today|portfolio|instruments|search)/.test(url)) {
+      await new Promise((r) => setTimeout(r, 50)) // let the status query settle first (the auth gate hides the page on 401)
+      return Response.json({ detail: 'not mocked' }, { status: typeof status === 'number' ? status : 404 })
+    }
     return Response.json({ paused: false, until: null, reason: null })
   })
   vi.stubGlobal('fetch', fetchMock)

@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { PagePlaceholder } from '@/components/page-placeholder'
+import { PortfolioPage } from '@/features/portfolio/portfolio-page'
 
 export const Route = createFileRoute('/portfolio')({
   staticData: { titleKey: 'nav.portfolio' },
-  component: () => <PagePlaceholder page="portfolio" />,
+  component: PortfolioPage,
 })
