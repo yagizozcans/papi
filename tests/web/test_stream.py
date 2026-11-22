@@ -64,7 +64,7 @@ def test_tail_skips_history_and_dedupes(clean_registry: Any, world: dict[str, An
 def _poll(client: TestClient, after: str | None, **params: Any) -> dict[str, Any]:
     if after is not None:
         params["after"] = after
-    r = client.get("/stream/poll", params=params)
+    r = client.get("/legacy/stream/poll", params=params)
     assert r.status_code == 200 and r.headers["cache-control"] == "no-store"
     return r.json()
 
@@ -76,8 +76,8 @@ def test_poll_without_after_returns_cursor_only(
     body = _poll(client, None, scope="all")
     assert body["items"] == [] and body["more"] is False and body["cursor"]
     # the feed page renders the same kind of cursor so its first poll misses nothing
-    html = client.get("/?scope=all").text
-    assert 'data-poll="/stream/poll?scope=all"' in html and 'data-cursor="' in html
+    html = client.get("/legacy/?scope=all").text
+    assert 'data-poll="/legacy/stream/poll?scope=all"' in html and 'data-cursor="' in html
     assert "EventSource" not in client.get("/static/app.js").text
 
 
@@ -238,7 +238,7 @@ def test_api_stream_yields_new_events_live(
 
 
 def test_dashboard_sse_route_removed(client: TestClient) -> None:
-    assert client.get("/stream").status_code in (404, 405)
+    assert client.get("/legacy/stream").status_code in (404, 405)
 
 
 def test_api_stream_max_lifetime_and_default(world: dict[str, Any]) -> None:

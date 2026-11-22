@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/": {
+    "/legacy/": {
         parameters: {
             query?: never;
             header?: never;
@@ -12,7 +12,7 @@ export interface paths {
             cookie?: never;
         };
         /** Feed Page */
-        get: operations["feed_page__get"];
+        get: operations["feed_page_legacy__get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -21,7 +21,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/agents": {
+    "/legacy/agents": {
         parameters: {
             query?: never;
             header?: never;
@@ -29,7 +29,7 @@ export interface paths {
             cookie?: never;
         };
         /** Agents Page */
-        get: operations["agents_page_agents_get"];
+        get: operations["agents_page_legacy_agents_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -38,7 +38,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/agents/run": {
+    "/legacy/agents/run": {
         parameters: {
             query?: never;
             header?: never;
@@ -48,14 +48,14 @@ export interface paths {
         get?: never;
         put?: never;
         /** Agents Start */
-        post: operations["agents_start_agents_run_post"];
+        post: operations["agents_start_legacy_agents_run_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/agents/runs/{run_id}": {
+    "/legacy/agents/runs/{run_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -63,7 +63,7 @@ export interface paths {
             cookie?: never;
         };
         /** Run Page */
-        get: operations["run_page_agents_runs__run_id__get"];
+        get: operations["run_page_legacy_agents_runs__run_id__get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -72,7 +72,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/company/{ticker}": {
+    "/legacy/company/{ticker}": {
         parameters: {
             query?: never;
             header?: never;
@@ -80,7 +80,7 @@ export interface paths {
             cookie?: never;
         };
         /** Company Page */
-        get: operations["company_page_company__ticker__get"];
+        get: operations["company_page_legacy_company__ticker__get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -89,7 +89,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/events/{event_id}": {
+    "/legacy/events/{event_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -97,7 +97,7 @@ export interface paths {
             cookie?: never;
         };
         /** Event Page */
-        get: operations["event_page_events__event_id__get"];
+        get: operations["event_page_legacy_events__event_id__get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -106,7 +106,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/events/{event_id}/feedback": {
+    "/legacy/events/{event_id}/feedback": {
         parameters: {
             query?: never;
             header?: never;
@@ -116,14 +116,14 @@ export interface paths {
         get?: never;
         put?: never;
         /** Event Feedback */
-        post: operations["event_feedback_events__event_id__feedback_post"];
+        post: operations["event_feedback_legacy_events__event_id__feedback_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/fragments/agents/runs/{run_id}": {
+    "/legacy/fragments/agents/runs/{run_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -131,7 +131,7 @@ export interface paths {
             cookie?: never;
         };
         /** Run Fragment */
-        get: operations["run_fragment_fragments_agents_runs__run_id__get"];
+        get: operations["run_fragment_legacy_fragments_agents_runs__run_id__get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -140,7 +140,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/fragments/events/{event_id}": {
+    "/legacy/fragments/events/{event_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -148,7 +148,7 @@ export interface paths {
             cookie?: never;
         };
         /** Feed Item Fragment */
-        get: operations["feed_item_fragment_fragments_events__event_id__get"];
+        get: operations["feed_item_fragment_legacy_fragments_events__event_id__get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -157,7 +157,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/fragments/theses/{name}": {
+    "/legacy/fragments/theses/{name}": {
         parameters: {
             query?: never;
             header?: never;
@@ -165,7 +165,7 @@ export interface paths {
             cookie?: never;
         };
         /** Thesis Fragment */
-        get: operations["thesis_fragment_fragments_theses__name__get"];
+        get: operations["thesis_fragment_legacy_fragments_theses__name__get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -174,7 +174,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/ops": {
+    "/legacy/ops": {
         parameters: {
             query?: never;
             header?: never;
@@ -182,7 +182,7 @@ export interface paths {
             cookie?: never;
         };
         /** Ops Page */
-        get: operations["ops_page_ops_get"];
+        get: operations["ops_page_legacy_ops_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -191,7 +191,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/ops/usage": {
+    "/legacy/ops/usage": {
         parameters: {
             query?: never;
             header?: never;
@@ -199,7 +199,7 @@ export interface paths {
             cookie?: never;
         };
         /** Usage Page */
-        get: operations["usage_page_ops_usage_get"];
+        get: operations["usage_page_legacy_ops_usage_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -208,7 +208,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/ops/usage/{action}": {
+    "/legacy/ops/usage/{action}": {
         parameters: {
             query?: never;
             header?: never;
@@ -218,14 +218,14 @@ export interface paths {
         get?: never;
         put?: never;
         /** Usage Action */
-        post: operations["usage_action_ops_usage__action__post"];
+        post: operations["usage_action_legacy_ops_usage__action__post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/portfolio": {
+    "/legacy/portfolio": {
         parameters: {
             query?: never;
             header?: never;
@@ -233,7 +233,7 @@ export interface paths {
             cookie?: never;
         };
         /** Portfolio Page */
-        get: operations["portfolio_page_portfolio_get"];
+        get: operations["portfolio_page_legacy_portfolio_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -242,7 +242,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/portfolio/pending/{pending_id}/apply": {
+    "/legacy/portfolio/pending/{pending_id}/apply": {
         parameters: {
             query?: never;
             header?: never;
@@ -252,14 +252,14 @@ export interface paths {
         get?: never;
         put?: never;
         /** Pending Apply */
-        post: operations["pending_apply_portfolio_pending__pending_id__apply_post"];
+        post: operations["pending_apply_legacy_portfolio_pending__pending_id__apply_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/portfolio/pending/{pending_id}/dismiss": {
+    "/legacy/portfolio/pending/{pending_id}/dismiss": {
         parameters: {
             query?: never;
             header?: never;
@@ -269,7 +269,112 @@ export interface paths {
         get?: never;
         put?: never;
         /** Pending Dismiss */
-        post: operations["pending_dismiss_portfolio_pending__pending_id__dismiss_post"];
+        post: operations["pending_dismiss_legacy_portfolio_pending__pending_id__dismiss_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/stream/poll": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Stream Poll
+         * @description Dashboard short poll: ``?after=<cursor>`` plus the feed's filter/sort parameters.
+         */
+        get: operations["stream_poll_legacy_stream_poll_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/theses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Theses Page */
+        get: operations["theses_page_legacy_theses_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/theses/upload": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Theses Upload */
+        post: operations["theses_upload_legacy_theses_upload_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/theses/{name}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Thesis Page */
+        get: operations["thesis_page_legacy_theses__name__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/theses/{name}/files/{file_name}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Thesis File */
+        get: operations["thesis_file_legacy_theses__name__files__file_name__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/theses/{name}/save": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Thesis Save */
+        post: operations["thesis_save_legacy_theses__name__save_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -290,111 +395,6 @@ export interface paths {
         get: operations["raw_download_raw__sha__get"];
         put?: never;
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/stream/poll": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Stream Poll
-         * @description Dashboard short poll: ``?after=<cursor>`` plus the feed's filter/sort parameters.
-         */
-        get: operations["stream_poll_stream_poll_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/theses": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Theses Page */
-        get: operations["theses_page_theses_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/theses/upload": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Theses Upload */
-        post: operations["theses_upload_theses_upload_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/theses/{name}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Thesis Page */
-        get: operations["thesis_page_theses__name__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/theses/{name}/files/{file_name}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Thesis File */
-        get: operations["thesis_file_theses__name__files__file_name__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/theses/{name}/save": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Thesis Save */
-        post: operations["thesis_save_theses__name__save_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -903,15 +903,15 @@ export interface components {
             /** Value */
             value: number;
         };
-        /** Body_agents_start_agents_run_post */
-        Body_agents_start_agents_run_post: {
+        /** Body_agents_start_legacy_agents_run_post */
+        Body_agents_start_legacy_agents_run_post: {
             /** Agent */
             agent: string;
             /** Ref */
             ref: string;
         };
-        /** Body_event_feedback_events__event_id__feedback_post */
-        Body_event_feedback_events__event_id__feedback_post: {
+        /** Body_event_feedback_legacy_events__event_id__feedback_post */
+        Body_event_feedback_legacy_events__event_id__feedback_post: {
             /** Comment */
             comment?: string | null;
             /** Kind */
@@ -924,13 +924,13 @@ export interface components {
              */
             target_type: string;
         };
-        /** Body_pending_apply_portfolio_pending__pending_id__apply_post */
-        Body_pending_apply_portfolio_pending__pending_id__apply_post: {
+        /** Body_pending_apply_legacy_portfolio_pending__pending_id__apply_post */
+        Body_pending_apply_legacy_portfolio_pending__pending_id__apply_post: {
             /** Quantity Override */
             quantity_override?: string | null;
         };
-        /** Body_theses_upload_theses_upload_post */
-        Body_theses_upload_theses_upload_post: {
+        /** Body_theses_upload_legacy_theses_upload_post */
+        Body_theses_upload_legacy_theses_upload_post: {
             /**
              * Direction
              * @default long
@@ -948,8 +948,8 @@ export interface components {
             /** Ticker */
             ticker: string;
         };
-        /** Body_thesis_save_theses__name__save_post */
-        Body_thesis_save_theses__name__save_post: {
+        /** Body_thesis_save_legacy_theses__name__save_post */
+        Body_thesis_save_legacy_theses__name__save_post: {
             /** Content */
             content: string;
         };
@@ -2003,7 +2003,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    feed_page__get: {
+    feed_page_legacy__get: {
         parameters: {
             query?: never;
             header?: never;
@@ -2023,7 +2023,7 @@ export interface operations {
             };
         };
     };
-    agents_page_agents_get: {
+    agents_page_legacy_agents_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -2043,7 +2043,7 @@ export interface operations {
             };
         };
     };
-    agents_start_agents_run_post: {
+    agents_start_legacy_agents_run_post: {
         parameters: {
             query?: never;
             header?: never;
@@ -2052,7 +2052,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/x-www-form-urlencoded": components["schemas"]["Body_agents_start_agents_run_post"];
+                "application/x-www-form-urlencoded": components["schemas"]["Body_agents_start_legacy_agents_run_post"];
             };
         };
         responses: {
@@ -2076,7 +2076,7 @@ export interface operations {
             };
         };
     };
-    run_page_agents_runs__run_id__get: {
+    run_page_legacy_agents_runs__run_id__get: {
         parameters: {
             query?: never;
             header?: never;
@@ -2107,7 +2107,7 @@ export interface operations {
             };
         };
     };
-    company_page_company__ticker__get: {
+    company_page_legacy_company__ticker__get: {
         parameters: {
             query?: never;
             header?: never;
@@ -2138,7 +2138,7 @@ export interface operations {
             };
         };
     };
-    event_page_events__event_id__get: {
+    event_page_legacy_events__event_id__get: {
         parameters: {
             query?: never;
             header?: never;
@@ -2169,7 +2169,7 @@ export interface operations {
             };
         };
     };
-    event_feedback_events__event_id__feedback_post: {
+    event_feedback_legacy_events__event_id__feedback_post: {
         parameters: {
             query?: never;
             header?: never;
@@ -2180,7 +2180,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/x-www-form-urlencoded": components["schemas"]["Body_event_feedback_events__event_id__feedback_post"];
+                "application/x-www-form-urlencoded": components["schemas"]["Body_event_feedback_legacy_events__event_id__feedback_post"];
             };
         };
         responses: {
@@ -2204,7 +2204,7 @@ export interface operations {
             };
         };
     };
-    run_fragment_fragments_agents_runs__run_id__get: {
+    run_fragment_legacy_fragments_agents_runs__run_id__get: {
         parameters: {
             query?: never;
             header?: never;
@@ -2235,7 +2235,7 @@ export interface operations {
             };
         };
     };
-    feed_item_fragment_fragments_events__event_id__get: {
+    feed_item_fragment_legacy_fragments_events__event_id__get: {
         parameters: {
             query?: never;
             header?: never;
@@ -2266,7 +2266,7 @@ export interface operations {
             };
         };
     };
-    thesis_fragment_fragments_theses__name__get: {
+    thesis_fragment_legacy_fragments_theses__name__get: {
         parameters: {
             query?: never;
             header?: never;
@@ -2297,7 +2297,7 @@ export interface operations {
             };
         };
     };
-    ops_page_ops_get: {
+    ops_page_legacy_ops_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -2317,7 +2317,7 @@ export interface operations {
             };
         };
     };
-    usage_page_ops_usage_get: {
+    usage_page_legacy_ops_usage_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -2337,7 +2337,7 @@ export interface operations {
             };
         };
     };
-    usage_action_ops_usage__action__post: {
+    usage_action_legacy_ops_usage__action__post: {
         parameters: {
             query?: never;
             header?: never;
@@ -2368,7 +2368,7 @@ export interface operations {
             };
         };
     };
-    portfolio_page_portfolio_get: {
+    portfolio_page_legacy_portfolio_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -2388,7 +2388,7 @@ export interface operations {
             };
         };
     };
-    pending_apply_portfolio_pending__pending_id__apply_post: {
+    pending_apply_legacy_portfolio_pending__pending_id__apply_post: {
         parameters: {
             query?: never;
             header?: never;
@@ -2399,7 +2399,7 @@ export interface operations {
         };
         requestBody?: {
             content: {
-                "application/x-www-form-urlencoded": components["schemas"]["Body_pending_apply_portfolio_pending__pending_id__apply_post"];
+                "application/x-www-form-urlencoded": components["schemas"]["Body_pending_apply_legacy_portfolio_pending__pending_id__apply_post"];
             };
         };
         responses: {
@@ -2423,7 +2423,7 @@ export interface operations {
             };
         };
     };
-    pending_dismiss_portfolio_pending__pending_id__dismiss_post: {
+    pending_dismiss_legacy_portfolio_pending__pending_id__dismiss_post: {
         parameters: {
             query?: never;
             header?: never;
@@ -2454,38 +2454,7 @@ export interface operations {
             };
         };
     };
-    raw_download_raw__sha__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                sha: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    stream_poll_stream_poll_get: {
+    stream_poll_legacy_stream_poll_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -2505,7 +2474,7 @@ export interface operations {
             };
         };
     };
-    theses_page_theses_get: {
+    theses_page_legacy_theses_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -2525,7 +2494,7 @@ export interface operations {
             };
         };
     };
-    theses_upload_theses_upload_post: {
+    theses_upload_legacy_theses_upload_post: {
         parameters: {
             query?: never;
             header?: never;
@@ -2534,7 +2503,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "multipart/form-data": components["schemas"]["Body_theses_upload_theses_upload_post"];
+                "multipart/form-data": components["schemas"]["Body_theses_upload_legacy_theses_upload_post"];
             };
         };
         responses: {
@@ -2558,7 +2527,7 @@ export interface operations {
             };
         };
     };
-    thesis_page_theses__name__get: {
+    thesis_page_legacy_theses__name__get: {
         parameters: {
             query?: never;
             header?: never;
@@ -2589,7 +2558,7 @@ export interface operations {
             };
         };
     };
-    thesis_file_theses__name__files__file_name__get: {
+    thesis_file_legacy_theses__name__files__file_name__get: {
         parameters: {
             query?: never;
             header?: never;
@@ -2621,7 +2590,7 @@ export interface operations {
             };
         };
     };
-    thesis_save_theses__name__save_post: {
+    thesis_save_legacy_theses__name__save_post: {
         parameters: {
             query?: never;
             header?: never;
@@ -2632,9 +2601,40 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/x-www-form-urlencoded": components["schemas"]["Body_thesis_save_theses__name__save_post"];
+                "application/x-www-form-urlencoded": components["schemas"]["Body_thesis_save_legacy_theses__name__save_post"];
             };
         };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    raw_download_raw__sha__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sha: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Successful Response */
             200: {

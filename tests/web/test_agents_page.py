@@ -27,10 +27,10 @@ def test_fragment_polls_only_while_the_run_is_active(client: TestClient) -> None
         fh.write(
             json.dumps({"at": runs.now_iso(), "tool": "use_skill", "args": {}, "ms": 1, "result": {}}) + "\n"
         )
-    live = client.get(f"/fragments/agents/runs/{RID}")
+    live = client.get(f"/legacy/fragments/agents/runs/{RID}")
     assert live.status_code == 200 and 'hx-trigger="every 2s"' in live.text and "1 araç çağrısı" in live.text
     runs.write_meta("kap-analyst", RID, status="ok", finished_at=runs.now_iso())
-    done = client.get(f"/fragments/agents/runs/{RID}")
+    done = client.get(f"/legacy/fragments/agents/runs/{RID}")
     assert "hx-trigger" not in done.text and "tamamlandı" in done.text
 
 
@@ -38,13 +38,13 @@ def test_listing_and_detail_handle_a_run_that_never_got_a_summary(client: TestCl
     runs.write_meta(
         "kap-analyst", RID, subject="1", started_at=runs.now_iso(), status="deferred", error="Ertelendi: x"
     )
-    assert client.get("/agents").status_code == 200
-    assert "Ertelendi: x" in client.get(f"/agents/runs/{RID}").text
+    assert client.get("/legacy/agents").status_code == 200
+    assert "Ertelendi: x" in client.get(f"/legacy/agents/runs/{RID}").text
 
 
 def test_unknown_or_malformed_run_ids_are_404(client: TestClient) -> None:
-    assert client.get("/agents/runs/00000000-0000-0000-0000-000000000000").status_code == 404
-    assert client.get("/fragments/agents/runs/..%2f..%2fetc").status_code == 404
+    assert client.get("/legacy/agents/runs/00000000-0000-0000-0000-000000000000").status_code == 404
+    assert client.get("/legacy/fragments/agents/runs/..%2f..%2fetc").status_code == 404
 
 
 def test_start_validates_input_and_spawns_the_cli(
@@ -52,10 +52,15 @@ def test_start_validates_input_and_spawns_the_cli(
 ) -> None:
     spawned: list[list[str]] = []
     monkeypatch.setattr(agents_page.subprocess, "Popen", lambda argv, **kw: spawned.append(argv))
-    assert client.post("/agents/run", data={"agent": "nope", "ref": "1"}).status_code == 400
-    assert client.post("/agents/run", data={"agent": "kap-analyst", "ref": "1; rm -rf /"}).status_code == 400
+    assert client.post("/legacy/agents/run", data={"agent": "nope", "ref": "1"}).status_code == 400
+    assert (
+        client.post("/legacy/agents/run", data={"agent": "kap-analyst", "ref": "1; rm -rf /"}).status_code
+        == 400
+    )
     assert not spawned
-    r = client.post("/agents/run", data={"agent": "kap-analyst", "ref": "1691891"}, follow_redirects=False)
+    r = client.post(
+        "/legacy/agents/run", data={"agent": "kap-analyst", "ref": "1691891"}, follow_redirects=False
+    )
     assert r.status_code == 303
     run_id = r.headers["location"].rsplit("/", 1)[1]
     assert spawned[0][spawned[0].index("--run-id") + 1] == run_id

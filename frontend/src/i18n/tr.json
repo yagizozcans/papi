@@ -9,6 +9,7 @@
     "system": "Sistem",
     "instrument": "Enstrüman",
     "more": "Daha fazla",
+    "legacy": "Eski pano",
     "soon": "yakında",
     "main": "Ana gezinme"
   },
@@ -138,7 +139,7 @@
   "auth": {
     "title": "Erişim jetonu gerekli",
     "body": "papi bu adresi yalnızca jetonla açıyor. Adresi bir kez ?token=… ile aç; jeton çerez olarak saklanır.",
-    "example": "http://<adres>:38417/app/?token=…",
+    "example": "http://<adres>:38417/?token=…",
     "hint": "Jetonu papi'yi başlattığın terminalde bulabilirsin."
   },
   "palette": {

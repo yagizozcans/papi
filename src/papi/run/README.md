@@ -20,7 +20,8 @@ papi run service install [--uv] | uninstall | status | logs [-n 40] [-f]
   - `llm`: kinds matching `llm_kind_prefixes` or handlers in `llm_modules` (analyst/checker), ×`llm.concurrency`
   - `io`: KAP (`io_kind_prefixes`), ×`io_concurrency`
   - `general`: everything else, ×`general_concurrency`
-- Web dashboard (uvicorn, same event loop) on `web.host:web.port` unless `--no-web`. If the port is
+- Web dashboard (uvicorn, same event loop) on `web.host:web.port` unless `--no-web`: the React UI at `/`,
+  the old dashboard at `/legacy/`, the JSON API at `/v1`. If the port is
   taken papi keeps running without web and sends an ops alert.
 - Monitor every `watchdog_interval_s`: writes the `run:heartbeat` kv row; detects sleep/wake
   (the wall clock moved more than `wake_jump_s` ahead of the monotonic clock). On wake it records

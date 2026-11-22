@@ -30,6 +30,7 @@ from papi.web import queries
 from papi.web.deps import parse_feed_filters, templates
 
 router = APIRouter()
+legacy_router = APIRouter()  # mounted under /legacy
 
 OVERLAP = timedelta(seconds=10)
 BATCH = 1000
@@ -154,7 +155,7 @@ def feed_poll(
     return {"cursor": tail.token(), "items": items, "more": more}
 
 
-@router.get("/stream/poll")
+@legacy_router.get("/stream/poll")
 def stream_poll(request: Request) -> JSONResponse:
     """Dashboard short poll: ``?after=<cursor>`` plus the feed's filter/sort parameters."""
     params = request.query_params

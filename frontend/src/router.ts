@@ -2,7 +2,7 @@ import { createRouter, type RouterHistory } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
 
 export function createAppRouter(history?: RouterHistory) {
-  return createRouter({ routeTree, basepath: '/app', history, defaultPreload: 'intent' })
+  return createRouter({ routeTree, history, defaultPreload: 'intent' })
 }
 
 declare module '@tanstack/react-router' {

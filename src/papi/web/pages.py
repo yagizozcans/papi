@@ -16,9 +16,11 @@ from papi.core.schema import feedback, raw_object
 from papi.core.timeutil import now_utc
 from papi.web import integrations, queries
 from papi.web import stream as live
+from papi.web.app import LEGACY
 from papi.web.deps import get_conn, parse_feed_filters, templates
 
 router = APIRouter()
+raw_router = APIRouter()  # mounted at the root: the new UI links document downloads here
 Conn = Annotated[Connection, Depends(get_conn)]
 
 
@@ -56,8 +58,10 @@ def feed_page(request: Request, conn: Conn) -> HTMLResponse:
     qs = filters.query_string()
     clear = filters.query_string(**{k: None for k in filters.params() if k not in ("scope", "sort")})
     no_dates = {"range": None, "from": None, "to": None}
-    range_urls = {key: "/?" + filters.query_string(**{**no_dates, "range": key}) for key in queries.RANGES}
-    range_urls["all"] = "/?" + filters.query_string(**no_dates)
+    range_urls = {
+        key: LEGACY + "/?" + filters.query_string(**{**no_dates, "range": key}) for key in queries.RANGES
+    }
+    range_urls["all"] = LEGACY + "/?" + filters.query_string(**no_dates)
     active_range = filters.range or ("custom" if filters.date_from or filters.date_to else "all")
     return _page(
         request,
@@ -76,10 +80,10 @@ def feed_page(request: Request, conn: Conn) -> HTMLResponse:
         range_urls=range_urls,
         active_range=active_range,
         scope=scope,
-        poll_url="/stream/poll" + (f"?{qs}" if qs else ""),
+        poll_url=LEGACY + "/stream/poll" + (f"?{qs}" if qs else ""),
         cursor=cursor,
         query_string=qs,
-        clear_url="/" + (f"?{clear}" if clear else ""),
+        clear_url=LEGACY + "/" + (f"?{clear}" if clear else ""),
     )
 
 
@@ -129,11 +133,11 @@ def event_feedback(
             )
         )
     if not _is_htmx(request):
-        return _back(request, f"/events/{event_id}")
+        return _back(request, f"{LEGACY}/events/{event_id}")
     return _notice(f"Kaydedildi: {queries.FEEDBACK_KINDS[kind]}")
 
 
-@router.get("/raw/{sha}")
+@raw_router.get("/raw/{sha}")
 def raw_download(sha: str, conn: Conn) -> Response:
     """Stored source bytes (attachments, original HTML/PDF) from the raw store."""
     row = conn.execute(select(raw_object).where(raw_object.c.sha256 == sha)).first()
@@ -186,7 +190,7 @@ def pending_apply(
     except (KeyError, LookupError, ValueError) as exc:
         return _notice(f"Uygulanamadı: {exc}", level="error", status_code=409)
     if not _is_htmx(request):
-        return _back(request, "/portfolio")
+        return _back(request, f"{LEGACY}/portfolio")
     return _notice(f"Uygulandı (işlem {txn_id[:8]}…)")
 
 
@@ -200,7 +204,7 @@ def pending_dismiss(request: Request, pending_id: str) -> Response:
     except (KeyError, LookupError, ValueError) as exc:
         return _notice(f"Reddedilemedi: {exc}", level="error", status_code=409)
     if not _is_htmx(request):
-        return _back(request, "/portfolio")
+        return _back(request, f"{LEGACY}/portfolio")
     return _notice("Reddedildi")
 
 
@@ -239,7 +243,7 @@ def usage_action(request: Request, action: str) -> Response:
     except integrations.SliceUnavailable as exc:
         return _notice(f"LLM modülü yok: {exc}", level="error", status_code=503)
     if not _is_htmx(request):
-        return _back(request, "/ops/usage")
+        return _back(request, f"{LEGACY}/ops/usage")
     return _notice(
         "Claude analizleri duraklatıldı" if action == "pause" else "Claude analizleri sürdürülüyor"
     )

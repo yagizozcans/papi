@@ -301,7 +301,7 @@
         "title": "BenchmarkPoint",
         "type": "object"
       },
-      "Body_agents_start_agents_run_post": {
+      "Body_agents_start_legacy_agents_run_post": {
         "properties": {
           "agent": {
             "title": "Agent",
@@ -316,10 +316,10 @@
           "agent",
           "ref"
         ],
-        "title": "Body_agents_start_agents_run_post",
+        "title": "Body_agents_start_legacy_agents_run_post",
         "type": "object"
       },
-      "Body_event_feedback_events__event_id__feedback_post": {
+      "Body_event_feedback_legacy_events__event_id__feedback_post": {
         "properties": {
           "comment": {
             "anyOf": [
@@ -356,10 +356,10 @@
         "required": [
           "kind"
         ],
-        "title": "Body_event_feedback_events__event_id__feedback_post",
+        "title": "Body_event_feedback_legacy_events__event_id__feedback_post",
         "type": "object"
       },
-      "Body_pending_apply_portfolio_pending__pending_id__apply_post": {
+      "Body_pending_apply_legacy_portfolio_pending__pending_id__apply_post": {
         "properties": {
           "quantity_override": {
             "anyOf": [
@@ -373,10 +373,10 @@
             "title": "Quantity Override"
           }
         },
-        "title": "Body_pending_apply_portfolio_pending__pending_id__apply_post",
+        "title": "Body_pending_apply_legacy_portfolio_pending__pending_id__apply_post",
         "type": "object"
       },
-      "Body_theses_upload_theses_upload_post": {
+      "Body_theses_upload_legacy_theses_upload_post": {
         "properties": {
           "direction": {
             "default": "long",
@@ -416,10 +416,10 @@
           "files",
           "ticker"
         ],
-        "title": "Body_theses_upload_theses_upload_post",
+        "title": "Body_theses_upload_legacy_theses_upload_post",
         "type": "object"
       },
-      "Body_thesis_save_theses__name__save_post": {
+      "Body_thesis_save_legacy_theses__name__save_post": {
         "properties": {
           "content": {
             "title": "Content",
@@ -429,7 +429,7 @@
         "required": [
           "content"
         ],
-        "title": "Body_thesis_save_theses__name__save_post",
+        "title": "Body_thesis_save_legacy_theses__name__save_post",
         "type": "object"
       },
       "CitationOut": {
@@ -4271,9 +4271,9 @@
   },
   "openapi": "3.1.0",
   "paths": {
-    "/": {
+    "/legacy/": {
       "get": {
-        "operationId": "feed_page__get",
+        "operationId": "feed_page_legacy__get",
         "responses": {
           "200": {
             "content": {
@@ -4289,9 +4289,9 @@
         "summary": "Feed Page"
       }
     },
-    "/agents": {
+    "/legacy/agents": {
       "get": {
-        "operationId": "agents_page_agents_get",
+        "operationId": "agents_page_legacy_agents_get",
         "responses": {
           "200": {
             "content": {
@@ -4307,14 +4307,14 @@
         "summary": "Agents Page"
       }
     },
-    "/agents/run": {
+    "/legacy/agents/run": {
       "post": {
-        "operationId": "agents_start_agents_run_post",
+        "operationId": "agents_start_legacy_agents_run_post",
         "requestBody": {
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
-                "$ref": "#/components/schemas/Body_agents_start_agents_run_post"
+                "$ref": "#/components/schemas/Body_agents_start_legacy_agents_run_post"
               }
             }
           },
@@ -4343,9 +4343,9 @@
         "summary": "Agents Start"
       }
     },
-    "/agents/runs/{run_id}": {
+    "/legacy/agents/runs/{run_id}": {
       "get": {
-        "operationId": "run_page_agents_runs__run_id__get",
+        "operationId": "run_page_legacy_agents_runs__run_id__get",
         "parameters": [
           {
             "in": "path",
@@ -4382,9 +4382,9 @@
         "summary": "Run Page"
       }
     },
-    "/company/{ticker}": {
+    "/legacy/company/{ticker}": {
       "get": {
-        "operationId": "company_page_company__ticker__get",
+        "operationId": "company_page_legacy_company__ticker__get",
         "parameters": [
           {
             "in": "path",
@@ -4421,9 +4421,9 @@
         "summary": "Company Page"
       }
     },
-    "/events/{event_id}": {
+    "/legacy/events/{event_id}": {
       "get": {
-        "operationId": "event_page_events__event_id__get",
+        "operationId": "event_page_legacy_events__event_id__get",
         "parameters": [
           {
             "in": "path",
@@ -4460,9 +4460,9 @@
         "summary": "Event Page"
       }
     },
-    "/events/{event_id}/feedback": {
+    "/legacy/events/{event_id}/feedback": {
       "post": {
-        "operationId": "event_feedback_events__event_id__feedback_post",
+        "operationId": "event_feedback_legacy_events__event_id__feedback_post",
         "parameters": [
           {
             "in": "path",
@@ -4478,7 +4478,7 @@
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
-                "$ref": "#/components/schemas/Body_event_feedback_events__event_id__feedback_post"
+                "$ref": "#/components/schemas/Body_event_feedback_legacy_events__event_id__feedback_post"
               }
             }
           },
@@ -4509,9 +4509,9 @@
         "summary": "Event Feedback"
       }
     },
-    "/fragments/agents/runs/{run_id}": {
+    "/legacy/fragments/agents/runs/{run_id}": {
       "get": {
-        "operationId": "run_fragment_fragments_agents_runs__run_id__get",
+        "operationId": "run_fragment_legacy_fragments_agents_runs__run_id__get",
         "parameters": [
           {
             "in": "path",
@@ -4548,9 +4548,9 @@
         "summary": "Run Fragment"
       }
     },
-    "/fragments/events/{event_id}": {
+    "/legacy/fragments/events/{event_id}": {
       "get": {
-        "operationId": "feed_item_fragment_fragments_events__event_id__get",
+        "operationId": "feed_item_fragment_legacy_fragments_events__event_id__get",
         "parameters": [
           {
             "in": "path",
@@ -4587,9 +4587,9 @@
         "summary": "Feed Item Fragment"
       }
     },
-    "/fragments/theses/{name}": {
+    "/legacy/fragments/theses/{name}": {
       "get": {
-        "operationId": "thesis_fragment_fragments_theses__name__get",
+        "operationId": "thesis_fragment_legacy_fragments_theses__name__get",
         "parameters": [
           {
             "in": "path",
@@ -4626,9 +4626,9 @@
         "summary": "Thesis Fragment"
       }
     },
-    "/ops": {
+    "/legacy/ops": {
       "get": {
-        "operationId": "ops_page_ops_get",
+        "operationId": "ops_page_legacy_ops_get",
         "responses": {
           "200": {
             "content": {
@@ -4644,9 +4644,9 @@
         "summary": "Ops Page"
       }
     },
-    "/ops/usage": {
+    "/legacy/ops/usage": {
       "get": {
-        "operationId": "usage_page_ops_usage_get",
+        "operationId": "usage_page_legacy_ops_usage_get",
         "responses": {
           "200": {
             "content": {
@@ -4662,9 +4662,9 @@
         "summary": "Usage Page"
       }
     },
-    "/ops/usage/{action}": {
+    "/legacy/ops/usage/{action}": {
       "post": {
-        "operationId": "usage_action_ops_usage__action__post",
+        "operationId": "usage_action_legacy_ops_usage__action__post",
         "parameters": [
           {
             "in": "path",
@@ -4701,9 +4701,9 @@
         "summary": "Usage Action"
       }
     },
-    "/portfolio": {
+    "/legacy/portfolio": {
       "get": {
-        "operationId": "portfolio_page_portfolio_get",
+        "operationId": "portfolio_page_legacy_portfolio_get",
         "responses": {
           "200": {
             "content": {
@@ -4719,9 +4719,9 @@
         "summary": "Portfolio Page"
       }
     },
-    "/portfolio/pending/{pending_id}/apply": {
+    "/legacy/portfolio/pending/{pending_id}/apply": {
       "post": {
-        "operationId": "pending_apply_portfolio_pending__pending_id__apply_post",
+        "operationId": "pending_apply_legacy_portfolio_pending__pending_id__apply_post",
         "parameters": [
           {
             "in": "path",
@@ -4737,7 +4737,7 @@
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
-                "$ref": "#/components/schemas/Body_pending_apply_portfolio_pending__pending_id__apply_post"
+                "$ref": "#/components/schemas/Body_pending_apply_legacy_portfolio_pending__pending_id__apply_post"
               }
             }
           }
@@ -4767,9 +4767,9 @@
         "summary": "Pending Apply"
       }
     },
-    "/portfolio/pending/{pending_id}/dismiss": {
+    "/legacy/portfolio/pending/{pending_id}/dismiss": {
       "post": {
-        "operationId": "pending_dismiss_portfolio_pending__pending_id__dismiss_post",
+        "operationId": "pending_dismiss_legacy_portfolio_pending__pending_id__dismiss_post",
         "parameters": [
           {
             "in": "path",
@@ -4806,48 +4806,10 @@
         "summary": "Pending Dismiss"
       }
     },
-    "/raw/{sha}": {
-      "get": {
-        "description": "Stored source bytes (attachments, original HTML/PDF) from the raw store.",
-        "operationId": "raw_download_raw__sha__get",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sha",
-            "required": true,
-            "schema": {
-              "title": "Sha",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "summary": "Raw Download"
-      }
-    },
-    "/stream/poll": {
+    "/legacy/stream/poll": {
       "get": {
         "description": "Dashboard short poll: ``?after=<cursor>`` plus the feed's filter/sort parameters.",
-        "operationId": "stream_poll_stream_poll_get",
+        "operationId": "stream_poll_legacy_stream_poll_get",
         "responses": {
           "200": {
             "content": {
@@ -4861,9 +4823,9 @@
         "summary": "Stream Poll"
       }
     },
-    "/theses": {
+    "/legacy/theses": {
       "get": {
-        "operationId": "theses_page_theses_get",
+        "operationId": "theses_page_legacy_theses_get",
         "responses": {
           "200": {
             "content": {
@@ -4879,14 +4841,14 @@
         "summary": "Theses Page"
       }
     },
-    "/theses/upload": {
+    "/legacy/theses/upload": {
       "post": {
-        "operationId": "theses_upload_theses_upload_post",
+        "operationId": "theses_upload_legacy_theses_upload_post",
         "requestBody": {
           "content": {
             "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/Body_theses_upload_theses_upload_post"
+                "$ref": "#/components/schemas/Body_theses_upload_legacy_theses_upload_post"
               }
             }
           },
@@ -4915,9 +4877,9 @@
         "summary": "Theses Upload"
       }
     },
-    "/theses/{name}": {
+    "/legacy/theses/{name}": {
       "get": {
-        "operationId": "thesis_page_theses__name__get",
+        "operationId": "thesis_page_legacy_theses__name__get",
         "parameters": [
           {
             "in": "path",
@@ -4954,9 +4916,9 @@
         "summary": "Thesis Page"
       }
     },
-    "/theses/{name}/files/{file_name}": {
+    "/legacy/theses/{name}/files/{file_name}": {
       "get": {
-        "operationId": "thesis_file_theses__name__files__file_name__get",
+        "operationId": "thesis_file_legacy_theses__name__files__file_name__get",
         "parameters": [
           {
             "in": "path",
@@ -5000,9 +4962,9 @@
         "summary": "Thesis File"
       }
     },
-    "/theses/{name}/save": {
+    "/legacy/theses/{name}/save": {
       "post": {
-        "operationId": "thesis_save_theses__name__save_post",
+        "operationId": "thesis_save_legacy_theses__name__save_post",
         "parameters": [
           {
             "in": "path",
@@ -5018,7 +4980,7 @@
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
-                "$ref": "#/components/schemas/Body_thesis_save_theses__name__save_post"
+                "$ref": "#/components/schemas/Body_thesis_save_legacy_theses__name__save_post"
               }
             }
           },
@@ -5045,6 +5007,44 @@
           }
         },
         "summary": "Thesis Save"
+      }
+    },
+    "/raw/{sha}": {
+      "get": {
+        "description": "Stored source bytes (attachments, original HTML/PDF) from the raw store.",
+        "operationId": "raw_download_raw__sha__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sha",
+            "required": true,
+            "schema": {
+              "title": "Sha",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Raw Download"
       }
     },
     "/v1/disclosures/{disclosure_id}": {

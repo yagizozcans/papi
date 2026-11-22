@@ -20,9 +20,9 @@ def test_real_portfolio_positions(
     pytest.importorskip("papi.portfolio.service")
     monkeypatch.setattr(integrations, "positions", REAL_POSITIONS)
     monkeypatch.setattr(integrations, "pending_actions", REAL_PENDING)
-    html = client.get("/portfolio").text
-    assert 'href="/company/ASELS">ASELS</a>' in html and "Onay bekleyen kurumsal işlem yok" in html
-    feed = client.get("/?scope=holdings").text
+    html = client.get("/legacy/portfolio").text
+    assert 'href="/legacy/company/ASELS">ASELS</a>' in html and "Onay bekleyen kurumsal işlem yok" in html
+    feed = client.get("/legacy/?scope=holdings").text
     assert 'badge hold">HOLDING' in feed and "ASELS temettü düzeltmesi" in feed
 
 
@@ -33,8 +33,8 @@ def test_real_taxonomy_labels(
     REAL_TAXONOMY.cache_clear()
     monkeypatch.setattr(integrations, "_taxonomy", REAL_TAXONOMY)
     tax = taxonomy.load()
-    html = client.get("/?scope=all").text
+    html = client.get("/legacy/?scope=all").text
     assert tax.label("distribution.dividend.cash", "tr") in html
     fam = tax.family_of("distribution.dividend.cash")
-    heads = client.get(f"/?scope=all&family={fam}").text
+    heads = client.get(f"/legacy/?scope=all&family={fam}").text
     assert "ASELS temettü düzeltmesi" in heads and "GARAN faaliyet raporu" not in heads

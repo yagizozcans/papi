@@ -17,8 +17,8 @@
   {% if g.queue %}<p class="small">Limit nedeniyle bekleyen LLM işleri: {% if g.queue is mapping and g.queue.llm_deferred is defined %}{% for k, v in g.queue.llm_deferred.items() %}{{ k }}={{ v }} {% else %}yok{% endfor %}{% elif g.queue is mapping %}{% for k, v in g.queue.items() %}{{ k }}={{ v | val }} {% endfor %}{% else %}{{ g.queue | val }}{% endif %}</p>{% endif %}
   {% endif %}
   <div class="actions" id="gov-actions">
-    <button hx-post="/ops/usage/pause" hx-target="#gov-result">Duraklat</button>
-    <button hx-post="/ops/usage/resume" hx-target="#gov-result" class="secondary">Sürdür</button>
+    <button hx-post="{{ LEGACY }}/ops/usage/pause" hx-target="#gov-result">Duraklat</button>
+    <button hx-post="{{ LEGACY }}/ops/usage/resume" hx-target="#gov-result" class="secondary">Sürdür</button>
     <span id="gov-result"></span>
   </div>
 </section>

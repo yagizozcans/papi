@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Akış{% endblock %}
 {% block main %}
-<form class="filters" method="get" action="/" data-autosubmit>
+<form class="filters" method="get" action="{{ LEGACY }}/" data-autosubmit>
   <div class="seg" role="radiogroup" aria-label="Kapsam">
     {% for val, label in [('mine', 'Portföyüm + izleme + P3'), ('holdings', 'Portföy'), ('watchlist', 'İzleme'), ('all', 'Tüm KAP')] %}
     <label class="{{ 'on' if filters.scope == val }}"><input type="radio" name="scope" value="{{ val }}" {{ 'checked' if filters.scope == val }}>{{ label }}</label>
@@ -39,7 +39,7 @@
 </form>
 
 <div id="newpill" class="pill" hidden><button type="button">0 yeni</button></div>
-<div id="reloadpill" class="pill" hidden><a href="/?{{ query_string }}">Yeni öğeler var — yenile</a></div>
+<div id="reloadpill" class="pill" hidden><a href="{{ LEGACY }}/?{{ query_string }}">Yeni öğeler var — yenile</a></div>
 <div id="live" class="live" title="Canlı akış bağlantısı">●</div>
 
 <section id="feed" class="feed" data-poll="{{ poll_url }}" data-cursor="{{ cursor }}" data-sort="{{ filters.sort }}" data-has-more="{{ '1' if has_more else '0' }}">
@@ -53,10 +53,10 @@
       {% with it = g.item %}{% include "_feed_item.html" %}{% endwith %}
     {% endif %}
   {% else %}
-    <p class="empty" id="feed-empty">Bu filtrelerle olay yok.{% if filters.scope != 'all' %} <a href="/?scope=all">Tüm KAP'ı göster</a>{% endif %}</p>
+    <p class="empty" id="feed-empty">Bu filtrelerle olay yok.{% if filters.scope != 'all' %} <a href="{{ LEGACY }}/?scope=all">Tüm KAP'ı göster</a>{% endif %}</p>
   {% endfor %}
 </section>
-<p id="oldnote" class="small" hidden><span class="n">0</span> eski bildirim işlendi (listenin altına düşüyor){% if has_more %} · <a href="/?{{ query_string ~ '&' if query_string }}limit={{ [filters.limit + 100, 500] | min }}">daha fazla göster</a>{% endif %}</p>
-{% if has_more and filters.limit < 500 %}<p class="more"><a href="/?{{ query_string ~ '&' if query_string }}limit={{ [filters.limit + 100, 500] | min }}">Daha fazla göster</a></p>{% endif %}
+<p id="oldnote" class="small" hidden><span class="n">0</span> eski bildirim işlendi (listenin altına düşüyor){% if has_more %} · <a href="{{ LEGACY }}/?{{ query_string ~ '&' if query_string }}limit={{ [filters.limit + 100, 500] | min }}">daha fazla göster</a>{% endif %}</p>
+{% if has_more and filters.limit < 500 %}<p class="more"><a href="{{ LEGACY }}/?{{ query_string ~ '&' if query_string }}limit={{ [filters.limit + 100, 500] | min }}">Daha fazla göster</a></p>{% endif %}
 <p class="hint">Kısayollar: <kbd>j</kbd>/<kbd>k</kbd> gezin · <kbd>Enter</kbd> aç · <kbd>o</kbd> KAP'ta aç · <kbd>/</kbd> hisse ara · {{ count }} olay</p>
 {% endblock %}

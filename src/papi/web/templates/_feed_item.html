@@ -11,7 +11,7 @@
       <span class="stage stage-{{ it.stage }}">{{ 'analiz edildi' if it.stage == 'analysed' else 'kurallar' }}</span>
       {{ m.markers(it) }}
     </div>
-    <a class="headline" href="/events/{{ it.id }}">{{ it.headline }}</a>
+    <a class="headline" href="{{ LEGACY }}/events/{{ it.id }}">{{ it.headline }}</a>
     {% if it.issuers %}<div class="issuers">{% for i in it.issuers %}{{ i.name }}{% if not loop.last %}, {% endif %}{% endfor %}</div>{% endif %}
   </div>
   <div class="links">

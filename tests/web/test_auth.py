@@ -22,7 +22,9 @@ def test_non_loopback_requires_configured_token() -> None:
         create_app(host="0.0.0.0")
 
 
-@pytest.mark.parametrize("path", ["/", "/ops", "/v1/events", "/static/app.css", "/v1/stream", "/stream/poll"])
+@pytest.mark.parametrize(
+    "path", ["/legacy/", "/legacy/ops", "/v1/events", "/static/app.css", "/v1/stream", "/legacy/stream/poll"]
+)
 def test_token_enforced_on_all_routes(
     world: dict[str, Any], monkeypatch: pytest.MonkeyPatch, path: str
 ) -> None:
@@ -36,28 +38,28 @@ def test_token_enforced_on_all_routes(
 
 def test_query_token_sets_cookie(world: dict[str, Any]) -> None:
     with TestClient(create_app(host="0.0.0.0", token="tok")) as c:
-        r = c.get("/?scope=all&token=tok", follow_redirects=False)
-        assert r.status_code == 303 and r.headers["location"] == "/?scope=all"
+        r = c.get("/legacy/?scope=all&token=tok", follow_redirects=False)
+        assert r.status_code == 303 and r.headers["location"] == "/legacy/?scope=all"
         assert TOKEN_COOKIE in r.cookies
-        assert c.get("/?scope=all").status_code == 200  # cookie now carried
+        assert c.get("/legacy/?scope=all").status_code == 200  # cookie now carried
         c.cookies.clear()
-        assert c.get("/?token=nope", follow_redirects=False).status_code == 401
-        assert c.post("/events/x/feedback", data={"kind": "helpful"}).status_code == 401
+        assert c.get("/legacy/?token=nope", follow_redirects=False).status_code == 401
+        assert c.post("/legacy/events/x/feedback", data={"kind": "helpful"}).status_code == 401
 
 
 def test_loopback_needs_no_token_but_guards_host_and_origin(world: dict[str, Any]) -> None:
     with TestClient(create_app(host="127.0.0.1", token="ignored")) as c:
-        assert c.get("/").status_code == 200
-        assert c.get("/", headers={"Host": "127.0.0.1:38417"}).status_code == 200
-        assert c.get("/", headers={"Host": "evil.example"}).status_code == 400  # DNS rebinding
+        assert c.get("/legacy/").status_code == 200
+        assert c.get("/legacy/", headers={"Host": "127.0.0.1:38417"}).status_code == 200
+        assert c.get("/legacy/", headers={"Host": "evil.example"}).status_code == 400  # DNS rebinding
         r = c.post(
-            f"/events/{world['e_div']}/feedback",
+            f"/legacy/events/{world['e_div']}/feedback",
             data={"kind": "helpful"},
             headers={"Origin": "http://evil.example"},
         )
         assert r.status_code == 403  # cross-site POST
         r = c.post(
-            f"/events/{world['e_div']}/feedback",
+            f"/legacy/events/{world['e_div']}/feedback",
             data={"kind": "helpful"},
             headers={"Origin": "http://testserver", "HX-Request": "true"},
         )

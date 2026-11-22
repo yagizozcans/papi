@@ -3,7 +3,7 @@
 {% block main %}
 <section class="card">
   <h2>Ajan çalıştır</h2>
-  <form method="post" action="/agents/run" class="filters">
+  <form method="post" action="{{ LEGACY }}/agents/run" class="filters">
     <select name="agent" aria-label="Ajan">{% for a in agents %}<option value="{{ a }}">{{ a }}</option>{% endfor %}</select>
     <input name="ref" placeholder="KAP bildirim no (ör. 1691891) veya tez adı (ör. THYAO-2026-11-06)" aria-label="Konu" required pattern="[0-9A-Za-z-]{1,40}" size="40">
     <button type="submit">Başlat</button>
@@ -18,7 +18,7 @@
   {% for r in runs %}<tr>
     <td>{{ r.started | ist('%d.%m %H:%M:%S') if r.started else '—' }}</td>
     <td>{{ r.agent }}</td>
-    <td><a href="/agents/runs/{{ r.run_id }}">{{ r.subject or r.run_id[:8] }}</a></td>
+    <td><a href="{{ LEGACY }}/agents/runs/{{ r.run_id }}">{{ r.subject or r.run_id[:8] }}</a></td>
     <td><span class="run-status run-{{ r.status }}">{{ r.status_tr }}</span></td>
     <td class="r">{{ r.turns if r.turns is not none else '—' }}</td>
     <td class="r">{{ r.cost_usd | num(4) if r.cost_usd is not none else '—' }}</td>

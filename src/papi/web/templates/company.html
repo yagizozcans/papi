@@ -30,7 +30,7 @@
   {% if c.disclosures %}
   <table class="tbl"><thead><tr><th>Yayın</th><th>Konu</th><th>Olay</th><th></th></tr></thead><tbody>
   {% for d in c.disclosures %}<tr><td>{{ d.published_at | ist }}</td><td>{{ d.title or d.subject or '—' }}{% if d.revision_label %} <span class="mark rev">{{ d.revision_label }}</span>{% endif %}{% if d.is_late %} <span class="mark late">Geç bildirim</span>{% endif %}</td>
-    <td>{% for e in d.events %}<a href="/events/{{ e.id }}">{{ e.label }}</a>{% if not loop.last %}, {% endif %}{% else %}<small>{{ d.ingest_status }}</small>{% endfor %}</td>
+    <td>{% for e in d.events %}<a href="{{ LEGACY }}/events/{{ e.id }}">{{ e.label }}</a>{% if not loop.last %}, {% endif %}{% else %}<small>{{ d.ingest_status }}</small>{% endfor %}</td>
     <td><a href="{{ d.kap_url }}" target="_blank" rel="noopener noreferrer">KAP ↗</a></td></tr>{% endfor %}
   </tbody></table>
   {% else %}<p class="reason">Bildirim yok.</p>{% endif %}

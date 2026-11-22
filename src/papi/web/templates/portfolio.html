@@ -10,13 +10,13 @@
   {% if p.positions %}
   <table class="tbl" id="positions"><thead><tr><th>Hisse</th><th class="r">Adet</th><th class="r">Ort. maliyet</th><th class="r">Son kapanış</th><th class="r">Değer (TL)</th><th class="r">Ağırlık</th><th class="r">K/Z (TL)</th><th class="r">K/Z %</th><th>Son olay</th></tr></thead><tbody>
   {% for r in p.positions %}
-    <tr><td><a class="chip" href="/company/{{ r.ticker }}">{{ r.ticker }}</a></td>
+    <tr><td><a class="chip" href="{{ LEGACY }}/company/{{ r.ticker }}">{{ r.ticker }}</a></td>
       <td class="r">{{ r.quantity | num(0) }}</td><td class="r">{{ r.avg_cost | num }}</td>
       <td class="r">{{ r.last_close | num }}{% if r.last_close_date %} <small>{{ r.last_close_date | ist }}</small>{% endif %}</td>
       <td class="r">{{ r.market_value | num }}</td><td class="r">{{ (r.weight * 100) | pct if r.weight is not none else '—' }}</td>
       <td class="r {{ 'pos' if r.pnl and r.pnl > 0 else 'neg' if r.pnl and r.pnl < 0 }}">{{ r.pnl | num }}</td>
       <td class="r {{ 'pos' if r.pnl_pct and r.pnl_pct > 0 else 'neg' if r.pnl_pct and r.pnl_pct < 0 }}">{{ r.pnl_pct | pct }}</td>
-      <td>{% if r.last_event %}<a href="/events/{{ r.last_event.id }}">{{ r.last_event.code_label }}</a> <small>{{ r.last_event.announced_at | ist('%d.%m') }}</small>{% else %}—{% endif %}</td></tr>
+      <td>{% if r.last_event %}<a href="{{ LEGACY }}/events/{{ r.last_event.id }}">{{ r.last_event.code_label }}</a> <small>{{ r.last_event.announced_at | ist('%d.%m') }}</small>{% else %}—{% endif %}</td></tr>
   {% endfor %}
   </tbody>
   {% if p.total_value is not none %}<tfoot><tr><th>Toplam</th><td></td><td></td><td></td><td class="r"><b>{{ p.total_value | num }}</b></td><td></td><td class="r"><b>{{ p.total_pnl | num }}</b></td><td></td><td></td></tr></tfoot>{% endif %}
@@ -33,9 +33,9 @@
   {% for a in p.pending %}
     <tr id="pa-{{ a.id }}"><td>{{ a.ticker or a.instrument_id[:8] }}</td><td>{{ a.kind }}</td><td>{{ a.ex_date | ist if a.ex_date else '—' }}</td>
       <td>{% if a.proposal %}{{ a.proposal.text_tr or (a.proposal | val) }}{% endif %}</td>
-      <td class="actions"><form hx-post="/portfolio/pending/{{ a.id }}/apply" hx-target="#pa-res-{{ a.id }}" method="post" action="/portfolio/pending/{{ a.id }}/apply">
+      <td class="actions"><form hx-post="{{ LEGACY }}/portfolio/pending/{{ a.id }}/apply" hx-target="#pa-res-{{ a.id }}" method="post" action="{{ LEGACY }}/portfolio/pending/{{ a.id }}/apply">
           <input name="quantity_override" placeholder="adet (isteğe bağlı)" size="10"><button type="submit">Uygula</button></form>
-        <form hx-post="/portfolio/pending/{{ a.id }}/dismiss" hx-target="#pa-res-{{ a.id }}" method="post" action="/portfolio/pending/{{ a.id }}/dismiss"><button type="submit" class="secondary">Reddet</button></form>
+        <form hx-post="{{ LEGACY }}/portfolio/pending/{{ a.id }}/dismiss" hx-target="#pa-res-{{ a.id }}" method="post" action="{{ LEGACY }}/portfolio/pending/{{ a.id }}/dismiss"><button type="submit" class="secondary">Reddet</button></form>
         <div id="pa-res-{{ a.id }}"></div></td></tr>
   {% endfor %}
   </tbody></table>

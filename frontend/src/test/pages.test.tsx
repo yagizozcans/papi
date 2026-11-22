@@ -177,7 +177,7 @@ afterEach(() => {
 describe('Today', () => {
   it('renders the attention list and persists mark-as-seen', async () => {
     const user = userEvent.setup()
-    const first = await renderApp('/app/')
+    const first = await renderApp('/')
     expect(await screen.findByTestId('attention-unseen')).toHaveTextContent('2')
     expect(screen.getByTestId('market-strip')).toHaveTextContent('11.131,32')
     expect(screen.getByTestId('dead-lane')).toHaveTextContent('boom')
@@ -189,7 +189,7 @@ describe('Today', () => {
     expect(JSON.parse(localStorage.getItem('papi-seen-attention')!)).toEqual(['e1'])
 
     first.unmount()
-    await renderApp('/app/')
+    await renderApp('/')
     expect(await screen.findByTestId('attention-unseen')).toHaveTextContent('1')
 
     await user.click(screen.getByRole('button', { name: /Hepsini okundu yap/ }))
@@ -200,14 +200,14 @@ describe('Today', () => {
   it('shows an error with retry', async () => {
     vi.unstubAllGlobals()
     mockApi({ '/v1/today': () => new Response('{}', { status: 500 }) })
-    await renderApp('/app/')
+    await renderApp('/')
     expect(await screen.findByRole('button', { name: 'Yeniden dene' })).toBeInTheDocument()
   })
 })
 
 describe('Portfolio', () => {
   it('renders totals and a holdings row with Turkish number formatting', async () => {
-    await renderApp('/app/portfolio')
+    await renderApp('/portfolio')
     const totals = await screen.findByTestId('portfolio-totals')
     await waitFor(() => expect(totals).toHaveTextContent('560.018,25'))
     expect(totals).toHaveTextContent('495.386,81')
@@ -226,7 +226,7 @@ describe('Portfolio', () => {
 
 describe('Instrument', () => {
   it('renders the header and the disclosures tab', async () => {
-    await renderApp('/app/i/THYAO')
+    await renderApp('/i/THYAO')
     const header = await screen.findByTestId('instrument-header')
     await waitFor(() => expect(header).toHaveTextContent('TÜRK HAVA YOLLARI A.O.'))
     expect(header).toHaveTextContent('PORTFÖYDE')
@@ -236,7 +236,7 @@ describe('Instrument', () => {
   })
 
   it('shows a 404 state for an unknown ticker', async () => {
-    await renderApp('/app/i/NOPE')
+    await renderApp('/i/NOPE')
     expect(await screen.findByText('NOPE bulunamadı')).toBeInTheDocument()
   })
 })
@@ -244,7 +244,7 @@ describe('Instrument', () => {
 describe('Command palette search', () => {
   it('shows instrument results and navigates on Enter', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/app/')
+    const { router } = await renderApp('/')
     await screen.findByTestId('page-title')
     await user.keyboard('{Control>}k{/Control}')
     const dialog = await screen.findByRole('dialog')

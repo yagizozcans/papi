@@ -149,7 +149,7 @@ def test_upload_stores_files_in_order_and_starts_the_import(client: TestClient, 
     started: list[list[str]] = []
     monkeypatch.setattr(theses_page.subprocess, "Popen", lambda argv, **kw: started.append(argv))
     r = client.post(
-        "/theses/upload",
+        "/legacy/theses/upload",
         data={"ticker": "thyao", "direction": "long", "horizon": "6 ay", "run": "1"},
         files=[("files", ("b sayfa.jpg", b"x", "image/jpeg")), ("files", ("a.pdf", b"y", "application/pdf"))],
         follow_redirects=False,
@@ -160,13 +160,13 @@ def test_upload_stores_files_in_order_and_starts_the_import(client: TestClient, 
     assert sorted(p.name for p in importer.files_dir(name).iterdir()) == ["01-b sayfa.jpg", "02-a.pdf"]
     argv = started[0]
     assert argv[argv.index("--name") + 1] == name and "--run" in argv
-    assert client.get(f"/theses/{name}").status_code == 200
+    assert client.get(f"/legacy/theses/{name}").status_code == 200
 
 
 def test_upload_rejects_unsupported_files(client: TestClient, monkeypatch) -> None:
     monkeypatch.setattr(theses_page.subprocess, "Popen", lambda *a, **k: pytest.fail("started"))
     r = client.post(
-        "/theses/upload",
+        "/legacy/theses/upload",
         data={"ticker": "THYAO"},
         files=[("files", ("x.exe", b"x", "application/octet-stream"))],
     )
@@ -176,6 +176,6 @@ def test_upload_rejects_unsupported_files(client: TestClient, monkeypatch) -> No
 def test_save_replaces_the_thesis_text(client: TestClient) -> None:
     path = doc.theses_dir() / "THYAO-2026-11-06.md"
     path.write_text(doc.template("THYAO", date(2026, 11, 6)), encoding="utf-8")
-    r = client.post("/theses/THYAO-2026-11-06/save", data={"content": "yeni"}, follow_redirects=False)
+    r = client.post("/legacy/theses/THYAO-2026-11-06/save", data={"content": "yeni"}, follow_redirects=False)
     assert r.status_code == 303 and path.read_text(encoding="utf-8") == "yeni"
-    assert client.post("/theses/YOK/save", data={"content": "x"}).status_code == 404
+    assert client.post("/legacy/theses/YOK/save", data={"content": "x"}).status_code == 404

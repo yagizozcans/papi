@@ -9,6 +9,7 @@
     "system": "System",
     "instrument": "Instrument",
     "more": "More",
+    "legacy": "Legacy dashboard",
     "soon": "soon",
     "main": "Main navigation"
   },
@@ -138,7 +139,7 @@
   "auth": {
     "title": "Access token required",
     "body": "papi only opens this address with a token. Open the URL once with ?token=…; the token is then stored as a cookie.",
-    "example": "http://<host>:38417/app/?token=…",
+    "example": "http://<host>:38417/?token=…",
     "hint": "You can find the token in the terminal where you started papi."
   },
   "palette": {

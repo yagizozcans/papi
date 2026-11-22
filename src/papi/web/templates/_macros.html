@@ -1,5 +1,5 @@
 {% macro tickers(list) -%}
-{% for t in list %}<a class="chip" href="/company/{{ t.ticker }}">{{ t.ticker }}{% if t.badge == 'HOLDING' %}<b class="badge hold">HOLDING</b>{% elif t.badge == 'WATCH' %}<b class="badge watch">WATCH</b>{% endif %}</a>{% endfor %}
+{% for t in list %}<a class="chip" href="{{ LEGACY }}/company/{{ t.ticker }}">{{ t.ticker }}{% if t.badge == 'HOLDING' %}<b class="badge hold">HOLDING</b>{% elif t.badge == 'WATCH' %}<b class="badge watch">WATCH</b>{% endif %}</a>{% endfor %}
 {%- endmacro %}
 {% macro mat(m, band) -%}
 {% if m is not none %}<span class="mat mat-{{ band or 'na' }}" title="Önemlilik {{ m }}/100{% if band %} ({{ band }}){% endif %}">{{ m }}</span>{% endif %}

@@ -7,7 +7,7 @@ import { defineConfig } from 'vitest/config'
 const PAPI = process.env.PAPI_API ?? 'http://127.0.0.1:38417'
 
 export default defineConfig({
-  base: '/app/',
+  base: '/',
   plugins: [
     tanstackRouter({ target: 'react', autoCodeSplitting: true }),
     react(),
@@ -22,6 +22,9 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      '/raw': PAPI,
+      '/legacy': PAPI,
+      '/static': PAPI,
       '/v1': {
         target: PAPI,
         changeOrigin: true,

@@ -1,4 +1,4 @@
-<div id="thesis"{% if t.st.active %} hx-get="/fragments/theses/{{ t.name }}" hx-trigger="every 2s" hx-swap="outerHTML"{% endif %}>
+<div id="thesis"{% if t.st.active %} hx-get="{{ LEGACY }}/fragments/theses/{{ t.name }}" hx-trigger="every 2s" hx-swap="outerHTML"{% endif %}>
 {% set st = t.st %}
 <section class="card">
   <h1>{{ t.name }}</h1>
@@ -6,15 +6,15 @@
     <span class="run-status run-{{ st.status }}">{{ st.status_tr }}</span>
     {% if st.files %}<span>{{ st.files_done or 0 }}/{{ st.files | length }} dosya</span>{% endif %}
     {% if st.pages_done is not none and st.files %}<span>{{ st.pages_done or 0 }} sayfa okundu</span>{% endif %}
-    {% if t.runs %}<span>son analiz: <a href="/agents/runs/{{ t.runs[0].run_id }}">{{ t.runs[0].label }}</a> ({{ t.runs | length }} çalışma)</span>{% endif %}
+    {% if t.runs %}<span>son analiz: <a href="{{ LEGACY }}/agents/runs/{{ t.runs[0].run_id }}">{{ t.runs[0].label }}</a> ({{ t.runs | length }} çalışma)</span>{% endif %}
   </div>
   {% if st.status == 'extracting' %}<p class="hint">Sayfalar okunuyor; fotoğraf ve taranmış sayfalar birkaç saniye ile yarım dakika sürer.</p>{% endif %}
-  {% if st.status == 'analysing' %}<p class="notice warn">Ajan çalışıyor: <a href="/agents/runs/{{ st.run_id }}">canlı izle</a></p>{% endif %}
+  {% if st.status == 'analysing' %}<p class="notice warn">Ajan çalışıyor: <a href="{{ LEGACY }}/agents/runs/{{ st.run_id }}">canlı izle</a></p>{% endif %}
   {% if st.status == 'failed' %}<p class="notice error">{{ st.error }}</p>{% endif %}
   {% if st.status == 'stale' %}<p class="notice warn">İşlem uzun süredir ilerlemiyor; süreç ölmüş olabilir.</p>{% endif %}
   {% if st.warnings %}<ul>{% for w in st.warnings %}<li class="neg">{{ w }}</li>{% endfor %}</ul>{% endif %}
   {% if not st.active and t.text is not none %}
-  <form method="post" action="/agents/run" class="filters">
+  <form method="post" action="{{ LEGACY }}/agents/run" class="filters">
     <input type="hidden" name="agent" value="strategy-analyst"><input type="hidden" name="ref" value="{{ t.name }}">
     <button type="submit"{% if t.check and t.check.errors %} disabled title="Önce hataları düzelt"{% endif %}>Ajanı çalıştır</button>
   </form>
@@ -34,7 +34,7 @@
 <section class="card">
   <h2>Tez metni</h2>
   <p class="hint">Okunan metni burada düzelt (özellikle aşağıda emin olunamayan kelimeler). <code>## Başlık</code> satırları bölümleri ayırır; <code>&lt;!-- --&gt;</code> içi analize girmez.</p>
-  <form method="post" action="/theses/{{ t.name }}/save">
+  <form method="post" action="{{ LEGACY }}/theses/{{ t.name }}/save">
     <textarea name="content" rows="32" style="width:100%;font:13px/1.45 ui-monospace,monospace" aria-label="Tez metni">{{ t.text }}</textarea>
     <p><button type="submit">Kaydet</button></p>
   </form>
@@ -46,13 +46,13 @@
   <h2>Sayfalar ({{ t.pages | length }})</h2>
   {% for p in t.pages %}
   <div class="doc">
-    <h3>Sayfa {{ loop.index }} · <a href="/theses/{{ t.name }}/files/{{ p.file }}" target="_blank" rel="noopener">{{ p.file }}</a> s.{{ p.number }} <span class="hint">({{ t.method_tr.get(p.method, p.method) }})</span></h3>
+    <h3>Sayfa {{ loop.index }} · <a href="{{ LEGACY }}/theses/{{ t.name }}/files/{{ p.file }}" target="_blank" rel="noopener">{{ p.file }}</a> s.{{ p.number }} <span class="hint">({{ t.method_tr.get(p.method, p.method) }})</span></h3>
     {% if p.uncertain %}<p class="hint">Emin olunamayan: {% for w in p.uncertain %}<span class="chip">{{ w }}</span> {% endfor %}</p>{% endif %}
     <pre style="white-space:pre-wrap;font:13px/1.45 inherit">{{ p.text }}</pre>
   </div>
   {% endfor %}
 </section>
 {% elif t.files %}
-<section class="card"><h2>Dosyalar</h2><ul>{% for f in t.files %}<li><a href="/theses/{{ t.name }}/files/{{ f }}" target="_blank" rel="noopener">{{ f }}</a></li>{% endfor %}</ul></section>
+<section class="card"><h2>Dosyalar</h2><ul>{% for f in t.files %}<li><a href="{{ LEGACY }}/theses/{{ t.name }}/files/{{ f }}" target="_blank" rel="noopener">{{ f }}</a></li>{% endfor %}</ul></section>
 {% endif %}
 </div>

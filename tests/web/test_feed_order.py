@@ -122,7 +122,7 @@ def test_query_orders_by_publish_time_not_processing_time(
 @pytest.mark.parametrize("sort", ["time_desc", "time_asc", "materiality"])
 def test_rendered_data_published_in_order(client: TestClient, backlog: dict[str, str], sort: str) -> None:
     """JS-free check: the server-rendered ``data-*`` sort keys follow the selected order."""
-    html = client.get(f"/?scope=all&sort={sort}").text
+    html = client.get(f"/legacy/?scope=all&sort={sort}").text
     pub, mats = _published(html), _mats(html)
     assert len(pub) == 4 and all(pub)
     assert f'data-sort="{sort}"' in html
@@ -174,8 +174,8 @@ def test_istanbul_day_boundaries(client: TestClient, world: dict[str, Any], db: 
         assert ids("range=7d") == {late_27, early_28}
         # custom dates override a quick range
         assert ids("range=today&from=2026-10-27&to=2026-10-27") == {late_27}
-        html = client.get("/?scope=all&range=yesterday").text
-        assert 'class="qbtn on" href="/?scope=all&amp;range=yesterday">Dün' in html
+        html = client.get("/legacy/?scope=all&range=yesterday").text
+        assert 'class="qbtn on" href="/legacy/?scope=all&amp;range=yesterday">Dün' in html
         assert '<input type="hidden" name="range" value="yesterday">' in html
     # 23:30 UTC on the 27th is already the 28th in Istanbul
     with time_machine.travel(datetime(2026, 10, 27, 23, 30, tzinfo=UTC), tick=True):
@@ -239,7 +239,7 @@ def test_band_filter(
 
 
 def test_filter_bar(client: TestClient, world: dict[str, Any]) -> None:
-    html = client.get("/?scope=all").text
+    html = client.get("/legacy/?scope=all").text
     assert 'name="materiality_gte"' not in html  # replaced by the band select
     for label in (
         "Önemlilik: Tümü",
@@ -259,10 +259,10 @@ def test_filter_bar(client: TestClient, world: dict[str, Any]) -> None:
         assert label in html
     assert "filtre etkin" not in html and "data-autosubmit" in html and 'class="js-hide"' in html
     html = client.get(
-        "/?scope=all&band=high&hide_routine=1&family=distribution&sort=materiality&range=7d"
+        "/legacy/?scope=all&band=high&hide_routine=1&family=distribution&sort=materiality&range=7d"
     ).text
     assert "4 filtre etkin" in html
-    assert 'href="/?scope=all&amp;sort=materiality">Filtreleri temizle' in html
+    assert 'href="/legacy/?scope=all&amp;sort=materiality">Filtreleri temizle' in html
     assert '<option value="high" selected>' in html and '<option value="materiality" selected>' in html
     # every filter and the sort travel to the poll URL and the load-more links
     stream = re.search(r'data-poll="([^"]+)"', html)
@@ -271,7 +271,7 @@ def test_filter_bar(client: TestClient, world: dict[str, Any]) -> None:
         assert part in stream.group(1)
     # quick-range links keep the other filters and drop custom dates
     assert (
-        'href="/?scope=all&amp;family=distribution&amp;band=high&amp;range=today&amp;hide_routine=1&amp;sort=materiality"'
+        'href="/legacy/?scope=all&amp;family=distribution&amp;band=high&amp;range=today&amp;hide_routine=1&amp;sort=materiality"'
         in html
     )
     legacy = client.get("/v1/events?scope=all&materiality_gte=70").json()["items"]
@@ -282,7 +282,7 @@ def test_filter_bar(client: TestClient, world: dict[str, Any]) -> None:
 
 
 def _poll(client: TestClient, after: str, **params: Any) -> list[dict[str, Any]]:
-    return client.get("/stream/poll", params={"after": after, **params}).json()["items"]
+    return client.get("/legacy/stream/poll", params={"after": after, **params}).json()["items"]
 
 
 def test_poll_honours_band_and_date_filters(
@@ -314,7 +314,7 @@ def test_poll_catchup_item_carries_its_publish_time(
         created=datetime(2026, 10, 28, 7, 0, tzinfo=UTC),
     )
     db.commit()
-    cursor = client.get("/stream/poll").json()["cursor"]
+    cursor = client.get("/legacy/stream/poll").json()["cursor"]
     with core_db.transaction() as conn:
         publish_classified(conn, old, "business.contract.award", "P2")
     items = _poll(client, cursor, scope="all")

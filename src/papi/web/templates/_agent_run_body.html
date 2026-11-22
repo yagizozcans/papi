@@ -1,6 +1,6 @@
-<div id="agent-run"{% if r.active %} hx-get="/fragments/agents/runs/{{ r.run_id }}" hx-trigger="every 2s" hx-swap="outerHTML"{% endif %}>
+<div id="agent-run"{% if r.active %} hx-get="{{ LEGACY }}/fragments/agents/runs/{{ r.run_id }}" hx-trigger="every 2s" hx-swap="outerHTML"{% endif %}>
 <section class="card">
-  <h1>{{ r.agent }} · {% if r.subject and r.subject.isdigit() %}<a href="https://www.kap.org.tr/tr/Bildirim/{{ r.subject }}" target="_blank" rel="noopener">{{ r.subject }}</a>{% elif r.agent == 'strategy-analyst' and r.subject %}<a href="/theses/{{ r.subject }}">{{ r.subject }}</a>{% else %}{{ r.subject }}{% endif %}</h1>
+  <h1>{{ r.agent }} · {% if r.subject and r.subject.isdigit() %}<a href="https://www.kap.org.tr/tr/Bildirim/{{ r.subject }}" target="_blank" rel="noopener">{{ r.subject }}</a>{% elif r.agent == 'strategy-analyst' and r.subject %}<a href="{{ LEGACY }}/theses/{{ r.subject }}">{{ r.subject }}</a>{% else %}{{ r.subject }}{% endif %}</h1>
   <div class="meta">
     <span class="run-status run-{{ r.status }}">{{ r.status_tr }}</span>
     <span>başlangıç {{ r.started | ist('%d.%m %H:%M:%S') if r.started else '—' }}</span>

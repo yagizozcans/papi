@@ -19,13 +19,13 @@
     {% if it.kap_url %}<a class="kap" href="{{ it.kap_url }}" target="_blank" rel="noopener noreferrer">KAP'ta aç ↗</a>{% endif %}
     <span class="code-raw">{{ d.event.code }}</span>
   </div>
-  {% if d.event.superseded_by %}<p class="notice warn">Bu olay yeni bir sürümle değiştirildi: <a href="/events/{{ d.event.superseded_by }}">güncel olay</a></p>{% endif %}
+  {% if d.event.superseded_by %}<p class="notice warn">Bu olay yeni bir sürümle değiştirildi: <a href="{{ LEGACY }}/events/{{ d.event.superseded_by }}">güncel olay</a></p>{% endif %}
   {% if d.revision_chain %}
   <div class="revs"><b>Revizyon geçmişi:</b>
-    <ol>{% for r in d.revision_chain %}<li class="{{ 'cur' if r.current }}">{{ r.revision_label }} · {{ r.published_at | ist }} · {% if r.event_id and not r.current %}<a href="/events/{{ r.event_id }}">olay</a> · {% endif %}<a href="{{ r.kap_url }}" target="_blank" rel="noopener noreferrer">KAP {{ r.source_ref }}</a></li>{% endfor %}</ol>
+    <ol>{% for r in d.revision_chain %}<li class="{{ 'cur' if r.current }}">{{ r.revision_label }} · {{ r.published_at | ist }} · {% if r.event_id and not r.current %}<a href="{{ LEGACY }}/events/{{ r.event_id }}">olay</a> · {% endif %}<a href="{{ r.kap_url }}" target="_blank" rel="noopener noreferrer">KAP {{ r.source_ref }}</a></li>{% endfor %}</ol>
   </div>
   {% endif %}
-  {% if d.superseded %}<p class="small">Önceki sınıflandırmalar: {% for s in d.superseded %}<a href="/events/{{ s.id }}">{{ s.code }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</p>{% endif %}
+  {% if d.superseded %}<p class="small">Önceki sınıflandırmalar: {% for s in d.superseded %}<a href="{{ LEGACY }}/events/{{ s.id }}">{{ s.code }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</p>{% endif %}
 </section>
 
 <section class="card forme" id="for-me">
@@ -114,7 +114,7 @@
 
 <section class="card" id="feedback">
   <h2>Geri bildirim</h2>
-  <form class="fb" hx-post="/events/{{ d.event.id }}/feedback" hx-target="#fb-result" hx-swap="innerHTML" method="post" action="/events/{{ d.event.id }}/feedback">
+  <form class="fb" hx-post="{{ LEGACY }}/events/{{ d.event.id }}/feedback" hx-target="#fb-result" hx-swap="innerHTML" method="post" action="{{ LEGACY }}/events/{{ d.event.id }}/feedback">
     <input name="comment" placeholder="Not (isteğe bağlı)" size="30">
     {% for k, label in feedback_kinds.items() %}<button type="submit" name="kind" value="{{ k }}">{{ label }}{% if d.feedback_counts.get(k) %} ({{ d.feedback_counts[k] }}){% endif %}</button>{% endfor %}
   </form>

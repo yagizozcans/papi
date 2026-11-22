@@ -3,7 +3,7 @@
 {% block main %}
 <section class="card">
   <h2>Tez yükle</h2>
-  <form method="post" action="/theses/upload" enctype="multipart/form-data" class="filters">
+  <form method="post" action="{{ LEGACY }}/theses/upload" enctype="multipart/form-data" class="filters">
     <input type="file" name="files" multiple required accept="{{ accept }}" aria-label="Dosyalar">
     <input name="ticker" placeholder="BIST kodu (ör. THYAO)" aria-label="BIST kodu" required pattern="[A-Za-z0-9]{3,6}" size="14">
     <select name="direction" aria-label="Yön"><option value="long">long</option><option value="short">short</option><option value="izle">izle</option></select>
@@ -22,10 +22,10 @@
   {% if rows %}
   <table class="tbl"><thead><tr><th>Tez</th><th>Durum</th><th>Kontrol</th><th>Son analiz</th></tr></thead><tbody>
   {% for r in rows %}<tr>
-    <td><a href="/theses/{{ r.name }}">{{ r.name }}</a></td>
+    <td><a href="{{ LEGACY }}/theses/{{ r.name }}">{{ r.name }}</a></td>
     <td><span class="run-status run-{{ r.st.status }}">{{ r.st.status_tr }}</span></td>
     <td>{% if r.check is none %}—{% elif r.check.errors %}<span class="neg">{{ r.check.errors | length }} hata</span>{% elif r.check.gaps %}{{ r.check.gaps | length }} eksik{% else %}<span class="pos">tam</span>{% endif %}</td>
-    <td>{% if r.last %}<a href="/agents/runs/{{ r.last.run_id }}">{{ r.last.label }}</a>{% else %}—{% endif %}</td>
+    <td>{% if r.last %}<a href="{{ LEGACY }}/agents/runs/{{ r.last.run_id }}">{{ r.last.label }}</a>{% else %}—{% endif %}</td>
   </tr>{% endfor %}
   </tbody></table>
   {% else %}<p class="reason">Henüz tez yok.</p>{% endif %}

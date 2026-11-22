@@ -116,8 +116,9 @@ papi run service install --uv    # or: launchd LaunchAgent com.papi.run (starts 
 papi run service status          # launchd state; `papi run service logs` / `uninstall`
 ```
 
-Dashboard: <http://127.0.0.1:38417> (feed `/`, `/portfolio`, `/company/<TICKER>`, `/events/<id>`,
-`/ops`, `/ops/usage`). Details of the process, lanes, backups and launchd:
+Dashboard: <http://127.0.0.1:38417> (new UI: Today `/`, `/feed`, `/portfolio`, `/i/<TICKER>`; the old
+Jinja dashboard lives under `/legacy/`, with theses and agents at `/legacy/theses`, `/legacy/agents`).
+Details of the process, lanes, backups and launchd:
 [src/papi/run/README.md](src/papi/run/README.md).
 
 On the first start papi lists the last two days of KAP and works through that backlog (holdings and
@@ -136,7 +137,7 @@ watchlist first; new live disclosures always go ahead of the backlog). Expect ab
 
 **8. Investment theses (strategy analyst)**
 
-Upload a paper on the dashboard's **Tezler** page (`/theses`): PDF, photos (JPG/PNG/HEIC), DOCX or TXT,
+Upload a paper on the dashboard's **Tezler** page (`/legacy/theses`): PDF, photos (JPG/PNG/HEIC), DOCX or TXT,
 several files form one thesis in upload order. PDF text layers are read directly; scanned pages and
 photos are transcribed page by page by Claude (opus, ~$0.10/page). Lines that are section names
 (Fikir, Konsensüs, … — misspellings and "→ Fikir:" are fine) split the text into the template; the

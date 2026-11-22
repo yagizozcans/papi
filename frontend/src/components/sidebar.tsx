@@ -31,6 +31,14 @@ export function Sidebar() {
           </Link>
         ))}
       </nav>
+      <div className="mt-auto border-t border-border p-2">
+        <a
+          href="/legacy/"
+          className="flex h-8 items-center rounded-md px-2 text-xs text-muted-foreground hover:bg-accent hover:text-foreground"
+        >
+          {t('nav.legacy')}
+        </a>
+      </div>
     </aside>
   )
 }

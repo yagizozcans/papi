@@ -40,7 +40,7 @@ export function mockStatus(status: Status | number = baseStatus) {
   return fetchMock
 }
 
-export async function renderApp(path = '/app/') {
+export async function renderApp(path = '/') {
   await i18n.changeLanguage('tr')
   const router = createAppRouter(createMemoryHistory({ initialEntries: [path] }))
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })

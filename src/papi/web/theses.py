@@ -22,6 +22,7 @@ from papi.core.timeutil import ist_date
 from papi.thesis import document as doc
 from papi.thesis import importer
 from papi.thesis.extract import SUPPORTED
+from papi.web.app import LEGACY
 from papi.web.deps import templates
 
 router = APIRouter()
@@ -171,7 +172,7 @@ async def theses_upload(
         stdin=subprocess.DEVNULL,
         start_new_session=True,
     )
-    return RedirectResponse(f"/theses/{name}", status_code=303)
+    return RedirectResponse(f"{LEGACY}/theses/{name}", status_code=303)
 
 
 @router.get("/theses/{name}", response_class=HTMLResponse)
@@ -201,7 +202,7 @@ def thesis_save(name: str, content: Annotated[str, Form()]) -> Response:
     if importer.read_status(name) and _status(name)["active"]:
         return _error("Dosya şu an işleniyor; bitince kaydet", 409)
     (doc.theses_dir() / f"{name}.md").write_text(content.replace("\r\n", "\n"), encoding="utf-8")
-    return RedirectResponse(f"/theses/{name}", status_code=303)
+    return RedirectResponse(f"{LEGACY}/theses/{name}", status_code=303)
 
 
 @router.get("/theses/{name}/files/{file_name}")

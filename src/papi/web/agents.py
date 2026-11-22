@@ -19,6 +19,7 @@ from papi.agents import runs
 from papi.agents.definition import AgentError, list_agents, load_agent
 from papi.core.ids import uuid7
 from papi.core.timeutil import parse_iso
+from papi.web.app import LEGACY
 from papi.web.deps import templates
 
 router = APIRouter()
@@ -132,7 +133,7 @@ def agents_start(agent: Annotated[str, Form()], ref: Annotated[str, Form()]) -> 
         stdin=subprocess.DEVNULL,
         start_new_session=True,
     )
-    return RedirectResponse(f"/agents/runs/{run_id}", status_code=303)
+    return RedirectResponse(f"{LEGACY}/agents/runs/{run_id}", status_code=303)
 
 
 def _load(run_id: str) -> dict[str, Any] | None:

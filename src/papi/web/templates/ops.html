@@ -68,10 +68,10 @@
 <section class="card" id="review">
   <h2>İnceleme listesi</h2>
   <h3>İşaretli analizler</h3>
-  {% if o.review.flagged %}<ul>{% for a in o.review.flagged %}<li>{{ a.created_at | ist }} · <a href="/events/{{ a.event_id }}">{{ a.code }}</a> · {{ a.agent }}</li>{% endfor %}</ul>{% else %}<p class="reason">Yok.</p>{% endif %}
+  {% if o.review.flagged %}<ul>{% for a in o.review.flagged %}<li>{{ a.created_at | ist }} · <a href="{{ LEGACY }}/events/{{ a.event_id }}">{{ a.code }}</a> · {{ a.agent }}</li>{% endfor %}</ul>{% else %}<p class="reason">Yok.</p>{% endif %}
   <h3>Desteklenmeyen / doğrulanamayan iddialar</h3>
-  {% if o.review.claims %}<ul>{% for c in o.review.claims %}<li><a href="/events/{{ c.event_id }}">olay</a> · {{ c.text }} <small>({{ c.check_status or '' }} {{ c.verify_status or '' }})</small></li>{% endfor %}</ul>{% else %}<p class="reason">Yok.</p>{% endif %}
+  {% if o.review.claims %}<ul>{% for c in o.review.claims %}<li><a href="{{ LEGACY }}/events/{{ c.event_id }}">olay</a> · {{ c.text }} <small>({{ c.check_status or '' }} {{ c.verify_status or '' }})</small></li>{% endfor %}</ul>{% else %}<p class="reason">Yok.</p>{% endif %}
   <h3>Geri bildirimlerim</h3>
-  {% if o.review.feedback %}<ul>{% for f in o.review.feedback %}<li>{{ f.created_at | ist }} · <b>{{ f.label }}</b> · {% if f.target_type == 'event' %}<a href="/events/{{ f.target_id }}">olay</a>{% else %}{{ f.target_type }} {{ f.target_id[:8] }}{% endif %}{% if f.comment %} — {{ f.comment }}{% endif %}</li>{% endfor %}</ul>{% else %}<p class="reason">Yok.</p>{% endif %}
+  {% if o.review.feedback %}<ul>{% for f in o.review.feedback %}<li>{{ f.created_at | ist }} · <b>{{ f.label }}</b> · {% if f.target_type == 'event' %}<a href="{{ LEGACY }}/events/{{ f.target_id }}">olay</a>{% else %}{{ f.target_type }} {{ f.target_id[:8] }}{% endif %}{% if f.comment %} — {{ f.comment }}{% endif %}</li>{% endfor %}</ul>{% else %}<p class="reason">Yok.</p>{% endif %}
 </section>
 {% endblock %}

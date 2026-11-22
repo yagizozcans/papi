@@ -13,10 +13,11 @@ from __future__ import annotations
 import ipaddress
 import mimetypes
 import secrets
+from collections.abc import Callable
 from pathlib import Path
 from urllib.parse import parse_qsl, urlencode, urlsplit
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from starlette.requests import Request
 from starlette.responses import (
@@ -33,6 +34,7 @@ from papi import __version__
 from papi.core.config import get_settings, get_web_token
 
 WEB_DIR = Path(__file__).resolve().parent
+LEGACY = "/legacy"  # URL prefix of the old Jinja/htmx dashboard (single source of truth)
 TOKEN_COOKIE = "papi_token"
 LOOPBACK_NAMES = frozenset({"localhost", "127.0.0.1", "::1", "testserver"})
 SAFE_METHODS = frozenset({"GET", "HEAD", "OPTIONS"})
@@ -116,28 +118,59 @@ code{background:#eee;padding:.1rem .3rem;border-radius:3px}</style></head><body>
 <p>Yeni arayüz henüz derlenmedi. Derlemek için:</p>
 <p>The new UI has not been built yet. To build it:</p>
 <p><code>cd frontend &amp;&amp; npm ci &amp;&amp; npm run build</code></p>
-<p><a href="/">Eski pano / Old dashboard</a></p>
+<p><a href="/legacy/">Eski pano / Legacy dashboard</a></p>
 </body></html>"""
 
 
+# Top-level paths that never fall through to the SPA (their own routers answer, or 404 as JSON/text).
+_NON_SPA_PREFIXES = ("v1", "legacy", "static", "raw")
+
+# Old bookmarks into the pre-P1 dashboard: path template -> new location.
+_REDIRECTS = {
+    "/events/{event_id}": "/feed/{event_id}",
+    "/company/{ticker}": "/i/{ticker}",
+    "/ops": "/system",
+    "/theses": f"{LEGACY}/theses",
+    "/agents": f"{LEGACY}/agents",
+}
+
+
 def _ui_routes(app: FastAPI, ui_dir: Path) -> None:
+    """Redirects for old URLs, then the SPA: bundle files at their paths and the ``index.html`` fallback.
+
+    Must be registered last so every real route wins over the catch-all."""
+
     def index_response() -> Response:
         index = ui_dir / "index.html"
         if not index.is_file():
             return HTMLResponse(UI_MISSING_HTML, status_code=503, headers={"Cache-Control": "no-store"})
         return FileResponse(index, media_type="text/html", headers={"Cache-Control": "no-cache"})
 
+    def with_query(request: Request, target: str) -> str:
+        return target + (f"?{request.url.query}" if request.url.query else "")
+
     @app.get("/app", include_in_schema=False)
-    def ui_root_redirect() -> Response:
-        return RedirectResponse("/app/", status_code=307)
-
-    @app.get("/app/", include_in_schema=False)
-    def ui_root() -> Response:
-        return index_response()
-
     @app.get("/app/{path:path}", include_in_schema=False)
-    def ui_file(path: str) -> Response:
-        if not ui_dir.is_dir():
+    def old_app_prefix(request: Request, path: str = "") -> Response:
+        return RedirectResponse(with_query(request, "/" + path), status_code=308)
+
+    def make_redirect(template: str) -> Callable[[Request], Response]:
+        def handler(request: Request) -> Response:
+            return RedirectResponse(
+                with_query(request, template.format(**request.path_params)), status_code=308
+            )
+
+        return handler
+
+    for old, new in _REDIRECTS.items():
+        app.add_api_route(old, make_redirect(new), methods=["GET"], include_in_schema=False)
+
+    @app.get("/{path:path}", include_in_schema=False)
+    def spa(path: str) -> Response:
+        first = path.split("/", 1)[0]
+        if first in _NON_SPA_PREFIXES:
+            raise HTTPException(status_code=404)  # same JSON 404 as any other unknown API path
+        if not ui_dir.is_dir() or not path:
             return index_response()
         root = ui_dir.resolve()
         try:
@@ -145,12 +178,12 @@ def _ui_routes(app: FastAPI, ui_dir: Path) -> None:
             target.relative_to(root)
         except (ValueError, OSError):
             return index_response()
-        if path.startswith("assets/") and not target.is_file():
+        if first == "assets" and not target.is_file():
             return PlainTextResponse("Not found", status_code=404)
-        if not path or not target.is_file() or target.name == "index.html":
+        if not target.is_file() or target.name == "index.html":
             return index_response()
         ctype = mimetypes.guess_type(target.name)[0] or "application/octet-stream"
-        cache = "public, max-age=31536000, immutable" if path.startswith("assets/") else "no-cache"
+        cache = "public, max-age=31536000, immutable" if first == "assets" else "no-cache"
         return FileResponse(target, media_type=ctype, headers={"Cache-Control": cache})
 
 
@@ -167,7 +200,7 @@ def create_app(
     ``host`` is the address the server will bind (default ``web.host``); when it is not loopback a
     token is mandatory (``token`` argument, else ``get_web_token()``) and enforced on all routes.
     ``stream_max_seconds`` bounds one ``/v1/stream`` SSE connection; API clients reconnect with
-    ``Last-Event-ID``. The dashboard itself short-polls ``/stream/poll`` (no long-lived connections).
+    ``Last-Event-ID``. The dashboard itself short-polls ``/legacy/stream/poll`` (no long-lived connections).
     """
     settings = get_settings()
     bind = host or settings.web.host
@@ -196,8 +229,8 @@ def create_app(
     app.include_router(stream.router)
     app.include_router(api.router)
     app.include_router(api_ui.router)
-    app.include_router(pages.router)
-    app.include_router(agents.router)
-    app.include_router(theses.router)
+    app.include_router(pages.raw_router)
+    for legacy in (stream.legacy_router, pages.router, agents.router, theses.router):
+        app.include_router(legacy, prefix=LEGACY)
     _ui_routes(app, ui_dir if ui_dir is not None else WEB_DIR / "ui")
     return app

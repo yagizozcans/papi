@@ -80,7 +80,7 @@ describe('feed', () => {
     const { calls } = setup((url) => {
       if (url.pathname === '/v1/feed') return Response.json(url.searchParams.get('before') ? feed([item(3)]) : feed([item(2), item(1)], 'CUR'))
     })
-    await renderApp('/app/feed')
+    await renderApp('/feed')
     expect(await screen.findByText('Başlık 2')).toBeInTheDocument()
     expect(screen.getByText('Başlık 1')).toBeInTheDocument()
     expect(screen.getAllByRole('option').length).toBeGreaterThanOrEqual(2)
@@ -90,7 +90,7 @@ describe('feed', () => {
 
   it('filter change updates search params and refetches', async () => {
     const { calls } = setup((url) => (url.pathname === '/v1/feed' ? Response.json(feed([item(1)])) : undefined))
-    const { router } = await renderApp('/app/feed')
+    const { router } = await renderApp('/feed')
     await screen.findByText('Başlık 1')
     await userEvent.click(screen.getByRole('button', { name: 'P1' }))
     await waitFor(() => expect(router.state.location.search).toMatchObject({ priority: 'P1' }))
@@ -102,7 +102,7 @@ describe('feed', () => {
       if (url.pathname === '/v1/feed') return Response.json(feed([item(1)]))
       if (url.pathname === '/v1/events/ev-1/detail') return Response.json(detail(1))
     })
-    const { router } = await renderApp('/app/feed')
+    const { router } = await renderApp('/feed')
     await userEvent.click(await screen.findByText('Başlık 1'))
     await waitFor(() => expect(router.state.location.pathname).toBe('/feed/ev-1'))
     const reader = await screen.findByRole('region', { name: 'Bildirim okuyucu' })
@@ -116,7 +116,7 @@ describe('feed', () => {
 
   it('shows a 404 state for an unknown event', async () => {
     setup((url) => (url.pathname === '/v1/feed' ? Response.json(feed([item(1)])) : undefined))
-    await renderApp('/app/feed/nope')
+    await renderApp('/feed/nope')
     expect(await screen.findByText('Bildirim bulunamadı')).toBeInTheDocument()
   })
 
@@ -131,7 +131,7 @@ describe('feed', () => {
       }
       return Response.json(feed([item(1)]))
     })
-    await renderApp('/app/feed/ev-1')
+    await renderApp('/feed/ev-1')
     await screen.findByText('Başlık 1')
     await waitFor(() => expect(polled).toBeGreaterThan(0), { timeout: 8000 })
     const pill = await screen.findByRole('button', { name: /1 yeni bildirim/ })
@@ -152,7 +152,7 @@ describe('feed', () => {
         return Response.json({ event_id: 'ev-1', feedback_counts: { helpful: 2 } })
       }
     })
-    await renderApp('/app/feed/ev-1')
+    await renderApp('/feed/ev-1')
     const btn = await screen.findByRole('button', { name: /Faydalı/ })
     expect(btn).toHaveTextContent('(1)')
     await userEvent.click(btn)

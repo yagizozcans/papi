@@ -4,8 +4,8 @@ Status: **draft spec + plan**, 2026-11-22. Owner decisions recorded below; open 
 
 ## 1. Goals
 
-- A new React dashboard that runs **next to** the existing Jinja/htmx dashboard (served at `/app`; the old
-  pages stay at `/` until the new one covers them, then they may be retired).
+- A new React dashboard that runs **next to** the existing Jinja/htmx dashboard (served at `/`; the old
+  pages stay at `/legacy` until the new one covers them, then they may be retired).
 - **Everything papi can do is possible in the UI** (full CLI parity, §5), not only reading.
 - Designed as a product, not a port of the old pages: new information architecture (§3).
 - Works on the owner's phone (responsive + installable PWA).
@@ -30,9 +30,9 @@ Status: **draft spec + plan**, 2026-11-22. Owner decisions recorded below; open 
 | Theme | Dark and light toggle; **always starts dark** (choice remembered per browser) |
 | Live updates | Short polling (a few seconds of delay is fine); no SSE/WebSocket |
 | Logo / accent | Cici CV mark (`#2563EB` blue) as papi logo and accent colour |
-| Serving | `npm run build` → `src/papi/web/ui/` (git-ignored); FastAPI serves it at `/app` with SPA fallback. If the bundle is missing, `/app` shows build instructions; the old dashboard keeps working without Node |
+| Serving | `npm run build` → `src/papi/web/ui/` (git-ignored); FastAPI serves it at `/` with SPA fallback (never for `/v1`, `/legacy`, `/static`, `/raw`). If the bundle is missing, `/` shows build instructions; the old dashboard keeps working without Node |
 | Phone access | Home Wi-Fi: bind to the LAN address with the existing token auth for non-loopback binds (`papi/web/app.py`) |
-| URL | `/app` during P0–P1; the new UI **takes over `/`** once P1 is done (old pages move to `/legacy`) |
+| URL | Done (P1): the new UI is at `/`; the old Jinja/htmx pages moved to `/legacy`. `/app/*`, `/events/<id>`, `/company/<t>`, `/ops` redirect (308) to the new routes; `/theses`, `/agents` to `/legacy/...`. `/raw/<sha>` and `/static` stay at root |
 
 ## 3. Information architecture
 
@@ -103,7 +103,7 @@ Secrets (Telegram token) are written to the Keychain by the backend, never retur
 
 | Phase | Scope | Check |
 |---|---|---|
-| P0 Foundation | `frontend/` scaffold, tokens, shell (sidebar, ⌘K, status bar, theme, i18n), OpenAPI type generation, FastAPI `/app` serving, CI (typecheck, lint, vitest, build) | `/app` loads in both themes and languages; CI green |
+| P0 Foundation | `frontend/` scaffold, tokens, shell (sidebar, ⌘K, status bar, theme, i18n), OpenAPI type generation, FastAPI SPA serving, CI (typecheck, lint, vitest, build) | the UI loads in both themes and languages; CI green |
 | P1 Read | Today, Feed + reader, Instrument, Portfolio (read), status bar data; missing read endpoints | Each page renders real `~/.papi` data; API tests |
 | P2 Act | trades/import/reconcile/pending/watchlists, agent runs, theses, LLM controls, alert rules | Every action covered by an API test + one UI test |
 | P3 System | health, data-source jobs, KB review, settings editor, backups/restore, evals, Telegram setup | CLI parity table §5 fully ticked |

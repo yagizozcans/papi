@@ -15,7 +15,7 @@ from sqlalchemy import Connection
 
 from papi.core import db
 from papi.core.timeutil import to_ist, to_utc
-from papi.web.app import WEB_DIR
+from papi.web.app import LEGACY, WEB_DIR
 from papi.web.queries import BANDS, DEFAULT_SORT, PRIORITIES, RANGES, SCOPES, SORTS, FeedFilters
 
 
@@ -146,6 +146,7 @@ templates.env.filters.update(
     tojson_safe=to_json,
 )
 templates.env.globals["render_document"] = render_document
+templates.env.globals["LEGACY"] = LEGACY
 
 
 def _int(value: str | None) -> int | None:

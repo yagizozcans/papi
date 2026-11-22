@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Ellipsis } from 'lucide-react'
+import { Ellipsis, History } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle } from '@/components/ui/sheet'
@@ -46,6 +46,10 @@ export function BottomTabs() {
               </Link>
             </SheetClose>
           ))}
+          <a href="/legacy/" className="flex h-10 items-center gap-3 rounded-md px-2 hover:bg-accent">
+            <History className="size-4 text-muted-foreground" />
+            <span className="flex-1">{t('nav.legacy')}</span>
+          </a>
         </SheetContent>
       </Sheet>
     </nav>
